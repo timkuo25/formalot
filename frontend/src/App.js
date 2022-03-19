@@ -1,11 +1,23 @@
 import './App.css';
-import { useEffect } from 'react';
+import { Homepage } from './Pages/Homepage';
+import { MakeSurvey } from './Pages/MakeSurvey';
+import { SurveyManagement } from './Pages/SurveyManagement'; 
+import { Lottery } from './Pages/Lottery';
+import { Register } from './Pages/Register';
+import { Login } from './Pages/Login';
+
 
 const App = () => {
 
+
   return (
     <>
-        Formalot!
+      <Homepage />
+      <MakeSurvey />
+      <SurveyManagement />
+      <Lottery />
+      <Register />
+      <Login />
     </>
   );
 }
