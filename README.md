@@ -2,7 +2,7 @@
 
 ## Frontend
 
-After clonong the project, run
+After cloning the project, run
 
 ```
 cd frontend
