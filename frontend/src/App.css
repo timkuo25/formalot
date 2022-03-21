@@ -80,4 +80,37 @@ header {
   background-color: var(--hover-color);
 }
 
+.card {
+  width: 18em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  display: flex;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+}
+
+.prize-tag {
+  width: max-content;
+  padding: 0.3em;
+  margin-bottom: 1em;
+  background-color: #ababab;
+  color: #ffffff;
+  border-radius: 0.5em;
+}
+
+.share-q {
+  all: unset;
+  width: 5em;
+  height: 2.5em;
+  border: var(--theme-color) solid 0.2em;
+  border-radius: 0.5em;
+  text-align: center;
+  font-weight: 800;
+}
+
+
+.share-q:hover{
+  background-color: var(--hover-color);
+}
 /* border: #000000 solid 1px; */
