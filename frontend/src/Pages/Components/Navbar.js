@@ -5,6 +5,7 @@ const Navbar = () => {
             <nav className="navbar">
                 <button className="nav-option">探索</button>
                 <button className="nav-option">製作</button>
+                <button className="nav-option">說明</button>
                 <button className="nav-option user-dropdown">
                     User
                     <div className="user-dropdown-options">
