@@ -5,6 +5,7 @@
 :root {
   --theme-color: #8864b3;
   --theme-color-dark: #432a58;
+  --theme-light-grey: #ebe9f0;
   --hover-color: rgba(77, 14, 179, 0.03);
 }
 
@@ -146,7 +147,6 @@ button:hover{
 .description > h2 {
   font-size: 3em;
 }
-
 .description > h3 {
   font-weight: 100;
   font-size: 1.3em;
@@ -225,3 +225,83 @@ button:hover{
   justify-content: center;
 }
 /* border: #000000 solid 1px; */
+
+
+/* Lottery page */
+.lottery-container{
+  display:flex;
+  flex-direction: row;
+}
+
+.lottery-results{
+  height: 100%;
+  width: 60%;
+  margin: 5%;
+  margin-right: 1%;
+  padding: 0.5em 2em;
+  margin-bottom: 1em;
+  border: var(--theme-light-grey) solid 0.1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.lottery-results > h2{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.avator{
+  width: 5em;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  /* transform: translate(5px, 5px); */
+  padding: 1em;
+  margin: 0.3em;
+  font-size: 1em;
+  font-weight: 600;
+  /* background-color: var(--theme-light-grey); */
+}
+
+.avator-image{
+  width: 4.5em;
+  margin: 0em;
+  border-radius: 100%;
+}
+
+.avator-container{
+  display: flex;
+  justify-content: left;
+}
+
+.prize-image {
+  width: 10em;
+  margin: 0.3em;
+  border-radius: 0.5em;
+}
+
+.lottery-card {
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 0.8em 0.2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.lottery-card > h2{
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.form-info{
+  height: 100%;
+  width: 40%;
+  margin: 5%;
+  margin-left: 0%;
+  padding: 0.5em 2em;
+  margin-bottom: 1em;
+  border: var(--theme-light-grey) solid 0.1em;
+  display: flex;
+  flex-direction: column;
+}
