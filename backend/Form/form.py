@@ -1,6 +1,3 @@
-# input: User.student_id
-# output: Form.{form_title, form_picture, form_end_date, form_run_state, form_delete_state}
-
 from db.db import get_db
 from flask import request, jsonify, Blueprint
 from flasgger.utils import swag_from
@@ -13,6 +10,8 @@ form_bp = Blueprint('form', __name__)
 
 
 def replied(student_id):
+    # input: User.student_id
+    # output: Form.{form_title, form_picture, form_end_date, form_run_state, form_delete_state}
     db = get_db()
     cursor = db.cursor()
     query = '''SELECT Form.form_title, Form.form_picture, Form.form_end_date, Form.form_run_state, Form.form_delete_state
