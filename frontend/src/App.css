@@ -226,7 +226,7 @@ button:hover{
 /* border: #000000 solid 1px; */
 
 
-/* Lottery page */
+/* Lottery page --------------------------*/
 .lottery-container{
   display:flex;
   flex-direction: row;
@@ -303,4 +303,22 @@ button:hover{
   border: var(--theme-light-grey) solid 0.1em;
   display: flex;
   flex-direction: column;
+}
+
+.form-info > h2{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.prize-container{
+  display: flex;
+  /* justify-content: left; */
+  flex-direction: column;
+  margin-bottom: 1em; 
+  align-items: left;
+}
+
+.prize-container > h3{
+  font-size: 1em;
+  font-weight: bold;
 }
