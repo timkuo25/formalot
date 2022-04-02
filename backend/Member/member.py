@@ -56,7 +56,7 @@ def login_check(id, password):
     result = db.cursor()
     result.execute("SELECT user_hashed_pwd from Users where Users.student_id = %s", id)
     rows = result.fetchone()
-    if rows != []:
+    if rows != None:
         if password_hash == rows[0]:
             return True
         else:
@@ -67,8 +67,12 @@ def login_check(id, password):
 
 @app_members.route('/Logout')
 def Logout():
-    session.pop('student_id')
-    return '已登出'
+    user=session.get('student_id') 
+    if user == None:
+        return '請先登入'
+    else:
+        session.pop('student_id')
+        return '已登出'
 
 
 @app_members.route('/UserUpdate',methods = ["PUT","GET"])
@@ -82,7 +86,6 @@ def UserUpdate():
         last_name = request.args.get("last_name")
         password = request.args.get("password")
         password2 = request.args.get("password2")
-
         if rows != []:
             if len(first_name) != 0:
                 result.execute("UPDATE Users SET user_firstname = %s WHERE student_id = %s", (first_name, id))   
