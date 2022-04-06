@@ -1,0 +1,54 @@
+listReplierForm
+View forms that student replied
+---
+tags:
+  - Form
+
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - student_id
+      properties:
+        student_id:
+          type: string
+
+responses:
+  200:
+    description: Forms replied by student
+    schema:
+      $ref: "#/definitions/AllForms"
+
+definitions:
+  AllForms:
+    type: array
+    items:
+      $ref: "#/definitions/FormModel"
+    example:
+      - form_delete_state: 0
+        form_end_date: 2022-03-21 23:59:59.000
+        form_picture: null
+        form_run_state: WaitForDraw
+        form_title: 對儀式感的看法之探討
+      - form_delete_state: 0
+        form_end_date: 2022-04-22 23:59:59.000
+        form_picture: null
+        form_run_state: Open
+        form_title: 2022【醫美認知與消費意願之研究】調查表問卷
+
+  FormModel:
+    type: object
+    properties:
+      form_delete_state:
+        type: integer
+      form_end_date:
+        type: datetime
+      form_picture:
+        type: BLOB
+      form_run_state:
+        type: string
+      form_title:
+        type: string
