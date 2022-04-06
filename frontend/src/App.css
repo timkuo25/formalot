@@ -322,3 +322,99 @@ button:hover{
   font-size: 1.2em;
   font-weight: bold;
 }
+
+.register_card_left {
+  width: 48em;
+  height:50em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 1em 1em 1em 1em;
+  display: flex;
+  flex-direction: row;
+  transform: translate(20px, 20px);
+  float:left;
+  text-align: center;
+}
+
+.reg_description {
+  padding-left: 6em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 45em;
+  transform: translateY(-2em);
+  margin: 0.5em 5.5em;
+  color: var(--theme-color);
+}
+
+.register_card_right {
+  width: 50em;
+  height:50em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 1em 1em 1em 1em;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+  float:left;
+  text-align:left;
+}
+.input_content{
+  margin: 0.4em 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.reg_submit{
+  border: var(--theme-color-dark) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: #fbfafc;
+  color: var(--theme-color-dark);
+  margin: 1em 1em;
+  width: 5em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.reg_inputbar{
+  width: 45%;
+  border-radius: 0.3em;
+  height: 2.5em;
+}
+
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(200, 200, 200);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContainer {
+  width: 500px;
+  height: 500px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.titleCloseBtn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.inputbar{
+  width: 60%;
+  border-radius: 0.3em;
+  height: 2.5em;
+  display: flex;
+  text-align: center;
+}

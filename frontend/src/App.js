@@ -12,12 +12,7 @@ const App = () => {
 
   return (
     <>
-      <Homepage />
-      <MakeSurvey />
-      <SurveyManagement />
-      <Lottery />
-      <Register />
-      <Login />
+      <Register /> 
     </>
   );
 }
