@@ -13,12 +13,12 @@ const Navbar = () => {
                 <button className="nav-option">說明</button>
                 <button className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
                     User
-                    {modalOpen && <LoginModal closeModal={setModalOpen} />}
                     <div className="user-dropdown-options" >
                         <button>管理問卷</button>
                         <button>個人資料</button>
                     </div>
                 </button>
+                {modalOpen && <LoginModal closeModal={setModalOpen} />}
             </nav>
         </header>
     )
