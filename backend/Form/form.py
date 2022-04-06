@@ -40,11 +40,33 @@ def win_lottery_check(form_id, student_id):
     return "未中獎"
 
 
+def deleteForm(form_id):
+    cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = '''UPDATE Form
+    SET form_delete_state = '1'
+    WHERE form_id = %s
+    '''
+    cursor.execute(query, [form_id])
+    db.commit()
+    return "Deleted form"
+
+
+def closeForm(form_id):
+    cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    query = '''UPDATE Form
+    SET form_run_state='Closed'
+    WHERE form_id = %s
+    '''
+    cursor.execute(query, [form_id])
+    db.commit()
+    return "Closed form"
+
+
 # route
 
 
-@form_bp.route('/SurveyManagement', methods=["GET"])
-@swag_from('replier_form_specs.yml', methods=["GET"])
+@ form_bp.route('/SurveyManagement', methods=["GET"])
+@ swag_from('replier_form_specs.yml', methods=["GET"])
 def returnReplierForm():
     # req_json = request.get_json()
     student_id = session.get('student_id')
@@ -57,3 +79,15 @@ def returnReplierForm():
         result_dict['winning_status'] = win_lottery_check(form_id, student_id)
         response.append(result_dict)
     return jsonify(response)
+
+
+@ form_bp.route('/SurveyManagement', methods=["PUT"])
+def modifyForm():
+    req_json = request.get_json()
+    form_id = req_json["form_id"]
+    action = req_json["action"]
+    if action == "delete":
+        deleteForm(form_id)
+    elif action == "close":
+        closeForm(form_id)
+    return "Modified form"
