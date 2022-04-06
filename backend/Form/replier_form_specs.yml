@@ -28,21 +28,23 @@ definitions:
     items:
       $ref: "#/definitions/FormModel"
     example:
-      - form_delete_state: 0
-        form_end_date: 2022-03-21 23:59:59.000
+      - form_end_date: Mon, 21 Mar 2022 12:59:59 GMT
+        form_form_id: 0
         form_picture: null
         form_run_state: WaitForDraw
         form_title: 對儀式感的看法之探討
-      - form_delete_state: 0
-        form_end_date: 2022-04-22 23:59:59.000
+        winning_status: 中獎
+      - form_end_date: Fri, 22 Apr 2022 23:59:59 GMT
+        form_form_id: 2
         form_picture: null
         form_run_state: Open
         form_title: 2022【醫美認知與消費意願之研究】調查表問卷
+        winning_status: 未中獎
 
   FormModel:
     type: object
     properties:
-      form_delete_state:
+      form_form_id:
         type: integer
       form_end_date:
         type: datetime
@@ -51,4 +53,6 @@ definitions:
       form_run_state:
         type: string
       form_title:
+        type: string
+      winning_status:
         type: string
