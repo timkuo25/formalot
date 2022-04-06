@@ -227,6 +227,12 @@ button:hover{
 
 
 /* Lottery page --------------------------*/
+
+.lottery-page-container{
+  display:flex;
+  flex-direction: column;
+}
+
 .lottery-container{
   display:flex;
   flex-direction: row;
@@ -323,6 +329,7 @@ button:hover{
   font-weight: bold;
 }
 
+
 .register_card_left {
   width: 48em;
   height:50em;
@@ -418,3 +425,24 @@ button:hover{
   display: flex;
   text-align: center;
 }
+
+/* 右下角的紫色按鈕 */
+.form-buttons{
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 3%;
+}
+.form-button {
+  all: unset;
+  background-color: var(--theme-color-dark);
+  border-radius: 0.4em;
+  width: 6em;
+  height: 2.5em;
+  font-size: 1.3em;
+  font-weight: 700;
+  text-align: center;
+  margin:0.5em;
+  color: #FFFFFF;
+}
+
