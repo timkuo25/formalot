@@ -10,15 +10,14 @@ const Register = () => {
 
     const callApi = async (e) => {
         e.preventDefault();
-        const result = await fetch("https://httpbin.org/post", {
+        const result = await fetch("http://127.0.0.1:5000/Register", {
             method: "POST",
             body: JSON.stringify({
                 email: email,
                 first_name: first_name,
                 last_name: last_name,
                 password: password,
-                password2: password2,
-                phone: phone
+                password2: password2
             }),
         });
         let resJson = await result.json();
@@ -56,11 +55,7 @@ const Register = () => {
                         <h3>確認密碼</h3>
                         <input type="text" value={password2} placeholder="Confirm Password" onChange={(e) => setPassword2(e.target.value)} className="reg_inputbar"/>
                     </div>
-                    <div className="input_content">
-                        <h3>聯絡電話</h3>
-                        <input type="text" value={phone} placeholder="Phone Number" onChange={(e) => setPhone(e.target.value)} className="reg_inputbar"/><br/>
-                    </div>
-                    <button className="reg_submit">登入</button>
+                    <button className="reg_submit">註冊</button>
                 </form>
             </div>
         </div>

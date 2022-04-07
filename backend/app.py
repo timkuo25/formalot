@@ -4,8 +4,11 @@ from Form.form import form_bp
 from Member.member import app_members
 from Lottery.lottery import lottery_bp
 from datetime import timedelta
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = "Your Key"
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
 
@@ -23,6 +26,6 @@ swag = Swagger(app)
 def index():
     return "home"
 
-# @app.route('/', methods=['GET'])
-# def index():
-#         return render_template('index.html')
+
+# if __name__ == "__main__":
+#     app.run(host='127.0.0.1', debug=True)
