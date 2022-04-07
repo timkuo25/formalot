@@ -10,15 +10,14 @@ const Register = () => {
 
     const callApi = async (e) => {
         e.preventDefault();
-        const result = await fetch("https://httpbin.org/post", {
+        const result = await fetch("http://127.0.0.1:5000/Register", {
             method: "POST",
             body: JSON.stringify({
                 email: email,
                 first_name: first_name,
                 last_name: last_name,
                 password: password,
-                password2: password2,
-
+                password2: password2
             }),
         });
         let resJson = await result.json();
