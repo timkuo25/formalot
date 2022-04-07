@@ -13,6 +13,8 @@ const App = () => {
   return (
     <>
       <Register /> 
+      <Homepage /> 
+      <Lottery />
     </>
   );
 }
