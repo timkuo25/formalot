@@ -44,7 +44,7 @@ const Lottery = () => {
                         抽獎日期：2022/3/21<br/>
                         <h2> 獎品 </h2>
                         <section className='prize-container'>
-                            <h3> coco brownie 禮盒(6入) 3 名 </h3>
+                            <h3> coco brownie 禮盒(6入) 4 名 </h3>
                             <img className='prize-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
                         </section>
                         <section className='prize-container'>
