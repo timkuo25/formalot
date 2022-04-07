@@ -22,7 +22,7 @@ const Lottery = () => {
                             </div>
                         </div>
                         <div className='lottery-card'>
-                            <h2> coco brownie 禮盒(6 入) 3 名 </h2>
+                            <h2> coco brownie 禮盒(6 入) 名 </h2>
                             <img className='prize-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
                             <div className='avator-container'>
                                 <Avator/>
