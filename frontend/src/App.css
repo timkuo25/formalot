@@ -329,10 +329,17 @@ button:hover{
   font-weight: bold;
 }
 
+/* Register page --------------------------*/
+.reg_card_container{
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+  justify-content: center;
+}
 
 .register_card_left {
   width: 48em;
-  height:50em;
+  height:55em;
   border-radius: 0.5em;
   box-shadow: 0px 1px 2.5px 1px #dadada;
   padding: 0.8em;
@@ -357,7 +364,7 @@ button:hover{
 
 .register_card_right {
   width: 50em;
-  height:50em;
+  height:55em;
   border-radius: 0.5em;
   box-shadow: 0px 1px 2.5px 1px #dadada;
   padding: 0.8em;
@@ -378,7 +385,7 @@ button:hover{
   border-radius: 0.3em;
   background-color: #fbfafc;
   color: var(--theme-color-dark);
-  margin: 1em 1em;
+  margin: 3em 1em;
   width: 5em;
   height: 2.25em;
   font-size: 1.2em;
@@ -392,14 +399,19 @@ button:hover{
   height: 2.5em;
 }
 
+/* LoginModal Components --------------------------*/
 .modalBackground {
   width: 100vw;
   height: 100vh;
-  background-color: rgba(200, 200, 200);
+  background-color: rgba(142, 141, 141, 0.573);
   position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
 }
 
 .modalContainer {
@@ -416,6 +428,9 @@ button:hover{
 .titleCloseBtn {
   display: flex;
   justify-content: flex-end;
+  border: 0em;
+  background-color: #ffffff;
+  color: var(--theme-color-dark);
 }
 
 .inputbar{
@@ -423,8 +438,36 @@ button:hover{
   border-radius: 0.3em;
   height: 2.5em;
   display: flex;
+  text-align: left;
+  margin: auto;
+}
+
+.forget-password{
+  border: 0em;
+  background-color: #ffffff;
+  color: var(--theme-color-dark);
+  margin-top: 2em;
+}
+
+.submit{
+  border: var(--theme-color-dark) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: #fbfafc;
+  color: var(--theme-color-dark);
+  margin: 1em 1em;
+  width: 5em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
   text-align: center;
 }
+
+
+
+
+
+
+
 
 /* 右下角的紫色按鈕 */
 .form-buttons{

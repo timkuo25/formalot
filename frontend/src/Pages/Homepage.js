@@ -5,7 +5,7 @@ const Homepage = () => {
     
     return (
         <>
-            <Navbar/>
+            <Navbar />
             <section className='call-to-action'>
                 <img className='main-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
                 <div className='description'>

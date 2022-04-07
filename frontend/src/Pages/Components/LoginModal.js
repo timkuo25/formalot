@@ -5,7 +5,7 @@ function LoginModal( {closeModal}){
     return ReactDom.createPortal(
         <div className='modalBackground'>
             <div className="modalContainer">
-                <button onClick={() => {closeModal(false);}} className="titleCloseBtn">X</button>
+                <button onClick={() => closeModal(false)} className="titleCloseBtn">X</button>
                     <div align="center" className="title">
                         <h2>登入</h2>
                     </div>
