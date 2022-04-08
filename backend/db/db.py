@@ -1,9 +1,9 @@
 import psycopg2
 
 # Update connection string information
-host = "sdmtest.postgres.database.azure.com"
+host = "sdmv2.postgres.database.azure.com"
 dbname = "postgres"
-user = "chung@sdmtest"
+user = "chung@sdmv2"
 password = "Sdm2022!"
 sslmode = "require"
 
