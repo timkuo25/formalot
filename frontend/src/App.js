@@ -5,6 +5,7 @@ import { SurveyManagement } from './Pages/SurveyManagement';
 import { Lottery } from './Pages/Lottery';
 import { Register } from './Pages/Register';
 import { Login } from './Pages/Login';
+import { Instruction } from './Pages/Instruction';
 
 
 const App = () => {
@@ -12,7 +13,8 @@ const App = () => {
 
   return (
     <>
-      <Register /> 
+      <Instruction />
+      {/* <SurveyManagement /> */}
     </>
   );
 }

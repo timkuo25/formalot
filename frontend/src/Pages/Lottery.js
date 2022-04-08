@@ -22,7 +22,7 @@ const Lottery = () => {
                             </div>
                         </div>
                         <div className='lottery-card'>
-                            <h2> coco brownie 禮盒(6 入) 3 名 </h2>
+                            <h2> coco brownie 禮盒(6 入) 名 </h2>
                             <img className='prize-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
                             <div className='avator-container'>
                                 <Avator/>
@@ -44,7 +44,7 @@ const Lottery = () => {
                         抽獎日期：2022/3/21<br/>
                         <h2> 獎品 </h2>
                         <section className='prize-container'>
-                            <h3> coco brownie 禮盒(6入) 3 名 </h3>
+                            <h3> coco brownie 禮盒(6入) 4 名 </h3>
                             <img className='prize-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
                         </section>
                         <section className='prize-container'>
