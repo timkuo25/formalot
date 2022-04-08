@@ -1,8 +1,7 @@
-
+from unittest import result
 from db.db import get_db
 from flask import request, jsonify, Blueprint
 import random
-
 
 lottery_bp = Blueprint('lottery', __name__)
 db = get_db()
@@ -23,10 +22,10 @@ def getCandidateByFormId(form_id):
 def getGiftAmountByFormId(form_id):
     cursor = db.cursor()
     query = '''
-    SELECT  gift_name, COUNT(gift_name)
+    SELECT  gift_name, COUNT(gift_name), gift_pic_url
     from gift
     WHERE form_form_id = (%s)
-    GROUP BY gift_name;
+    GROUP BY gift_name, gift_pic_url;
     '''
     cursor.execute(query, [form_id])
     db.commit()
@@ -78,8 +77,32 @@ def updateWinner(form_id, student_id, num, gift_name):
     # result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
     return 0
 
+def getUserAvatar(student_id):
+    cursor = db.cursor()
+    query = '''
+    SELECT user_avatar_url
+    FROM USERS
+    WHERE student_id = (%s); 
+    '''
+    cursor.execute(query, [student_id])
+    db.commit()
+    result = cursor.fetchone()[0]
 
+    return result
 
+def getClosedFormResult(form_id):
+    cursor = db.cursor()
+    query = '''
+    SELECT gift.gift_name, gift.number,gift.gift_pic_url, users.student_id, users.user_avatar_url
+    from gift join form ON form.form_id = gift.form_form_id 
+    JOIN users ON gift.user_student_id = users.student_id
+    WHERE form.form_id = (%s) AND form.form_run_state = 'Closed';
+    '''
+    cursor.execute(query, [form_id])
+    db.commit()
+
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    return result
 
 @lottery_bp.route('/GetCandidate', methods=["GET"])
 def getCandidate():
@@ -124,7 +147,8 @@ def getGift():
         for i in range(len(results)):
             data = {
                 "gift_name": results[i]["gift_name"],
-                "amount":results[i]["count"]
+                "amount":results[i]["count"],
+                "gift_pic_url": results[i]['gift_pic_url']
                 }
             response["data"].append(data) 
   
@@ -165,7 +189,8 @@ def autoLottery():
             prize = {
                 "gift": get_gift_detail[i]["gift_name"],
                 "number": get_gift_detail[i]["number"],
-                "winner": lottery_list[i]
+                "winner": lottery_list[i],
+                "winner_avatar_url": getUserAvatar(lottery_list[i])
             }
             response["data"]["lottery_results"].append(prize)
             response["status"] = "success"
@@ -178,8 +203,37 @@ def autoLottery():
         elif(get_run_state[0]["form_run_state"] == "Open"):
             response["message"] = "The form is still open!!!"
 
+    return jsonify(response)
 
+@lottery_bp.route('/GetLotteryResults', methods=["GET"])
+def getLotteryResults():
+    req_json = request.get_json()
+    form_id = req_json["form_id"]
+    response = {
+        "status": "",
+        "data": {'results':[]},
+        "message": ""
+    }
+    form_run_state = getFormRunStatueByFormId(form_id)[0]["form_run_state"]
+    if(form_run_state == 'Closed'):
+        result = getClosedFormResult(form_id)
+        if(len(result) != 0):
+            for row in result:
+                temp_data = {
+                    "gift_name": row["gift_name"],
+                    "gift_pic_url":row["gift_pic_url"],
+                    "number": row["number"],
+                    "student_id": row["student_id"],
+                    "user_avatar_url": row["user_avatar_url"]
+                }
+                response["data"]["results"].append(temp_data)
+            response["status"] = "success"
+            response["message"] = "Get lottery results successfully!!!"
+        else:
+            response["status"] = 'error'
+            response["message"] = 'You haven\'t entered the lottery yet!!!!!'
+    else:
+        response["status"] = 'error'
+        response["message"] = 'The form is still open.'
 
-        
-            
     return jsonify(response)
