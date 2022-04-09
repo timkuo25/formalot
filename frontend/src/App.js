@@ -4,18 +4,22 @@ import { MakeSurvey } from './Pages/MakeSurvey';
 import { SurveyManagement } from './Pages/SurveyManagement'; 
 import { Lottery } from './Pages/Lottery';
 import { Register } from './Pages/Register';
-import { Login } from './Pages/Login';
 import { Instruction } from './Pages/Instruction';
 
+import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const App = () => {
 
-
   return (
-    <>
-      <Instruction />
-      {/* <SurveyManagement /> */}
-    </>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Homepage/>}/>
+        <Route path='/lottery' element={<Lottery/>}/>
+        <Route path='/instruction' element={<Instruction/>}/>
+        <Route path='/survey_management' element={<SurveyManagement/>}/>
+        <Route path='/register' element={<Register/>}/>
+      </Routes>
+    </Router>
   );
 }
 

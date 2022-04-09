@@ -35,6 +35,14 @@ button:hover{
   margin-left: 2em;
 }
 
+.app-title > a {
+  text-decoration: none;
+}
+
+.app-title > a:active {
+  color:pink
+}
+
 .navbar {
   flex-grow: 0.2;
   display: flex;
@@ -51,6 +59,7 @@ button:hover{
   flex-grow: 1;
   font-size: 2vh;
   font-weight: 700;
+  cursor: pointer;
 }
 
 .nav-option:hover {
