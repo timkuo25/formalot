@@ -6,11 +6,11 @@ const Navbar = () => {
     const [modalOpen, setModalOpen] = useState(false);
     return(
         <header className="header">
-            <h1 className="app-title">Formalot</h1>
+            <h1 className="app-title"><a href='/'>Formalot</a></h1>
             <nav className="navbar">
                 <button className="nav-option">探索</button>
                 <button className="nav-option">製作</button>
-                <button className="nav-option">說明</button>
+                <a className="nav-option" href='/instruction'>說明</a>
                 <button className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
                     User
                     <div className="user-dropdown-options" >

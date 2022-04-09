@@ -1,17 +1,26 @@
-const Card = () => {
+const Card = ({ prize, num_prize, image_path, title, due_time, lottery_time }) => {
     
     return (
         <div className="card">
-            <div className="prize-tag">現金 100 元 2 名</div>
-            <img alt="" className="q-image" src={process.env.PUBLIC_URL + 'dog.png'}/>
-            <h3>臺大校園安全問卷</h3>
+            <div className="prize-tag">{`${prize} ${num_prize} 名`}</div>
+            <img alt="" className="q-image" src={image_path}/>
+            <h3>{title}</h3>
             <p>
-                截止時間：2022/3/14 20:00 <br/>
-                抽獎時間：2022/3/15 21:30
+                {`截止時間：${due_time}`} <br/>
+                {`抽獎時間：${lottery_time}`}
             </p>
             <button className="share-q">分享</button>
         </div>
     )
+}
+
+Card.defaultProps = {
+    prize: 'prize-name',
+    num_prize: 1,
+    image_path: process.env.PUBLIC_URL + 'dog.png',
+    title: 'title-name',
+    due_time: 'due-time',
+    lottery_time: 'lottery-time'
 }
 
 export { Card };
