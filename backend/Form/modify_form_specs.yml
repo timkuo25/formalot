@@ -1,0 +1,37 @@
+modifyForm
+Close or delete form
+---
+tags:
+  - Survey Management
+
+parameters:
+  - name: body
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - form_id
+        - action
+      properties:
+        form_id:
+          type: string
+        action:
+          type: string
+
+responses:
+  200:
+    description: status and message
+    schema:
+      $ref: "#/definitions/status_message"
+
+definitions:
+  status_message:
+    type: object
+    properties:
+      status:
+        type: string
+        example: success
+      message:
+        type: string
+        example: Deleted form
