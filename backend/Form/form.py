@@ -13,7 +13,7 @@ def replied(student_id):
     # input: User.student_id
     # output: Form.{form_title, form_picture, form_end_date, form_run_state, form_id}
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = '''SELECT Form.form_title, Form.form_picture, Form.form_end_date, Form.form_run_state, Form_form_id
+    query = '''SELECT Form.form_title, Form.form_pic_url, Form.form_end_date, Form.form_run_state, Form_form_id
     from UserForm
     JOIN Users on student_id = UserForm.User_student_id
     JOIN Form on form_id = UserForm.Form_form_id
@@ -48,7 +48,7 @@ def deleteForm(form_id):
     '''
     cursor.execute(query, [form_id])
     db.commit()
-    return "Deleted form"
+    return True
 
 
 def closeForm(form_id):
@@ -59,7 +59,7 @@ def closeForm(form_id):
     '''
     cursor.execute(query, [form_id])
     db.commit()
-    return "Closed form"
+    return True
 
 
 # route
@@ -82,12 +82,21 @@ def returnReplierForm():
 
 
 @ form_bp.route('/SurveyManagement', methods=["PUT"])
+@ swag_from('modify_form_specs.yml', methods=["PUT"])
 def modifyForm():
     req_json = request.get_json()
     form_id = req_json["form_id"]
     action = req_json["action"]
+    response_return = {
+        "status": "",
+        "message": ""
+    }
     if action == "delete":
         deleteForm(form_id)
+        response_return["status"] = "success"
+        response_return["message"] = "Deleted form"
     elif action == "close":
         closeForm(form_id)
-    return "Modified form"
+        response_return["status"] = "success"
+        response_return["message"] = "Closed form"
+    return jsonify(response_return)

@@ -2,11 +2,11 @@ listReplierForm
 View forms that student replied
 ---
 tags:
-  - Form
+  - Survey Management
 
 parameters:
-  - name: body
-    in: body
+  - name: student_id
+    in: cookie
     required: true
     schema:
       type: object
