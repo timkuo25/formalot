@@ -1,4 +1,3 @@
-from unittest import result
 from db.db import get_db
 from flask import request, jsonify, Blueprint
 import random
@@ -106,8 +105,7 @@ def getClosedFormResult(form_id):
 
 @lottery_bp.route('/GetCandidate', methods=["GET"])
 def getCandidate():
-    data = request.get_json()
-    form_id = data["form_id"]
+    form_id = request.args.get('form_id')
     results = getCandidateByFormId(form_id)  
     response = {
         "status": "",
@@ -129,8 +127,7 @@ def getCandidate():
 
 @lottery_bp.route('/GetGift', methods=["GET"])
 def getGift():
-    req_json = request.get_json()
-    form_id = req_json["form_id"]
+    form_id = request.args.get('form_id')
     results = getGiftAmountByFormId(form_id)  
     response = {
         "status": "",
@@ -160,8 +157,7 @@ def autoLottery():
     num_of_lottery = 0
     candidate_list = []
 
-    req_json = request.get_json()
-    form_id = req_json["form_id"]
+    form_id = request.args.get('form_id')
 
     get_gift = getGiftAmountByFormId(form_id)  
     get_candidate = getCandidateByFormId(form_id) 
@@ -207,8 +203,7 @@ def autoLottery():
 
 @lottery_bp.route('/GetLotteryResults', methods=["GET"])
 def getLotteryResults():
-    req_json = request.get_json()
-    form_id = req_json["form_id"]
+    form_id = request.args.get('form_id')
     response = {
         "status": "",
         "data": {'results':[]},
@@ -237,3 +232,4 @@ def getLotteryResults():
         response["message"] = 'The form is still open.'
 
     return jsonify(response)
+
