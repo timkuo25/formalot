@@ -3,6 +3,7 @@ from flasgger import Swagger
 from Form.form import form_bp
 from Member.member import app_members
 from Lottery.lottery import lottery_bp
+from Homepage.homePage import homePage_bp
 from datetime import timedelta
 from flask_cors import CORS
 
@@ -11,12 +12,13 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = "Your Key"
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
-
+app.config['JSON_AS_ASCII'] = False
 
 # register blueprint
 app.register_blueprint(form_bp)
 app.register_blueprint(app_members)
 app.register_blueprint(lottery_bp)
+app.register_blueprint(homePage_bp)
 
 # flasgger
 swag = Swagger(app)

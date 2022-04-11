@@ -2,6 +2,8 @@ from db.db import get_db
 from flask import Blueprint, request, session, jsonify
 from flasgger.utils import swag_from
 import psycopg2.extras  # get the results in form of dictionary
+import json
+import datetime
 
 form_bp = Blueprint('form', __name__)
 db = get_db()
@@ -61,6 +63,42 @@ def closeForm(form_id):
     db.commit()
     return True
 
+def created(student_id):
+    # input: User.student_id
+    # output: Form.{form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state}
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    try:
+        query = """
+        SELECT form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state
+        FROM Form 
+        WHERE User_student_id = %s AND form_delete_state = 0;
+        """
+        cursor.execute(query, [student_id])
+        db.commit()
+        return cursor.fetchall()
+    except:
+        db.rollback()
+        return 'failed to retrieve form.'
+    finally:
+        db.close()
+
+def addForm(form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url):
+    # input: request.get_json[form_title, questioncontent, form_end_date, form_pic_url], session.get(student_id), datetime.now
+    # output: 
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    try: 
+        query = """
+        INSERT INTO Form(form_id, form_title, questioncontent, form_create_date, form_end_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
+        SELECT MAX(form_id)+1 , %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
+        """
+        cursor.execute(query, [form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url])
+        db.commit()
+        return True
+    except:
+        db.rollback()
+        return False
+    finally:
+        db.close()
 
 # route
 
@@ -99,4 +137,38 @@ def modifyForm():
         closeForm(form_id)
         response_return["status"] = "success"
         response_return["message"] = "Closed form"
+    return jsonify(response_return)
+
+@ form_bp.route('/SurveyManagement/author', methods=['GET'])
+def returnAuthorForm():
+    # student_id = 'r10725051'  # test data
+    student_id = session.get('student_id')
+    results = created(student_id)
+    return jsonify(results)
+
+@ form_bp.route('/SurveyManagement/new', methods=['GET','POST'])
+def createForm(): 
+    # form_title = 'addForm測試'  # test data
+    # questioncontent = json.dumps([{'測試測試':'我是測試怪'}], ensure_ascii=False)  # test data
+    # form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # test data
+    # form_end_date = datetime.datetime(2022,9,10,23,59,59)  # test data
+    # student_id = 'r10725051'  # test data
+    # form_pic_url = 'https://imgur.com/gallery/ewCdEP9'  # test data
+    req_json = request.get_json(force=True)
+    form_title = req_json['form_title'] 
+    questioncontent = json.dumps(request.get_json()['questioncontent'], ensure_ascii=False) 
+    form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    form_end_date = req_json['form_end_date']
+    student_id = session.get('student_id')
+    form_pic_url = req_json['form_picture'] 
+    response_return = {
+        "status":"",
+        "message":""
+    }
+    if addForm(form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url):
+        response_return["status"] = 'success'
+        response_return["message"] = 'Form added.'
+    else:
+        response_return["status"] = 'fail'
+        response_return["message"] = 'Form aborted.'
     return jsonify(response_return)
