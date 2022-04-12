@@ -40,20 +40,20 @@ const Register = () => {
                         <input type="text" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} className="reg_inputbar"/>
                     </div>
                     <div className="input_content">
-                        <h3>Firstname</h3>
-                        <input type="text" value={first_name} placeholder="Firstname" onChange={(e) => setFirstname(e.target.value)} className="reg_inputbar"/>
+                        <h3>姓氏</h3>
+                        <input type="text" maxlength="45" value={last_name} placeholder="Lastname" onChange={(e) => setLastname(e.target.value)} className="reg_inputbar"/>
                     </div>
                     <div className="input_content">
-                        <h3>Lastname</h3>
-                        <input type="text" value={last_name} placeholder="Lastname" onChange={(e) => setLastname(e.target.value)} className="reg_inputbar"/>
+                        <h3>名字</h3>
+                        <input type="text" maxlength="45" value={first_name} placeholder="Firstname" onChange={(e) => setFirstname(e.target.value)} className="reg_inputbar"/>
                     </div>
                     <div className="input_content">
                         <h3>密碼</h3>
-                        <input type="text" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} className="reg_inputbar"/>
+                        <input type="password" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} className="reg_inputbar"/>
                     </div>
                     <div className="input_content">
                         <h3>確認密碼</h3>
-                        <input type="text" value={password2} placeholder="Confirm Password" onChange={(e) => setPassword2(e.target.value)} className="reg_inputbar"/>
+                        <input type="password" value={password2} placeholder="Confirm Password" onChange={(e) => setPassword2(e.target.value)} className="reg_inputbar"/>
                     </div>
                     <button className="reg_submit">註冊</button>
                 </form>
