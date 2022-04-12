@@ -13,7 +13,7 @@ const Homepage = () => {
                     <h3>Formalot 是問卷抽獎管理的首選平台！</h3>
                     <div className='cta-button'>
                         <button className='explore-button'>探索抽獎</button>
-                        <button className='make-survey-button'>製作問卷</button>
+                        <button className='make-survey-button' onClick={()=>{window.location.href = "/MakeSurvey"}}>製作問卷</button>
                     </div>
                 </div>
             </section>

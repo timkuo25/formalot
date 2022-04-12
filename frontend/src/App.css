@@ -543,3 +543,180 @@ h3.manage-header {
   width: 70em;
   height: 80em;
 }
+
+
+
+
+/* make survey page by Jui Hsin Hsiao*/
+.makeSurvey-container{
+  display:flex;
+  flex-direction: row;
+}
+
+.makeSurvey-results{
+  height: 100%;
+  width: 60%;
+  margin: 5%;
+  margin-right: 1%;
+  padding: 0.5em 2em;
+  margin-bottom: 1em;
+  /*border: var(--theme-light-grey) solid 0.1em;*/
+  display: flex;
+  flex-direction: column;
+}
+
+.makeSurvey-results > h2{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+
+.makeSurvey-card {
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 0.8em 0.2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.makeSurvey-card > h2{
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.makeSurvey-info{
+  height: 100%;
+  width: 40%;
+  margin: 5%;
+  margin-left: 0%;
+  padding: 0.5em 2em;
+  margin-bottom: 1em;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.makeSurvey-info > h2{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+
+
+.SurveyDescriptionBtn {
+  width: 220px;
+  height: 120px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: #fff;
+  border: 1px;
+  border-color: #e7e7e7;
+  border-radius: 3px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  text-align: start;
+  }
+
+  .Btn:hover {
+    background-color: #8864b3;
+    color: #fff;
+    transform: translateY(-7px);
+  }
+
+  .SurveyOptionBtn {
+    width: 200px;
+    height: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #000;
+    background-color: #fff;
+    border: 1px;
+    border-color: #e7e7e7;
+    border-radius: 3px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    text-align: justify;
+    }
+
+  .sticky-div {
+      position: fixed;
+  }
+
+  .NextBtn {
+    width: 150px;
+    height: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #ebe9f0;
+    background-color: #8864b3;
+    border: 1px;
+    border-color: #e7e7e7;
+    border-radius: 3px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+    position: initial;
+    }
+
+  .BtnGroupContainer{
+    flex-direction: row;
+  }
+  .BtnGroup{
+    width: 60px;
+    height: 50px;
+    letter-spacing: 0.5px;
+    background-color: #ebe9f0;
+    color:#432a58;
+    font-size: 18px;
+    border: 1.5px solid #ebe9f0;
+    border-radius: 5px;
+    cursor: pointer;
+
+  }
+.BtnGroupActive{
+    background-color: #8864b3;
+    border: 1.5px solid #8864b3;
+    color: white;
+    }
+
+.giftBtn {
+  width: 80px;
+  height: 80px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #000;
+  background-color: #ebe9f0;
+  border: 1px;
+  border-color: #e7e7e7;
+  border-radius: 40px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  left: 50%;
+
+
+
+  }
+/* make survey page done */
