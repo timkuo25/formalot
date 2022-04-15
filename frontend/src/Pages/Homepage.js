@@ -1,7 +1,19 @@
 import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
+import { Footer } from './Components/Footer';
+import { useEffect, useState } from 'react';
 
 const Homepage = () => {
+    const [page, setPage] = useState(1);
+    const [maxPage, setMaxPage] = useState(1);
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetch('http://localhost:5000');
+            const dataJSON = await data.json();
+            console.log(dataJSON)
+        }
+        fetchData();
+    }, []);
     
     return (
         <>
@@ -43,6 +55,10 @@ const Homepage = () => {
                     </div>
                 </div>
             </section>
+            <section className='page-div'>
+                Page <input className="page" type="number" min="0" max="100"/> of {maxPage}
+            </section>
+            <Footer />
         </>
     )
 }

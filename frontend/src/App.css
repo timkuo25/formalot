@@ -6,7 +6,7 @@
   --theme-color: #8864b3;
   --theme-color-dark: #432a58;
   --theme-light-grey: #ebe9f0;
-  --hover-color: rgba(77, 14, 179, 0.03);
+  --hover-color: rgba(77, 14, 179, 0.15);
 }
 
 html,
@@ -18,6 +18,8 @@ body {
   overflow: visible;
   color: var(--theme-color-dark);
 }
+
+/* Header --------------------------*/
 header {
   display: flex;
   flex-direction: row;
@@ -94,6 +96,8 @@ button:hover{
   background-color: var(--hover-color);
 }
 
+/* Card --------------------------*/
+
 .card {
   width: 18em;
   border-radius: 0.5em;
@@ -128,6 +132,37 @@ button:hover{
 .share-q:hover{
   background-color: var(--hover-color);
 }
+
+/* Footer --------------------------*/
+.footer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5em;
+  background-color: var(--hover-color);
+}
+
+.copyright{
+  transform: translateX(80%);
+  font-weight: 600;
+  color: var(--theme-color-dark);
+}
+
+.footer-link{
+  display: flex;
+  width: 20em;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-link > a {
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: 900;
+  color: var(--theme-color-dark);
+}
+
+/* Home page --------------------------*/
 
 .call-to-action {
   background-color: var(--theme-color);
@@ -208,6 +243,8 @@ button:hover{
   display: flex;
   align-items: center;
   justify-content: center;
+  /* border: #000000 solid 1px; */
+
 }
 
 .latest-q-container {
@@ -232,7 +269,52 @@ button:hover{
   display: flex;
   justify-content: center;
 }
+
+.page-div {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5em;  
+}
+
+.page {
+  width: 3em;
+  height: 3em;
+}
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 /* border: #000000 solid 1px; */
+
+/* Explore page --------------------------*/
+.explore-title{
+  display: flex;
+  justify-content: center;
+}
+
+.explore-title > h2{
+  font-size: 3em;
+}
+
+.tag-select {
+  width: 40em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-item{
+  height: 3em;
+  width: 5em;
+  /* border: #000000 solid 1px; */
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 
 
 /* Lottery page --------------------------*/
