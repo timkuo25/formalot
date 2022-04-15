@@ -8,8 +8,8 @@ const Navbar = () => {
         <header className="header">
             <h1 className="app-title"><a href='/'>Formalot</a></h1>
             <nav className="navbar">
-                <button className="nav-option">探索</button>
-                <button className="nav-option">製作</button>
+                <button className="nav-option" onClick={() => {window.location.href='explore'}}>探索</button>
+                <button className="nav-option" onClick={() => {window.location.href='MakeSurvey'}}>製作</button>
                 <a className="nav-option" href='/instruction'>說明</a>
                 <button className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
                     User
