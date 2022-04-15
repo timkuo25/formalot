@@ -108,7 +108,7 @@ function LoginModal( {closeModal}){
                             </div>
                             <div>
                                 <h3 align="center">密碼</h3>
-                                <input placeholder="Password" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                                <input type="password" placeholder="Password" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                             </div>                                
                             <div className="login-button" align="center">
                                 <form onSubmit={callLoginApi}>
