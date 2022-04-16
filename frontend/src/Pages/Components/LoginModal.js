@@ -99,41 +99,26 @@ function LoginModal( {closeModal}){
                 <div className="modalContainer">
                     <button onClick={() => closeModal(false)} className="titleCloseBtn">X</button>
                         <div align="center" className="title">
-                                <h2>登入</h2>
-                            </div>
-
-                            <div>
-                                <h3 align="center">電子郵件</h3>
-                                <input placeholder="Email" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
-                            </div>
-                            <div>
-                                <h3 align="center">密碼</h3>
-                                <input type="password" placeholder="Password" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                            </div>                                
-                            <div className="login-button" align="center">
-                                <form onSubmit={callLoginApi}>
-                                    <button className="submit">登入</button>
-                                </form>
-                                <form onSubmit={calluserupdate}>
-                                    <button className="submit">更新</button>
-                                </form>
-                                <form onSubmit={calllogout}>
-                                    <button className="submit">登出</button>
-                                </form>
-                                {/* <button className="forget-password">忘記密碼？</button><br/> */}
-
-                                <form onSubmit={callemailApi}>
-                                    <input placeholder="code" className="inputbar" value={code} onChange={(e) => setCode(e.target.value)}></input>
-                                    <button className="submit">驗證碼</button><br/>
-                                </form>
-                                <form onSubmit={callforgetpasswordApi}>
-                                    <input placeholder="newpsw" className="inputbar" value={newpsw} onChange={(e) => setNewPsw(e.target.value)}></input>
-                                    <input placeholder="newpsw2" className="inputbar" value={newpsw2} onChange={(e) => setNewPsw2(e.target.value)}></input>
-                                    <button className="submit">更改密碼</button><br/>
-
-                                </form>
+                            <h2>登入</h2>
                         </div>
-                    </div>
+
+                        <div>
+                            <h3 align="center">電子郵件</h3>
+                            <input placeholder="Email" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                        </div>
+                        <div>
+                            <h3 align="center">密碼</h3>
+                            <input type="password" placeholder="Password" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                        </div>
+                        <div align="center">
+                            <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼</button>
+                        </div>                                
+                        <div className="login-button" align="center">
+                            <button className="submit" onSubmit={callLoginApi}>登入</button>
+                            <button className="submit" onClick={() => {window.location.href='register'}}>註冊</button>
+                            {/* <button className="forget-password">忘記密碼？</button><br/> */}
+                        </div>
+                </div>
             </div>,
             document.getElementById("portal")
         )
