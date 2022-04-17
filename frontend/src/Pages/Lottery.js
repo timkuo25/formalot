@@ -13,12 +13,14 @@ const Lottery = () => {
 
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
+    const [lotteryResults, setLotteryResults] = useState([]);
     
     // 使用 useEffect Hook
     useEffect(() => {
         console.log('execute function in useEffect');
         fetchCurrentGifts();
         fetchCandidateList();
+        fetchLotteryResults();
     }, []);  // dependency 
 
     const fetchCurrentGifts = () =>
@@ -35,7 +37,7 @@ const Lottery = () => {
         .then(response => response.json())
         .then(response => {
             setGifts(response.data);
-            // console.log('responsedata',response.data)
+            console.log('giftsdata',response.data)
         })
         .catch(error => console.log(error))  
     };
@@ -55,7 +57,25 @@ const Lottery = () => {
         .then(response => {
             console.log('candidate_data',response.data['candidates'])
             setCandidateList(response.data['candidates']);
-            // console.log('candidate_data',response.data)
+        })
+        .catch(error => console.log(error))  
+    };
+
+    const fetchLotteryResults = () =>
+    {
+        fetch(
+            `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+        .then(response => response.json())
+        .then(response => {
+            console.log('lottery results',response.data)
+            setLotteryResults(response.data['results']);
         })
         .catch(error => console.log(error))  
     };
@@ -77,7 +97,7 @@ const Lottery = () => {
                                 {candidateList.map( (candidate) => {
                                     return (
                                         <Avator
-                                        user_name={candidate.user_name}
+                                        user_name={candidate}
                                         // user_pic_url={candidate.user_pic_url}
                                     />
                                     )
@@ -85,16 +105,8 @@ const Lottery = () => {
                             </div>
                         </div>
                         {/* 禮物與中獎人 */}
-                        {/* {gifts.map( (gift) => {
-                            return (
-                                <LotteryCard
-                                    gift_name = {gift.gift_name}
-                                    gift_pic_url={gift.gift_pic_url}
-                                    gift_amount={gift.amount}
-                                />
-                            );
-                        })} */}
-                        {gifts.map(gift => {
+                        <LotteryCard results={lotteryResults} />
+                        {/* {gifts.map(gift => {
                             return (
                                 <div className='lottery-card' key={gift.gift_name}>
                                     <h2> {gift.gift_name} × {gift.amount}  </h2>
@@ -106,7 +118,7 @@ const Lottery = () => {
                                     </div>
                                 </div>
                             )
-                        })}
+                        })} */}
 
                     </section>
                     <section className='form-info'>
