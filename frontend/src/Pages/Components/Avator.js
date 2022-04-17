@@ -1,9 +1,9 @@
-const Avator = () => {
+const Avator = ({user_name, user_pic_url}) => {
     
     return (
         <div className="avator">
             <img alt="" className="avator-image" src={process.env.PUBLIC_URL + 'dog.png'}/>
-            <p> boru123 </p>
+            <p> {user_name} </p>
         </div>
     )
 }

@@ -18,18 +18,9 @@ const Register = () => {
                 first_name: first_name,
                 last_name: last_name,
                 password: password,
-<<<<<<< Updated upstream
                 password2: password2,
                 code: code,
                 session_code: sessionStorage.getItem('code')
-=======
-<<<<<<< HEAD
-                password2: password2
-=======
-                password2: password2,
-
->>>>>>> f4a1767 ([chen] LoginModal #)
->>>>>>> Stashed changes
             }),
         });
         let resJson = await result.json();
