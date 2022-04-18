@@ -6,7 +6,6 @@ import { SurveyManagement } from './Pages/SurveyManagement';
 import { Lottery } from './Pages/Lottery';
 import { Register } from './Pages/Register';
 import { Instruction } from './Pages/Instruction';
-import { Explore } from './Pages/Explore';
 import{ Profile } from './Pages/Profile';
 import { Explore } from './Pages/Explore';
 import { ForgetPassword } from './Pages/ForgetPassword';
@@ -27,7 +26,6 @@ const App = () => {
         <Route path='/register' element={<Register/>}/>
         <Route path='/MakeSurvey' element={<MakeSurvey/>}/>
         <Route path='/MakeSurvey2' element={<MakeSurvey2/>}/>
-        <Route path='/explore' element={<Explore/>}/>
         <Route path='/Profile' element={<Profile/>}/>
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
