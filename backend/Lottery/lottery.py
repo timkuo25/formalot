@@ -1,3 +1,4 @@
+from cmath import nan
 from db.db import get_db
 from flask import request, jsonify, Blueprint, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -72,6 +73,7 @@ def getFormRunStatueByFormId(form_id):
     cursor.execute(query, [form_id])
     db.commit()
 
+
     result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
     return result
 
@@ -108,11 +110,58 @@ def getUserAvatar(student_id):
 
 def getClosedFormResult(form_id):
     cursor = db.cursor()
+    # query = '''
+    # SELECT gift.gift_name, gift.number,gift.gift_pic_url, users.student_id, users.user_pic_url
+    # from gift join form ON form.form_id = gift.form_form_id 
+    # JOIN users ON gift.user_student_id = users.student_id
+    # WHERE form.form_id = (%s) AND form.form_run_state = 'Closed';
+    # '''
+    count_query = '''
+    SELECT count(distinct(gift_name))
+    FROM gift
+    WHERE form_form_id = (%s);
+    '''
+
+
+    cursor.execute(count_query, [form_id])
+    count_result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    count = count_result[0]["count"]
+
+    get_detail_query = '''
+    SELECT gift_name, count(gift_name) AS amount, gift_pic_url
+    FROM gift
+    WHERE form_form_id = (%s)
+    GROUP BY gift_name, gift_pic_url;
+    '''
+    cursor.execute(get_detail_query, [form_id])
+    detail_result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+
+    db.commit()
+    
+    
+    return count,detail_result
+
+def getClosedFormWinner(form_id, gift_name):
+    cursor = db.cursor()
     query = '''
-    SELECT gift.gift_name, gift.number,gift.gift_pic_url, users.student_id, users.user_pic_url
-    from gift join form ON form.form_id = gift.form_form_id 
-    JOIN users ON gift.user_student_id = users.student_id
-    WHERE form.form_id = (%s) AND form.form_run_state = 'Closed';
+    SELECT user_student_id, user_pic_url
+    FROM gift 
+    JOIN users ON users.student_id = gift.user_student_id
+    WHERE form_form_id = (%s) AND gift_name = (%s);
+    '''
+    cursor.execute(query, [form_id, gift_name])
+    db.commit()
+    
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+
+    return result
+
+def getFormDetailByFormId(form_id):
+    cursor = db.cursor()
+    query = '''
+    SELECT form_title, form_create_date, form_end_date, form_draw_date
+    FROM form
+    WHERE form_id = (%s);
     '''
     cursor.execute(query, [form_id])
     db.commit()
@@ -246,9 +295,35 @@ def getLotteryResults():
     form_id = request.args.get('form_id')
     response = {
         "status": "",
-        "data": {'results':[]},
+        "data": {
+            '禮物數量': nan,
+            'results':[]},
         "message": ""
     }
+<<<<<<< HEAD
+
+
+    
+    try:
+        form_run_state = getFormRunStatueByFormId(form_id)[0]['form_run_state']
+        if(form_run_state == 'Closed'):
+            gift_categoryamount = getClosedFormResult(form_id)[0]
+            gift_total = getClosedFormResult(form_id)[1]
+            response['data']['禮物數量'] = gift_categoryamount
+
+            for gift in gift_total:
+                response['data']['results'].append(gift)
+            
+            for gift_detail in response["data"]['results']:
+                gift_name = gift_detail['gift_name']
+                gift_detail['winner'] = getClosedFormWinner(form_id, gift_name)
+                response["status"] = "success"
+                response["message"] = "Get lottery results successfully!!!"
+        elif(form_run_state == 'WaitForDraw'):
+                response["status"] = 'error'
+                response["message"] = 'The form is waiting for draw!!!'
+        elif(form_run_state == 'Open'):
+=======
     form_run_state = getFormRunStatueByFormId(form_id)[0]["form_run_state"]
     if(form_run_state == 'Closed'):
         result = getClosedFormResult(form_id)
@@ -265,32 +340,50 @@ def getLotteryResults():
             response["status"] = "success"
             response["message"] = "Get lottery results successfully!!!"
         else:
+>>>>>>> d0cb5a1 (add jwt to lottery page)
             response["status"] = 'error'
-            response["message"] = 'You haven\'t entered the lottery yet!!!!!'
-    else:
+            response["message"] = 'The form is still open!!!'
+        
+              
+    except:
         response["status"] = 'error'
+<<<<<<< HEAD
+        response["message"] = 'The form is not exist!!!'  
+
+=======
         response["message"] = 'The form is still open.'
         
+>>>>>>> d0cb5a1 (add jwt to lottery page)
     return jsonify(response)
 
 
 
 @lottery_bp.route('/GetFormDetail', methods=["GET"])
+<<<<<<< HEAD
+=======
 @jwt_required()
+>>>>>>> d0cb5a1 (add jwt to lottery page)
 def getFormDetail():
     form_id = request.args.get('form_id')
     result = getFormDetailByFormId(form_id)[0]
 
     return jsonify(result)
 
-    
+<<<<<<< HEAD
+
+=======
+>>>>>>> d0cb5a1 (add jwt to lottery page)
 @lottery_bp.route('/Autolotteryfunc', methods=["GET"])
 def autolotteryfunc():
     cursor = db.cursor()
     query = '''
     SELECT form_id
     FROM form
+<<<<<<< HEAD
     WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
+=======
+    WHERE form_run_state = 'WaitForDraw' AND form_draw_date <CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
+>>>>>>> d0cb5a1 (add jwt to lottery page)
     '''
     cursor.execute(query)
     db.commit()
