@@ -49,7 +49,8 @@ const Lottery = () => {
             {
                 method: "GET",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
                 }
             }
         )
@@ -68,7 +69,8 @@ const Lottery = () => {
             {
                 method: "GET",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
                 }
             }
         )
