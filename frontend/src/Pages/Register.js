@@ -73,12 +73,14 @@ const Register = () => {
                 </div>
                 <div className="input_content">
                     <h3>信箱驗證碼</h3>
+                    
+                    <form onSubmit={callemailApi} className="register_verification">                        
                     <input type="text" value={code} placeholder="Verification code" onChange={(e) => setCode(e.target.value)} className="reg_inputbar"/>
+                        <button className="ver_submit">取得驗證碼</button>
+                    </form>
                 </div>
                 
-            <form onSubmit={callemailApi}>
-                <button className="reg_submit">取得驗證碼</button>
-            </form>
+            
             <form onSubmit={callregisterApi}>
                 <button className="reg_submit">註冊</button>
             </form>
