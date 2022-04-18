@@ -2,14 +2,17 @@ from flask import Flask
 from flasgger import Swagger
 from Form.form import form_bp
 from Member.member import app_members
-from Lottery.lottery import lottery_bp
+from Lottery.lottery import lottery_bp, autolotteryfunc
 from Homepage.homePage import homePage_bp
 from datetime import timedelta
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+from flask_apscheduler import APScheduler
+# pip3 install flask_apscheduler
 
 
 app = Flask(__name__)
+scheduler = APScheduler()
 # register blueprint
 app.register_blueprint(form_bp)
 app.register_blueprint(app_members)
@@ -45,8 +48,12 @@ app.config.update(
 swag = Swagger(app)
 
 
+
 @app.route('/')
 def index():
+    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=12)
+    # sched.add_job(job_function, 'cron', day_of_week='mon-fri', hour=5, minute=30, end_date='2016-12-31')
+    scheduler.start()
     return "home"
 
 
