@@ -284,13 +284,14 @@ def getFormDetail():
 
     return jsonify(result)
 
+    
 @lottery_bp.route('/Autolotteryfunc', methods=["GET"])
 def autolotteryfunc():
     cursor = db.cursor()
     query = '''
     SELECT form_id
     FROM form
-    WHERE form_run_state = 'WaitForDraw' AND form_draw_date <CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
+    WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
     '''
     cursor.execute(query)
     db.commit()
