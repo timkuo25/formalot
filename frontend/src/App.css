@@ -317,13 +317,16 @@ input::-webkit-inner-spin-button {
 }
 
 
-/* Lottery page --------------------------*/
+/* Lottery page ---------------------------------------------------*/
 
+/* whole lottery page */
 .lottery-page-container{
   display:flex;
   flex-direction: column;
 }
 
+
+/* left-hand side */
 .lottery-container{
   display:flex;
   flex-direction: row;
@@ -339,15 +342,17 @@ input::-webkit-inner-spin-button {
   border: var(--theme-light-grey) solid 0.1em;
   display: flex;
   flex-direction: column;
+  border-radius: 1.5em;
 }
 
 .lottery-results > h2{
-  font-size: 2em;
+  font-size: 3em;
   font-weight: bold;
 }
 
+/* 用戶框架 */
 .avator{
-  width: 5em;
+  width: 6em;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -359,17 +364,20 @@ input::-webkit-inner-spin-button {
   /* background-color: var(--theme-light-grey); */
 }
 
+/* 用戶照片 */
 .avator-image{
-  width: 4.5em;
+  width: 6em;
   margin: 0em;
   border-radius: 100%;
 }
 
+/* 橫向用戶照片 */
 .avator-container{
   display: flex;
   justify-content: left;
 }
 
+/* 獎品照片 */
 .prize-image {
   width: 10em;
   margin: 0.3em;
@@ -553,16 +561,6 @@ input::-webkit-inner-spin-button {
   text-align: center;
 }
 
-
-
-
-<<<<<<< Updated upstream
-=======
-
-
-
-
->>>>>>> Stashed changes
 /* 右下角的紫色按鈕 */
 .form-buttons{
   display:flex;

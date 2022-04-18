@@ -1,4 +1,3 @@
-from itsdangerous import json
 from db.db import get_db
 from flask import request, jsonify, Blueprint, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity

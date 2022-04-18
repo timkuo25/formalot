@@ -13,14 +13,19 @@ const Lottery = () => {
 
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
-    const [lotteryResults, setLotteryResults] = useState([]);
-    
+    const [formDetail, setFormDetail] = useState([]);
+    // const [lotteryResults, setLotteryResults] = useState([]);
+
+    // 取得 access token
+    // const access_token =  localStorage.getItem('jwt');
+
     // 使用 useEffect Hook
     useEffect(() => {
         console.log('execute function in useEffect');
         fetchCurrentGifts();
         fetchCandidateList();
-        fetchLotteryResults();
+        fetchFormDetail();
+        // fetchLotteryResults();
     }, []);  // dependency 
 
     const fetchCurrentGifts = () =>
@@ -30,7 +35,8 @@ const Lottery = () => {
             {
                 method: "GET",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
                 }
             }
         )
@@ -62,6 +68,30 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
+    const fetchFormDetail = () =>
+    {
+        fetch(
+            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+                }
+            }
+        )
+        .then(response => response.json())
+        .then(response => {
+            console.log('Form Detail',response)
+            setFormDetail(response);
+        })
+        .catch(error => console.log(error))  
+    };
+
+
+
+
+
     const fetchLotteryResults = () =>
     {
         fetch(
@@ -77,7 +107,7 @@ const Lottery = () => {
         .then(response => response.json())
         .then(response => {
             console.log('lottery results',response.data)
-            setLotteryResults(response.data['results']);
+            // setLotteryResults(response.data['results']);
         })
         .catch(error => console.log(error))  
     };
@@ -90,9 +120,10 @@ const Lottery = () => {
             <Navbar/>
             {console.log('render')}
             <section className='lottery-page-container'>
+                {/* 問卷左半部抽獎結果 */}
                 <section className='lottery-container'>
                     <section className='lottery-results'>
-                        <h2>你快樂嗎？大學生對快樂的定義</h2>
+                        <h2> {formDetail.form_title} </h2>
                         <div className='lottery-card'>
                             <h2> 可抽獎人名單：510 人 </h2>
                             <div className='avator-container'>
@@ -107,8 +138,8 @@ const Lottery = () => {
                             </div>
                         </div>
                         {/* 禮物與中獎人 */}
-                        <LotteryCard results={lotteryResults} />
-                        {/* {gifts.map(gift => {
+                        {/* <LotteryCard results={lotteryResults} /> */}
+                        {gifts.map(gift => {
                             return (
                                 <div className='lottery-card' key={gift.gift_name}>
                                     <h2> {gift.gift_name} × {gift.amount}  </h2>
@@ -120,28 +151,34 @@ const Lottery = () => {
                                     </div>
                                 </div>
                             )
-                        })} */}
+                        })}
 
                     </section>
+
+
+
+                    {/* 問卷右半部基本問卷資訊 */}
                     <section className='form-info'>
                         <h2> 問卷資訊 </h2>
-                        問卷截止時間：2022/3/20 <br />
-                        抽獎日期：2022/3/21<br/>
+                        發布時間：{formDetail.form_create_date} <br />
+                        截止時間：{formDetail.form_end_date} <br />
+                        抽獎時間：{formDetail.form_draw_date}<br/>
                         <h2> 獎品 </h2>
-                        <section className='prize-container'>
-                            <h3> coco brownie 禮盒(6入) 4 名 </h3>
-                            <img className='prize-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
-                        </section>
-                        <section className='prize-container'>
-                            <h3> coco brownie 瑪芬 1 名 </h3>
-                            <img className='prize-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
-                        </section>
+                        {gifts.map(gift => {
+                            return (
+                                <div className='prize-container' key={gift.gift_name}>
+                                    <h3> {gift.gift_name} × {gift.amount} </h3>
+                                    <img className='prize-image' src={gift.gift_pic_url} alt=''/>
+                                </div>
+                            )
+                        })}
+
                     </section>
                 </section>
                 <div className='form-buttons'>
                     <button class='form-button'> 填答結果</button>
                     <button class='form-button'> 瀏覽問卷</button>
-                    <button class='form-button' onClick={fetchCurrentGifts}> 重新整理</button>
+                    {/* <button class='form-button' onClick={fetchCurrentGifts}> 重新整理</button> */}
                 </div>
             </section>
 
