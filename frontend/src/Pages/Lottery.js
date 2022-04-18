@@ -14,7 +14,7 @@ const Lottery = () => {
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
-    // const [lotteryResults, setLotteryResults] = useState([]);
+    const [lotteryResults, setLotteryResults] = useState([]);
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -25,7 +25,7 @@ const Lottery = () => {
         fetchCurrentGifts();
         fetchCandidateList();
         fetchFormDetail();
-        // fetchLotteryResults();
+        fetchLotteryResults();
     }, []);  // dependency 
 
     const fetchCurrentGifts = () =>
@@ -36,7 +36,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
                 }
             }
         )
@@ -107,7 +107,7 @@ const Lottery = () => {
         .then(response => response.json())
         .then(response => {
             console.log('lottery results',response.data)
-            // setLotteryResults(response.data['results']);
+            setLotteryResults(response.data['results']);
         })
         .catch(error => console.log(error))  
     };
@@ -125,7 +125,7 @@ const Lottery = () => {
                     <section className='lottery-results'>
                         <h2> {formDetail.form_title} </h2>
                         <div className='lottery-card'>
-                            <h2> 可抽獎人名單：510 人 </h2>
+                            <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
                             <div className='avator-container'>
                                 {candidateList.map( (candidate) => {
                                     return (
@@ -138,8 +138,8 @@ const Lottery = () => {
                             </div>
                         </div>
                         {/* 禮物與中獎人 */}
-                        {/* <LotteryCard results={lotteryResults} /> */}
-                        {gifts.map(gift => {
+                        <LotteryCard results={lotteryResults} />
+                        {/* {gifts.map(gift => {
                             return (
                                 <div className='lottery-card' key={gift.gift_name}>
                                     <h2> {gift.gift_name} × {gift.amount}  </h2>
@@ -151,7 +151,7 @@ const Lottery = () => {
                                     </div>
                                 </div>
                             )
-                        })}
+                        })} */}
 
                     </section>
 

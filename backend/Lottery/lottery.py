@@ -300,7 +300,6 @@ def getLotteryResults():
             'results':[]},
         "message": ""
     }
-<<<<<<< HEAD
 
 
     
@@ -323,67 +322,32 @@ def getLotteryResults():
                 response["status"] = 'error'
                 response["message"] = 'The form is waiting for draw!!!'
         elif(form_run_state == 'Open'):
-=======
-    form_run_state = getFormRunStatueByFormId(form_id)[0]["form_run_state"]
-    if(form_run_state == 'Closed'):
-        result = getClosedFormResult(form_id)
-        if(len(result) != 0):
-            for row in result:
-                temp_data = {
-                    "gift_name": row["gift_name"],
-                    "gift_pic_url":row["gift_pic_url"],
-                    "number": row["number"],
-                    "student_id": row["student_id"],
-                    "user_pic_url": row["user_pic_url"]
-                }
-                response["data"]["results"].append(temp_data)
-            response["status"] = "success"
-            response["message"] = "Get lottery results successfully!!!"
-        else:
->>>>>>> d0cb5a1 (add jwt to lottery page)
             response["status"] = 'error'
             response["message"] = 'The form is still open!!!'
         
               
     except:
         response["status"] = 'error'
-<<<<<<< HEAD
         response["message"] = 'The form is not exist!!!'  
 
-=======
-        response["message"] = 'The form is still open.'
-        
->>>>>>> d0cb5a1 (add jwt to lottery page)
     return jsonify(response)
 
 
 
 @lottery_bp.route('/GetFormDetail', methods=["GET"])
-<<<<<<< HEAD
-=======
-@jwt_required()
->>>>>>> d0cb5a1 (add jwt to lottery page)
 def getFormDetail():
     form_id = request.args.get('form_id')
     result = getFormDetailByFormId(form_id)[0]
 
     return jsonify(result)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d0cb5a1 (add jwt to lottery page)
 @lottery_bp.route('/Autolotteryfunc', methods=["GET"])
 def autolotteryfunc():
     cursor = db.cursor()
     query = '''
     SELECT form_id
     FROM form
-<<<<<<< HEAD
     WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
-=======
-    WHERE form_run_state = 'WaitForDraw' AND form_draw_date <CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
->>>>>>> d0cb5a1 (add jwt to lottery page)
     '''
     cursor.execute(query)
     db.commit()
