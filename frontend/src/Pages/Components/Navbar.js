@@ -15,7 +15,7 @@ const Navbar = () => {
                     User
                     <div className="user-dropdown-options" >
                         <button>管理問卷</button>
-                        <button>個人資料</button>
+                        <button onClick={()=>{window.location.href = "/Profile"}}>個人資料</button>
                     </div>
                 </button>
                 {modalOpen && <LoginModal closeModal={setModalOpen} />}

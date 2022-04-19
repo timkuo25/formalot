@@ -328,6 +328,7 @@ def getFormDetail():
 
     return jsonify(result)
 
+
 @lottery_bp.route('/Autolotteryfunc', methods=["GET"])
 def autolotteryfunc():
     cursor = db.cursor()
