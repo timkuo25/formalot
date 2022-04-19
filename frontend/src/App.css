@@ -193,7 +193,7 @@ button:hover{
 /* Home page --------------------------*/
 
 .call-to-action {
-  background-image: url('./img/LandingPage.g') ;
+  background-image: url('./img/LandingPage.svg') ;
   background-size: cover;
   background-clip: border-box;
   background-color: var(--theme-purple);
