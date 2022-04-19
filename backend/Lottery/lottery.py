@@ -191,12 +191,13 @@ def getCandidate():
                 "student_id": i["student_id"],
                 "user_pic_url": i["user_pic_url"]
             }
-            response["data"]["candidates"].append(i["student_id"])
+            response["data"]["candidates"].append(temp_data)
             response["message"] = "Get candidates successfully!!!"
 
     return jsonify(response)
 
 @lottery_bp.route('/GetGift', methods=["GET"])
+@jwt_required()
 def getGift():
     form_id = request.args.get('form_id')
     results = getGiftAmountByFormId(form_id)  

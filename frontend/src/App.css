@@ -3,10 +3,12 @@
 }
 
 :root {
-  --theme-color: #8864b3;
-  --theme-color-dark: #432a58;
+  --theme-pink: #FDCDD6;
+  --theme-purple: #8864b3;
+  --theme-dark-purple: #432a58;
+  --theme-black: #0f0b2b;
   --theme-light-grey: #ebe9f0;
-  --hover-color: rgba(77, 14, 179, 0.15);
+  --theme-extra-light: #fbfafc;
 }
 
 html,
@@ -16,7 +18,7 @@ body {
   font: 14px 'Montserrat', Helvetica, Arial, sans-serif;
   background: #ffffff;
   overflow: visible;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
 }
 
 /* Header --------------------------*/
@@ -25,7 +27,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: var(--theme-color-dark) solid 4px;
+  border-bottom: var(--theme-dark-purple) solid 4px;
 }
 
 button:hover{
@@ -42,7 +44,7 @@ button:hover{
 }
 
 .app-title > a:active {
-  color:pink
+  color: var(--theme-pink);
 }
 
 .navbar {
@@ -59,13 +61,13 @@ button:hover{
   align-items: center;
   justify-content: space-around;
   flex-grow: 1;
-  font-size: 2vh;
+  font-size: 1.5vh;
   font-weight: 700;
   cursor: pointer;
 }
 
 .nav-option:hover {
-  background-color: var(--hover-color);
+  background-color: var(--theme-pink);
 }
 
 .user-dropdown-options{
@@ -93,7 +95,7 @@ button:hover{
 }
 
 .user-dropdown-options > *:hover {
-  background-color: var(--hover-color);
+  background-color: var(--theme-pink);
 }
 
 /* Card --------------------------*/
@@ -113,7 +115,7 @@ button:hover{
   width: max-content;
   padding: 0.2em 0.8em;
   margin-bottom: 1em;
-  background-color: var(--theme-color);
+  background-color: var(--theme-purple);
   color: #ffffff;
   border-radius: 1em;
 }
@@ -122,7 +124,7 @@ button:hover{
   all: unset;
   width: 5em;
   height: 2.5em;
-  border: var(--theme-color) solid 0.2em;
+  border: var(--theme-purple) solid 0.4em;
   border-radius: 0.5em;
   text-align: center;
   font-weight: 800;
@@ -130,7 +132,7 @@ button:hover{
 
 
 .share-q:hover{
-  background-color: var(--hover-color);
+  background-color: var(--theme-pink);
 }
 
 /* Footer --------------------------*/
@@ -139,13 +141,13 @@ button:hover{
   align-items: center;
   justify-content: space-between;
   height: 5em;
-  background-color: var(--hover-color);
+  background-color: var(--theme-pink);
 }
 
 .copyright{
   transform: translateX(80%);
   font-weight: 600;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
 }
 
 .footer-link{
@@ -159,13 +161,13 @@ button:hover{
   text-decoration: none;
   font-size: 1.1em;
   font-weight: 900;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
 }
 
 /* Home page --------------------------*/
 
 .call-to-action {
-  background-color: var(--theme-color);
+  background-color: var(--theme-purple);
   color: #fbfafc;
   display: flex;
   align-items: center;
@@ -202,7 +204,7 @@ button:hover{
 
 .explore-button {
   all: unset;
-  background-color: var(--theme-color-dark);
+  background-color: var(--theme-dark-purple);
   border-radius: 0.7em;
   width: 6em;
   height: 2.5em;
@@ -213,10 +215,10 @@ button:hover{
 
 .make-survey-button {
   all: unset;
-  border: var(--theme-color-dark) solid 0.25em;
+  border: var(--theme-dark-purple) solid 0.25em;
   border-radius: 0.7em;
   background-color: #fbfafc;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
   margin-left: 1.3em;
   width: 5.75em;
   height: 2.25em;
@@ -317,13 +319,16 @@ input::-webkit-inner-spin-button {
 }
 
 
-/* Lottery page --------------------------*/
+/* Lottery page ---------------------------------------------------*/
 
+/* whole lottery page */
 .lottery-page-container{
   display:flex;
   flex-direction: column;
 }
 
+
+/* left-hand side */
 .lottery-container{
   display:flex;
   flex-direction: row;
@@ -339,43 +344,54 @@ input::-webkit-inner-spin-button {
   border: var(--theme-light-grey) solid 0.1em;
   display: flex;
   flex-direction: column;
+  border-radius: 1.5em;
 }
 
 .lottery-results > h2{
-  font-size: 2em;
+  font-size: 3em;
   font-weight: bold;
+  color:#0f0b2b;
 }
 
+/* 用戶框架 */
 .avator{
-  width: 5em;
+  width: 6em;
   display: flex;
   align-items: center;
   flex-direction: column;
   /* transform: translate(5px, 5px); */
   padding: 1em;
-  margin: 0.3em;
+  margin: 1em;
   font-size: 1em;
   font-weight: 600;
   /* background-color: var(--theme-light-grey); */
 }
 
+/* 用戶照片 */
 .avator-image{
-  width: 4.5em;
+  width: 5.5em;
   margin: 0em;
   border-radius: 100%;
+  border: var(--theme-light-grey) solid 0.1em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
 }
 
+/* 橫向用戶照片 */
 .avator-container{
   display: flex;
   justify-content: left;
 }
 
+/* 獎品照片 */
 .prize-image {
-  width: 10em;
-  margin: 0.3em;
+  width: 15em;
+  margin: 1em;
   border-radius: 0.5em;
+  border: var(--theme-light-grey) solid 0.1em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
 }
 
+/* 獎品與中獎者框框 */
 .lottery-card {
   border-radius: 0.5em;
   box-shadow: 0px 1px 2.5px 1px #dadada;
@@ -386,10 +402,11 @@ input::-webkit-inner-spin-button {
 }
 
 .lottery-card > h2{
-  font-size: 1.2em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 
+/* 基本表單資訊 */
 .form-info{
   height: 100%;
   width: 40%;
@@ -403,10 +420,12 @@ input::-webkit-inner-spin-button {
 }
 
 .form-info > h2{
+  color:#0f0b2b;
   font-size: 2em;
   font-weight: bold;
 }
 
+/* 獎品資訊 */
 .prize-container{
   display: flex;
   /* justify-content: left; */
@@ -416,7 +435,7 @@ input::-webkit-inner-spin-button {
 }
 
 .prize-container > h3{
-  font-size: 1.2em;
+  font-size: 1.4em;
   font-weight: bold;
 }
 
@@ -450,7 +469,7 @@ input::-webkit-inner-spin-button {
   height: 45em;
   transform: translateY(-2em);
   margin: 0.5em 5.5em;
-  color: var(--theme-color);
+  color: var(--theme-purple);
 }
 
 .register_card_right {
@@ -495,10 +514,10 @@ input::-webkit-inner-spin-button {
 }
 
 .reg_submit{
-  border: var(--theme-color-dark) solid 0.15em;
+  border: var(--theme-dark-purple) solid 0.15em;
   border-radius: 0.3em;
   background-color: #fbfafc;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
   margin: 3em 1em;
   width: 5em;
   height: 2.25em;
@@ -548,7 +567,7 @@ input::-webkit-inner-spin-button {
   justify-content: flex-end;
   border: 0em;
   background-color: #ffffff;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
 }
 
 .inputbar{
@@ -563,22 +582,21 @@ input::-webkit-inner-spin-button {
 .forget-password{
   border: 0em;
   background-color: #ffffff;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
   margin-top: 2em;
 }
 
 .submit{
-  border: var(--theme-color-dark) solid 0.15em;
+  border: var(--theme-dark-purple) solid 0.15em;
   border-radius: 0.3em;
   background-color: #fbfafc;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
   margin: 1em 1em;
   width: 5em;
   height: 2.25em;
   font-size: 1.2em;
   font-weight: 700;
   text-align: center;
-
 }
 
 .login-button{
@@ -595,7 +613,7 @@ input::-webkit-inner-spin-button {
 }
 .form-button {
   all: unset;
-  background-color: var(--theme-color-dark);
+  background-color: var(--theme-dark-purple);
   border-radius: 0.4em;
   width: 6em;
   height: 2.5em;
