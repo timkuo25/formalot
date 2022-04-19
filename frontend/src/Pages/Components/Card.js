@@ -1,3 +1,5 @@
+import ImageButton from 'react-image-button';
+
 const Card = ({ prize, num_prize, image_path, title, due_time, lottery_time }) => {
     
     return (
@@ -9,7 +11,7 @@ const Card = ({ prize, num_prize, image_path, title, due_time, lottery_time }) =
                 {`截止時間：${due_time}`} <br/>
                 {`抽獎時間：${lottery_time}`}
             </p>
-            <button className="share-q">分享</button>
+            <button className='share-q'> <img className='share-image' src={process.env.PUBLIC_URL + 'share.png'} alt="分享"/></button>
         </div>
     )
 }

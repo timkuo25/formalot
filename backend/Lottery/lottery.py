@@ -170,19 +170,6 @@ def getFormDetailByFormId(form_id):
     return result
 
 
-def getFormDetailByFormId(form_id):
-    cursor = db.cursor()
-    query = '''
-    SELECT form_title, form_create_date, form_end_date, form_draw_date
-    FROM form
-    WHERE form_id = (%s);
-    '''
-    cursor.execute(query, [form_id])
-    db.commit()
-
-    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
-    return result
-
 @lottery_bp.route('/GetCandidate', methods=["GET"])
 @jwt_required()
 def getCandidate():
