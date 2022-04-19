@@ -106,7 +106,7 @@ const Lottery = () => {
         )
         .then(response => response.json())
         .then(response => {
-            console.log('lottery results',response.data)
+            console.log('lottery results22',response.data)
             setLotteryResults(response.data['results']);
         })
         .catch(error => console.log(error))  
@@ -130,28 +130,34 @@ const Lottery = () => {
                                 {candidateList.map( (candidate) => {
                                     return (
                                         <Avator
-                                        user_name={candidate}
-                                        // user_pic_url={candidate.user_pic_url}
-                                    />
+                                            user_name={candidate.student_id}
+                                            user_pic_url={candidate.user_pic_url}
+                                        />
                                     )
                                 })}
                             </div>
                         </div>
                         {/* 禮物與中獎人 */}
-                        <LotteryCard results={lotteryResults} />
-                        {/* {gifts.map(gift => {
+                        {/* <LotteryCard results={lotteryResults} /> */}
+                        {lotteryResults.map(result => {
                             return (
-                                <div className='lottery-card' key={gift.gift_name}>
-                                    <h2> {gift.gift_name} × {gift.amount}  </h2>
-                                    <img className='prize-image' src={gift.gift_pic_url} alt=''/>
+                                <div className='lottery-card' key={result.gift_name}>
+                                    <h2> {result.gift_name} × {result.amount}  </h2>
+                                    <img className='prize-image' src={result.gift_pic_url} alt=''/>
                                     <div className='avator-container'>
-                                        <Avator/>
-                                        <Avator/>
-                                        <Avator/>
+                                        {console.log('winner', lotteryResults)}
+                                        {result['winner'].map( (winner) => {
+                                            return(
+                                                <Avator
+                                                    user_name={winner.user_student_id}
+                                                    user_pic_url={winner.user_pic_url}
+                                                />
+                                            )
+                                        })}
                                     </div>
                                 </div>
                             )
-                        })} */}
+                        })}
 
                     </section>
 
