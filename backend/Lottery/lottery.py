@@ -169,6 +169,7 @@ def getFormDetailByFormId(form_id):
     result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
     return result
 
+
 @lottery_bp.route('/GetCandidate', methods=["GET"])
 @jwt_required()
 def getCandidate():

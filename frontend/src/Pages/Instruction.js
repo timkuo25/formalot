@@ -1,5 +1,5 @@
-import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
+import { Footer } from './Components/Footer';
 
 const Instruction = () => {
     
@@ -34,6 +34,7 @@ const Instruction = () => {
                         </p>                
                 </div>
             </section>
+            <Footer/> 
         </>
     )
 }

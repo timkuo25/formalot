@@ -103,12 +103,12 @@ function LoginModal( {closeModal}){
                         </div>
 
                         <div>
-                            <h3 align="center">電子郵件</h3>
-                            <input placeholder="Email" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                            {/* <h3 align="center">電子郵件</h3> */}
+                            <input placeholder="輸入電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
                         </div>
                         <div>
-                            <h3 align="center">密碼</h3>
-                            <input type="password" placeholder="Password" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                            {/* <h3 align="center">密碼</h3> */}
+                            <input type="password" placeholder="輸入密碼" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                         </div>
                         <div align="center">
                             <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼</button>
