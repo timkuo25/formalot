@@ -241,7 +241,7 @@ def password_check(password, password2):
 
 
 def login_check(id, password):
-    db = db.get()
+    db = get_db()
     password_hash = str(md5(password.encode("utf-8")).hexdigest())
     result = db.cursor()
     query = '''
