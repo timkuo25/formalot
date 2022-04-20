@@ -523,7 +523,7 @@ input::-webkit-inner-spin-button {
   text-align:left;
 }
 .input_content{
-  margin: 0.4em 1em;
+  margin: 0.6em 1em;
   display: flex;
   flex-direction: column;
 }
@@ -611,10 +611,11 @@ input::-webkit-inner-spin-button {
 .inputbar{
   width: 60%;
   border-radius: 0.3em;
-  height: 2.5em;
+  height: 3em;
   display: flex;
   text-align: left;
   margin: auto;
+  margin-top: 3em;
 }
 
 .forget-password{

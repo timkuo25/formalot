@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navbar } from './Components/Navbar';
+import { Footer } from "./Components/Footer";
 const ForgetPassword = () => {
         // 忘記密碼
         const [email, setEmail] = useState("");
@@ -58,9 +59,10 @@ const ForgetPassword = () => {
             <form>
                 <button className="reg_submit" onSubmit={callforgetpasswordApi}>修改</button>
             </form>
-            
-            </div>
+          
+            </div> 
         </div>
+        <Footer/> 
     </>
     )
 }
