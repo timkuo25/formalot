@@ -28,38 +28,38 @@ const EditProfile = () => {
     return (
     <>
     <Navbar/>
-     <div className="reg_card_container" align='center'>
+     <div className="edit_card_container" align='center'>
             
-            <div className="register_card_right">
-                <div className="input_content">
+            <div className="edit_card_right">
+                <div className="edit_input_content">
                     <h1>編輯個人資訊</h1>
                 </div>
-                <div className="input_content">
+                <div className="edit_input_content">
                     <h2>你的信箱</h2>
                     <h3>r10725056@ntu.edu.tw</h3>
                 </div>
-                <div className="input_content">
+                <div className="edit_input_content">
                     <h3>姓氏</h3>
-                    <input value={last_name} onChange={(e) => setLastname(e.target.value)} type="password" placeholder="LastName" className="reg_inputbar"/>
+                    <input value={last_name} onChange={(e) => setLastname(e.target.value)} type="text" placeholder="LastName" className="edit_inputbar"/>
                 </div>
-                <div className="input_content">
+                <div className="edit_input_content">
                     <h3>名字</h3>
-                    <input value={first_name} onChange={(e) => setFirstname(e.target.value)} type="password" placeholder="FirstName" className="reg_inputbar"/>
+                    <input value={first_name} onChange={(e) => setFirstname(e.target.value)} type="text" placeholder="FirstName" className="edit_inputbar"/>
                 </div>
 
-                <div className="input_content">
+                <div className="edit_input_content">
                     <h3>輸入新密碼</h3>
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="reg_inputbar"/>
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="edit_inputbar"/>
                 </div>
-                <div className="input_content">
+                <div className="edit_input_content">
                     <h3>確認新密碼</h3>
-                    <input value={password2} onChange={(e) => setPassword2(e.target.value)} type="password" placeholder="Confirm Password" className="reg_inputbar"/>
+                    <input value={password2} onChange={(e) => setPassword2(e.target.value)} type="password" placeholder="Confirm Password" className="edit_inputbar"/>
                 </div>
                 
                 
             
             <form>
-                <button className="reg_submit" onSubmit={calluserupdate}>修改</button>
+                <button className="edit_submit" onSubmit={calluserupdate}>修改</button>
             </form>
             
             </div>
