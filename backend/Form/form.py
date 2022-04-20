@@ -4,9 +4,9 @@ from flasgger.utils import swag_from
 import psycopg2.extras  # get the results in form of dictionary
 import json
 import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 form_bp = Blueprint('form', __name__)
-db = get_db()
 
 # DAO
 
@@ -14,6 +14,7 @@ db = get_db()
 def replied(student_id):
     # input: User.student_id
     # output: Form.{form_title, form_picture, form_end_date, form_run_state, form_id}
+    db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     query = '''SELECT Form.form_title, Form.form_pic_url, Form.form_end_date, Form.form_run_state, Form_form_id
     from UserForm
@@ -23,12 +24,14 @@ def replied(student_id):
     '''
     cursor.execute(query, [student_id])
     db.commit()
+    db.close()
     return cursor.fetchall()
 
 
 def win_lottery_check(form_id, student_id):
     # input: Userform.form_id, student_id
     # output: "未中獎"/"中獎"
+    db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     query = '''SELECT *
         FROM gift
@@ -36,6 +39,7 @@ def win_lottery_check(form_id, student_id):
         '''
     cursor.execute(query, (form_id, student_id))
     rows = cursor.fetchall()
+    db.close()
 
     if rows != []:
         return "中獎"
@@ -43,6 +47,7 @@ def win_lottery_check(form_id, student_id):
 
 
 def deleteForm(form_id):
+    db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     query = '''UPDATE Form
     SET form_delete_state = '1'
@@ -50,10 +55,12 @@ def deleteForm(form_id):
     '''
     cursor.execute(query, [form_id])
     db.commit()
+    db.close()
     return True
 
 
 def closeForm(form_id):
+    db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     query = '''UPDATE Form
     SET form_run_state='Closed'
@@ -61,11 +68,14 @@ def closeForm(form_id):
     '''
     cursor.execute(query, [form_id])
     db.commit()
+    db.close()
     return True
+
 
 def created(student_id):
     # input: User.student_id
     # output: Form.{form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state}
+    db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         query = """
@@ -82,16 +92,19 @@ def created(student_id):
     finally:
         db.close()
 
+
 def addForm(form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url):
     # input: request.get_json[form_title, questioncontent, form_end_date, form_pic_url], session.get(student_id), datetime.now
-    # output: 
+    # output:
+    db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    try: 
+    try:
         query = """
         INSERT INTO Form(form_id, form_title, questioncontent, form_create_date, form_end_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
         SELECT MAX(form_id)+1 , %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
         """
-        cursor.execute(query, [form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url])
+        cursor.execute(query, [form_title, questioncontent,
+                       form_create_date, form_end_date, student_id, form_pic_url])
         db.commit()
         return True
     except:
@@ -100,15 +113,30 @@ def addForm(form_title, questioncontent, form_create_date, form_end_date, studen
     finally:
         db.close()
 
+
+# CORS issue
+@form_bp.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    header['Access-Control-Allow-Headers'] = '*'
+    header['Access-Control-Allow-Methods'] = '*'
+    header['Content-type'] = 'application/json'
+    return response
+
+
+# get jwt function
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return current_user
+
+
 # route
-
-
 @ form_bp.route('/SurveyManagement', methods=["GET"])
 @ swag_from('replier_form_specs.yml', methods=["GET"])
 def returnReplierForm():
-    # req_json = request.get_json()
-    student_id = session.get('student_id')
-    # student_id = req_json["student_id"]
+    student_id = protected()  # get id
     results = replied(student_id)  # list
     response = []
     for result in results:  # result: psycopg2.extras.DictRow
@@ -139,6 +167,7 @@ def modifyForm():
         response_return["message"] = "Closed form"
     return jsonify(response_return)
 
+
 @ form_bp.route('/SurveyManagement/author', methods=['GET'])
 def returnAuthorForm():
     # student_id = 'r10725051'  # test data
@@ -146,8 +175,9 @@ def returnAuthorForm():
     results = created(student_id)
     return jsonify(results)
 
-@ form_bp.route('/SurveyManagement/new', methods=['GET','POST'])
-def createForm(): 
+
+@ form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
+def createForm():
     # form_title = 'addForm測試'  # test data
     # questioncontent = json.dumps([{'測試測試':'我是測試怪'}], ensure_ascii=False)  # test data
     # form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # test data
@@ -155,15 +185,16 @@ def createForm():
     # student_id = 'r10725051'  # test data
     # form_pic_url = 'https://imgur.com/gallery/ewCdEP9'  # test data
     req_json = request.get_json(force=True)
-    form_title = req_json['form_title'] 
-    questioncontent = json.dumps(request.get_json()['questioncontent'], ensure_ascii=False) 
+    form_title = req_json['form_title']
+    questioncontent = json.dumps(
+        request.get_json()['questioncontent'], ensure_ascii=False)
     form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     form_end_date = req_json['form_end_date']
     student_id = session.get('student_id')
-    form_pic_url = req_json['form_picture'] 
+    form_pic_url = req_json['form_picture']
     response_return = {
-        "status":"",
-        "message":""
+        "status": "",
+        "message": ""
     }
     if addForm(form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url):
         response_return["status"] = 'success'

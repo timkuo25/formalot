@@ -8,6 +8,7 @@ password = "fcc9bdf8b118140b1d24073bc8487f2a177fd61621c3f8177531840d996dd911"
 port = 5432
 sslmode = "require"
 
+
 def get_db():
     # Construct connection string
     conn_string = "host={0} user={1} dbname={2} password={3} sslmode={4} port={5}".format(
