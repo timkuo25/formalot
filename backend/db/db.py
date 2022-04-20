@@ -1,10 +1,10 @@
 import psycopg2
 
 # Update connection string information
-host = "ec2-52-73-155-171.compute-1.amazonaws.com"
-dbname = "dcihqp1n2bj66v"
-user = "roetlfqmcenvgu"
-password = "f129646353f803a7a9c2fd68bc994d7976b3d078ea0dea6f3ea448e36791972a"
+host = "ec2-3-211-6-217.compute-1.amazonaws.com"
+dbname = "d2me1o5ljgshr3"
+user = "fomchdsnqjstku"
+password = "fcc9bdf8b118140b1d24073bc8487f2a177fd61621c3f8177531840d996dd911"
 port = 5432
 sslmode = "require"
 
