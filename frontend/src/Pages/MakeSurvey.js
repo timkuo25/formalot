@@ -86,66 +86,68 @@ class MakeSurvey extends Component{
             <>
             <Navbar/>
             {/*react dnd*/}
-            <section className='makeSurvey-container'>
-        
-                <section className='makeSurvey-results'>
-                    <div>
+            <section className='page-container'>
+                     <div className='breadcrumb'>
                         <h3>製作問卷 > 填寫抽獎資訊 > 發布問卷 </h3>
                     </div>
-
-                    <form onSubmit={this.handleSubmit}>
-                    <div className='makeSurvey-card'>
-                        <h3>表單標題</h3>
-                        <p>
-                            <input type="text" placeholder="問卷題目" style={{width: "100%", height:"50px"}} defaultValue="Untitled"/>
-                        </p>
-                        <p>
-                            <input type="text" placeholder="問卷描述" style={{width: "100%", height:"30px"}}/>
-                        </p>
+                <section className='makeSurvey-container'>
+            
+                    <section className='makeSurvey-results'>
+                        <form onSubmit={this.handleSubmit}>
+                        <div className='makeSurvey-card'>
+                            <h3>表單標題</h3>
+                            <p>
+                                <input type="text" placeholder="問卷題目" style={{width: "100%", height:"50px"}} defaultValue="Untitled"/>
+                            </p>
+                            <p>
+                                <input type="text" placeholder="問卷描述" style={{width: "100%", height:"30px"}}/>
+                            </p>
+        
+                        </div>
+                        {this.divList()}
+                            <input className='Btn NextBtn' type='submit' value="下一步"/>
+                        
+                            </form> 
     
-                    </div>
-                    {this.divList()}
-                        <input className='Btn NextBtn' type='submit' value="下一步"/>
+                        
+                        
+        
+                    </section>  
                     
-                        </form> 
-  
-                    
-                    
-    
-                </section>  
-                
-                <section className='makeSurvey-info'>
+                    <section className='makeSurvey-info'>
 
-                    <div className='makeSurvey-card sticky-div'>
-                        <p>
-                            <button className='Btn SurveyDescriptionBtn' onClick = {()=>this.renderCrudDiv('description')}>
-                             簡答
-                            </button>
-                        </p>
+                        <div className='makeSurvey-card sticky-div'>
+                            <p>
+                                <button className='Btn SurveyDescriptionBtn' onClick = {()=>this.renderCrudDiv('description')}>
+                                簡答
+                                </button>
+                            </p>
 
-                        <p>
-                            <button className='Btn SurveyOptionBtn'>
-                               單選題
-                            </button>
-                        </p>
-                        <p>
-                            <button className='Btn SurveyOptionBtn'>
-                               多選題
-                            </button>
-                        </p>
-                        <p>
-                            <button className='Btn SurveyOptionBtn'>
-                               下拉式選單
-                            </button>
-                        </p>
-                        <p>
-                            <button className='Btn SurveyOptionBtn'>
-                               線性量表問題
-                            </button>
-                        </p>
-                    </div>
+                            <p>
+                                <button className='Btn SurveyOptionBtn'>
+                                單選題
+                                </button>
+                            </p>
+                            <p>
+                                <button className='Btn SurveyOptionBtn'>
+                                多選題
+                                </button>
+                            </p>
+                            <p>
+                                <button className='Btn SurveyOptionBtn'>
+                                下拉式選單
+                                </button>
+                            </p>
+                            <p>
+                                <button className='Btn SurveyOptionBtn'>
+                                線性量表問題
+                                </button>
+                            </p>
+                        </div>
+                    </section>
+                    
                 </section>
-                
+
             </section>
             </>
         )

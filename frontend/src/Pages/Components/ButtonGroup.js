@@ -9,7 +9,7 @@ const ButtonGroup = ({ buttons, btnFunc}) => {
   return (
     <>
       {buttons.map((buttonLabel, i) => (
-        <button
+        <button 
           key={i}
           name={buttonLabel}
           onClick={(event) => handleClick(event, i)}

@@ -19,7 +19,7 @@ const Homepage = () => {
         <>
             <Navbar />
             <section className='call-to-action'>
-                <img className='main-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
+                {/* <img className='main-image' src={process.env.PUBLIC_URL + 'LandingPage.svg'} alt=''/> */}
                 <div className='description'>
                     <h2>填寫問卷，參與抽獎，<br/>發布專屬於你的抽獎問卷</h2>
                     <h3>Formalot 是問卷抽獎管理的首選平台！</h3>
