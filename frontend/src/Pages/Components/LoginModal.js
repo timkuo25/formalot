@@ -114,7 +114,7 @@ function LoginModal( {closeModal}){
                             <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼</button>
                         </div>                                
                         <div className="login-button" align="center">
-                            <button className="submit" onSubmit={callLoginApi}>登入</button>
+                            <button className="submit" onClick={callLoginApi}>登入</button>
                             <button className="submit" onClick={() => {window.location.href='register'}}>註冊</button>
                             {/* <button className="forget-password">忘記密碼？</button><br/> */}
                         </div>
