@@ -499,9 +499,9 @@ input::-webkit-inner-spin-button {
 }
 
 .ver_submit{
-  border: var(--theme-color-dark) solid 0.15em;
+  border: var(--theme-dark-purple) solid 0.15em;
   border-radius: 0.3em;
-  background-color: var(--theme-color);
+  background-color: var(--theme-purple);
   color: #ffffff;
   margin: 0em 3em;
   width: 10em;
@@ -535,6 +535,8 @@ input::-webkit-inner-spin-button {
   justify-content:left;
   float:left;
 }
+
+/* end Register page --------------------------*/
 
 /* LoginModal Components --------------------------*/
 .modalBackground {
@@ -603,6 +605,8 @@ input::-webkit-inner-spin-button {
   flex-direction: row;
   float:left;
 }
+
+/* End LoginModal Components --------------------------*/
 
 /* 右下角的紫色按鈕 */
 .form-buttons{
@@ -858,7 +862,7 @@ h3.manage-header {
 }
 
 .profile_card{
-  background-color: var(--theme-color);
+  background-color: var(--theme-purple);
   color: #ffffff;
   width: 40%;
   height:40em;
@@ -908,10 +912,10 @@ h3.manage-header {
 
 .edit-profile{
   margin-top: 80px;
-  border: var(--theme-color-dark) solid 0.15em;
+  border: var(--theme-dark-purple) solid 0.15em;
   border-radius: 0.3em;
   background-color: #fbfafc;
-  color: var(--theme-color-dark);
+  color: var(--theme-dark-purple);
   width: 8em;
   height: 2.25em;
   font-size: 1.2em;
