@@ -10,40 +10,84 @@ form_bp = Blueprint('form', __name__)
 
 # DAO
 
-
 def replied(student_id):
-    # input: User.student_id
-    # output: Form.{form_title, form_picture, form_end_date, form_run_state, form_id}
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = '''SELECT Form.form_title, Form.form_pic_url, Form.form_end_date, Form.form_run_state, Form_form_id
-    from UserForm
-    JOIN Users on student_id = UserForm.User_student_id
-    JOIN Form on form_id = UserForm.Form_form_id
-    WHERE Form.form_delete_state='0' AND Users.student_id = %s
-    '''
-    cursor.execute(query, [student_id])
-    db.commit()
-    db.close()
-    return cursor.fetchall()
-
-
-def win_lottery_check(form_id, student_id):
-    # input: Userform.form_id, student_id
-    # output: "未中獎"/"中獎"
-    db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = '''SELECT *
-        FROM gift
-        WHERE form_form_id = %s AND user_student_id= %s
+    try:
+        # 直覺寫法（有更有效率的結構但我還沒想到怎麼寫QQ）
+        query = '''SELECT UserForm.Form_form_id, Form.Form_title, Form.Form_end_date, Form.Form_draw_date, Form.Form_run_state, Form.Form_pic_url, Gift.Gift_name AS draw_result
+        FROM UserForm
+        LEFT JOIN Form ON UserForm.Form_form_id = Form.Form_id
+        LEFT JOIN Gift ON UserForm.Form_form_id = Gift.Form_form_id AND UserForm.User_student_id = Gift.User_student_id
+        WHERE Form.form_delete_state = 0 AND UserForm.User_student_id = %s;
         '''
-    cursor.execute(query, (form_id, student_id))
-    rows = cursor.fetchall()
-    db.close()
+        cursor.execute(query, [student_id])
+        db.commit()
+        return cursor.fetchall()
+    except:
+        db.rollback()
+        return 'failed to retrieve form.'
+    finally:
+        db.close() 
 
-    if rows != []:
-        return "中獎"
-    return "未中獎"
+
+def created(student_id):
+    # input: User.student_id
+    # output: Form.{form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state}
+    db = get_db()
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    try:
+        query = """
+        SELECT form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state
+        FROM Form 
+        WHERE User_student_id = %s AND form_delete_state = 0;
+        """
+        cursor.execute(query, [student_id])
+        db.commit()
+        return cursor.fetchall()
+    except:
+        db.rollback()
+        return 'failed to retrieve form.'
+    finally:
+        db.close()
+
+
+'''
+@ Wei: 我把win_lottery_check和replied合併，讓查詢replied form 時只要I/O db一次
+'''
+# def replied(student_id):
+#     # input: User.student_id
+#     # output: Form.{form_title, form_picture, form_end_date, form_run_state, form_id}
+#     db = get_db()
+#     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#     query = '''SELECT Form.form_title, Form.form_pic_url, Form.form_end_date, Form.form_run_state, Form_form_id
+#     from UserForm
+#     JOIN Users on student_id = UserForm.User_student_id
+#     JOIN Form on form_id = UserForm.Form_form_id
+#     WHERE Form.form_delete_state='0' AND Users.student_id = %s
+#     '''
+#     cursor.execute(query, [student_id])
+#     db.commit()
+#     db.close()
+#     return cursor.fetchall()
+
+
+# def win_lottery_check(form_id, student_id):
+#     # input: Userform.form_id, student_id
+#     # output: "未中獎"/"中獎"
+#     db = get_db()
+#     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#     query = '''SELECT *
+#         FROM gift
+#         WHERE form_form_id = %s AND user_student_id= %s
+#         '''
+#     cursor.execute(query, (form_id, student_id))
+#     rows = cursor.fetchall()
+#     db.close()
+
+#     if rows != []:
+#         return "中獎"
+#     return "未中獎"
 
 
 def deleteForm(form_id):
@@ -70,27 +114,6 @@ def closeForm(form_id):
     db.commit()
     db.close()
     return True
-
-
-def created(student_id):
-    # input: User.student_id
-    # output: Form.{form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state}
-    db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    try:
-        query = """
-        SELECT form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state
-        FROM Form 
-        WHERE User_student_id = %s AND form_delete_state = 0;
-        """
-        cursor.execute(query, [student_id])
-        db.commit()
-        return cursor.fetchall()
-    except:
-        db.rollback()
-        return 'failed to retrieve form.'
-    finally:
-        db.close()
 
 
 def addForm(form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url):
@@ -133,18 +156,29 @@ def protected():
 
 
 # route
-@ form_bp.route('/SurveyManagement', methods=["GET"])
-@ swag_from('replier_form_specs.yml', methods=["GET"])
-def returnReplierForm():
-    student_id = protected()  # get id
-    results = replied(student_id)  # list
-    response = []
-    for result in results:  # result: psycopg2.extras.DictRow
-        result_dict = dict(result)
-        form_id = result_dict['form_form_id']
-        result_dict['winning_status'] = win_lottery_check(form_id, student_id)
-        response.append(result_dict)
+
+
+@ form_bp.route('/SurveyManagement', methods=['GET'])
+def returnForm():
+    student_id = protected()
+    # student_id = 'r10725051'  # test data
+    response = [{'replied':replied(student_id),
+                'created':created(student_id)}]
     return jsonify(response)
+
+
+# @ form_bp.route('/SurveyManagement', methods=["GET"])
+# @ swag_from('replier_form_specs.yml', methods=["GET"])
+# def returnReplierForm():
+#     student_id = protected()  # get id
+#     results = replied(student_id)  # list
+#     response = []
+#     for result in results:  # result: psycopg2.extras.DictRow
+#         result_dict = dict(result)
+#         form_id = result_dict['form_form_id']
+#         result_dict['winning_status'] = win_lottery_check(form_id, student_id)
+#         response.append(result_dict)
+#     return jsonify(response)
 
 
 @ form_bp.route('/SurveyManagement', methods=["PUT"])
@@ -168,12 +202,12 @@ def modifyForm():
     return jsonify(response_return)
 
 
-@ form_bp.route('/SurveyManagement/author', methods=['GET'])
-def returnAuthorForm():
-    # student_id = 'r10725051'  # test data
-    student_id = session.get('student_id')
-    results = created(student_id)
-    return jsonify(results)
+# @ form_bp.route('/SurveyManagement/author', methods=['GET'])
+# def returnAuthorForm():
+#     # student_id = 'r10725051'  # test data
+#     student_id = session.get('student_id')
+#     results = created(student_id)
+#     return jsonify(results)
 
 
 @ form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
