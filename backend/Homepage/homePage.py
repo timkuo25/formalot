@@ -22,7 +22,7 @@ def formRecommendation():
         query = """
         SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_end_date, Form.form_pic_url, COUNT(DISTINCT UserForm.User_student_id) AS num_answer
         FROM Form
-        INNER JOIN UserForm
+        LEFT JOIN UserForm
         ON Form.form_id = UserForm.Form_form_id
         WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open'
         GROUP BY Form.form_id;
