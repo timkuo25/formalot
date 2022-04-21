@@ -12,7 +12,7 @@ form_bp = Blueprint('form', __name__)
 
 def replied(student_id):
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         # 直覺寫法（有更有效率的結構但我還沒想到怎麼寫QQ）
         query = '''SELECT UserForm.Form_form_id, Form.Form_title, Form.Form_end_date, Form.Form_draw_date, Form.Form_run_state, Form.Form_pic_url, Gift.Gift_name AS draw_result
@@ -38,7 +38,7 @@ def created(student_id):
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         query = """
-        SELECT form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state
+        SELECT form_id, form_title, form_pic_url, form_create_date, form_end_date, form_draw_date, form_run_state
         FROM Form 
         WHERE User_student_id = %s AND form_delete_state = 0;
         """
