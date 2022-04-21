@@ -1,10 +1,13 @@
 import React from "react";
 import ReactDom from "react-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Homepage } from "../Homepage";
 
 function LoginModal( {closeModal}){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     // 登入
     const callLoginApi = async (e) => {
@@ -20,13 +23,17 @@ function LoginModal( {closeModal}){
         if (resJson.access_token){
             localStorage.setItem('jwt', resJson.access_token);
             console.log("Login Success");
+            console.log(resJson.access_token);
             alert("Login Success");
+            window.location.reload();
+            navigate(<Homepage/>);
+            
         }else{
             console.log(resJson);
             alert(resJson.message);
         };
-
     };
+
 
     // 登出
     const calllogout = async (e) => {
@@ -104,18 +111,18 @@ function LoginModal( {closeModal}){
 
                         <div>
                             {/* <h3 align="center">電子郵件</h3> */}
-                            <input placeholder="輸入電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                            <input placeholder="電子郵件或帳號" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
                         </div>
                         <div>
                             {/* <h3 align="center">密碼</h3> */}
-                            <input type="password" placeholder="輸入密碼" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                            <input type="password" placeholder="密碼" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                         </div>
                         <div align="center">
-                            <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼</button>
+                            <button className="submit" onClick={callLoginApi}>登入</button><br/>
+                            <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼?</button>
                         </div>                                
                         <div className="login-button" align="center">
-                            <button className="submit" onClick={callLoginApi}>登入</button>
-                            <button className="submit" onClick={() => {window.location.href='register'}}>註冊</button>
+                            <button className="create-account-button" onClick={() => {window.location.href='register'}}>建立新帳號</button>
                             {/* <button className="forget-password">忘記密碼？</button><br/> */}
                         </div>
                 </div>

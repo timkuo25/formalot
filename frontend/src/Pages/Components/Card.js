@@ -1,4 +1,4 @@
-import ImageButton from 'react-image-button';
+//import ImageButton from 'react-image-button';
 
 const Card = ({ prize, num_prize, image_path, title, due_time, lottery_time }) => {
     
