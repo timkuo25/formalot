@@ -57,11 +57,11 @@ const Register = () => {
                 </div>
                 <div className="input_content">
                     <h3>姓氏</h3>
-                    <input type="text" maxlength="45" value={last_name} placeholder="Lastname" onChange={(e) => setLastname(e.target.value)} className="reg_inputbar"/>
+                    <input type="text" maxLength="45" value={last_name} placeholder="Lastname" onChange={(e) => setLastname(e.target.value)} className="reg_inputbar"/>
                 </div>
                 <div className="input_content">
                     <h3>名字</h3>
-                    <input type="text" maxlength="45" value={first_name} placeholder="Firstname" onChange={(e) => setFirstname(e.target.value)} className="reg_inputbar"/>
+                    <input type="text" maxLength="45" value={first_name} placeholder="Firstname" onChange={(e) => setFirstname(e.target.value)} className="reg_inputbar"/>
                 </div>
                 <div className="input_content">
                     <h3>密碼</h3>

@@ -1,7 +1,7 @@
 from flask import Flask
 from flasgger import Swagger
 from Form.form import form_bp
-from Member.member import app_members
+from Member.member import members_bp
 from Lottery.lottery import lottery_bp, autolotteryfunc
 from Homepage.homePage import homePage_bp
 from datetime import timedelta
@@ -15,7 +15,7 @@ app = Flask(__name__)
 # scheduler = APScheduler()
 # register blueprint
 app.register_blueprint(form_bp)
-app.register_blueprint(app_members)
+app.register_blueprint(members_bp)
 app.register_blueprint(lottery_bp)
 app.register_blueprint(homePage_bp)
 
@@ -56,5 +56,5 @@ def index():
     return "home"
 
 
-# if __name__ == "__main__":
-#     app.run(host='127.0.0.1', debug=True)
+if __name__ == "__main__":
+    app.run(host='127.0.0.1', debug=True)
