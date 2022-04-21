@@ -1,6 +1,6 @@
 from db.db import get_db
 # from db.db import row_to_dict # For sqlite
-from flask import Blueprint, request, session, jsonify
+from flask import Blueprint, request, jsonify
 from flasgger.utils import swag_from
 import psycopg2.extras  # get the results in form of dictionary
 
