@@ -238,14 +238,6 @@ def modifyForm():
     return jsonify(response_return)
 
 
-# @ form_bp.route('/SurveyManagement/author', methods=['GET'])
-# def returnAuthorForm():
-#     # student_id = 'r10725051'  # test data
-#     student_id = session.get('student_id')
-#     results = created(student_id)
-#     return jsonify(results)
-
-
 @ form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
 def createForm():
 
