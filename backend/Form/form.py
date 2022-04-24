@@ -116,23 +116,59 @@ def closeForm(form_id):
     return True
 
 
-def addForm(form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url):
-    # input: request.get_json[form_title, questioncontent, form_end_date, form_pic_url], session.get(student_id), datetime.now
-    # output:
+'''
+[Wei]: addForm可能會再更新，以確保db transaction process。（但變數不會改變，前端可以照用）
+'''
+def addForm(form_title, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    # db cursor is lightweight, so it's better to declare multiple curosrs instead of running multiple db connections.
+    cursor1 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor2 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor3 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor4 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    
     try:
+        # Write Form
         query = """
-        INSERT INTO Form(form_id, form_title, questioncontent, form_create_date, form_end_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
-        SELECT MAX(form_id)+1 , %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
+        INSERT INTO Form(form_id, form_title, questioncontent, form_create_date, form_end_date, form_draw_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
+        SELECT Max(form_id)+1, %s, %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
         """
-        cursor.execute(query, [form_title, questioncontent,
-                       form_create_date, form_end_date, student_id, form_pic_url])
+        cursor1.execute(query, [form_title, questioncontent, form_create_date, form_end_date,form_draw_date, student_id, form_pic_url])
+
+        # Find Max form_id
+        query = """SELECT MAX(form_id) FROM form;"""
+        cursor2.execute(query)
+        result = cursor2.fetchall()
+        form_id = result[0]['max']
+        print('Find Max form_id = {}'.format(form_id))
+
+        # Write Formtag
+        query = """
+        INSERT INTO Formtag(form_form_id, tag_tag_id)
+        SELECT %s, tag_id FROM Tag WHERE tag_name = %s;
+        """
+        cursor3.execute(query, [form_id, form_tag_name])
+        print('Write Formtag')
+
+        # Write Gift
+        query = """
+        INSERT INTO Gift(form_form_id, gift_name, gift_pic_url, number)
+        VALUES 
+        """
+        for gift in gift_info:
+            for i in range(gift['quantity']):
+                query += """({}, '{}', '{}', {}),""".format(form_id, gift['gift_name'], gift['gift_pic_url'], i)
+        query = query[:-1]
+        cursor4.execute(query)
+        print('Write Gift')
+
         db.commit()
         return True
-    except:
+
+    except psycopg2.DatabaseError as error:
         db.rollback()
-        return False
+        return error
+
     finally:
         db.close()
 
@@ -202,38 +238,38 @@ def modifyForm():
     return jsonify(response_return)
 
 
-# @ form_bp.route('/SurveyManagement/author', methods=['GET'])
-# def returnAuthorForm():
-#     # student_id = 'r10725051'  # test data
-#     student_id = session.get('student_id')
-#     results = created(student_id)
-#     return jsonify(results)
-
-
 @ form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
 def createForm():
+
     # form_title = 'addForm測試'  # test data
-    # questioncontent = json.dumps([{'測試測試':'我是測試怪'}], ensure_ascii=False)  # test data
+    # questioncontent = '[{"測試題目":"測試題目"}]'  # test data
     # form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # test data
-    # form_end_date = datetime.datetime(2022,9,10,23,59,59)  # test data
+    # form_end_date = datetime.datetime(2022, 9, 10, 23, 59, 59)  # test data
+    # form_draw_date = datetime.datetime(2022,9, 11, 23, 59, 59)  # test data
     # student_id = 'r10725051'  # test data
-    # form_pic_url = 'https://imgur.com/gallery/ewCdEP9'  # test data
+    # form_pic_url = 'https://imgur.com/gallery/05YcgLz'  # test data
+    # form_tag_name = '美妝保養類'  # test data
+    # gift_info = [{"gift_name":"星巴克","gift_pic_url":"imgur.com/1","quantity":3},{"gift_name":"iPhone", "gift_pic_url":"imgur.com/2","quantity":2}]  # test data
+    
     req_json = request.get_json(force=True)
     form_title = req_json['form_title']
-    questioncontent = json.dumps(
-        request.get_json()['questioncontent'], ensure_ascii=False)
+    questioncontent = json.dumps(req_json['questioncontent'], ensure_ascii=False)
     form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     form_end_date = req_json['form_end_date']
-    student_id = session.get('student_id')
-    form_pic_url = req_json['form_picture']
-    response_return = {
+    form_draw_date = req_json['form_draw_date']
+    student_id = protected()
+    form_pic_url = req_json['form_pic_url']
+    form_tag_name = req_json['form_tag_name']
+    gift_info = req_json['gift_info']
+
+    response = {
         "status": "",
         "message": ""
     }
-    if addForm(form_title, questioncontent, form_create_date, form_end_date, student_id, form_pic_url):
-        response_return["status"] = 'success'
-        response_return["message"] = 'Form added.'
+    if addForm(form_title, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
+        response["status"] = 'success'
+        response["message"] = 'Form added.'
     else:
-        response_return["status"] = 'fail'
-        response_return["message"] = 'Form aborted.'
-    return jsonify(response_return)
+        response["status"] = 'fail'
+        response["message"] = 'Form aborted.'
+    return jsonify(response)

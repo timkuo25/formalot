@@ -20,7 +20,7 @@ def formRecommendation():
     
     try:
         query = """
-        SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_end_date, Form.form_pic_url, COUNT(DISTINCT UserForm.User_student_id) AS num_answer
+        SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, COUNT(DISTINCT UserForm.User_student_id) AS num_answer
         FROM Form
         LEFT JOIN UserForm
         ON Form.form_id = UserForm.Form_form_id
@@ -44,9 +44,8 @@ def get_formRecommendation():
 
     sortBy = request.args.get('sortBy')
     result = formRecommendation()
-    print(result)
     if sortBy == 'newest':
-        result.sort(key=lambda x: x['form_end_date'], reverse = True)
+        result.sort(key=lambda x: x['form_create_date'], reverse = True)
     else: # most popular form first by default
         result.sort(key=lambda x: x['num_answer'], reverse = True)
     return jsonify(result)
