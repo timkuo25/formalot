@@ -8,7 +8,7 @@ const Profile = () => {
               Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
             body: JSON.stringify({
-                first_name: "testupdate",
+                first_name: "",
                 last_name : "",
                 password : "",
                 password2 : "",
