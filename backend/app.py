@@ -4,6 +4,7 @@ from Form.form import form_bp
 from Member.member import members_bp
 from Lottery.lottery import lottery_bp, autolotteryfunc
 from Homepage.homePage import homePage_bp
+from Explore.exploreform import explore_bp
 from datetime import timedelta
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -18,6 +19,7 @@ app.register_blueprint(form_bp)
 app.register_blueprint(members_bp)
 app.register_blueprint(lottery_bp)
 app.register_blueprint(homePage_bp)
+app.register_blueprint(explore_bp)
 
 
 # set JWT 
