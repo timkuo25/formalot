@@ -19,10 +19,9 @@ const ForgetPassword = () => {
                     session_code: sessionStorage.getItem('code')
                 }),
             });
-            const resdata = await getprotected;
+            const resdata = await getprotected.json();
             console.log(resdata);
             alert(resdata.message);
-    
         };
 
         const callemailApi = async (e) => {
@@ -71,7 +70,7 @@ const ForgetPassword = () => {
                 
             
             <form>
-                <button className="forget_submit" onSubmit={callforgetpasswordApi}>修改</button>
+                <button className="forget_submit" onClick={callforgetpasswordApi}>修改</button>
             </form>
           
             </div> 

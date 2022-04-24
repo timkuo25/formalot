@@ -59,7 +59,7 @@ function LoginModal( {closeModal}){
                 password2 : "",
             }),
         });
-        const resdata = await getprotected;
+        const resdata = await getprotected.json();
         console.log(resdata);
         alert(resdata.message);
    
@@ -81,7 +81,7 @@ function LoginModal( {closeModal}){
                 session_code: sessionStorage.getItem('code')
             }),
         });
-        const resdata = await getprotected;
+        const resdata = await getprotected.json();
         console.log(resdata);
         alert(resdata.message);
 

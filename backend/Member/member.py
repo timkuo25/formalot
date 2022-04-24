@@ -214,10 +214,6 @@ def ForgetPsw():
         if code_check(code, session_code):
             id = email[:email.find('@')]
             rows = getMemberByStudentId(id)
-            response_return = {
-                "status": "",
-                "message": ""
-            }
             if rows != []:
                 password = req_json["password"]
                 password2 = req_json["password2"]
@@ -288,7 +284,7 @@ def password_check(password, password2):
 def login_check(id, password):
     password_hash = str(md5(password.encode("utf-8")).hexdigest())
     rows = getPasswordByStudentId(id)
-    if rows != None:
+    if rows != []:
         if password_hash == rows[0][0]:
             return True
         else:
