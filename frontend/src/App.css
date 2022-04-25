@@ -713,7 +713,7 @@ h3.manage-header {
 }
 
 .survey-card {
-  border-radius: 0.5em;
+  /* border-radius: 0.5em; */
   box-shadow: 0px 1px 2.5px 1px #dadada;
   padding: 2em;
   margin: 0.8em 0.8em;
@@ -730,6 +730,69 @@ h3.manage-header {
 .instruction-container {
   width: 70em;
   height: 80em;
+}
+
+.prize-tag-management {
+  width: max-content;
+  padding: 0.4em 0.1em;
+  margin-bottom: 1em;
+  margin-right: 0.5em;
+  background-color: var(--theme-purple);
+  color: #ffffff;
+  border-radius: 1em;
+  display: inline-block;
+}
+
+.tag-container {
+  text-align:center;
+}
+
+.share-q-management {
+  all: unset;
+  width: 5em;
+  height: 2.5em;
+  border: var(--theme-purple) solid 0.4em;
+  border-radius: 0.5em;
+  text-align: center;
+  font-weight: 800;
+  display: inline-block;
+}
+
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+.card-container-management {
+  display: flex;
+  /* #justify-content: center; */
+  overflow: auto;
+  white-space: nowrap;
+  
 }
 
 
