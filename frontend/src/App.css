@@ -29,6 +29,14 @@ body {
   border: var(--theme-light-grey) solid 0.1em;
   border-radius: 10px;
   box-shadow: var(--shadow);
+  background-color: var(--theme-extra-light);
+}
+
+/* 按鈕有跳動效果 */
+.Btn:hover {
+  background-color: var(--theme-purple);
+  color: #fff;
+  transform: translateY(-2px);
 }
 
 /* Header --------------------------*/
@@ -61,7 +69,7 @@ button:hover{
 
 .app-title > a {
   text-decoration: none;
-  color: var(--theme-dark-purple);
+  color: var(--theme-purple);
 }
 
 .app-title > a:active {
@@ -84,6 +92,7 @@ button:hover{
   flex-grow: 1;
   font-weight: 700;
   cursor: pointer;
+  color:var(--theme-dark-purple);
 }
 
 .nav-option:hover {
@@ -140,6 +149,11 @@ button:hover{
   transform: translateY(-5px);
 }
 
+.card > h3{
+  color: var(--theme-dark-purple);
+  font-weight: 600;
+}
+
 .prize-tag {
   width: max-content;
   padding: 0.2em 0.8em;
@@ -182,13 +196,13 @@ button:hover{
   align-items: center;
   justify-content: space-between;
   height: 5em;
-  background-color: var(--theme-pink);
+  background-color: var(--theme-dark-purple);
 }
 
 .copyright{
   transform: translateX(80%);
-  font-weight: 600;
-  color: var(--theme-dark-purple);
+  font-weight: 400;
+  color: var(--theme-light-grey);
 }
 
 .footer-link{
@@ -196,13 +210,14 @@ button:hover{
   width: 20em;
   align-items: center;
   justify-content: space-between;
+  color: var(--theme-light-grey);
 }
 
 .footer-link > a {
   text-decoration: none;
-  font-size: 1.1em;
-  font-weight: 900;
-  color: var(--theme-dark-purple);
+  font-size: 1em;
+  font-weight: 300;
+  color: var(--theme-light-grey);
 }
 
 /* Home page --------------------------*/
@@ -311,6 +326,7 @@ button:hover{
   text-align: center;
   font-size: 3em;
   font-weight: 900;
+  color: var(--theme-dark-purple);
 }
 
 .latest-q-container > h3 {
@@ -318,6 +334,7 @@ button:hover{
   font-size: 1.2em;
   font-weight: 900;
   transform: translateY(-1em);
+  color: var(--theme-dark-purple);
 }
 
 .card-container {
@@ -358,13 +375,14 @@ input::-webkit-inner-spin-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--theme-extra-light);
 }
 
 .tag-item{
   height: 3em;
   width: 5em;
   /* border: #000000 solid 1px; */
-  font-weight: 900;
+  font-weight: 400;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -444,8 +462,6 @@ input::-webkit-inner-spin-button {
 
 /* 獎品與中獎者框框 */
 .lottery-card {
-  border-radius: 0.5em;
-  box-shadow: var(--shadow);
   padding: 0.8em;
   margin: 0.8em 0.2em;
   display: flex;
@@ -453,7 +469,7 @@ input::-webkit-inner-spin-button {
 }
 
 .lottery-card > h2{
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-weight: bold;
 }
 
@@ -488,6 +504,16 @@ input::-webkit-inner-spin-button {
   font-size: 1.2em;
   font-weight: bold;
 }
+
+/* Fill-in page --------------------------*/
+.question-card {
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+  justify-content: center;
+}
+
+
 
 /* Register page --------------------------*/
 .reg_card_container{
@@ -756,7 +782,7 @@ h3.manage-header {
   font-size: 1.5em;
   margin: 1em;
   padding-left: 1%;
-  color: var(--theme-light-grey);
+  color: var(--theme-purple);
 }
 
 .makeSurvey-container{
@@ -820,23 +846,15 @@ h3.manage-header {
   text-transform: uppercase;
   letter-spacing: 2.5px;
   font-weight: 500;
-  color: var(--theme-black);
   background-color: #fff;
-  border: 1px;
   border-color: #e7e7e7;
-  border-radius: 3px;
-  box-shadow: 0px 1px 2.5px 1px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
   text-align: center;
   }
 
-  .Btn:hover {
-    background-color: var(--theme-purple);
-    color: #fff;
-    transform: translateY(-2px);
-  }
+
 
   .SurveyOptionBtn {
     width: 200px;
@@ -844,12 +862,6 @@ h3.manage-header {
     text-transform: uppercase;
     letter-spacing: 2.5px;
     font-weight: 500;
-    color: var(--theme-black);
-    background-color: #fff;
-    border: 1px;
-    border-color: #e7e7e7;
-    border-radius: 3px;
-    box-shadow: 0px 1px 2.5px 1px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease 0s;
     cursor: pointer;
     outline: none;
@@ -899,13 +911,23 @@ h3.manage-header {
     margin-right: 0.5em;
     margin-top: 0.5em;
   }
-.BtnGroupActive{
+.BtnGroupActive {
     background-color: #8864b3;
     border: 1.5px solid #8864b3;
     color: white;
   }
 
+.input-columns {
+  width: 60%;
+  height: 40px;
+  border: var(--theme-light-grey) solid 1.5px;
+  border-radius: 4px;
+  outline-style: none;
+}
 
+.input-columns:focus {
+  border: var(--theme-purple) solid 2px;
+}
 
 .add-giftBtn {
   width: 100px;
@@ -914,13 +936,12 @@ h3.manage-header {
   /* font-size: 11px; */
   text-transform: uppercase;
   letter-spacing: 2.5px;
-  font-weight: 500;
+  font-weight: 400;
   color: #000;
-  background-color: var(--theme-light-grey);
   border: 1px;
   border-color: #e7e7e7;
   border-radius: 40px;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow);
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
@@ -928,7 +949,7 @@ h3.manage-header {
   left: 50%;
 }
 
-  .add-gift-image {
+.add-gift-image {
     width: 80px;
     height: 80px;
   }

@@ -10,6 +10,7 @@ import{ Profile } from './Pages/Profile';
 import { Explore } from './Pages/Explore';
 import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
+import { Fillin} from './Pages/Fill-in'
 
 
 import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -30,6 +31,7 @@ const App = () => {
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
         <Route path='/editProfile' element={<EditProfile/>}/>
+        <Route path='/Fillin' element={<Fillin/>}/>
 
       </Routes>
     </Router>

@@ -92,7 +92,7 @@ class MakeSurvey extends Component{
                     </div>
                 <section className='makeSurvey-container'>
             
-                    <section className='makeSurvey-results'>
+                    <section className='makeSurvey-results card-shadow'>
                         <form onSubmit={this.handleSubmit}>
                         <div className='makeSurvey-card'>
                             <h3>表單標題</h3>
@@ -116,30 +116,30 @@ class MakeSurvey extends Component{
                     
                     <section className='makeSurvey-info'>
 
-                        <div className='makeSurvey-card sticky-div'>
+                        <div className='makeSurvey-card sticky-div card-shadow'>
                             <p>
-                                <button className='Btn SurveyDescriptionBtn' onClick = {()=>this.renderCrudDiv('description')}>
+                                <button className='Btn SurveyDescriptionBtn card-shadow' onClick = {()=>this.renderCrudDiv('description')}>
                                 簡答
                                 </button>
                             </p>
 
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 單選題
                                 </button>
                             </p>
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 多選題
                                 </button>
                             </p>
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 下拉式選單
                                 </button>
                             </p>
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 線性量表問題
                                 </button>
                             </p>
