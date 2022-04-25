@@ -368,6 +368,23 @@ def autolotteryfunc():
     db.close()
     return jsonify(result)
 
+
+@lottery_bp.route('/GetUserForm', methods=["GET"])
+def getUserForm():
+    form_id = request.args.get('form_id')
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT form_id, temp_col
+    FROM form
+    WHERE form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    db.commit()
+
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    return jsonify(result)
+
     # num_of_lottery = 0
     # candidate_list = []
 
