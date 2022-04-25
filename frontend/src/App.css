@@ -18,15 +18,17 @@ body {
   height: 100%;
   margin: 0%;
   font-family: 14px 'Montserrat', Helvetica, Arial, sans-serif;
-  background: #ffffff;
+  background: var(--theme-light-grey);
   overflow: visible;
   color: #000;
 }
 
-body > h1
-{
-  font-size: 5em;
-  font-weight: 900;
+
+/* General CSS  (everyone can use) --------*/
+.card-shadow{
+  border: var(--theme-light-grey) solid 0.1em;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
 }
 
 /* Header --------------------------*/
@@ -37,6 +39,7 @@ header {
   align-items: center;
   box-shadow: var(--shadow);
   transition: all .7s ease-in;
+  background-color: var(--theme-extra-light);
   /* border-bottom: var(--theme-dark-purple) solid 4px; */
 }
 
@@ -58,7 +61,7 @@ button:hover{
 
 .app-title > a {
   text-decoration: none;
-  color: var(--theme-extra-light);
+  color: var(--theme-dark-purple);
 }
 
 .app-title > a:active {
@@ -391,14 +394,12 @@ input::-webkit-inner-spin-button {
   margin-right: 1%;
   padding: 0.5em 2em;
   margin-bottom: 1em;
-  border: var(--theme-light-grey) solid 0.1em;
   display: flex;
   flex-direction: column;
-  border-radius: 1.5em;
 }
 
 .lottery-results > h2{
-  font-size: 3em;
+  font-size: 2em;
   font-weight: bold;
   color:#0f0b2b;
 }
@@ -464,7 +465,6 @@ input::-webkit-inner-spin-button {
   margin-left: 0%;
   padding: 0.5em 2em;
   margin-bottom: 1em;
-  border: var(--theme-light-grey) solid 0.1em;
   display: flex;
   flex-direction: column;
 }
@@ -485,7 +485,7 @@ input::-webkit-inner-spin-button {
 }
 
 .prize-container > h3{
-  font-size: 1.4em;
+  font-size: 1.2em;
   font-weight: bold;
 }
 

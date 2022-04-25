@@ -122,9 +122,9 @@ const Lottery = () => {
             <section className='lottery-page-container'>
                 {/* 問卷左半部抽獎結果 */}
                 <section className='lottery-container'>
-                    <section className='lottery-results'>
+                    <section className='lottery-results card-shadow'>
                         <h2> {formDetail.form_title} </h2>
-                        <div className='lottery-card'>
+                        <div className='lottery-card card-shadow'>
                             <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
                             <div className='avator-container'>
                                 {candidateList.map( (candidate) => {
@@ -138,12 +138,12 @@ const Lottery = () => {
                             </div>
                         </div>
                         {/* 禮物與中獎人 */}
-                        {/* <LotteryCard results={lotteryResults} /> */}
-                        {lotteryResults.map(result => {
+                        <LotteryCard results={lotteryResults} />
+                        {/* {lotteryResults.map(result => {
                             return (
-                                <div className='lottery-card' key={result.gift_name}>
+                                <div className='lottery-card card-shadow' key={result.gift_name}>
                                     <h2> {result.gift_name} × {result.amount}  </h2>
-                                    <img className='prize-image' src={result.gift_pic_url} alt=''/>
+                                    <img className='prize-image card-shadow' src={result.gift_pic_url} alt=''/>
                                     <div className='avator-container'>
                                         {console.log('winner', lotteryResults)}
                                         {result['winner'].map( (winner) => {
@@ -157,14 +157,14 @@ const Lottery = () => {
                                     </div>
                                 </div>
                             )
-                        })}
+                        })} */}
 
                     </section>
 
 
 
                     {/* 問卷右半部基本問卷資訊 */}
-                    <section className='form-info'>
+                    <section className='form-info card-shadow'>
                         <h2> 問卷資訊 </h2>
                         發布時間：{formDetail.form_create_date} <br />
                         截止時間：{formDetail.form_end_date} <br />

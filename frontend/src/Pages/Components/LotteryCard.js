@@ -1,16 +1,16 @@
 import { Avator } from './Avator';
-import React from 'react'
+import React from 'react';
 
 function LotteryCard(props) {
   return (
-    <div className="lottery-card">
+    <div className="lottery-car card-shadow">
         {/* {console.log('lottery results',props.results.data)} */}
-        {props && props.map(result => {
+        {props.results && props.results.map(result => {
             <div>
                 <h2>{result.gift_name} × {result.amount}  </h2>
-                <img className='prize-image' src={result.gift_pic_url} alt=''/>
+                <img className='prize-image card-shadow' src={result.gift_pic_url} alt=''/>
                 <div className='avator-container'>
-                    {props.results.winner.map( (winner) => {
+                    {result.winner.map( (winner) => {
                         return (
                             <Avator
                                 user_name={winner.user_stutent_id}
