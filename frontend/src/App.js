@@ -10,29 +10,16 @@ import{ Profile } from './Pages/Profile';
 import { Explore } from './Pages/Explore';
 import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
+import Home from './Pages/Home';
 
-
-import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const App = () => {
 
   return (
-    <Router>
-      <Routes>
-        <Route path='/' element={<Homepage/>}/>
-        <Route path='/lottery' element={<Lottery/>}/>
-        <Route path='/instruction' element={<Instruction/>}/>
-        <Route path='/survey_management' element={<SurveyManagement/>}/>
-        <Route path='/register' element={<Register/>}/>
-        <Route path='/MakeSurvey' element={<MakeSurvey/>}/>
-        <Route path='/MakeSurvey2' element={<MakeSurvey2/>}/>
-        <Route path='/Profile' element={<Profile/>}/>
-        <Route path='/explore' element={<Explore/>}/>
-        <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
-        <Route path='/editProfile' element={<EditProfile/>}/>
-
-      </Routes>
-    </Router>
+    <>
+      <Home />
+    </>
   );
 }
 
