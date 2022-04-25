@@ -17,7 +17,7 @@ const Explore = ( {tags} ) => {
                     return (
                         <div
                             className='tag-item'
-                            name={item}
+                            key={item}
                             style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
                             onClick={e => {setShowTag(e.currentTarget.innerText)}}
                         >{item}</div>

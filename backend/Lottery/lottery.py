@@ -34,10 +34,10 @@ def getCandidateByFormId(form_id):
     WHERE form_form_id = (%s) ;
     '''
     cursor.execute(query, [form_id])
-    db.commit()
-    db.close()
     result = [dict((cursor.description[i][0], value)
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
     return result
 
 
@@ -51,10 +51,10 @@ def getGiftAmountByFormId(form_id):
     GROUP BY gift_name, gift_pic_url;
     '''
     cursor.execute(query, [form_id])
-    db.commit()
-    db.close()
     result = [dict((cursor.description[i][0], value)
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
     return result
 
 
@@ -67,10 +67,10 @@ def getGiftDetailByFormId(form_id):
     WHERE form_form_id = (%s);
     '''
     cursor.execute(query, [form_id])
-    db.commit()
-    db.close()
     result = [dict((cursor.description[i][0], value)
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
     return result
 
 
@@ -83,10 +83,10 @@ def getFormRunStatueByFormId(form_id):
     WHERE form_id = (%s);
     '''
     cursor.execute(query, [form_id])
-    db.commit()
-    db.close()
     result = [dict((cursor.description[i][0], value)
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
     return result
 
 
@@ -112,6 +112,7 @@ def updateWinner(form_id, student_id, num, gift_name):
 
 
 def getUserAvatar(student_id):
+    db = get_db()
     cursor = db.cursor()
     query = '''
     SELECT user_pic_url
@@ -170,10 +171,10 @@ def getClosedFormWinner(form_id, gift_name):
     WHERE form_form_id = (%s) AND gift_name = (%s);
     '''
     cursor.execute(query, [form_id, gift_name])
-    db.commit()
-    db.close()
     result = [dict((cursor.description[i][0], value)
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
 
     return result
 
@@ -187,11 +188,10 @@ def getFormDetailByFormId(form_id):
     WHERE form_id = (%s);
     '''
     cursor.execute(query, [form_id])
-    db.commit()
-    db.close()
-
     result = [dict((cursor.description[i][0], value)
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
     return result
 
 
@@ -362,10 +362,10 @@ def autolotteryfunc():
     WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
     '''
     cursor.execute(query)
-    db.commit()
-    db.close()
     result = [dict((cursor.description[i][0], value)
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
     return jsonify(result)
 
     # num_of_lottery = 0
