@@ -2,7 +2,7 @@ import './App.css';
 import { Homepage } from './Pages/Homepage';
 import { MakeSurvey } from './Pages/MakeSurvey';
 import { MakeSurvey2 } from './Pages/MakeSurvey2';
-import { SurveyManagement } from './Pages/SurveyManagement'; 
+import SurveyManagement from './Pages/SurveyManagement';
 import { Lottery } from './Pages/Lottery';
 import { Register } from './Pages/Register';
 import { Instruction } from './Pages/Instruction';
