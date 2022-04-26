@@ -5,16 +5,11 @@ import { ItemSlider } from './Components/ItemSlider'
 import React, { useState, useEffect } from 'react';
 
 
-
 // 傳入想要看的 formID
 const FORM_SEARCH = {id:3};
 
 const Lottery = () => {
-
-
-
     const [activeItemIndex, setActiveItemIndex] = useState(0);
-    const chevronWidth = 10;
 
 
     console.log('----- invoke function component -----');
@@ -138,11 +133,18 @@ const Lottery = () => {
                         <h2> {formDetail.form_title} </h2>
                         <div className='lottery-card card-shadow'>
                             <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
-                            <ItemSlider candidateList={candidateList} chevronWidth={chevronWidth}
+                            <ItemSlider candidateList={candidateList} 
                             activeItemIndex={activeItemIndex} setActiveItemIndex={setActiveItemIndex}/>
                         </div>
                         {/* 禮物與中獎人 */}
-                        <LotteryCard lotteryResults={lotteryResults} />
+                        <div >
+                            {lotteryResults && lotteryResults.map(result => {
+                                return (
+                                    <LotteryCard result={result}/>
+                                )
+                            })}
+                        </div>
+
 
                     </section>
 
