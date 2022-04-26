@@ -1,6 +1,6 @@
 import { Navbar } from './Components/Navbar';
 import { Avator } from './Components/Avator';
-import {LotteryCard} from './Components/LotteryCard'
+import { LotteryCard } from './Components/LotteryCard'
 import React, { useState, useEffect } from 'react';
 
 // 傳入想要看的 formID

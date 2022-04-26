@@ -44,13 +44,13 @@ class MakeSurvey extends Component{
                     <div className='makeSurvey-card' key={i}>
                     <h4>簡答</h4>
                     <p>
-                        <input id={i} type="text" placeholder="Question" style={{width: "100%", height:"50px"}} onChange={this.handleChange}/>
+                        <input id={i} type="text" placeholder="Question" className='input-columns' onChange={this.handleChange}/>
                     </p>
                     <p>
-                        <input type="text" placeholder="Answer" disabled = {1} style={{width: "80%", height:"80px"}}/>
+                        <input type="text" placeholder="Answer" disabled = {1} className='input-columns'/>
                     </p>
         
-                </div>
+                    </div>
                   );
             }
  
@@ -97,10 +97,10 @@ class MakeSurvey extends Component{
                         <div className='makeSurvey-card'>
                             <h3>表單標題</h3>
                             <p>
-                                <input type="text" placeholder="問卷題目" style={{width: "100%", height:"50px"}} defaultValue="Untitled"/>
+                                <input type="text" placeholder="問卷題目" className='input-columns' style={{width: "100%"}} defaultValue="Untitled"/>
                             </p>
                             <p>
-                                <input type="text" placeholder="問卷描述" style={{width: "100%", height:"30px"}}/>
+                                <input type="text" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}}/>
                             </p>
         
                         </div>

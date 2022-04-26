@@ -10,7 +10,7 @@
   --theme-light-grey: #ebe9f0;
   --theme-extra-light: #fbfafc;
   --theme-shadow: #dadada;
-  --shadow: 0px 4px 4px 0px #dadada;
+  --shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 html,
@@ -39,6 +39,23 @@ body {
   transform: translateY(-2px);
 }
 
+.general-button {
+  width: 80px;
+  height: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  color: #ebe9f0;
+  background-color: var(--theme-dark-purple);
+  border: var(--theme-pink) solid 1px;
+  border-radius: 3px;
+  box-shadow: 0px 1px 2.5px 1px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+  position: initial;
+  }
 /* Header --------------------------*/
 header {
   display: flex;
@@ -133,10 +150,8 @@ button:hover{
 /* Card --------------------------*/
 
 .card {
-  width: 18em;
+  width: 17%;
   border-radius: 0.5em;
-  border: var(--theme-light-grey) solid 0.1em;
-  box-shadow: var(--shadow);
   padding: 0.8em;
   margin: 0.8em 0.2em;
   display: flex;
@@ -165,8 +180,8 @@ button:hover{
 
 
 .share-image {
-  height: 2em;
-  width: 2em;
+  height: 1.5em;
+  width: 1.5em;
 }
 
 .share-q {
@@ -463,7 +478,7 @@ input::-webkit-inner-spin-button {
 /* 獎品與中獎者框框 */
 .lottery-card {
   padding: 0.8em;
-  margin: 0.8em 0.2em;
+  margin: 0.8em 0em;
   display: flex;
   flex-direction: column;
 }
@@ -732,21 +747,21 @@ input::-webkit-inner-spin-button {
 }
 
 h2.manage-header {
-  font-size: 3em;
+  font-size: 2em;
   text-align: left;
+  color: var(--theme-dark-purple);
 }
 
 h3.manage-header {
-  font-size: 1.7em;
+  font-size: 1.5em;
   text-align: left;
   padding: 0;
   margin-bottom: 0;
   margin-top: 0;
+  color: var(--theme-dark-purple);
 }
 
 .survey-card {
-  border-radius: 0.5em;
-  box-shadow: 0px 1px 2.5px 1px #dadada;
   padding: 2em;
   margin: 0.8em 0.8em;
   display: flex;
@@ -764,6 +779,11 @@ h3.manage-header {
   height: 80em;
 }
 
+.divide-line {
+  width: 100%;
+  height: 20px;
+  border-top: var(--theme-purple) solid 1.5px;
+}
 
 
 
@@ -1156,3 +1176,7 @@ h3.manage-header {
 }
 
 /* end EditProfile page --------------------------*/
+
+
+
+/* Fill-in page -------------------*/

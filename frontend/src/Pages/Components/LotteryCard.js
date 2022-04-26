@@ -3,7 +3,7 @@ import React from 'react';
 
 function LotteryCard(props) {
   return (
-    <div className="lottery-card card-shadow">
+    <div >
         {props.lotteryResults && props.lotteryResults.map(result => {
             return (
                 <div className='lottery-card card-shadow' key={result.gift_name}>

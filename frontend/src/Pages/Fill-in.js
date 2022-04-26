@@ -19,10 +19,14 @@ const Fillin = () => {
 
     // 使用 useEffect Hook
     useEffect(() => {
+        let abortController = new AbortController();  
         console.log('execute function in useEffect');
         fetchCurrentGifts();
         fetchFormDetail();
         fetchQuestions();
+        return () => {  
+            abortController.abort();  
+        }  
     }, []);  // dependency 
 
     const fetchCurrentGifts = () =>
@@ -98,8 +102,6 @@ const Fillin = () => {
                     <section className='lottery-results card-shadow'>
                         <h2> {formDetail.form_title} </h2>
                         <QuestionCard questions={questions} />
-
-
                     </section>
 
 
