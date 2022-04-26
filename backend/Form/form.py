@@ -119,7 +119,7 @@ def closeForm(form_id):
 '''
 [Wei]: addForm可能會再更新，以確保db transaction process。（但變數不會改變，前端可以照用）
 '''
-def addForm(form_title, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
+def addForm(form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
     db = get_db()
     # db cursor is lightweight, so it's better to declare multiple curosrs instead of running multiple db connections.
     cursor1 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -130,17 +130,16 @@ def addForm(form_title, questioncontent, form_create_date, form_end_date, form_d
     try:
         # Write Form
         query = """
-        INSERT INTO Form(form_id, form_title, questioncontent, form_create_date, form_end_date, form_draw_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
-        SELECT Max(form_id)+1, %s, %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
+        INSERT INTO Form(form_id, form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
+        SELECT Max(form_id)+1, %s, %s, %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
         """
-        cursor1.execute(query, [form_title, questioncontent, form_create_date, form_end_date,form_draw_date, student_id, form_pic_url])
+        cursor1.execute(query, [form_title, form_description, questioncontent, form_create_date, form_end_date,form_draw_date, student_id, form_pic_url])
 
         # Find Max form_id
         query = """SELECT MAX(form_id) FROM form;"""
         cursor2.execute(query)
         result = cursor2.fetchall()
         form_id = result[0]['max']
-        print('Find Max form_id = {}'.format(form_id))
 
         # Write Formtag
         query = """
@@ -148,7 +147,6 @@ def addForm(form_title, questioncontent, form_create_date, form_end_date, form_d
         SELECT %s, tag_id FROM Tag WHERE tag_name = %s;
         """
         cursor3.execute(query, [form_id, form_tag_name])
-        print('Write Formtag')
 
         # Write Gift
         query = """
@@ -160,7 +158,6 @@ def addForm(form_title, questioncontent, form_create_date, form_end_date, form_d
                 query += """({}, '{}', '{}', {}),""".format(form_id, gift['gift_name'], gift['gift_pic_url'], i)
         query = query[:-1]
         cursor4.execute(query)
-        print('Write Gift')
 
         db.commit()
         return True
@@ -242,6 +239,7 @@ def modifyForm():
 def createForm():
 
     # form_title = 'addForm測試'  # test data
+    # form_description = '這是一份測試問卷'
     # questioncontent = '[{"測試題目":"測試題目"}]'  # test data
     # form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # test data
     # form_end_date = datetime.datetime(2022, 9, 10, 23, 59, 59)  # test data
@@ -253,6 +251,7 @@ def createForm():
     
     req_json = request.get_json(force=True)
     form_title = req_json['form_title']
+    form_description = req_json['form_description']
     questioncontent = json.dumps(req_json['questioncontent'], ensure_ascii=False)
     form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     form_end_date = req_json['form_end_date']
@@ -266,7 +265,7 @@ def createForm():
         "status": "",
         "message": ""
     }
-    if addForm(form_title, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
+    if addForm(form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
         response["status"] = 'success'
         response["message"] = 'Form added.'
     else:
