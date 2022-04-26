@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navbar } from './Components/Navbar';
+import { Footer } from './Components/Footer';
 const EditProfile = () => {
     const [first_name, setFirstname] = useState("");
     const [last_name, setLastname] = useState("");
@@ -64,6 +65,7 @@ const EditProfile = () => {
             
             </div>
         </div>
+        <Footer/>
     </>
     )
 }
