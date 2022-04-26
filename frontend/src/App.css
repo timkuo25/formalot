@@ -540,7 +540,7 @@ input::-webkit-inner-spin-button {
 
 .register_card_left {
   width: 48em;
-  height:55em;
+  height:70em;
   border-radius: 0.5em;
   box-shadow: 0px 1px 2.5px 1px #dadada;
   padding: 0.8em;
@@ -550,6 +550,7 @@ input::-webkit-inner-spin-button {
   transform: translate(20px, 20px);
   float:left;
   text-align: center;
+  background-color: #ffffff;
 }
 
 .reg_description {
@@ -565,7 +566,7 @@ input::-webkit-inner-spin-button {
 
 .register_card_right {
   width: 50em;
-  height:55em;
+  height:70em;
   border-radius: 0.5em;
   box-shadow: 0px 1px 2.5px 1px #dadada;
   padding: 0.8em;
@@ -574,6 +575,7 @@ input::-webkit-inner-spin-button {
   transform: translate(20px, 20px);
   float:left;
   text-align:left;
+  background-color: #ffffff;
 }
 .input_content{
   margin: 0.6em 1em;
@@ -1046,11 +1048,6 @@ h3.manage-header {
 .profile-header{
   margin: 1em 1em 1em 1em;
 }
-.profile_card_container{
-  display:flex;
-  flex-direction: row;
-  display: flex; 
-}
 
 .profile_card{
   background-color: var(--theme-purple);
@@ -1067,42 +1064,97 @@ h3.manage-header {
   justify-content:center;
 }
 
-.profile_card_right{
-  background-color: #ffffff;
-  width: 50%;
-  height:30em;
-  border-radius: 0.5em;
-  box-shadow: 0px 1px 2.5px 1px #dadada;
-  padding: 0.5em;
-  display: flex;
-  flex-direction: column;
-  transform: translate(20px, 20px);
-  text-align: center;
-  justify-content:center;
-  margin-left: 30px;
-}
-
 .top-section{
   justify-content:left;
-  margin-left: 0;
+  display:flex;
+  flex-direction: row;
+  display: flex; 
 }
 
-.top-section img{
-  width: 40%;
+.top-section .photo{
+  width: 20%;
   border-radius: 50%;
-}
-
-.top-section p{
-  margin: 5px 0 5px 0;
+  margin: 70px 5px 5px 60px;
 }
 
 .top-section .name{
   font-size: 30px;
   margin-top: 20px;
+  margin: 100px 5px 5px 150px;
+  color: black;
+}
+
+.top-section .email{
+  font-size: 20px;
+  margin: 10px 5px 5px 150px;
+}
+
+.top-section .self-intro{
+  margin: 10px 5px 5px 150px;
+  width: 120%;
+  height: 100px;
+  border-color:#f9f9f9;
+  border-width: 1px;
+  border-radius: 0;
+  resize: none;
+}
+
+hr.solid {
+  border-top: 3px solid #b79fd5;
+  margin-top: 50px;
+}
+
+.profile_card_container{
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+  justify-content: center;
+}
+
+.profile_card_right {
+  width: 70em;
+  height:65em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 1em 1em 1em 1em;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+  float:left;
+  text-align:left;
+  background-color: #ffffff;
+}
+
+.profile-content{
+  justify-content:left;
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+}
+
+.profile-name{
+  margin: 40px 200px 0px 100px;
+}
+
+.profile-bar{
+  margin: 32px 10px;
+  width: 45%;
+  height: 40px;
+  border-color:#f9f9f9;
+  border-width: 1px;
+  border-radius: 0;
+  font-size: 20px;
+}
+
+.pencil{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin: 42px 0px 5px 0px;
 }
 
 .edit-profile{
-  margin-top: 80px;
+  margin-top: 70px;
   border: var(--theme-dark-purple) solid 0.15em;
   border-radius: 0.3em;
   background-color: #fbfafc;
@@ -1113,6 +1165,7 @@ h3.manage-header {
   font-weight: 700;
   text-align: center;
   justify-content:right;
+  margin-left: 80%;
 }
 /* profile page done */
 
@@ -1136,6 +1189,7 @@ h3.manage-header {
   transform: translate(20px, 20px);
   float:left;
   text-align:left;
+  background-color: #ffffff;
 }
 .forget_input_content{
   margin: 0.6em 1em;
@@ -1210,6 +1264,7 @@ h3.manage-header {
   transform: translate(20px, 20px);
   float:left;
   text-align:left;
+  background-color: #ffffff;
 }
 .edit_input_content{
   margin: 0.6em 1em;
