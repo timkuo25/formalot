@@ -1,19 +1,28 @@
 import { Navbar } from './Components/Navbar';
 import { Avator } from './Components/Avator';
 import { LotteryCard } from './Components/LotteryCard'
+import { ItemSlider } from './Components/ItemSlider'
 import React, { useState, useEffect } from 'react';
 
+
+
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:1};
+const FORM_SEARCH = {id:3};
 
 const Lottery = () => {
 
-    console.log('----- invoke function component -----');
 
+
+    const [activeItemIndex, setActiveItemIndex] = useState(0);
+    const chevronWidth = 10;
+
+
+    console.log('----- invoke function component -----');
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
     const [lotteryResults, setLotteryResults] = useState([]);
+
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -129,17 +138,8 @@ const Lottery = () => {
                         <h2> {formDetail.form_title} </h2>
                         <div className='lottery-card card-shadow'>
                             <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
-                            <div className='avator-container'>
-                                {candidateList.map( (candidate) => {
-                                    return (
-                                        <Avator
-                                            key={candidate.student_id}
-                                            user_name={candidate.student_id}
-                                            user_pic_url={candidate.user_pic_url}
-                                        />
-                                    )
-                                })}
-                            </div>
+                            <ItemSlider candidateList={candidateList} chevronWidth={chevronWidth}
+                            activeItemIndex={activeItemIndex} setActiveItemIndex={setActiveItemIndex}/>
                         </div>
                         {/* 禮物與中獎人 */}
                         <LotteryCard lotteryResults={lotteryResults} />
