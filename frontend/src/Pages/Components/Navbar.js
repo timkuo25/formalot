@@ -50,7 +50,7 @@ const Navbar = () => {
                 <button className="nav-option user-dropdown">
                     User
                     <div className="user-dropdown-options" >
-                        <button onClick={()=>{window.location.href = "/Profile"}}>管理問卷</button>
+                        <button onClick={()=>{window.location.href = "/SurveyManagement"}}>管理問卷</button>
                         <button onClick={()=>{window.location.href = "/Profile"}}>個人資料</button>
                         <button onClick={calllogout}>登出</button>
                     </div>

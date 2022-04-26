@@ -44,13 +44,13 @@ class MakeSurvey extends Component{
                     <div className='makeSurvey-card' key={i}>
                     <h4>簡答</h4>
                     <p>
-                        <input id={i} type="text" placeholder="Question" style={{width: "100%", height:"50px"}} onChange={this.handleChange}/>
+                        <input id={i} type="text" placeholder="Question" className='input-columns' onChange={this.handleChange}/>
                     </p>
                     <p>
-                        <input type="text" placeholder="Answer" disabled = {1} style={{width: "80%", height:"80px"}}/>
+                        <input type="text" placeholder="Answer" disabled = {1} className='input-columns'/>
                     </p>
         
-                </div>
+                    </div>
                   );
             }
  
@@ -92,15 +92,15 @@ class MakeSurvey extends Component{
                     </div>
                 <section className='makeSurvey-container'>
             
-                    <section className='makeSurvey-results'>
+                    <section className='makeSurvey-results card-shadow'>
                         <form onSubmit={this.handleSubmit}>
                         <div className='makeSurvey-card'>
                             <h3>表單標題</h3>
                             <p>
-                                <input type="text" placeholder="問卷題目" style={{width: "100%", height:"50px"}} defaultValue="Untitled"/>
+                                <input type="text" placeholder="問卷題目" className='input-columns' style={{width: "100%"}} defaultValue="Untitled"/>
                             </p>
                             <p>
-                                <input type="text" placeholder="問卷描述" style={{width: "100%", height:"30px"}}/>
+                                <input type="text" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}}/>
                             </p>
         
                         </div>
@@ -116,30 +116,30 @@ class MakeSurvey extends Component{
                     
                     <section className='makeSurvey-info'>
 
-                        <div className='makeSurvey-card sticky-div'>
+                        <div className='makeSurvey-card sticky-div card-shadow'>
                             <p>
-                                <button className='Btn SurveyDescriptionBtn' onClick = {()=>this.renderCrudDiv('description')}>
+                                <button className='Btn SurveyDescriptionBtn card-shadow' onClick = {()=>this.renderCrudDiv('description')}>
                                 簡答
                                 </button>
                             </p>
 
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 單選題
                                 </button>
                             </p>
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 多選題
                                 </button>
                             </p>
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 下拉式選單
                                 </button>
                             </p>
                             <p>
-                                <button className='Btn SurveyOptionBtn'>
+                                <button className='Btn SurveyDescriptionBtn card-shadow'>
                                 線性量表問題
                                 </button>
                             </p>

@@ -1,31 +1,29 @@
 import { Navbar } from './Components/Navbar';
-import { Avator } from './Components/Avator';
-import { LotteryCard } from './Components/LotteryCard'
+// import { Avator } from './Components/Avator';
+import {QuestionCard} from './Components/QuestionCard'
 import React, { useState, useEffect } from 'react';
 
 // 傳入想要看的 formID
 const FORM_SEARCH = {id:1};
 
-const Lottery = () => {
+const Fillin = () => {
 
     console.log('----- invoke function component -----');
 
     const [gifts, setGifts] = useState([]);
-    const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
-    const [lotteryResults, setLotteryResults] = useState([]);
+    const [questions, setQuestions] = useState([]);
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
 
     // 使用 useEffect Hook
     useEffect(() => {
-        console.log('execute function in useEffect');
         let abortController = new AbortController();  
+        console.log('execute function in useEffect');
         fetchCurrentGifts();
-        fetchCandidateList();
         fetchFormDetail();
-        fetchLotteryResults();
+        fetchQuestions();
         return () => {  
             abortController.abort();  
         }  
@@ -51,26 +49,6 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
-    const fetchCandidateList = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetCandidate?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('candidate_data',response.data['candidates'])
-            setCandidateList(response.data['candidates']);
-        })
-        .catch(error => console.log(error))  
-    };
-
     const fetchFormDetail = () =>
     {
         fetch(
@@ -92,13 +70,10 @@ const Lottery = () => {
     };
 
 
-
-
-
-    const fetchLotteryResults = () =>
+    const fetchQuestions = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
             {
                 method: "GET",
                 headers: {
@@ -109,41 +84,24 @@ const Lottery = () => {
         )
         .then(response => response.json())
         .then(response => {
-            console.log('lottery results22',response.data)
-            setLotteryResults(response.data['results']);
+            console.log('questions',response[0]['temp_col']['Questions'])
+            setQuestions(response[0]['temp_col']['Questions']);
         })
         .catch(error => console.log(error))  
     };
 
 
 
-    
     return (
         <>
             <Navbar/>
             {console.log('render')}
             <section className='lottery-page-container'>
-                {/* 問卷左半部抽獎結果 */}
+                {/* 問卷左半部問卷題目 */}
                 <section className='lottery-container'>
                     <section className='lottery-results card-shadow'>
                         <h2> {formDetail.form_title} </h2>
-                        <div className='lottery-card card-shadow'>
-                            <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
-                            <div className='avator-container'>
-                                {candidateList.map( (candidate) => {
-                                    return (
-                                        <Avator
-                                            key={candidate.student_id}
-                                            user_name={candidate.student_id}
-                                            user_pic_url={candidate.user_pic_url}
-                                        />
-                                    )
-                                })}
-                            </div>
-                        </div>
-                        {/* 禮物與中獎人 */}
-                        <LotteryCard lotteryResults={lotteryResults} />
-
+                        <QuestionCard questions={questions} />
                     </section>
 
 
@@ -166,14 +124,9 @@ const Lottery = () => {
 
                     </section>
                 </section>
-                <div className='form-buttons'>
-                    <button class='form-button'> 填答結果</button>
-                    <button class='form-button'> 瀏覽問卷</button>
-                    {/* <button class='form-button' onClick={fetchCurrentGifts}> 重新整理</button> */}
-                </div>
             </section>
 
         </>
     )
 }
-export { Lottery }
+export { Fillin }

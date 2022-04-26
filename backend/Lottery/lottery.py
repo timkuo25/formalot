@@ -399,4 +399,67 @@ def getUserForm():
     result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
     return jsonify(result)
 
-    
+
+@lottery_bp.route('/GetUserForm', methods=["GET"])
+def getUserForm():
+    form_id = request.args.get('form_id')
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT form_id, temp_col
+    FROM form
+    WHERE form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    db.commit()
+
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    return jsonify(result)
+
+    # num_of_lottery = 0
+    # candidate_list = []
+
+    # # form_id = request.args.get('form_id')
+
+    # get_formdetail = getFormDetailByFormId(form_id)
+    # get_gift = getGiftAmountByFormId(form_id)
+    # get_candidate = getCandidateByFormId(form_id)
+    # get_gift_detail = getGiftDetailByFormId(form_id)
+    # get_run_state = getFormRunStatueByFormId(form_id)
+    # response = {
+    #     "status": "",
+    #     "data": {"lottery_results": [] },
+    #     "message": ""
+    # }
+    # if(get_run_state == []):
+    #     response["status"] = "error"
+    #     response["message"] = "The form does not exist!!!"
+    # elif (get_run_state[0]["form_run_state"] == "WaitForDraw"):
+    #     # lottery_list = []
+    #     for i in get_candidate:
+    #         candidate_list.append(i["user_student_id"])
+
+    #     for i in range(len(get_gift)):
+    #         num_of_lottery += get_gift[i]["count"]
+
+    #     lottery_list = random.sample(candidate_list, num_of_lottery)
+    #     for i in range(len(get_gift_detail)):
+    #         prize = {
+    #             "gift": get_gift_detail[i]["gift_name"],
+    #             "number": get_gift_detail[i]["number"],
+    #             "winner": lottery_list[i],
+    #             "winner_avatar_url": getUserAvatar(lottery_list[i])
+    #         }
+    #         response["data"]["lottery_results"].append(prize)
+    #         response["status"] = "success"
+    #         response["message"] = "The draw is complete and the result is stored in database!!!"
+    #         updateWinner(form_id, lottery_list[i], get_gift_detail[i]["number"], get_gift_detail[i]["gift_name"])
+    # else:
+    #     response["status"] = "error"
+    #     if(get_run_state[0]["form_run_state"] == "Closed"):
+    #         response["message"] = "The form has been closed!!!"
+    #     elif(get_run_state[0]["form_run_state"] == "Open"):
+    #         response["message"] = "The form is still open!!!"
+
+    # return jsonify(response)
+

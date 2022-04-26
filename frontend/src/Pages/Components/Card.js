@@ -3,7 +3,7 @@
 const Card = ({ prize, num_prize, image_path, title, due_time, lottery_time }) => {
     
     return (
-        <div className="card">
+        <div className="card card-shadow">
             <div className="prize-tag">{`${prize} ${num_prize} 名`}</div>
             <img alt="" className="q-image" src={image_path}/>
             <h3>{title}</h3>
