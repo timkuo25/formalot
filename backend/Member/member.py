@@ -6,6 +6,7 @@ from smtplib import SMTPException
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from flask_mail import Mail, Message
+import psycopg2.extras  # get the results in form of dictionary
 
 members_bp = Blueprint('members_bp', __name__)
 
@@ -88,10 +89,10 @@ def updateMemberInfo(Info, student_id, diffinfo):
 
 def getMemberByStudentId(student_id):
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         query = '''
-        SELECT Users.student_id 
+        SELECT student_id, user_firstname, user_lastname, user_pic_url
         From Users 
         WHERE Users.student_id = (%s);
         '''
@@ -274,12 +275,17 @@ def UserUpdate():
 
     return jsonify(response_return)
 
+@members_bp.route('/GetUserProfile', methods=["GET"])
+def GetUserProfile():
+    id = protected()
+    rows = getMemberByStudentId(id)
+    return jsonify(rows)
+
 def password_check(password, password2):
     if password == password2:
         return True
     else:
         return False
-
 
 def login_check(id, password):
     password_hash = str(md5(password.encode("utf-8")).hexdigest())
