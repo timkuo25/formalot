@@ -29,42 +29,36 @@ const Profile = () => {
                         <div>
                             <p className="name">張瑞晨</p>
                             <p className="email">r10725056@ntu.edu.tw</p>
-                            <textarea type="text" placeholder = "自我介紹" className="self-intro"/>
+                            {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>
                     </div>
                     <hr class="solid"></hr>
                         
                     <div className="profile-content">
-                        <h3 className="profile-name">姓名</h3>
-                        <input type="text" className="profile-bar" value="張瑞晨">
+                        <h3 className="profile-name">信箱</h3>
+                        <input type="text" className="profile-bar-gray" value="r10725056@ntu.edu.tw"/>
+                    </div>
+
+                    <div className="profile-content">
+                        <h3 className="profile-name">學號</h3>
+                        <input type="text" className="profile-bar-gray" value="r10725056"/>
+                        {/* <i class="fa fa-pencil icon"></i> */}
+                    </div>
+
+                    <div className="profile-content">
+                        <h3 className="profile-name">姓氏</h3>
+                        <input type="text" className="profile-bar" value="張">
                             {/* <text>張瑞晨</text> */}
                         </input>
-                        <img className="pencil" src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
+                        <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
                     </div>
 
                     <div className="profile-content">
-                        <h3 className="profile-name">信箱</h3>
-                        <input type="text" className="profile-bar" value="r10725056@ntu.edu.tw"/>
-                    </div>
-
-                    <div className="profile-content">
-                        <h3 className="profile-name">帳號</h3>
-                        <input type="text" className="profile-bar" value="r10725056"/>
-                        <img className="pencil" src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
-                        {/* <i class="fa fa-pencil icon"></i> */}
-                    </div>
-
-                    <div className="profile-content">
-                        <h3 className="profile-name">密碼</h3>
-                        <input type="password" className="profile-bar" value="12345678"/>
-                        <img className="pencil" src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
-                        {/* <i class="fa fa-pencil icon"></i> */}
-                    </div>
-
-                    <div className="profile-content">
-                        <h3 className="profile-name">手機</h3>
-                        <input type="text" className="profile-bar" value="0912345678"/>
-                        <img className="pencil" src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
+                        <h3 className="profile-name">名字</h3>
+                        <input type="text" className="profile-bar" value="瑞晨">
+                            {/* <text>張瑞晨</text> */}
+                        </input>
+                        <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
                     </div>
 
                     <form onSubmit={calluserupdate}>

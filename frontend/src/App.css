@@ -1078,15 +1078,15 @@ h3.manage-header {
 }
 
 .top-section .name{
-  font-size: 30px;
-  margin-top: 20px;
-  margin: 100px 5px 5px 150px;
+  font-size: 35px;
+  margin: 120px 5px 5px 150px;
   color: black;
 }
 
 .top-section .email{
-  font-size: 20px;
-  margin: 10px 5px 5px 150px;
+  font-size: 25px;
+  margin: 30px 5px 5px 150px;
+  color: var(--theme-purple)
 }
 
 .top-section .self-intro{
@@ -1133,14 +1133,25 @@ hr.solid {
 }
 
 .profile-name{
-  margin: 40px 200px 0px 100px;
+  margin: 58px 200px 0px 100px;
+}
+
+.profile-bar-gray{
+  margin: 50px 10px;
+  width: 45%;
+  height: 40px;
+  border-color:#cccccc;
+  border-width: 1px;
+  border-radius: 0;
+  font-size: 20px;
+  background-color: #dedede;
 }
 
 .profile-bar{
-  margin: 32px 10px;
+  margin: 50px 10px;
   width: 45%;
   height: 40px;
-  border-color:#f9f9f9;
+  border-color:#cccccc;
   border-width: 1px;
   border-radius: 0;
   font-size: 20px;
@@ -1150,11 +1161,11 @@ hr.solid {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  margin: 42px 0px 5px 0px;
+  margin: 60px 0px 5px 0px;
 }
 
 .edit-profile{
-  margin-top: 70px;
+  margin-top: 30px;
   border: var(--theme-dark-purple) solid 0.15em;
   border-radius: 0.3em;
   background-color: #fbfafc;
