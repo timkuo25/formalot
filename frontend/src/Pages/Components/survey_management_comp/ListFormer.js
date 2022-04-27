@@ -5,11 +5,11 @@ const ListFormer = ({ listData , deleteData}) => {
 
         return <div className="list">
             {
-                listData.map((item) =>{
+                listData.map((item, index) =>{
                     const { id, name, time, drawTime, memberShip} = item
                         if (memberShip=="填寫者") {
                             return (
-                                <div>
+                                <div key={index}>
                                     {/* <h1>{JSON.stringify(listData, null, 2) }</h1> */}
 
                                     <Item

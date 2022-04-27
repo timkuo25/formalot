@@ -1,3 +1,4 @@
+import '../css/SurveyManagement.css'
 import { useState, useEffect } from "react"
 import { Navbar } from "./Components/Navbar"
 import React from "react"
@@ -55,8 +56,8 @@ const SurveyManagement = () => {
                                 </div>
                         </div>
                         <div className='survey-manage-buttons'>
-                            <button class='form-button'> 填答問卷</button>
-                            <button class='form-button'> 製作問卷</button>
+                            <button className='form-button'> 填答問卷</button>
+                            <button className='form-button'> 製作問卷</button>
                         </div>
                     </div> 
 

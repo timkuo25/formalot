@@ -1,3 +1,4 @@
+import '../../css/Footer.css'
 import React, { useState } from 'react';
 
 

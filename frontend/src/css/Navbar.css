@@ -1,0 +1,90 @@
+/* Navbar --------------------------*/
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+    transition: all .7s ease-in;
+    background-color: var(--theme-extra-light);
+    /* border-bottom: var(--theme-dark-purple) solid 4px; */
+}
+
+.scrolled{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--theme-extra-light);
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+.app-title {
+    flex-grow: 1;
+    margin-left: 2em;
+}
+
+.app-title > a {
+    text-decoration: none;
+    color: var(--theme-purple);
+}
+
+.app-title > a:active {
+    color: var(--theme-pink);
+}
+
+.navbar {
+    flex-grow: 0.2;
+    display: flex;
+    justify-content: center;
+    height: 6vh;
+    transform: translateX(-5vw);  
+}
+
+.nav-option {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-grow: 1;
+    font-weight: 700;
+    cursor: pointer;
+    color:var(--theme-dark-purple);
+}
+
+.nav-option:hover {
+    color: var(--theme-purple);
+}
+
+.user-dropdown-options{
+    display: none;
+    position: absolute;
+    top: -3em;
+    width: 6vw;
+    height: 10vh;
+    background-color: var(--theme-extra-light);
+    box-shadow: var(--shadow);
+    transform: translateY(10vh);
+}
+
+.user-dropdown:hover .user-dropdown-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.user-dropdown-options > * {
+    all: unset;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:rgb(75, 71, 71);
+    font-weight: 500;
+}
+
+.user-dropdown-options > *:hover {
+    color: var(--theme-purple);
+}

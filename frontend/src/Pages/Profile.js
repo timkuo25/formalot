@@ -1,3 +1,4 @@
+import '../css/Profile.css';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 const Profile = () => {
@@ -32,7 +33,7 @@ const Profile = () => {
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>
                     </div>
-                    <hr class="solid"></hr>
+                    <hr className="solid"></hr>
                         
                     <div className="profile-content">
                         <h3 className="profile-name">信箱</h3>

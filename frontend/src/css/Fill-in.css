@@ -1,0 +1,7 @@
+/* Fill-in page --------------------------*/
+.question-card {
+    display:flex;
+    flex-direction: row;
+    display: flex; 
+    justify-content: center;
+}

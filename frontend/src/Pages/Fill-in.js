@@ -1,3 +1,4 @@
+import '../css/Fill-in.css';
 import { Navbar } from './Components/Navbar';
 // import { Avator } from './Components/Avator';
 import {QuestionCard} from './Components/QuestionCard'
