@@ -1,3 +1,4 @@
+import '../css/MakeSurvey.css';
 import { Navbar } from './Components/Navbar';
 import React, {Component} from 'react';
 import { useNavigate } from "react-router-dom";

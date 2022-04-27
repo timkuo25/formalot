@@ -1,0 +1,30 @@
+/* Footer --------------------------*/
+.footer{
+    margin-top: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 5em;
+    background-color: var(--theme-dark-purple);
+}
+
+.copyright{
+    transform: translateX(80%);
+    font-weight: 400;
+    color: var(--theme-light-grey);
+}
+
+.footer-link{
+    display: flex;
+    width: 20em;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--theme-light-grey);
+}
+
+.footer-link > a {
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 300;
+    color: var(--theme-light-grey);
+}

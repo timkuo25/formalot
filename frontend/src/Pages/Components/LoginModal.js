@@ -1,3 +1,4 @@
+import '../../css/LoginModal.css';
 import React from "react";
 import ReactDom from "react-dom";
 import { useState } from "react";

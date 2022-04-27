@@ -1,0 +1,137 @@
+/* Home page --------------------------*/
+
+.call-to-action {
+    background-image: url('../img/LandingPage.svg') ;
+    background-size: cover;
+    background-clip: border-box;
+    background-color: var(--theme-purple);
+    color: #fbfafc;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index:1;
+    height: 50em;
+    margin-top:-20ex;
+}
+
+/* .main-image {
+    height: 100%;
+    width: 100%;
+    z-index:1;
+} */
+
+.description {
+    padding-left: 5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 30em;
+    transform: translateY(-2em);
+    color: var(--theme-dark-purple)
+}
+
+.description > h2 {
+    font-size: 2.5em;
+    color: var(--theme-dark-purple)
+}
+.description > h3 {
+    font-weight: 100;
+    font-size: 1.3em;
+    transform: translateY(-2em);
+}
+
+.cta-button {
+    transform: translateY(-2em);
+}
+
+.explore-button {
+    all: unset;
+    border: var(--theme-extra-light) solid 0.25em;
+    border-radius: 0.7em;
+    background-color: var(--theme-dark-purple);
+    color: var(--theme-extra-light);
+    margin-left: 1.3em;
+    width: 5.75em;
+    height: 2.25em;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.make-survey-button {
+    all: unset;
+    border: var(--theme-dark-purple) solid 0.25em;
+    border-radius: 0.7em;
+    background-color: #fbfafc;
+    color: var(--theme-dark-purple);
+    margin-left: 1.3em;
+    width: 5.75em;
+    height: 2.25em;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.showcase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    font-weight: 900;
+    padding: 2em;
+    background-color: var(--theme-light-grey);
+}
+
+.showcase-image {
+    width: 5em;
+    margin: 0.6em;
+}
+
+.latest-q {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: #000000 solid 1px; */
+}
+
+.latest-q-container {
+    width: 90em;
+    height: 90em;
+}
+
+.latest-q-container > h2{
+    text-align: center;
+    font-size: 3em;
+    font-weight: 900;
+    color: var(--theme-dark-purple);
+}
+
+.latest-q-container > h3 {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 900;
+    transform: translateY(-1em);
+    color: var(--theme-dark-purple);
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+}
+
+.page-div {
+    display: flex;
+    justify-content: center;
+    font-size: 1.5em;  
+}
+
+.page {
+    width: 3em;
+    height: 3em;
+}
+
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* border: #000000 solid 1px; */

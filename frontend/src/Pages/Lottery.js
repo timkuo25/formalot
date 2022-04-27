@@ -1,3 +1,4 @@
+import '../css/Lottery.css'
 import { Navbar } from './Components/Navbar';
 import { Avator } from './Components/Avator';
 import { LotteryCard } from './Components/LotteryCard'

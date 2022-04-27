@@ -1,3 +1,4 @@
+import '../css/MakeSurvey.css';
 import { Navbar } from './Components/Navbar';
 import {ButtonGroup} from "./Components/ButtonGroup";
 import React, {Component, useState, useRef} from 'react';
