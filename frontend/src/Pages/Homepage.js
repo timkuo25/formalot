@@ -1,3 +1,4 @@
+import '../css/Homepage.css';
 import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
@@ -8,9 +9,11 @@ const Homepage = () => {
     const [maxPage, setMaxPage] = useState(1);
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetch('http://localhost:5000');
+            const data = await fetch('http://localhost:5000/home');
             const dataJSON = await data.json();
             console.log(dataJSON)
+            
+            setMaxPage(Math.ceil((dataJSON.length) / 8))
         }
         fetchData();
     }, []);

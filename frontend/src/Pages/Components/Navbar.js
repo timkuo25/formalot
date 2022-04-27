@@ -1,3 +1,4 @@
+import '../../css/Navbar.css';
 import { LoginModal } from './LoginModal';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
@@ -24,13 +25,13 @@ const Navbar = () => {
                 <button className="nav-option" onClick={() => {window.location.href='explore'}}>探索</button>
                 <button className="nav-option" onClick={() => {window.location.href='MakeSurvey'}}>製作</button>
                 <a className="nav-option" href='/instruction'>說明</a>
-                <button className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
+                <div className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
                     User
                     <div className="user-dropdown-options" >
                         <button>管理問卷</button>
                         <button>個人資料</button>
                     </div>
-                </button>
+                </div>
                 {modalOpen && <LoginModal closeModal={setModalOpen} />}
             </nav>
         </header>

@@ -1,3 +1,4 @@
+import '../css/EditProfile.css';
 import { useState } from "react";
 import { Navbar } from './Components/Navbar';
 const EditProfile = () => {

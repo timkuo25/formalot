@@ -15,9 +15,9 @@ const Item = ({ id, title, due_time, lottery_time, image_path, prize, num_prize,
                     <div className="tag_container">
                         <div className="prize-tag-management">{`${prize} ${num_prize} 名`}</div>
                         <div className="prize-tag-management">{`${status}`}</div>
-                        <div class="dropdown">
-                            <button class="prize-tag-management">選項</button>
-                                <div class="dropdown-content">
+                        <div className="dropdown">
+                            <button className="prize-tag-management">選項</button>
+                                <div className="dropdown-content">
                                     <a href="#">關閉問卷</a>
                                     <a href="#">刪除問卷</a>
                                 </div>

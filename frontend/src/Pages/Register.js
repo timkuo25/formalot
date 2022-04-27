@@ -1,4 +1,5 @@
-import { useState } from "react";
+import '../css/Register.css';
+import { useState,useRef } from "react";
 import { Navbar } from './Components/Navbar';
 
 const Register = () => {
