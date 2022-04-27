@@ -193,7 +193,7 @@ def getFormDetailByFormId(form_id):
 
 
 @lottery_bp.route('/GetCandidate', methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def getCandidate():
     form_id = request.args.get('form_id')
     results = getCandidateByFormId(form_id)
@@ -221,7 +221,7 @@ def getCandidate():
 
 
 @lottery_bp.route('/GetGift', methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def getGift():
     form_id = request.args.get('form_id')
     results = getGiftAmountByFormId(form_id)
@@ -300,7 +300,7 @@ def autoLottery(form_id):
 
 
 @lottery_bp.route('/GetLotteryResults', methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def getLotteryResults():
     form_id = request.args.get('form_id')
     response = {

@@ -2,11 +2,12 @@ import { Navbar } from './Components/Navbar';
 import { Avator } from './Components/Avator';
 import { LotteryCard } from './Components/LotteryCard'
 import { ItemSlider } from './Components/ItemSlider'
+import ReactLoading from "react-loading";
 import React, { useState, useEffect } from 'react';
 
 
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:3};
+const FORM_SEARCH = {id:1};
 
 const Lottery = () => {
     const [activeItemIndex, setActiveItemIndex] = useState(0);
@@ -17,6 +18,7 @@ const Lottery = () => {
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
     const [lotteryResults, setLotteryResults] = useState([]);
+    const [isLoading, setLoading] = useState(1);
 
 
     // 取得 access token
@@ -43,7 +45,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
                 }
             }
         )
@@ -63,7 +65,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
                 }
             }
         )
@@ -83,7 +85,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
                 }
             }
         )
@@ -95,10 +97,6 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
-
-
-
-
     const fetchLotteryResults = () =>
     {
         fetch(
@@ -107,7 +105,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
                 }
             }
         )
@@ -116,11 +114,15 @@ const Lottery = () => {
             console.log('lottery results22',response.data)
             setLotteryResults(response.data['results']);
         })
+        .then(setLoading(0))
         .catch(error => console.log(error))  
     };
 
-
-
+    const Loading = () => {
+        if(isLoading == 1){
+            return <ReactLoading type="spinningBubbles" color="#432a58" />
+        }
+    }
     
     return (
         <>
@@ -138,6 +140,9 @@ const Lottery = () => {
                         </div>
                         {/* 禮物與中獎人 */}
                         <div >
+                            {/* <button className='form-button' onClick={fetchLotteryResults}> 中獎名單</button> */}
+                            {console.log("isLoading", isLoading)}
+                            {Loading}
                             {lotteryResults && lotteryResults.map(result => {
                                 return (
                                     <LotteryCard result={result}/>

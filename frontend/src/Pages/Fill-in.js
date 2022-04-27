@@ -37,7 +37,7 @@ const Fillin = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
                 }
             }
         )
@@ -57,7 +57,7 @@ const Fillin = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
                 }
             }
         )
@@ -78,7 +78,7 @@ const Fillin = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
                 }
             }
         )

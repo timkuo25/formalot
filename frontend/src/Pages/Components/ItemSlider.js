@@ -23,7 +23,7 @@ function ItemSlider(props) {
         {props.candidateList.map( (candidate) => {
             return (
                 <Avator
-                    key={candidate.user_student_id}
+                    key={candidate.student_id}
                     user_name={candidate.student_id}
                     user_pic_url={candidate.user_pic_url}
                 />
