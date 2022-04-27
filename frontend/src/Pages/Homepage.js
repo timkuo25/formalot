@@ -8,7 +8,7 @@ const Homepage = () => {
     const [maxPage, setMaxPage] = useState(1);
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetch('http://localhost:5000');
+            const data = await fetch('http://localhost:5000/home');
             const dataJSON = await data.json();
             console.log(dataJSON)
         }

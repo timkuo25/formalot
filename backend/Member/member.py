@@ -4,7 +4,7 @@ import re
 import uuid
 from smtplib import SMTPException
 from flask import Blueprint, request, jsonify, current_app
-from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
+from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity, create_refresh_token
 from flask_mail import Mail, Message
 
 members_bp = Blueprint('members_bp', __name__)
@@ -24,18 +24,20 @@ def protected():
     current_user = get_jwt_identity()
     return current_user
 
-def addMember(user_firstname, user_lastname, student_id, user_hashed_pwd):
+def addMember(user_email, user_firstname, user_lastname, student_id, user_hashed_pwd):
     db = get_db()
     cursor = db.cursor()
     try:
         query = '''
-        INSERT into Users (user_firstname, user_lastname, student_id, user_hashed_pwd) values (%s,%s,%s,%s);
+        INSERT into Users (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd) values (%s,%s,%s,%s,%s);
         '''
-        cursor.execute(query, (user_firstname, user_lastname, student_id, user_hashed_pwd))
+        cursor.execute(query, (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd))
         db.commit()
         # return 'Succeed in adding member.'
+        print('Succeed in adding member.')
     except:
         db.rollback()
+        print('Failed to add member.')
         # return 'Failed to add member.'
     finally:
         db.close()
@@ -164,7 +166,7 @@ def Register():
         else:
             if password_check(password, password2):
                 password_hash = str(md5(password.encode("utf-8")).hexdigest())
-                addMember(first_name, last_name, id, password_hash)
+                addMember(email, first_name, last_name, id, password_hash)
                 response_return["status"] = "success"
                 response_return["message"] = "註冊成功"
             else:
@@ -189,7 +191,8 @@ def Login():
     }
     if login_check(id, password) == True:
         access_token = create_access_token(identity=id)
-        return jsonify({'access_token': access_token, "status": "success", "message": "登入成功"})
+        refresh_token = create_refresh_token(identity=id)
+        return jsonify({'access_token': access_token, 'refresh_token': refresh_token, "status": "success", "message": "登入成功"})
     elif login_check(id, password) == False:
         response_return["status"] = "error"
         response_return["message"] = "密碼錯誤"
