@@ -67,19 +67,8 @@ const Profile = () => {
                     </form>                
                 </div>
             </div>
-<<<<<<< HEAD
-
-            <div className="profile_card_right">
-                <div className="top-section">
-                
-                </div>
-            </div>       
-            
-    </>
-=======
         <Footer />
         </>
->>>>>>> main
     )
     
 }

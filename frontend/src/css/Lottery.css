@@ -76,10 +76,10 @@
     flex-direction: column;
 }
 
-.lottery-card > h2{
+/* .lottery-card > h2{
     font-size: 1.2em;
     font-weight: bold;
-}
+} */
 
 /* 基本表單資訊 */
 .form-info{
