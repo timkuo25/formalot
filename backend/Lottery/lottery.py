@@ -24,6 +24,22 @@ def protected():
     return current_user
 
 
+
+def getFormDeleteStatueByFormId(form_id):
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT form_delete_state
+    FROM form
+    WHERE form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value)
+                   for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
+    return result
+
 def getCandidateByFormId(form_id):
     db = get_db()
     cursor = db.cursor()
@@ -193,7 +209,7 @@ def getFormDetailByFormId(form_id):
 
 
 @lottery_bp.route('/GetCandidate', methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def getCandidate():
     form_id = request.args.get('form_id')
     results = getCandidateByFormId(form_id)
@@ -211,7 +227,7 @@ def getCandidate():
         for i in results:
             response["status"] = "success"
             temp_data = {
-                "student_id": i["student_id"],
+                "user_student_id": i["student_id"],
                 "user_pic_url": i["user_pic_url"]
             }
             response["data"]["candidates"].append(temp_data)
@@ -221,7 +237,7 @@ def getCandidate():
 
 
 @lottery_bp.route('/GetGift', methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def getGift():
     form_id = request.args.get('form_id')
     results = getGiftAmountByFormId(form_id)
@@ -300,7 +316,7 @@ def autoLottery(form_id):
 
 
 @lottery_bp.route('/GetLotteryResults', methods=["GET"])
-@jwt_required()
+# @jwt_required()
 def getLotteryResults():
     form_id = request.args.get('form_id')
     response = {
@@ -313,7 +329,8 @@ def getLotteryResults():
 
     try:
         form_run_state = getFormRunStatueByFormId(form_id)[0]['form_run_state']
-        if(form_run_state == 'Closed'):
+        form_del_state = getFormDeleteStatueByFormId(form_id)[0]['form_delete_state']
+        if(form_run_state == 'Closed' and form_del_state == 0):
             gift_categoryamount = getClosedFormResult(form_id)[0]
             gift_total = getClosedFormResult(form_id)[1]
             response['data']['禮物數量'] = gift_categoryamount
@@ -324,17 +341,20 @@ def getLotteryResults():
             for gift_detail in response["data"]['results']:
                 gift_name = gift_detail['gift_name']
                 gift_detail['winner'] = getClosedFormWinner(form_id, gift_name)
-                response["status"] = "success"
+                response["status"] = "Closed"
                 response["message"] = "Get lottery results successfully!!!"
         elif(form_run_state == 'WaitForDraw'):
-            response["status"] = 'error'
+            response["status"] = 'WaitForDraw'
             response["message"] = 'The form is waiting for draw!!!'
         elif(form_run_state == 'Open'):
-            response["status"] = 'error'
+            response["status"] = 'Open'
             response["message"] = 'The form is still open!!!'
+        elif(form_run_state == 'Closed' and form_del_state == 1):
+            response["status"] = 'Delete'
+            response["message"] = 'The form is deleted!!!!!'
 
     except:
-        response["status"] = 'error'
+        response["status"] = 'NotExist'
         response["message"] = 'The form is not exist!!!'
 
     return jsonify(response)
@@ -380,9 +400,6 @@ def AutolotteryOnTime():
 
     return 'lottery running'
     
-
-    # scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=12)
-    # scheduler.start()
 @lottery_bp.route('/GetUserForm', methods=["GET"])
 def getUserForm():
     form_id = request.args.get('form_id')
@@ -400,50 +417,4 @@ def getUserForm():
     
     return jsonify(result)
 
-    # num_of_lottery = 0
-    # candidate_list = []
-
-    # # form_id = request.args.get('form_id')
-
-    # get_formdetail = getFormDetailByFormId(form_id)
-    # get_gift = getGiftAmountByFormId(form_id)
-    # get_candidate = getCandidateByFormId(form_id)
-    # get_gift_detail = getGiftDetailByFormId(form_id)
-    # get_run_state = getFormRunStatueByFormId(form_id)
-    # response = {
-    #     "status": "",
-    #     "data": {"lottery_results": [] },
-    #     "message": ""
-    # }
-    # if(get_run_state == []):
-    #     response["status"] = "error"
-    #     response["message"] = "The form does not exist!!!"
-    # elif (get_run_state[0]["form_run_state"] == "WaitForDraw"):
-    #     # lottery_list = []
-    #     for i in get_candidate:
-    #         candidate_list.append(i["user_student_id"])
-
-    #     for i in range(len(get_gift)):
-    #         num_of_lottery += get_gift[i]["count"]
-
-    #     lottery_list = random.sample(candidate_list, num_of_lottery)
-    #     for i in range(len(get_gift_detail)):
-    #         prize = {
-    #             "gift": get_gift_detail[i]["gift_name"],
-    #             "number": get_gift_detail[i]["number"],
-    #             "winner": lottery_list[i],
-    #             "winner_avatar_url": getUserAvatar(lottery_list[i])
-    #         }
-    #         response["data"]["lottery_results"].append(prize)
-    #         response["status"] = "success"
-    #         response["message"] = "The draw is complete and the result is stored in database!!!"
-    #         updateWinner(form_id, lottery_list[i], get_gift_detail[i]["number"], get_gift_detail[i]["gift_name"])
-    # else:
-    #     response["status"] = "error"
-    #     if(get_run_state[0]["form_run_state"] == "Closed"):
-    #         response["message"] = "The form has been closed!!!"
-    #     elif(get_run_state[0]["form_run_state"] == "Open"):
-    #         response["message"] = "The form is still open!!!"
-
-    # return jsonify(response)
 
