@@ -72,9 +72,7 @@ const Profile = () => {
                 <div className="top-section">
                 
                 </div>
-            </div>
-        </div>
-        
+            </div>       
             
     </>
     )
