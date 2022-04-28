@@ -63,6 +63,7 @@ body {
   justify-content: flex-end;
   margin-bottom: 3%;
 }
+
 .form-button {
   all: unset;
   background-color: var(--theme-dark-purple);
@@ -74,6 +75,19 @@ body {
   text-align: center;
   margin:0.5em;
   color: #FFFFFF;
+}
+
+/* 輸入框 */
+.input-columns {
+  width: 60%;
+  height: 40px;
+  border: var(--theme-light-grey) solid 1.5px;
+  border-radius: 4px;
+  outline-style: none;
+}
+
+.input-columns:focus {
+  border: var(--theme-purple) solid 2px;
 }
 
 

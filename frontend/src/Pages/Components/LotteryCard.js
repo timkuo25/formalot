@@ -1,29 +1,19 @@
-import { Avator } from './Avator';
-import React from 'react';
+import { ItemSlider } from './ItemSlider'
+import React, { useState, useEffect } from 'react';
+
 
 function LotteryCard(props) {
+    const [activeItemIndex, setActiveItemIndex] = useState(0);
   return (
-    <div >
-        {props.lotteryResults && props.lotteryResults.map(result => {
-            return (
-                <div className='lottery-card card-shadow' key={result.gift_name}>
-                    <h2> {result.gift_name} × {result.amount}  </h2>
-                    <img className='prize-image card-shadow' src={result.gift_pic_url} alt=''/>
-                    <div className='avator-container'>
-                        {console.log('winner', result['winner'])}
-                        {result['winner'].map( (winner) => {
-                            return(
-                                <Avator
-                                    user_name={winner.user_student_id}
-                                    user_pic_url={winner.user_pic_url}
-                                />
-                            )
-                        })}
-                    </div>
-                </div>
-            )
-        })}
-    </div>
+        <div className='lottery-card card-shadow' key={props.result.gift_name}>
+            <h2> {props.result.gift_name} × {props.result.amount}  </h2>
+            <img className='prize-image card-shadow' src={props.result.gift_pic_url} alt=''/>
+            <div >
+                {console.log('winner', props.result['winner'])}
+                <ItemSlider candidateList={props.result['winner']} 
+                    activeItemIndex={activeItemIndex} setActiveItemIndex={setActiveItemIndex}/>
+            </div>
+        </div>
   )
 }
 

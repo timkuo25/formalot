@@ -2,19 +2,25 @@ import '../css/Lottery.css'
 import { Navbar } from './Components/Navbar';
 import { Avator } from './Components/Avator';
 import { LotteryCard } from './Components/LotteryCard'
+import { ItemSlider } from './Components/ItemSlider'
+import ReactLoading from "react-loading";
 import React, { useState, useEffect } from 'react';
 
+
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:1};
+const FORM_SEARCH = {id:0};
 
 const Lottery = () => {
+    const [activeItemIndex, setActiveItemIndex] = useState(0);
+
 
     console.log('----- invoke function component -----');
-
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
     const [lotteryResults, setLotteryResults] = useState([]);
+    const [isLoading, setLoading] = useState(1);
+
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -92,10 +98,6 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
-
-
-
-
     const fetchLotteryResults = () =>
     {
         fetch(
@@ -113,11 +115,15 @@ const Lottery = () => {
             console.log('lottery results22',response.data)
             setLotteryResults(response.data['results']);
         })
+        // .then(setLoading(0))
         .catch(error => console.log(error))  
     };
 
-
-
+    // const Loading = () => {
+    //     if(isLoading == 1){
+    //         return <ReactLoading type="spinningBubbles" color="#432a58" />
+    //     }
+    // }
     
     return (
         <>
@@ -130,20 +136,21 @@ const Lottery = () => {
                         <h2> {formDetail.form_title} </h2>
                         <div className='lottery-card card-shadow'>
                             <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
-                            <div className='avator-container'>
-                                {candidateList.map( (candidate) => {
-                                    return (
-                                        <Avator
-                                            key={candidate.student_id}
-                                            user_name={candidate.student_id}
-                                            user_pic_url={candidate.user_pic_url}
-                                        />
-                                    )
-                                })}
-                            </div>
+                            <ItemSlider candidateList={candidateList} 
+                            activeItemIndex={activeItemIndex} setActiveItemIndex={setActiveItemIndex}/>
                         </div>
                         {/* 禮物與中獎人 */}
-                        <LotteryCard lotteryResults={lotteryResults} />
+                        <div >
+                            {/* <button className='form-button' onClick={fetchLotteryResults}> 中獎名單</button> */}
+                            {/* {console.log("isLoading", isLoading)}
+                            {Loading} */}
+                            {lotteryResults && lotteryResults.map(result => {
+                                return (
+                                    <LotteryCard result={result}/>
+                                )
+                            })}
+                        </div>
+
 
                     </section>
 
