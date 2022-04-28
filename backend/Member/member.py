@@ -210,7 +210,7 @@ def Login():
     else:
         response_return["status"] = "error"
         response_return["message"] = "請先註冊"
-        response_return["test"] = login_check(id, password)
+        response_return["test"] = login_check(email, password)
         return jsonify(response_return)
 
 @members_bp.route('/ForgetPsw', methods=["PUT"])
