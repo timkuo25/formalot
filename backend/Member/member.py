@@ -4,12 +4,15 @@ import re
 import uuid
 from smtplib import SMTPException
 from flask import Blueprint, request, jsonify, current_app
-from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity, create_refresh_token
+from flask_jwt_extended import (
+    jwt_required, create_access_token, create_refresh_token,
+    # jwt_refresh_token_required, 
+    get_jwt_identity
+)
 from flask_mail import Mail, Message
 import psycopg2.extras  # get the results in form of dictionary
 
 members_bp = Blueprint('members_bp', __name__)
-
 
 @members_bp.after_request
 def after_request(response):
@@ -22,8 +25,15 @@ def after_request(response):
 
 @jwt_required()
 def protected():
+    # refresh()
     current_user = get_jwt_identity()
     return current_user
+
+# @jwt_refresh_token_required()
+# def refresh():
+#     current_user = get_jwt_identity()
+#     access_token = create_access_token(identity=current_user)
+#     return jsonify({'access_token': access_token})
 
 def addMember(user_email, user_firstname, user_lastname, student_id, user_hashed_pwd):
     db = get_db()
@@ -94,7 +104,7 @@ def getMemberByStudentId(student_id):
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         query = '''
-        SELECT student_id, user_firstname, user_lastname, user_pic_url
+        SELECT student_id, user_firstname, user_lastname, user_pic_url, user_email
         From Users 
         WHERE Users.student_id = (%s);
         '''
@@ -107,16 +117,16 @@ def getMemberByStudentId(student_id):
     finally:
         db.close()
 
-def getPasswordByStudentId(student_id):
+def getPasswordByUserEmail(user_email):
     db = get_db()
     cursor = db.cursor()
     try:
         query = '''
         SELECT user_hashed_pwd 
         from Users 
-        WHERE Users.student_id = (%s);
+        WHERE Users.user_email = (%s);
         '''
-        cursor.execute(query, [student_id])
+        cursor.execute(query, [user_email])
         db.commit()
         return cursor.fetchall()
     except:
@@ -124,7 +134,6 @@ def getPasswordByStudentId(student_id):
         # return 'Failed to retrieve member's password.'
     finally:
         db.close()
-
 
 @members_bp.route('/Email', methods=["POST"])
 def Email():
@@ -190,11 +199,11 @@ def Login():
         "message": "",
         "test": ""
     }
-    if login_check(id, password) == True:
+    if login_check(email, password) == True:
         access_token = create_access_token(identity=id)
         refresh_token = create_refresh_token(identity=id)
         return jsonify({'access_token': access_token, 'refresh_token': refresh_token, "status": "success", "message": "登入成功"})
-    elif login_check(id, password) == False:
+    elif login_check(email, password) == False:
         response_return["status"] = "error"
         response_return["message"] = "密碼錯誤"
         return jsonify(response_return)
@@ -290,15 +299,15 @@ def password_check(password, password2):
     else:
         return False
 
-def login_check(id, password):
+def login_check(user_email, password):
     password_hash = str(md5(password.encode("utf-8")).hexdigest())
-    rows = getPasswordByStudentId(id)
+    rows = getPasswordByUserEmail(user_email)
     if rows != []:
         if password_hash == rows[0][0]:
             return True
         else:
             return False
-
+    
 def sendemail(recipient, condition):
     response_return = {
         "status": "",

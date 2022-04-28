@@ -27,6 +27,7 @@ app.config["JWT_COOKIE_SECURE"] = False
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # 設定access_token的有效時間
+# app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15  # 設定access_token的有效時間
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=1)  # 設定refresh_token的有效時間
 jwt = JWTManager(app)
 

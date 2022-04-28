@@ -173,6 +173,41 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         db.close()
 
 
+def searchResponseByID(student_id, form_id):
+    db = get_db()
+    cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        query = '''
+        SELECT *
+        From UserForm
+        WHERE Form_form_id = (%s) and User_student_id = (%s)
+        '''
+        cursor.execute(query, [form_id, student_id])
+        db.commit()
+        return cursor.fetchall()
+    except:
+        db.rollback()
+        # return 'Failed to retrieve member.'
+    finally:
+        db.close()
+
+def addResponse(student_id, form_id, answer_time, answercontent):
+    db = get_db()
+    cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    try:
+        query = """
+        INSERT INTO UserForm(User_student_id, Form_form_id, Form_answer_time, Answercontent)
+        values (%s,%s,%s,%s);
+        """
+        cursor.execute(query, [student_id, form_id, answer_time, answercontent])
+        db.commit()
+        return True
+    except psycopg2.DatabaseError as error:
+        db.rollback()
+        print(error)
+    finally:
+        db.close()
+
 
 # CORS issue
 @form_bp.after_request
@@ -193,6 +228,32 @@ def protected():
 
 
 # route
+
+@ form_bp.route('/FillForm', methods=['POST'])
+def FillForm():
+    student_id = protected()
+    req_json = request.get_json(force=True)
+    form_id = req_json["form_id"]
+    response = {
+        "status": "",
+        "message": ""
+    }
+    rows = searchResponseByID(student_id, form_id)
+    print(rows)
+    if rows != None:
+        response["status"] = "error"
+        response["message"] = "您已填寫過此表單"
+    # else:
+    #     answercontent = json.dumps(req_json["answercontent"], ensure_ascii=False)
+    #     answer_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #     if addResponse(student_id, form_id, answer_time, answercontent):
+    #         response["status"] = 'success'
+    #         response["message"] = 'Reponse added.'
+    #     else:
+    #         response["status"] = 'fail'
+    #         response["message"] = 'Reponse aborted.'
+    
+    return jsonify(response)
 
 
 @ form_bp.route('/SurveyManagement', methods=['GET'])
@@ -276,3 +337,5 @@ def createForm():
         response["status"] = 'fail'
         response["message"] = 'Form aborted.'
     return jsonify(response)
+
+
