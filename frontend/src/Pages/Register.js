@@ -69,13 +69,35 @@ const Register = () => {
     //     setLoading(false)
     //   };
     
-      const onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-          let img = event.target.files[0];
-          setImage(URL.createObjectURL(img))
-        }
-      };
-  
+    const onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+        let img = event.target.files[0];
+        setImage(URL.createObjectURL(img))
+    }
+    };
+
+    let errors = {};
+    
+    // if (!email.trim()) {
+    //   errors.username = 'Username required';
+    // }
+    // else if (!/^[A-Za-z]+/.test(values.name.trim())) {
+    //   errors.name = 'Enter a valid name';
+    // }
+
+    // if (!email) {
+    // errors.email = 'Email is required';
+    // } else 
+    if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
+    errors.email = '請使用有效台大信箱註冊！';
+    }
+    else{
+        errors.pass = '可使用的電子郵件！';
+    }
+    // if (!password) {
+    // errors.password = 'Password is required';
+    // }
+
 
     return (
     <>
@@ -89,7 +111,11 @@ const Register = () => {
             <div className="register_card_right">
                 <div className="input_content">
                     <h3>電子郵件</h3>
-                    <input type="text" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} className="reg_inputbar"/>
+                    <div className = 'reg-valid'>
+                        <input type="text" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} className="reg_inputbar"/>
+                        {errors.email && <font>{errors.email}</font>}
+                        {errors.pass && <text>{errors.pass}</text>}
+                    </div>
                 </div>
                 <div className="input_content">
                     <h3>姓氏</h3>

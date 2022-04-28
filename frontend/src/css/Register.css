@@ -97,4 +97,25 @@
     float:left;
 }
 
+
+.reg-valid{
+    display:flex;
+    flex-direction: row;
+    display: flex; 
+    justify-content: left;
+}
+
+.reg-valid font {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    color: #f00e0e;
+    margin-left: 2em;
+}
+
+.reg-valid text {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    color: #0ef03b;
+    margin-left: 2em;
+}
 /* end Register page --------------------------*/
