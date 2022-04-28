@@ -1,5 +1,6 @@
 import '../css/Profile.css';
 import { Navbar } from './Components/Navbar';
+import { Footer } from './Components/Footer';
 const Profile = () => {
     const calluserupdate = async (e) => {
         e.preventDefault();
@@ -9,7 +10,7 @@ const Profile = () => {
               Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
             body: JSON.stringify({
-                first_name: "",
+                first_name: "testupdate",
                 last_name : "",
                 password : "",
                 password2 : "",
@@ -18,7 +19,6 @@ const Profile = () => {
         const resdata = await getprotected;
         console.log(resdata);
         alert(resdata.message);
-   
     };
     return (
         <>
@@ -64,9 +64,10 @@ const Profile = () => {
 
                     <form onSubmit={calluserupdate}>
                         <button className="edit-profile" onClick={() => {window.location.href='editProfile'}}>Edit Profile</button>
-                    </form>
+                    </form>                
                 </div>
             </div>
+<<<<<<< HEAD
 
             <div className="profile_card_right">
                 <div className="top-section">
@@ -75,6 +76,10 @@ const Profile = () => {
             </div>       
             
     </>
+=======
+        <Footer />
+        </>
+>>>>>>> main
     )
     
 }

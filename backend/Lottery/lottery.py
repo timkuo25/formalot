@@ -397,6 +397,10 @@ def getUserForm():
     result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
     db.commit()
     db.close()
+<<<<<<< HEAD
+=======
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+>>>>>>> main
     return jsonify(result)
 
     # num_of_lottery = 0
