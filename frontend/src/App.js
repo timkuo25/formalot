@@ -32,7 +32,6 @@ const App = () => {
         <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
         <Route path='/editProfile' element={<EditProfile/>}/>
         <Route path='/Fillin' element={<Fillin/>}/>
-
       </Routes>
     </Router>
   );
