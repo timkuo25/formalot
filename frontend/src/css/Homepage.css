@@ -1,5 +1,3 @@
-/* Home page --------------------------*/
-
 .call-to-action {
     background-image: url('../img/LandingPage.svg') ;
     background-size: cover;
@@ -13,12 +11,6 @@
     height: 50em;
     margin-top:-20ex;
 }
-
-/* .main-image {
-    height: 100%;
-    width: 100%;
-    z-index:1;
-} */
 
 .description {
     padding-left: 5em;
@@ -92,11 +84,12 @@
     align-items: center;
     justify-content: center;
     /* border: #000000 solid 1px; */
+    height: 100%;
 }
 
 .latest-q-container {
     width: 90em;
-    height: 90em;
+    height: auto;
 }
 
 .latest-q-container > h2{
@@ -114,6 +107,20 @@
     color: var(--theme-dark-purple);
 }
 
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .card-container {
     display: flex;
     justify-content: center;
@@ -122,6 +129,7 @@
 .page-div {
     display: flex;
     justify-content: center;
+    align-items: center;
     font-size: 1.5em;  
 }
 
@@ -134,4 +142,3 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-/* border: #000000 solid 1px; */

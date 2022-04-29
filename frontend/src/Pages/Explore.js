@@ -7,6 +7,26 @@ import { useState } from 'react';
 const Explore = ( {tags} ) => {
     const [showTag, setShowTag] = useState('最新');
 
+    const [latest, setLatest] = useState([]);
+    const [popular, setPopular] = useState([]);
+    const [food, setFood] = useState([]);
+    const [drink, setDrink] = useState([]);
+    const [cosmetic, setCosmetic] = useState([]);
+    const [sta, setSta] = useState([]);
+    const [cash, setCash] = useState([]);
+    const [voucher, setVoucher] = useState([]);
+    const [other, setOther] = useState([]);
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const data = await fetch('http://localhost:5000/GetFormByKeyWord?KeywordType=&Keyword=');
+    //         const dataJSON = await data.json();
+    //         console.log(dataJSON);
+            
+    //     }
+    //     fetchData();
+    // }, []);
+
     return (
         <>
             <Navbar />
@@ -20,7 +40,10 @@ const Explore = ( {tags} ) => {
                             className='tag-item'
                             key={item}
                             style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
-                            onClick={e => {setShowTag(e.currentTarget.innerText)}}
+                            onClick={e => {
+                                setShowTag(item);
+                                // if (item === '最新')
+                            }}
                         >{item}</div>
                     )
                 })}
