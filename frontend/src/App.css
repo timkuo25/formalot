@@ -1,3 +1,4 @@
+/* Home page --------------------------*/
 * {
   box-sizing: border-box;
 }
@@ -89,8 +90,3 @@ body {
 .input-columns:focus {
   border: var(--theme-purple) solid 2px;
 }
-
-
-
-
-/* Fill-in page -------------------*/
