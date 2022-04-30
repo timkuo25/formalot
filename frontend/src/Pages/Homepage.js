@@ -5,18 +5,32 @@ import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
 
 const Homepage = () => {
-    const [page, setPage] = useState(1);
-    const [maxPage, setMaxPage] = useState(1);
+    const [page, setPage] = useState(0);
+    const [maxPage, setMaxPage] = useState(0);
+    const [forms, setForms] = useState(null);
+    
     useEffect(() => {
         const fetchData = async () => {
             const data = await fetch('http://localhost:5000/home');
             const dataJSON = await data.json();
-            console.log(dataJSON)
+            console.log(dataJSON);
             
-            setMaxPage(Math.ceil((dataJSON.length) / 8))
+            setMaxPage(Math.ceil((dataJSON.length) / 8));
+            setPage(1);
+            setForms(dataJSON);
         }
         fetchData();
     }, []);
+
+    const last_page_style = {
+        transform: 'scaleX(-1)',
+        cursor: page <= 1 ? null : 'pointer',
+        opacity: page <= 1 ? '0.2' : '1',
+    }
+    const next_page_style = {
+        cursor: page === maxPage ? null : 'pointer',
+        opacity: page === maxPage ? '0.2' : '1',
+    }
     
     return (
         <>
@@ -44,22 +58,56 @@ const Homepage = () => {
                 <div className='latest-q-container'>
                     <h2>最新問卷</h2>
                     <h3>點擊問卷，快速填寫問卷，即可參加抽獎，幸運星即將降臨</h3>
-                    <div className='card-container'>
-                        <Card/>
-                        <Card/>
-                        <Card/>
-                        <Card/>
-                    </div>
-                    <div className='card-container'>
-                        <Card/>
-                        <Card/>
-                        <Card/>
-                        <Card/>
-                    </div>
+                    {!forms
+                        ?
+                            <div className='card-container'>
+                                <div className="loader"></div>
+                            </div>
+                        :<>
+                            <div className='card-container'>
+                                {
+                                    [...Array(4)]
+                                    .map((_, i) => 8*(page-1) + i)
+                                    .map(item => {
+                                        console.log(item);
+                                        return item > forms.length ? <Card key={item} info={null} type='home'/> : <Card key={item} info={forms[item]} type='home'/>
+                                    })
+                                }
+                            </div>
+                            <div className='card-container'>
+                                {
+                                    [...Array(4)]
+                                    .map((_, i) => 8*(page-1) + 4 + i)
+                                    .map(item => {
+                                        console.log(item);
+                                        return item > forms.length ? <Card key={item} info={null} type='home'/> : <Card key={item} info={forms[item]} type='home'/>
+                                    })
+                                }
+                            </div>
+                        </>
+                    }
                 </div>
             </section>
             <section className='page-div'>
-                Page <input className="page" type="number" min="0" max="100"/> of {maxPage}
+                <img 
+                    src={`${process.env.PUBLIC_URL}/next_page.png`}
+                    width={50}
+                    style={last_page_style} 
+                    onClick={() => {
+                        if (page === 1) return;
+                        setPage(page - 1);
+                    }}
+                />
+                Page {page} of {maxPage}
+                <img 
+                    src={`${process.env.PUBLIC_URL}/next_page.png`}
+                    width={50}
+                    style={next_page_style}
+                    onClick={() =>{ 
+                        if (page === maxPage) return;
+                        setPage(page + 1);
+                    }}
+                />
             </section>
             <Footer />
         </>

@@ -80,7 +80,7 @@ const EditProfile = () => {
                 
             
             <form>
-                <button className="edit_submit" onSubmit={calluserupdate}>修改</button>
+                <button className="edit_submit" onClick={calluserupdate}>修改</button>
             </form>
             
             </div>

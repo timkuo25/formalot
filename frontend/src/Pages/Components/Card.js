@@ -1,6 +1,30 @@
 import '../../css/Card.css';
+import { useEffect, useState } from 'react';
 
-const Card = ({ prize, num_prize, image_path, title, due_time, lottery_time }) => {
+
+const Card = ({ info, type }) => {
+    if (!info) return <div className="empty-card"></div>;
+    let prize, num_prize, image_path, title, due_time, lottery_time;
+
+    if (type === 'home'){
+        prize = 'prize name';
+        num_prize = 'x';
+        image_path = `${process.env.PUBLIC_URL}/dog.png` //info.form_pic_url;
+        title = info.form_title;
+        due_time = info.form_end_date;
+        lottery_time = 'lottery date';
+    }
+
+
+    if (type === 'explore'){
+        prize = 'prize name';
+        num_prize = 'x';
+        image_path = `${process.env.PUBLIC_URL}/dog.png` //info.form_pic_url;
+        title = 'title';
+        due_time = info.form_end_date;
+        lottery_time = 'lottery date';
+    }
+
     return (
         <div className="card card-shadow">
             <div className="prize-tag">{`${prize} ${num_prize} 名`}</div>
@@ -13,15 +37,6 @@ const Card = ({ prize, num_prize, image_path, title, due_time, lottery_time }) =
             <button className='share-q'> <img className='share-image' src={process.env.PUBLIC_URL + 'share.png'} alt="分享"/></button>
         </div>
     )
-}
-
-Card.defaultProps = {
-    prize: 'prize-name',
-    num_prize: 1,
-    image_path: process.env.PUBLIC_URL + 'dog.png',
-    title: 'title-name',
-    due_time: 'due-time',
-    lottery_time: 'lottery-time'
 }
 
 export { Card };
