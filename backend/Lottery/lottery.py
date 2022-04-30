@@ -322,7 +322,7 @@ def getLotteryResults():
     response = {
         "status": "",
         "data": {
-            '禮物數量': nan,
+            '禮物數量': 0,
             'results': []},
         "message": ""
     }
@@ -333,7 +333,7 @@ def getLotteryResults():
         if(form_run_state == 'Closed' and form_del_state == 0):
             gift_categoryamount = getClosedFormResult(form_id)[0]
             gift_total = getClosedFormResult(form_id)[1]
-            response['data']['禮物數量'] = gift_categoryamount
+            response['data']['禮物數量'] = (gift_categoryamount).tostring()
 
             for gift in gift_total:
                 response['data']['results'].append(gift)

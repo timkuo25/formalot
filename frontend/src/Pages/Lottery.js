@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 
 
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:1};
+const FORM_SEARCH = {id:6};
 
 const Lottery = () => {
     const [activeItemIndex, setActiveItemIndex] = useState(0);
@@ -19,11 +19,10 @@ const Lottery = () => {
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
     const [lotteryResults, setLotteryResults] = useState({
-        "status":"Unknown",
+        "status":"Open",
         "results":[],
         "isLoading":true,
     });
-    const [isLoading, setLoading] = useState(1);
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -69,7 +68,7 @@ const Lottery = () => {
         .then(response => response.json())
         .then(response => {
             setGifts(response.data);
-            console.log('giftsdata',response.data)
+            console.log('giftsdata',response)
         })
         .catch(error => console.log(error))  
     };
@@ -180,21 +179,26 @@ const Lottery = () => {
         )
         .then(response => response.json())
         .then(response => {
-            console.log('lottery results22',response)
+            console.log('lottery results22', response)
             setLotteryResults({
                 "status": response.status,
                 "results": response.data['results'],
                 "isLoading": false,
-        })})
-        // .then(setLoading(0))
+            })
+        })
         .catch(error => console.log(error))  
     };
 
-    // function Loading (isLoading ){
-    //     if(isLoading == 1){
-    //         return <ReactLoading type="spinningBubbles" color="#432a58" />
-    //     }
-    // }
+
+
+  
+    function SeeStatus(lotteryResults){
+        return lotteryResults.status == "Open" ? <h3>問卷還沒到抽獎日期！</h3>
+        : lotteryResults.status == "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
+        : lotteryResults.status == "WaitforDraw" ? <h3>問卷已到抽獎日，等待製作者手動抽獎。</h3> 
+        : lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>);
+    }
+
     
     return (
         <>
@@ -204,7 +208,7 @@ const Lottery = () => {
                 {/* 問卷左半部抽獎結果 */}
                 <section className='lottery-container'>
                     <section className='lottery-results card-shadow'>
-                        <h2> {formDetail.form_title} </h2>
+                        <h1> {formDetail.form_title} </h1>
                         <div className='lottery-card card-shadow'>
                             <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
                             <ItemSlider candidateList={candidateList} 
@@ -212,14 +216,9 @@ const Lottery = () => {
                         </div>
                         {/* 禮物與中獎人 */}
                         <div >
-                            {/* <button className='form-button' onClick={fetchLotteryResults}> 中獎名單</button> */}
                             {console.log("isLoading", lotteryResults.isLoading)}
                             {lotteryResults.isLoading ? <ReactLoading type="spinningBubbles" color="#432a58" /> : 
-                                lotteryResults.results && lotteryResults.results.map(result => {
-                                    return (
-                                        <LotteryCard result={result}/>
-                                    )
-                                })
+                                SeeStatus(lotteryResults)
                             }
 
                         </div>
@@ -236,14 +235,16 @@ const Lottery = () => {
                         截止時間：{formDetail.form_end_date} <br />
                         抽獎時間：{formDetail.form_draw_date}<br/>
                         <h2> 獎品 </h2>
-                        {gifts.map(gift => {
-                            return (
-                                <div className='prize-container' key={gift.gift_name}>
-                                    <h3> {gift.gift_name} × {gift.amount} </h3>
-                                    <img className='prize-image' src={gift.gift_pic_url} alt=''/>
-                                </div>
-                            )
-                        })}
+                        {gifts.length == 0 ? <h3>此問卷沒有抽獎</h3> :  
+                            gifts.map(gift => {
+                                return (
+                                    <div className='prize-container' key={gift.gift_name}>
+                                        <h3> {gift.gift_name} × {gift.amount} </h3>
+                                        <img className='prize-image' src={gift.gift_pic_url} alt=''/>
+                                    </div>
+                                )
+                            })
+                        }
 
                     </section>
                 </section>
