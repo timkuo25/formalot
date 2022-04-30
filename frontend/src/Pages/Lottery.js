@@ -184,9 +184,9 @@ const Lottery = () => {
             setLotteryResults({
                 "status": response.status,
                 "results": response.data['results'],
-                // "isLoading": false,
+                "isLoading": false,
         })})
-        .then(setLoading(0))
+        // .then(setLoading(0))
         .catch(error => console.log(error))  
     };
 
