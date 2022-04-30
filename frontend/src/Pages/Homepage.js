@@ -70,7 +70,7 @@ const Homepage = () => {
                                     .map((_, i) => 8*(page-1) + i)
                                     .map(item => {
                                         console.log(item);
-                                        return item > forms.length ? <Card key={item} info={null}/> : <Card key={item} info={forms[item]}/>
+                                        return item > forms.length ? <Card key={item} info={null} type='home'/> : <Card key={item} info={forms[item]} type='home'/>
                                     })
                                 }
                             </div>
@@ -80,7 +80,7 @@ const Homepage = () => {
                                     .map((_, i) => 8*(page-1) + 4 + i)
                                     .map(item => {
                                         console.log(item);
-                                        return item > forms.length ? <Card key={item} info={null}/> : <Card key={item} info={forms[item]}/>
+                                        return item > forms.length ? <Card key={item} info={null} type='home'/> : <Card key={item} info={forms[item]} type='home'/>
                                     })
                                 }
                             </div>

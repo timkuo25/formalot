@@ -2,14 +2,28 @@ import '../../css/Card.css';
 import { useEffect, useState } from 'react';
 
 
-const Card = ({ info }) => {
-    if (!info) return <div className="empty-card"></div>
-    const prize = 'prize name';
-    const num_prize = 'x';
-    const image_path = `${process.env.PUBLIC_URL}/dog.png` //info.form_pic_url;
-    const title = info.form_title;
-    const due_time = info.form_end_date;
-    const lottery_time = 'lottery date';
+const Card = ({ info, type }) => {
+    if (!info) return <div className="empty-card"></div>;
+    let prize, num_prize, image_path, title, due_time, lottery_time;
+
+    if (type === 'home'){
+        prize = 'prize name';
+        num_prize = 'x';
+        image_path = `${process.env.PUBLIC_URL}/dog.png` //info.form_pic_url;
+        title = info.form_title;
+        due_time = info.form_end_date;
+        lottery_time = 'lottery date';
+    }
+
+
+    if (type === 'explore'){
+        prize = 'prize name';
+        num_prize = 'x';
+        image_path = `${process.env.PUBLIC_URL}/dog.png` //info.form_pic_url;
+        title = 'title';
+        due_time = info.form_end_date;
+        lottery_time = 'lottery date';
+    }
 
     return (
         <div className="card card-shadow">

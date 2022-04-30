@@ -2,30 +2,40 @@ import '../css/Explore.css'
 import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const Explore = ( {tags} ) => {
+const Explore = ( ) => {
     const [showTag, setShowTag] = useState('最新');
+    const [loading, setLoading] = useState(true);
+    const tags = ['最新', '熱門', '食物', '飲料', '美妝', '文具', '現金', '禮卷', '其他'];
 
-    const [latest, setLatest] = useState([]);
-    const [popular, setPopular] = useState([]);
-    const [food, setFood] = useState([]);
-    const [drink, setDrink] = useState([]);
-    const [cosmetic, setCosmetic] = useState([]);
-    const [sta, setSta] = useState([]);
-    const [cash, setCash] = useState([]);
-    const [voucher, setVoucher] = useState([]);
-    const [other, setOther] = useState([]);
+    const [showList, setShowList] = useState({
+        '最新': [],
+        '熱門': [],
+        '食物': [],
+        '飲料': [],
+        '美妝': [],
+        '文具': [],
+        '現金': [],
+        '禮卷': [],
+        '其他': [],
+    })
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const data = await fetch('http://localhost:5000/GetFormByKeyWord?KeywordType=&Keyword=');
-    //         const dataJSON = await data.json();
-    //         console.log(dataJSON);
-            
-    //     }
-    //     fetchData();
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            tags.forEach(async item => {
+                const data = await fetch(`http://localhost:5000/GetFormByKeyWord?KeywordType=tag&Keyword=${item}類`);
+                const dataJSON = await data.json();
+                setShowList(prevShowList => {
+                    let curShowList = prevShowList;
+                    curShowList[item] = dataJSON;
+                    return curShowList;
+                });
+            })
+            console.log(showList);
+        }
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -42,7 +52,6 @@ const Explore = ( {tags} ) => {
                             style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
                             onClick={e => {
                                 setShowTag(item);
-                                // if (item === '最新')
                             }}
                         >{item}</div>
                     )
@@ -50,27 +59,14 @@ const Explore = ( {tags} ) => {
             </div>
             <section className='explore'>
                 <div className='card-container'>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                </div>
-                <div className='card-container'>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
+                    {showList[showTag].map(item => {
+                        return <Card type='explore' info={item}/>
+                    })}
                 </div>
             </section>
             <Footer />
         </>
     )
-}
-
-Explore.defaultProps = {
-    tags: ['最新', '熱門', '食物', '飲料', '美妝', '文具', '現金', '禮卷', '其他']
 }
 
 export { Explore };
