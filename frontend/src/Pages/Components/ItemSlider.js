@@ -10,7 +10,7 @@ function ItemSlider(props) {
         requestToChangeActive={props.setActiveItemIndex}
         activeItemIndex={props.activeItemIndex}
         numberOfCards={5}
-        gutter={10}
+        gutter={"5em"}
         rightChevron={
             <RightCircleOutlined style={{ fontSize: '1.5em', color: '#8864b3'}}/>
           }
@@ -24,7 +24,7 @@ function ItemSlider(props) {
             return (
                 <Avator
                     key={candidate.student_id}
-                    user_name={candidate.student_id}
+                    user_name={candidate.user_student_id}
                     user_pic_url={candidate.user_pic_url}
                 />
             )

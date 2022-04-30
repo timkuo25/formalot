@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 
 
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:0};
+const FORM_SEARCH = {id:1};
 
 const Lottery = () => {
     const [activeItemIndex, setActiveItemIndex] = useState(0);
@@ -18,9 +18,12 @@ const Lottery = () => {
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
-    const [lotteryResults, setLotteryResults] = useState([]);
+    const [lotteryResults, setLotteryResults] = useState({
+        "status":"Unknown",
+        "results":[],
+        "isLoading":true,
+    });
     const [isLoading, setLoading] = useState(1);
-
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -38,6 +41,19 @@ const Lottery = () => {
         }  
     }, []);  // dependency 
 
+
+    // gifts
+    // {
+    //     "data": [
+    //         {
+    //             "amount": 1,
+    //             "gift_name": "LG 樂金直驅變頻上下門冰箱393公升",
+    //             "gift_pic_url": "https://i.imgur.com/j7aXj81.jpg"
+    //         },
+    //     ],
+    //     "message": "Get gifts successfully!!!",
+    //     "status": "success", "error"
+    // }
     const fetchCurrentGifts = () =>
     {
         fetch(
@@ -46,7 +62,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
                 }
             }
         )
@@ -58,6 +74,19 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
+    // candidateList
+    // {
+    //     "data": {
+    //         "candidates": [
+    //             {
+    //                 "user_pic_url": "https://i.imgur.com/JSAGBAs.jpg",
+    //                 "user_student_id": "b07905244"
+    //             },
+    //         ]
+    //     },
+    //     "message": "Get candidates successfully!!!",
+    //     "status": "success"
+    // }
     const fetchCandidateList = () =>
     {
         fetch(
@@ -66,7 +95,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
                 }
             }
         )
@@ -78,6 +107,13 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
+    // formDetail
+    // {
+    //     "form_create_date": "Mon, 21 Mar 2022 12:59:59 GMT",
+    //     "form_draw_date": "Sun, 22 May 2022 12:59:59 GMT",
+    //     "form_end_date": "Sat, 21 May 2022 12:59:59 GMT",
+    //     "form_title": "對儀式感的看法之探討"
+    // }
     const fetchFormDetail = () =>
     {
         fetch(
@@ -86,7 +122,7 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
                 }
             }
         )
@@ -98,6 +134,38 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
+    // lotteryResults
+    // {
+    //     "data": {
+    //         "results": [
+    //             {
+    //                 "amount": 1,
+    //                 "gift_name": "LG 樂金直驅變頻上下門冰箱393公升",
+    //                 "gift_pic_url": "https://i.imgur.com/j7aXj81.jpg",
+    //                 "winner": [
+    //                     {
+    //                         "user_pic_url": "https://i.imgur.com/bJaiDDA.jpg",
+    //                         "user_student_id": "b07401201"
+    //                     }
+    //                 ]
+    //             },
+    //             {
+    //                 "amount": 1,
+    //                 "gift_name": "星巴克",
+    //                 "gift_pic_url": "https://i.imgur.com/KhpRc5G.jpg",
+    //                 "winner": [
+    //                     {
+    //                         "user_pic_url": "https://i.imgur.com/POYn9h1.jpg",
+    //                         "user_student_id": "r09302322"
+    //                     }
+    //                 ]
+    //             }
+    //         ],
+    //         "禮物數量": 2
+    //     },
+    //     "message": "Get lottery results successfully!!!",
+    //     "status": "Closed","WaitforDraw", "Open","Delete"
+    // }
     const fetchLotteryResults = () =>
     {
         fetch(
@@ -106,20 +174,23 @@ const Lottery = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
                 }
             }
         )
         .then(response => response.json())
         .then(response => {
-            console.log('lottery results22',response.data)
-            setLotteryResults(response.data['results']);
-        })
+            console.log('lottery results22',response)
+            setLotteryResults({
+                "status": response.status,
+                "results": response.data['results'],
+                "isLoading": false,
+        })})
         // .then(setLoading(0))
         .catch(error => console.log(error))  
     };
 
-    // const Loading = () => {
+    // function Loading (isLoading ){
     //     if(isLoading == 1){
     //         return <ReactLoading type="spinningBubbles" color="#432a58" />
     //     }
@@ -142,13 +213,15 @@ const Lottery = () => {
                         {/* 禮物與中獎人 */}
                         <div >
                             {/* <button className='form-button' onClick={fetchLotteryResults}> 中獎名單</button> */}
-                            {/* {console.log("isLoading", isLoading)}
-                            {Loading} */}
-                            {lotteryResults && lotteryResults.map(result => {
-                                return (
-                                    <LotteryCard result={result}/>
-                                )
-                            })}
+                            {console.log("isLoading", lotteryResults.isLoading)}
+                            {lotteryResults.isLoading ? <ReactLoading type="spinningBubbles" color="#432a58" /> : 
+                                lotteryResults.results && lotteryResults.results.map(result => {
+                                    return (
+                                        <LotteryCard result={result}/>
+                                    )
+                                })
+                            }
+
                         </div>
 
 

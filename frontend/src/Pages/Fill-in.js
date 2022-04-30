@@ -5,7 +5,7 @@ import {QuestionCard} from './Components/QuestionCard'
 import React, { useState, useEffect } from 'react';
 
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:1};
+const FORM_SEARCH = {id:0};
 
 const Fillin = () => {
 
@@ -85,8 +85,8 @@ const Fillin = () => {
         )
         .then(response => response.json())
         .then(response => {
-            console.log('questions',response[0]['temp_col']['Questions'])
-            setQuestions(response[0]['temp_col']['Questions']);
+            console.log('questions',response)
+            setQuestions(response[0]['questioncontent']);
         })
         .catch(error => console.log(error))  
     };
