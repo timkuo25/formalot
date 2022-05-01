@@ -24,6 +24,22 @@ body {
   color: #000;
 }
 
+h1 {
+  font-size: 2.2em;
+  font-weight: bold;
+  color:var(--theme-dark-purple);
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
 /* General CSS  (everyone can use) --------*/
 .card-shadow{
   border: var(--theme-light-grey) solid 0.1em;

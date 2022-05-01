@@ -3,6 +3,8 @@ import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
+import ReactLoading from "react-loading";
+
 
 const Homepage = () => {
     const [page, setPage] = useState(0);
@@ -61,7 +63,7 @@ const Homepage = () => {
                     {!forms
                         ?
                             <div className='card-container'>
-                                <div className="loader"></div>
+                                <ReactLoading type="spinningBubbles" color="#432a58" />
                             </div>
                         :<>
                             <div className='card-container'>

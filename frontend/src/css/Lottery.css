@@ -24,11 +24,11 @@
     flex-direction: column;
 }
 
-.lottery-results > h2{
+/* .lottery-results > h2{
     font-size: 2em;
     font-weight: bold;
     color:#0f0b2b;
-}
+} */
 
 /* 用戶框架 */
 .avator{
@@ -93,11 +93,11 @@
     flex-direction: column;
 }
 
-.form-info > h2{
+/* .form-info > h2{
     color:#0f0b2b;
     font-size: 2em;
     font-weight: bold;
-}
+} */
 
 /* 獎品資訊 */
 .prize-container{
@@ -108,7 +108,7 @@
     align-items: left;
 }
 
-.prize-container > h3{
+/* .prize-container > h3{
     font-size: 1.2em;
     font-weight: bold;
-}
+} */
