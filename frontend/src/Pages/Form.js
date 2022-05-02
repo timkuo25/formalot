@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import {useHref, useParams} from 'react-router-dom';
 
 
-const Fillin = () => {
+const Form = () => {
     const props = useParams();
     console.log("Props in lottery page", props.form_id)
     const FORM_ID = props.form_id; // 傳入想要看的 formID
@@ -211,4 +211,4 @@ const Fillin = () => {
         </>
     )
 }
-export { Fillin }
+export { Form }
