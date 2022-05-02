@@ -10,10 +10,13 @@ const Homepage = () => {
     const [page, setPage] = useState(0);
     const [maxPage, setMaxPage] = useState(0);
     const [forms, setForms] = useState(null);
+
     
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetch('http://localhost:5000/home');
+            const data = await fetch('http://127.0.0.1:5000/home',{
+                headers: {'Content-Type': 'application/json'}
+            });
             const dataJSON = await data.json();
             console.log(dataJSON);
             

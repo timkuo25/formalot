@@ -9,8 +9,8 @@ function ItemSlider(props) {
     <ItemsCarousel
         requestToChangeActive={props.setActiveItemIndex}
         activeItemIndex={props.activeItemIndex}
-        numberOfCards={5}
-        gutter={"5em"}
+        numberOfCards={4}
+        gutter={"5"}
         rightChevron={
             <RightCircleOutlined style={{ fontSize: '1.5em', color: '#8864b3'}}/>
           }

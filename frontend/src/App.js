@@ -11,17 +11,19 @@ import { Explore } from './Pages/Explore';
 import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
 import { Fillin} from './Pages/Fill-in'
+import { useEffect, useState, Link } from 'react';
 
 
 import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const App = () => {
+  // const [form_id, setFormid] = useState(0);
 
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Homepage/>}/>
-        <Route path='/lottery' element={<Lottery/>}/>
+        <Route path='/' element={<Homepage/>} />
+        <Route path='/lottery/:form_id' element={<Lottery/>} />
         <Route path='/instruction' element={<Instruction/>}/>
         <Route path='/SurveyManagement' element={<SurveyManagement/>}/>
         <Route path='/register' element={<Register/>}/>
@@ -31,7 +33,7 @@ const App = () => {
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
         <Route path='/editProfile' element={<EditProfile/>}/>
-        <Route path='/Fillin' element={<Fillin/>}/>
+        <Route path='/Fillin/:form_id' element={<Fillin/>}/>
       </Routes>
     </Router>
   );
