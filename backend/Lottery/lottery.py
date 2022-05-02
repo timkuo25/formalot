@@ -406,7 +406,7 @@ def getUserForm():
     db = get_db()
     cursor = db.cursor()
     query = '''
-    SELECT form_id, questioncontent
+    SELECT form_id, form_description, form_pic_url, questioncontent
     FROM form
     WHERE form_id = (%s);
     '''
