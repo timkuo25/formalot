@@ -102,7 +102,7 @@ h3.manage-header {
 
 .card-container-management {
     display: flex;
-    /* #justify-content: center; */
+    justify-content: center; 
     overflow: auto;
     white-space: nowrap;
 }
