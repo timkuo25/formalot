@@ -54,6 +54,18 @@ button:hover{
     color:var(--theme-dark-purple);
 }
 
+.active-nav-option {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-grow: 1;
+    font-weight: 700;
+    cursor: pointer;
+    color:var(--theme-purple);
+    border-bottom: 5px solid var(--theme-purple);
+}
+
 .nav-option:hover {
     color: var(--theme-purple);
 }

@@ -95,6 +95,17 @@ h3 {
 }
 
 /* 輸入框 */
+.input-columns {
+  width: 60%;
+  height: 40px;
+  border: var(--theme-light-grey) solid 1.5px;
+  border-radius: 4px;
+  outline-style: none;
+}
+
+.input-columns:focus {
+  border: var(--theme-purple) solid 2px;
+}
 
 /* survey_management */
 
@@ -243,39 +254,3 @@ h3.manage-header {
 
 
 
-/* make survey page by Jui Hsin Hsiao-----------------------*/
-
-.page-container {
-  display:flex;
-  flex-direction: column;
-}
-
-.breadcrumb{
-  display:flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  letter-spacing: 10px;
-  font-size: 1.5em;
-  margin: 1em;
-  padding-left: 1%;
-  color: var(--theme-light-grey);
-}
-
-.makeSurvey-container{
-  display:flex;
-  flex-direction: row;
-  align-items: flex-start;
-}
-
-.makeSurvey-results{
-  height: 100%;
-  width: 60%;
-  height: 40px;
-  border: var(--theme-light-grey) solid 1.5px;
-  border-radius: 4px;
-  outline-style: none;
-}
-
-.input-columns:focus {
-  border: var(--theme-purple) solid 2px;
-}
