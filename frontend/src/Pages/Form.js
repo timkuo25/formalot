@@ -26,11 +26,28 @@ const Form = () => {
         console.log('execute function in useEffect');
         fetchCurrentGifts();
         fetchFormDetail();
-        // fetchQuestions();
+        fetchIsOwner();
         return () => {  
             abortController.abort();  
         }  
     }, []);  // dependency 
+
+    const fetchIsOwner = async () =>
+    {
+        const response = await fetch(
+            `http://127.0.0.1:5000/FormOwnerCheck?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  
+                }
+            }
+        );
+        const resJson = await response.json();
+        console.log("is owner?", resJson);
+    }
+
 
     const fetchCurrentGifts = async () => {
         try {
@@ -67,7 +84,29 @@ const Form = () => {
         .then(response => response.json())
         .then(response => {
             console.log('Form Detail',response)
-            setFormDetail(response);
+            setFormDetail({
+                form_create_date : new Intl.DateTimeFormat('zh-TW', {
+                    year: 'numeric', 
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(response.form_create_date)),
+                form_end_date : new Intl.DateTimeFormat('zh-TW', {
+                    year: 'numeric', 
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(response.form_end_date)),
+                form_draw_date : new Intl.DateTimeFormat('zh-TW', {
+                    year: 'numeric', 
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(response.form_draw_date))
+            })
         })
         .catch(error => console.log(error))  
     };
@@ -76,6 +115,7 @@ const Form = () => {
         return showTag === "填寫問卷" ? <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
         : <Lottery form_id = {FORM_ID} form_title={formDetail.form_title}/> 
     }
+
 
 
     return (
@@ -106,7 +146,7 @@ const Form = () => {
                         <h2> 問卷資訊 </h2>
                         發布時間：{formDetail.form_create_date} <br />
                         截止時間：{formDetail.form_end_date} <br />
-                        抽獎時間：{formDetail.form_draw_date}<br/>
+                        抽獎時間：{formDetail.form_draw_date} <br />
                         <h2> 獎品 </h2>
                         {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
                             gifts.map(gift => {

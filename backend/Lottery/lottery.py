@@ -401,6 +401,8 @@ def AutolotteryOnTime():
 
     return 'lottery running'
     
+
+# 取得該問卷的題目與題型
 @lottery_bp.route('/GetUserForm', methods=["GET"])
 def getUserForm():
     form_id = request.args.get('form_id')
@@ -420,15 +422,15 @@ def getUserForm():
 
 
 
-
+# 確認某表單的製作者是否為該登入的用戶
 @lottery_bp.route('/FormOwnerCheck', methods=["GET"])
 @jwt_required()
 def FormOwnerCheck():
 
     response = {
-        "form_id": NULL,
+        "form_id": 0,
         "form_owner_status": False,
-        "form_owener_id": ''
+        "form_owener_id": 0
     }
 
     form_id = request.args.get('form_id')

@@ -10,7 +10,14 @@ const Card = ({ info, type }) => {
         num_prize = 'x';
         image_path = info.form_pic_url;
         title = info.form_title;
-        due_time = info.form_end_date;
+        // due_time = info.form_end_date;
+        due_time = new Intl.DateTimeFormat('zh-TW', {
+            year: 'numeric', 
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+          }).format(new Date(info.form_end_date))
         lottery_time = 'lottery date';
     }
 
@@ -33,7 +40,7 @@ const Card = ({ info, type }) => {
         <div className="card card-shadow" onClick={clickForm}>
             <div className="prize-tag">{`${prize} ${num_prize} 名`}</div>
             <img alt="" className="q-image" src={image_path}/>
-            <h3 className='aaa'>{title}</h3>
+            <div className='card-form-title'> <h3>{title}</h3> </div>
             <p>
                 {`截止時間：${due_time}`} <br/>
                 {`抽獎時間：${lottery_time}`}
