@@ -10,7 +10,8 @@ import{ Profile } from './Pages/Profile';
 import { Explore } from './Pages/Explore';
 import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
-import { Fillin} from './Pages/Fill-in'
+import { Fillin } from './Pages/Fill-in'
+import { BrowseForm } from './Pages/Browse-form'
 import { useEffect, useState, Link } from 'react';
 import {SurveyStatistics} from './Pages/SurveyStatistics';
 
@@ -24,6 +25,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path='/' element={<Homepage/>} />
+        <Route path='/browse/:form_id' element={<BrowseForm/>}/>
         <Route path='/lottery/:form_id' element={<Lottery/>} />
         <Route path='/instruction' element={<Instruction/>}/>
         <Route path='/SurveyManagement' element={<SurveyManagement/>}/>
