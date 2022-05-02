@@ -56,8 +56,6 @@ h3.manage-header {
     border-top: var(--theme-purple) solid 1.5px;
 }
 
-
-
 .tag-container {
     text-align:center;
 }
@@ -171,32 +169,6 @@ h3.manage-header {
     padding: 10px;
   }
   
-  
-  /* Card --------------------------*/
-  
-  .card-container {
-    width: 100%;
-    border-radius: 0.5em;
-    padding: 0.8em;
-    margin: 0.8em 0.2em;
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff;
-    border-color: gray;
-  }
-    /* transform: translate(20px, 20px); */
-  
-  .card {
-    width: 18em;
-    border-radius: 0.5em;
-    box-shadow: 0px 1px 2.5px 1px #dadada;
-    padding: 0.8em;
-    margin: 0.8em 0.2em;
-    display: flex;
-    flex-direction: column;
-    /* transform: translate(20px, 20px); */
-  
-  }
   
   /* .card:hover {
     transform: translateY(-5px);
@@ -316,13 +288,3 @@ h3.manage-header {
   }
   
   
-  
-  
-  
-  .card-container-management {
-    display: flex;
-    /* #justify-content: center; */
-    overflow: auto;
-    white-space: nowrap;
-    
-  }

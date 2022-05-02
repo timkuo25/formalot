@@ -1,10 +1,11 @@
 import '../css/Lottery.css'
 import '../css/Fill-in.css'
+import '../css/Form.css'
 import { Navbar } from './Components/Navbar';
 import { Fillin } from './Fill-in';
 import { Lottery } from './Lottery';
 import React, { useState, useEffect } from 'react';
-import {useHref, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 
 const Form = () => {
@@ -82,11 +83,11 @@ const Form = () => {
             <Navbar/>
             {console.log('render')}
             <section className='lottery-page-container'>
-                <div className='tag-select'>
+                <div className='page-navbar'>
                     {tags.map(item => {
                         return (
                             <div
-                                className='tag-item'
+                                className='page-navbar-item'
                                 key={item}
                                 style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
                                 onClick={e => {

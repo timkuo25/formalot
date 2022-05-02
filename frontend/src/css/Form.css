@@ -1,21 +1,21 @@
 
 /* Form page --------------------------*/
-.tag-select {
-    width: 40em;
-    box-shadow: 0px 1px 2.5px 1px #dadada;
+.page-navbar {
+    width: 30%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background-color: var(--theme-extra-light);
+    justify-content:flex-start;
+    /* background-color: var(--theme-extra-light); */
+    margin: 3% 5%;
 }
 
-.tag-item{
+.page-navbar-item{
     height: 3em;
-    width: 5em;
-    /* border: #000000 solid 1px; */
+    width: 33%;
     font-weight: 400;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    background-color: var(--theme-extra-light);
 }
