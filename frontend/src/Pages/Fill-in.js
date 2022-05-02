@@ -10,8 +10,6 @@ const Fillin = (props) => {
 
     const FORM_ID = props.form_id; // 傳入想要看的 formID
     console.log('----- invoke function component -----');
-    const [gifts, setGifts] = useState([]);
-    const [formDetail, setFormDetail] = useState([]);
     const [formContent, setFormContent] = useState([]);
 
     // 取得 access token
@@ -25,46 +23,6 @@ const Fillin = (props) => {
             abortController.abort();  
         }  
     }, []);  // dependency 
-
-    const fetchCurrentGifts = async () => {
-        try {
-            const response = await fetch(
-                `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
-                    }
-                });
-            const responseJson = await response.json();
-            setGifts(responseJson.data);
-            console.log('giftsdata',response.data);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    };
-
-    const fetchFormDetail = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('Form Detail',response)
-            setFormDetail(response);
-        })
-        .catch(error => console.log(error))  
-    };
 
     const fetchQuestions = () =>
     {
@@ -146,10 +104,14 @@ const Fillin = (props) => {
                 form_id: props.form_id,
                 answercontent: tempAnsList,
             }),
-            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`
+            }
         });
         let resJson = await result.json();
         console.log("submit message", resJson.message);
+        console.log("submit status", resJson.status);
+
     }
 
 

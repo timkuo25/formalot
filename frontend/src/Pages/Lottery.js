@@ -22,8 +22,6 @@ const Lottery = (props) => {
         "results":[],
         "isLoading":true,  // 控制是否還在 loading
     });
-    const [formDetail, setFormDetail] = useState([]);
-
 
     // 使用 useEffect Hook
     useEffect(() => {
@@ -70,32 +68,7 @@ const Lottery = (props) => {
         .catch(error => console.log(error))  
     };
 
-    // formDetail
-    // {
-    //     "form_create_date": "Mon, 21 Mar 2022 12:59:59 GMT",
-    //     "form_draw_date": "Sun, 22 May 2022 12:59:59 GMT",
-    //     "form_end_date": "Sat, 21 May 2022 12:59:59 GMT",
-    //     "form_title": "對儀式感的看法之探討"
-    // }
-    // const fetchFormDetail = () =>
-    // {
-    //     fetch(
-    //         `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-    //         {
-    //             method: "GET",
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
-    //             }
-    //         }
-    //     )
-    //     .then(response => response.json())
-    //     .then(response => {
-    //         console.log('Form Detail',response)
-    //         setFormDetail(response);
-    //     })
-    //     .catch(error => console.log(error))  
-    // };
+ 
 
     // lotteryResults
     // {
