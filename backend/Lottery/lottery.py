@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from cmath import nan
 from db.db import get_db
 from flask import request, jsonify, Blueprint, current_app
@@ -418,3 +419,38 @@ def getUserForm():
     return jsonify(result)
 
 
+
+
+@lottery_bp.route('/FormOwnerCheck', methods=["GET"])
+@jwt_required()
+def FormOwnerCheck():
+
+    response = {
+        "form_id": NULL,
+        "form_owner_status": False,
+        "form_owener_id": ''
+    }
+
+    form_id = request.args.get('form_id')
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT form_id, user_student_id
+    FROM form
+    WHERE form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
+    
+    id = protected()
+
+    response["form_id"] = result[0]['form_id']
+    response["form_owener_id"] = result[0]['user_student_id']
+    if(id == result[0]['user_student_id']):
+        response["form_owner_status"] = True
+    else:
+        response["form_owner_status"] = False
+        
+    return jsonify(response)
