@@ -2,27 +2,9 @@ import '../css/Profile.css';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
+import callrefresh from '../refresh.js';
 
 const Profile = () => {
-    const calluserupdate = async (e) => {
-        e.preventDefault();
-        const getprotected = await fetch('http://127.0.0.1:5000/UserUpdate',{
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-            },
-            body: JSON.stringify({
-                first_name: "testupdate",
-                last_name : "",
-                password : "",
-                password2 : "",
-            }),
-        });
-        const resdata = await getprotected;
-        console.log(resdata);
-        alert(resdata.message);
-    };
-
     const [Profile, setProfile] = useState([]);
     useEffect(() => {
         const callGetUserProfile = async () => {
@@ -32,14 +14,17 @@ const Profile = () => {
                   Authorization: `Bearer ${localStorage.getItem('jwt')}`,
                 },
             });
-            const dataJSON = await data.json();
-            console.log(dataJSON);
-            setProfile(dataJSON[0]);
-
+            console.log(data.status);
+            if(data.status === 401){
+                callrefresh("reload");
+            }else{
+                const dataJSON = await data.json();
+                console.log(dataJSON);
+                setProfile(dataJSON[0]);
+            }
         };
         callGetUserProfile();
     }, []);
-
 
     return (
         <>
@@ -58,34 +43,26 @@ const Profile = () => {
                         
                     <div className="profile-content">
                         <h3 className="profile-name">信箱</h3>
-                        <input type="text" className="profile-bar-gray" value={Profile.user_email}/>
+                        <p className="profile-bar">{Profile.user_email}</p>
                     </div>
 
                     <div className="profile-content">
                         <h3 className="profile-name">學號</h3>
-                        <input type="text" className="profile-bar-gray" value={Profile.student_id}/>
-                        {/* <i class="fa fa-pencil icon"></i> */}
+                        <p className="profile-bar">{Profile.student_id}</p>
                     </div>
 
                     <div className="profile-content">
                         <h3 className="profile-name">姓氏</h3>
-                        <input type="text" className="profile-bar" value={Profile.user_lastname}>
-                            {/* <text>張瑞晨</text> */}
-                        </input>
-                        <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
+                        <p className="profile-bar">{Profile.user_lastname}</p>
+                        {/* <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/> */}
                     </div>
 
                     <div className="profile-content">
                         <h3 className="profile-name">名字</h3>
-                        <input type="text" className="profile-bar" value={Profile.user_firstname}>
-                            {/* <text>張瑞晨</text> */}
-                        </input>
-                        <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/>
+                        <p className="profile-bar">{Profile.user_firstname}</p>
+                        {/* <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/> */}
                     </div>
-
-                    <form onSubmit={calluserupdate}>
                         <button className="edit-profile" onClick={() => {window.location.href='editProfile'}}>Edit Profile</button>
-                    </form>                
                 </div>
             </div>
         <Footer />

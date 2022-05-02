@@ -209,17 +209,6 @@ def addResponse(student_id, form_id, answer_time, answercontent):
         db.close()
 
 
-# CORS issue
-@form_bp.after_request
-def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = '*'
-    header['Access-Control-Allow-Methods'] = '*'
-    header['Content-type'] = 'application/json'
-    return response
-
-
 # get jwt function
 @jwt_required()
 def protected():
@@ -240,18 +229,18 @@ def FillForm():
     }
     rows = searchResponseByID(student_id, form_id)
     print(rows)
-    if rows != None:
+    if rows != []:
         response["status"] = "error"
         response["message"] = "您已填寫過此表單"
-    # else:
-    #     answercontent = json.dumps(req_json["answercontent"], ensure_ascii=False)
-    #     answer_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #     if addResponse(student_id, form_id, answer_time, answercontent):
-    #         response["status"] = 'success'
-    #         response["message"] = 'Reponse added.'
-    #     else:
-    #         response["status"] = 'fail'
-    #         response["message"] = 'Reponse aborted.'
+    else:
+        answercontent = json.dumps(req_json["answercontent"], ensure_ascii=False)
+        answer_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if addResponse(student_id, form_id, answer_time, answercontent):
+            response["status"] = 'success'
+            response["message"] = 'Reponse added.'
+        else:
+            response["status"] = 'fail'
+            response["message"] = 'Reponse aborted.'
     
     return jsonify(response)
 

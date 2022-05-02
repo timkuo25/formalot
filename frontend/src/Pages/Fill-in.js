@@ -149,7 +149,8 @@ const Fillin = () => {
                 form_id: props.form_id,
                 answercontent: tempAnsList,
             }),
-            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+            headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwt')}`}
         });
         let resJson = await result.json();
         console.log("submit message", resJson.message);
