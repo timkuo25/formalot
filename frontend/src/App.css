@@ -95,7 +95,106 @@ h3 {
 }
 
 /* 輸入框 */
-.input-columns {
+
+/* survey_management */
+
+.survey-container {
+  width: 90em;
+  height: 110em;
+}
+
+.survey-bar {
+  display: flex;
+  align-items: left;
+  justify-content: center;
+}
+
+h2.manage-header {
+  font-size: 3em;
+  text-align: left;
+}
+
+h3.manage-header {
+  font-size: 1.7em;
+  text-align: left;
+  padding: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.stat-items{
+  height: 15px; 
+  display:inline-block; 
+  border-left: 2px solid #777; 
+  padding:0 15px;
+  padding-bottom:20px;
+  color:#777;
+  margin-top:10px;
+}
+
+#no-border{
+  border:none;
+  }
+
+/* .survey-card {
+  width: 18em;
+  border-radius: 0.5em;
+  box-shadow: var(--shadow);
+  padding: 0.8em;
+  margin: 0.8em 0.2em;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  transform: translate(20px, 20px); 
+} */
+
+/* .survey-card:hover {
+  transform: translateY(-5px);
+} */
+
+
+
+.survey-manage-buttons{
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.instruction-container {
+  width: 70em;
+  height: 80em;
+}
+
+
+
+
+
+/* make survey page by Jui Hsin Hsiao-----------------------*/
+
+.page-container {
+  display:flex;
+  flex-direction: column;
+}
+
+.breadcrumb{
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  letter-spacing: 10px;
+  font-size: 1.5em;
+  margin: 1em;
+  padding-left: 1%;
+  color: var(--theme-light-grey);
+}
+
+.makeSurvey-container{
+  display:flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.makeSurvey-results{
+  height: 100%;
   width: 60%;
   height: 40px;
   border: var(--theme-light-grey) solid 1.5px;

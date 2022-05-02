@@ -4,6 +4,8 @@ import { Avator } from './Components/Avator';
 import {LotteryCard} from './Components/LotteryCard'
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
+import { TagCloud } from 'react-tagcloud'
+
 
 // 傳入想要看的 formID
 const FORM_SEARCH = {id:1};
@@ -110,6 +112,7 @@ const SurveyStatistics = () => {
         })
         .catch(error => console.log(error))  
     };
+
     // google.charts.load('current', {'packages':['corechart']});
     // google.charts.setOnLoadCallback(drawChart);
 
@@ -135,6 +138,25 @@ const SurveyStatistics = () => {
 
 
 
+
+    const data = [
+        { value: 'JavaScript', count: 38 },
+        { value: 'React', count: 30 },
+        { value: 'Nodejs', count: 28 },
+        { value: 'Express.js', count: 25 },
+        { value: 'HTML5', count: 33 },
+        { value: 'MongoDB', count: 18 },
+        { value: 'CSS3', count: 20 },
+      ]
+      
+    const SimpleCloud = () => (
+        <TagCloud
+          minSize={12}
+          maxSize={35}
+          tags={data}
+          onClick={tag => alert(`'${tag.value}' was selected!`)}
+        />
+      )
     
     return (
         <>
@@ -171,11 +193,8 @@ const SurveyStatistics = () => {
                                         {result['winner'].map( (winner) => {
                                             return(
                                             <div>
-
-
                                                 <div id="no-border" class="stat-items">{winner.user_pic_url}</div>
                                                 <div class="stat-items">{winner.user_student_id}</div>
-
                                             </div>    
                                             )
                                         })}
@@ -191,6 +210,7 @@ const SurveyStatistics = () => {
                                         height="400px"
                                         legendToggle
                                         />
+                                        <SimpleCloud/>
                                     </div>
                                 </div>
                             )

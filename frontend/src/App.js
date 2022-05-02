@@ -12,6 +12,7 @@ import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
 import { Fillin} from './Pages/Fill-in'
 import { useEffect, useState, Link } from 'react';
+import {SurveyStatistics} from './Pages/SurveyStatistics';
 
 
 import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -34,6 +35,7 @@ const App = () => {
         <Route path='/ForgetPassword' element={<ForgetPassword/>}/>
         <Route path='/editProfile' element={<EditProfile/>}/>
         <Route path='/Fillin/:form_id' element={<Fillin/>}/>
+        <Route path='/SurveyStatistics' element={<SurveyStatistics/>}/>
       </Routes>
     </Router>
   );

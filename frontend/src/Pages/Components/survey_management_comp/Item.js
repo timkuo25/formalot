@@ -1,4 +1,8 @@
 import { useState } from "react"
+import "../../../css/SurveyManagement.css"
+import "./SurveyManagement.css"
+import "../../../App.css"
+
 const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_date, form_pic_url, form_run_state, deleteData}) => {
     
     
@@ -44,7 +48,7 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
 
     return (
 
-            <div className="item">
+            <div className="card-container ">
                 <div className="card">
                     <div className="tag-container">
                         <div className="prize-tag-management">{`${form_run_state}`}</div>
@@ -55,6 +59,8 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
                                     <button className="forget_submit" onClick={closeFormAPI}>刪除問卷</button>
                                 </div>
                         </div>
+                        <button className="prize-tag-management">{`${form_run_state}`}</button>
+
                     </div>
                     
                     <img alt="" className="q-image" src={form_pic_url} width="260" height="300" />
@@ -70,6 +76,7 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
                     <div className="tag-container"></div>
                 </div>
             </div>
+            
         
         )
         

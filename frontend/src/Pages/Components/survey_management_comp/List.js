@@ -20,14 +20,14 @@ const List = ({ listData , deleteData}) => {
                                 form_run_state={form_run_state}
                             />
                         </div>
+
                     )
                         
                 })
 
             }
 
-            </div>
-    
+            </div>    
 }
 
 List.defaultProps = {
