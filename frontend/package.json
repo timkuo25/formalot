@@ -20,6 +20,7 @@
     "react-image-crop": "^10.0.0",
     "react-items-carousel": "^2.8.0",
     "react-loading": "^2.0.3",
+    "react-native": "^0.68.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "react-slideshow-image": "^3.7.3",

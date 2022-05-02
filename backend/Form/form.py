@@ -217,18 +217,18 @@ def FillForm():
     }
     rows = searchResponseByID(student_id, form_id)
     print(rows)
-    if rows != None:
+    if rows != []:
         response["status"] = "error"
         response["message"] = "您已填寫過此表單"
-    # else:
-    #     answercontent = json.dumps(req_json["answercontent"], ensure_ascii=False)
-    #     answer_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    #     if addResponse(student_id, form_id, answer_time, answercontent):
-    #         response["status"] = 'success'
-    #         response["message"] = 'Reponse added.'
-    #     else:
-    #         response["status"] = 'fail'
-    #         response["message"] = 'Reponse aborted.'
+    else:
+        answercontent = json.dumps(req_json["answercontent"], ensure_ascii=False)
+        answer_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if addResponse(student_id, form_id, answer_time, answercontent):
+            response["status"] = 'success'
+            response["message"] = 'Reponse added.'
+        else:
+            response["status"] = 'fail'
+            response["message"] = 'Reponse aborted.'
     
     return jsonify(response)
 
