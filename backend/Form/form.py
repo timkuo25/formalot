@@ -155,6 +155,12 @@ def getAns(form_id):
         WHERE UserForm.form_form_id = %s;
         '''
         cursor.execute(query, [form_id])
+    except:
+        db.rollback()
+        # return 'Failed to retrieve member.'
+    finally:
+        db.close()
+
 
 def searchResponseByID(student_id, form_id):
     db = get_db()
