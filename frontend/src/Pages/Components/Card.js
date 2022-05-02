@@ -26,7 +26,7 @@ const Card = ({ info, type }) => {
 
     function clickForm(){
         console.log("form_id of this card is", info.form_id);
-        window.location.href='fillin/'+info.form_id;
+        window.location.href='form/'+info.form_id;
     }
 
     return (
