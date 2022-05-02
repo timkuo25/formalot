@@ -240,7 +240,7 @@ def FillForm():
     }
     rows = searchResponseByID(student_id, form_id)
     print(rows)
-    if rows != None:
+    if rows != []:
         response["status"] = "error"
         response["message"] = "您已填寫過此表單"
     else:

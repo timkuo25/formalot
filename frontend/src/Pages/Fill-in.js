@@ -111,7 +111,7 @@ const Fillin = (props) => {
         let resJson = await result.json();
         console.log("submit message", resJson.message);
         console.log("submit status", resJson.status);
-
+        alert(resJson.message);
     }
 
 

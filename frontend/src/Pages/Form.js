@@ -82,6 +82,7 @@ const Form = () => {
         <>
             <Navbar/>
             {console.log('render')}
+            {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
             <section className='lottery-page-container'>
                 <div className='page-navbar'>
                     {tags.map(item => {
@@ -100,8 +101,6 @@ const Form = () => {
                 <section className='lottery-container'>
                     {/* 問卷左半部 */}
                     {changePage(showTag)}
-                    {/* <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
-                    <Lottery form_id = {FORM_ID} form_title={formDetail.form_title}/> */}
                     {/* 問卷右半部基本問卷資訊 */}
                     <section className='form-info card-shadow'>
                         <h2> 問卷資訊 </h2>
