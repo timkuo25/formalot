@@ -1,0 +1,114 @@
+/* Lottery page ---------------------------------------------------*/
+
+/* whole lottery page */
+.lottery-page-container{
+    display:flex;
+    flex-direction: column;
+}
+
+
+/* left-hand side */
+.lottery-container{
+    display:flex;
+    flex-direction: row;
+}
+
+.lottery-results{
+    height: 100%;
+    width: 60%;
+    margin: 5%;
+    margin-right: 1%;
+    padding: 0.5em 2em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+/* .lottery-results > h2{
+    font-size: 2em;
+    font-weight: bold;
+    color:#0f0b2b;
+} */
+
+/* 用戶框架 */
+.avator{
+    width: 6em;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    /* transform: translate(5px, 5px); */
+    padding: 1em;
+    margin: 1em;
+    font-size: 1em;
+    font-weight: 600;
+    /* background-color: var(--theme-light-grey); */
+}
+
+/* 用戶照片 */
+.avator-image{
+    width: 5.5em;
+    margin: 0em;
+    border-radius: 100%;
+    border: var(--theme-light-grey) solid 0.1em;
+    box-shadow: var(--shadow);
+}
+
+/* 橫向用戶照片 */
+.avator-container{
+    display: flex;
+    justify-content: left;
+}
+
+/* 獎品照片 */
+.prize-image {
+    width: 15em;
+    margin: 1em;
+    border-radius: 0.5em;
+    border: var(--theme-light-grey) solid 0.1em;
+    box-shadow: var(--shadow);
+}
+
+/* 獎品與中獎者框框 */
+.lottery-card {
+    padding: 0.8em;
+    margin: 0.8em 0em;
+    display: flex;
+    flex-direction: column;
+}
+
+/* .lottery-card > h2{
+    font-size: 1.2em;
+    font-weight: bold;
+} */
+
+/* 基本表單資訊 */
+.form-info{
+    height: 100%;
+    width: 40%;
+    margin: 5%;
+    margin-left: 0%;
+    padding: 0.5em 2em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+/* .form-info > h2{
+    color:#0f0b2b;
+    font-size: 2em;
+    font-weight: bold;
+} */
+
+/* 獎品資訊 */
+.prize-container{
+    display: flex;
+    /* justify-content: left; */
+    flex-direction: column;
+    margin-bottom: 1em; 
+    align-items: left;
+}
+
+/* .prize-container > h3{
+    font-size: 1.2em;
+    font-weight: bold;
+} */

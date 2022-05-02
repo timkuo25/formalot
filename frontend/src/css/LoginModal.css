@@ -1,0 +1,104 @@
+/* LoginModal Components --------------------------*/
+.modalBackground {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(142, 141, 141, 0.573);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.modalContainer {
+    width: 500px;
+    height: 520px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+.title{
+    color: var(--theme-dark-purple);
+}
+
+/* .login-form-input{
+    position: fixed;
+} */
+
+.login-form-input font {
+    font-size: 0.6rem;
+    margin-top: 0rem;
+    color: #f00e0e;
+    margin-left: 9.5em;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0px;
+    color: var(--theme-dark-purple);
+  }
+
+
+.titleCloseBtn {
+    display: flex;
+    justify-content: flex-end;
+    border: 0em;
+    background-color: #ffffff;
+    color: var(--theme-dark-purple);
+}
+
+.inputbar{
+    width: 60%;
+    border-radius: 0.3em;
+    height: 2.8em;
+    display: flex;
+    text-align: left;
+    margin: auto;
+    margin-top: 1em;
+}
+
+.forget-password{
+    border: 0em;
+    background-color: #ffffff;
+    color:#b1adad;
+    margin-top: 2em;
+}
+
+.submit{
+    border: var(--theme-dark-purple) solid 0.15em;
+    border-radius: 0.2em;
+    background-color: #fbfafc;
+    color: var(--theme-dark-purple);
+    margin: 2em 0em 0em 0em;
+    width: 5em;
+    height: 2.25em;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.login-button{
+    flex-direction: row;
+    float:left;
+}
+
+.create-account-button{
+    border: var(--theme-dark-purple) solid 0.15em;
+    border-radius: 0.2em;
+    background-color: var(--theme-dark-purple);
+    color: #fbfafc;
+    margin: 1em 0em 0em 0em;
+    width: 6em;
+    height: 2.5em;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* End LoginModal Components --------------------------*/

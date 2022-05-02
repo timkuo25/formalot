@@ -1,0 +1,29 @@
+/* Explore page --------------------------*/
+.explore-title{
+    display: flex;
+    justify-content: center;
+}
+
+.explore-title > h2{
+    font-size: 3em;
+}
+
+.tag-select {
+    width: 40em;
+    box-shadow: 0px 1px 2.5px 1px #dadada;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theme-extra-light);
+}
+
+.tag-item{
+    height: 3em;
+    width: 5em;
+    /* border: #000000 solid 1px; */
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

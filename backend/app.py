@@ -2,13 +2,12 @@ from flask import Flask
 from flasgger import Swagger
 from Form.form import form_bp
 from Member.member import members_bp
-from Lottery.lottery import lottery_bp, autolotteryfunc
+from Lottery.lottery import lottery_bp
 from Homepage.homePage import homePage_bp
 from Explore.exploreform import explore_bp
 from datetime import timedelta
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-# from flask_apscheduler import APScheduler
 # pip3 install flask_apscheduler
 
 
@@ -27,7 +26,9 @@ app.config['JWT_SECRET_KEY'] = 'this-should-be-change'
 app.config["JWT_COOKIE_SECURE"] = False
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config['CORS_HEADERS'] = 'Content-Type'
-JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=2)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # 設定access_token的有效時間
+# app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15  # 設定access_token的有效時間
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=1)  # 設定refresh_token的有效時間
 jwt = JWTManager(app)
 
 # set email
@@ -53,8 +54,6 @@ swag = Swagger(app)
 
 @app.route('/')
 def index():
-    # scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=12)
-    # scheduler.start()
     return "home"
 
 

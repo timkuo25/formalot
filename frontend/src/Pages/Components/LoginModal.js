@@ -1,3 +1,4 @@
+import '../../css/LoginModal.css';
 import React from "react";
 import ReactDom from "react-dom";
 import { useState } from "react";
@@ -36,70 +37,104 @@ function LoginModal( {closeModal}){
 
 
     // 登出
-    const calllogout = async (e) => {
-        e.preventDefault();
-        localStorage.removeItem('jwt');
-        console.log("Logout Success");
-        alert("Logout Success");
+    // const calllogout = async (e) => {
+    //     e.preventDefault();
+    //     localStorage.removeItem('jwt');
+    //     console.log("Logout Success");
+    //     alert("Logout Success");
    
-    };
+    // };
 
     // 更新使用者資訊
-    const calluserupdate = async (e) => {
-        e.preventDefault();
-        const getprotected = await fetch('http://127.0.0.1:5000/UserUpdate',{
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-            },
-            body: JSON.stringify({
-                first_name: "testupdate",
-                last_name : "",
-                password : "",
-                password2 : "",
-            }),
-        });
-        const resdata = await getprotected.json();
-        console.log(resdata);
-        alert(resdata.message);
+    // const calluserupdate = async (e) => {
+    //     e.preventDefault();
+    //     const getprotected = await fetch('http://127.0.0.1:5000/UserUpdate',{
+    //         method: 'PUT',
+    //         headers: {
+    //           Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    //         },
+    //         body: JSON.stringify({
+    //             first_name: "testupdate",
+    //             last_name : "",
+    //             password : "",
+    //             password2 : "",
+    //         }),
+    //     });
+    //     const resdata = await getprotected.json();
+    //     console.log(resdata);
+    //     alert(resdata.message);
    
-    };
+    // };
 
     // 忘記密碼
-    const [newpsw, setNewPsw] = useState("");
-    const [newpsw2, setNewPsw2] = useState("");
-    const [code, setCode] = useState("");
-    const callforgetpasswordApi = async (e) => {
-        e.preventDefault();
-        const getprotected = await fetch('http://127.0.0.1:5000/ForgetPsw',{
-            method: 'PUT',
-            body: JSON.stringify({
-                email: email,
-                password : newpsw,
-                password2 : newpsw2,
-                code: code,
-                session_code: sessionStorage.getItem('code')
-            }),
-        });
-        const resdata = await getprotected.json();
-        console.log(resdata);
-        alert(resdata.message);
+    // const [newpsw, setNewPsw] = useState("");
+    // const [newpsw2, setNewPsw2] = useState("");
+    // const [code, setCode] = useState("");
+    // const callforgetpasswordApi = async (e) => {
+    //     e.preventDefault();
+    //     const getprotected = await fetch('http://127.0.0.1:5000/ForgetPsw',{
+    //         method: 'PUT',
+    //         body: JSON.stringify({
+    //             email: email,
+    //             password : newpsw,
+    //             password2 : newpsw2,
+    //             code: code,
+    //             session_code: sessionStorage.getItem('code')
+    //         }),
+    //     });
+    //     const resdata = await getprotected.json();
+    //     console.log(resdata);
+    //     alert(resdata.message);
 
-    };
+    // };
 
-    const callemailApi = async (e) => {
-        e.preventDefault();
-        const result = await fetch("http://127.0.0.1:5000/Email?condition=forget_psw", {
-            method: "POST",
-            body: JSON.stringify({
-                email: email
-            }),
-        });
-        let resJson = await result.json();
-        console.log(resJson);
-        alert(resJson.message);
-        sessionStorage.setItem('code', resJson.code);
-    };
+
+    // 傳送驗證碼 api
+    // const callemailApi = async (e) => {
+    //     e.preventDefault();
+    //     const result = await fetch("http://127.0.0.1:5000/Email?condition=forget_psw", {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //             email: email
+    //         }),
+    //     });
+    //     let resJson = await result.json();
+    //     console.log(resJson);
+    //     alert(resJson.message);
+    //     sessionStorage.setItem('code', resJson.code);
+    // };
+
+    // validation
+        let errors = {};
+      
+        // if (!email.trim()) {
+        //   errors.username = 'Username required';
+        // }
+        // else if (!/^[A-Za-z]+/.test(values.name.trim())) {
+        //   errors.name = 'Enter a valid name';
+        // }
+      
+        if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
+          errors.email = '請輸入台大信箱格式';
+        } 
+        // else if (!/\S+@\S+\.\S+/.test(email)) {
+        //     errors.email = '信箱格式錯誤';
+        // }
+
+
+        if (!password) {
+          errors.password = '請輸入密碼';
+        } 
+        // else if (values.password.length < 6) {
+        //   errors.password = 'Password needs to be 6 characters or more';
+        // }
+      
+        // if (!values.password2) {
+        //   errors.password2 = 'Password is required';
+        // } else if (values.password2 !== values.password) {
+        //   errors.password2 = 'Passwords do not match';
+        // }
+      
 
         return ReactDom.createPortal(
             <div className='modalBackground'>
@@ -109,14 +144,18 @@ function LoginModal( {closeModal}){
                             <h2>登入</h2>
                         </div>
 
-                        <div>
-                            {/* <h3 align="center">電子郵件</h3> */}
-                            <input placeholder="電子郵件或帳號" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                        <div className='login-form-input'>
+                            {/* <label className='form-label'>帳號</label> */}
+                            <input placeholder="電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                            {errors.email && <font>{errors.email}</font>}
                         </div>
-                        <div>
-                            {/* <h3 align="center">密碼</h3> */}
+                        <p></p>
+                        <div className='login-form-input'>
+                            {/* <label className='form-label'>密碼</label> */}
                             <input type="password" placeholder="密碼" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                            {errors.password && <font>{errors.password}</font>}
                         </div>
+
                         <div align="center">
                             <button className="submit" onClick={callLoginApi}>登入</button><br/>
                             <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼?</button>

@@ -1,6 +1,7 @@
+import '../../css/Navbar.css';
 import { LoginModal } from './LoginModal';
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { Homepage } from "../Homepage";
 
 const Navbar = () => {
@@ -21,16 +22,17 @@ const Navbar = () => {
             <header className="header">
             <h1 className="app-title"><a href='/'>Formalot</a></h1>
             <nav className="navbar">
-                <button className="nav-option" onClick={() => {window.location.href='explore'}}>探索</button>
-                <button className="nav-option" onClick={() => {window.location.href='MakeSurvey'}}>製作</button>
-                <a className="nav-option" href='/instruction'>說明</a>
-                <button className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
+                <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore'> 探索 </NavLink>
+                <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey'> 製作 </NavLink>
+                <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction'> 說明 </NavLink>
+                <div className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
                     User
                     <div className="user-dropdown-options" >
                         <button>管理問卷</button>
                         <button>個人資料</button>
+                        <button>登入</button>
                     </div>
-                </button>
+                </div>
                 {modalOpen && <LoginModal closeModal={setModalOpen} />}
             </nav>
         </header>
@@ -44,13 +46,13 @@ const Navbar = () => {
             <header className="header">
             <h1 className="app-title"><a href='/'>Formalot</a></h1>
             <nav className="navbar">
-                <button className="nav-option" onClick={() => {window.location.href='explore'}}>探索</button>
-                <button className="nav-option" onClick={() => {window.location.href='MakeSurvey'}}>製作</button>
-                <a className="nav-option" href='/instruction'>說明</a>
+                <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore'> 探索 </NavLink>
+                <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey'> 製作 </NavLink>
+                <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction'> 說明 </NavLink>
                 <button className="nav-option user-dropdown">
                     User
                     <div className="user-dropdown-options" >
-                        <button onClick={()=>{window.location.href = "/Profile"}}>管理問卷</button>
+                        <button onClick={()=>{window.location.href = "/SurveyManagement"}}>管理問卷</button>
                         <button onClick={()=>{window.location.href = "/Profile"}}>個人資料</button>
                         <button onClick={calllogout}>登出</button>
                     </div>

@@ -1,3 +1,4 @@
+import '../css/MakeSurvey.css';
 import { Navbar } from './Components/Navbar';
 import {ButtonGroup} from "./Components/ButtonGroup";
 import React, {Component, useState, useRef} from 'react';
@@ -11,16 +12,16 @@ import "react-datepicker/dist/react-datepicker.css";
 const DisplayGiftDiv = ()=>{
   return(
     
-    <div className='lottery-card'>
+    <div className='lottery-card card-shadow'>
     <h4>輸入獎品資訊</h4>
       <p>
-          <input type="text" placeholder="獎品名稱" style={{width: "60%", height:"40px", border:' 2px solid #8864b3'}}/>
+          <input type="text" placeholder="獎品名稱"  className='input-columns'/>
       </p>
       <p>
-          <input type="text" placeholder="獎品數量" style={{width: "60%", height:"40px", border:' 2px solid #8864b3'}}/>
+          <input type="text" placeholder="獎品數量"  className='input-columns'/>
       </p>
       <p>
-          <input type="text" placeholder="獎品圖片url網址" style={{width: "60%", height:"40px", border:' 2px solid #8864b3'}}/>
+          <input type="text" placeholder="獎品圖片url網址"  className='input-columns'/>
       </p>
 
     </div>
@@ -55,7 +56,7 @@ const MakeSurvey2 = () => {
       return(
         
         <div>
-          <button className='add-giftBtn Btn' onClick={()=>{setGiftNum(giftNum+1)}}><img className='add-gift-image' src={process.env.PUBLIC_URL + 'giftbox.png'} alt='Gift'/></button>
+          <button className='add-giftBtn Btn ' onClick={()=>{setGiftNum(giftNum+1)}}><img className='add-gift-image' src={process.env.PUBLIC_URL + 'giftbox.png'} alt='Gift'/></button>
   
         </div>
     
@@ -92,26 +93,27 @@ const MakeSurvey2 = () => {
           </div>
           <section className='makeSurvey-container'>
               <section className='makeSurvey-info'>
-                  <div className='makeSurvey-card'>
+                  <div className='makeSurvey-card card-shadow'>
                     <h3 style={{textAlign: "center"}}>截止與抽獎時間</h3>
                     <h4>問卷截止時間</h4>
                     <p>
-                    <DatePicker selected={DateForFormEnd} onChange={(date:Date) => setDateForFormEnd(date)} />
+                    <DatePicker selected={DateForFormEnd} onChange={(date:Date) => setDateForFormEnd(date)}  className='input-columns' />
                     </p>
                     <h4>抽獎時間</h4>
                     <p>
-                    <DatePicker selected={DateForLottery} onChange={(date:Date) => setDateForLottery(date)} />
+                    <DatePicker selected={DateForLottery} onChange={(date:Date) => setDateForLottery(date)} className='input-columns'/>
                     </p>
                     <h4>問卷縮圖圖片</h4>
                     <div>
-                      <input className='Btn SurveyOptionBtn' ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
-                      <button className='Btn SurveyOptionBtn' onClick={()=>inputFile.current.click()}>
-                        選擇圖片
-                    </button>
+                      <img src={image} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>
                       </div>
                       <br></br>
                       <div>
-                      <img src={image} style={{  height: '300px', width: '400px'}}/>
+                      <input className='Btn SurveyOptionBtn' ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
+                      <button className='Btn SurveyOptionBtn card-shadow' onClick={()=>inputFile.current.click()}>
+                        選擇圖片
+                      </button>
+
                     </div>
 
                   
@@ -123,7 +125,7 @@ const MakeSurvey2 = () => {
               
               <section className='makeSurvey-results '>
 
-                  <div className='makeSurvey-card'>
+                  <div className='makeSurvey-card card-shadow'>
                   
                     <div className='makeSurvey-card'>
                       <h4>是否有抽獎？</h4>

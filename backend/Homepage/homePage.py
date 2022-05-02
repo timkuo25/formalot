@@ -3,6 +3,7 @@ from db.db import get_db
 from flask import Blueprint, request, jsonify
 from flasgger.utils import swag_from
 import psycopg2.extras  # get the results in form of dictionary
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 homePage_bp = Blueprint('homePage', __name__)
 
@@ -36,6 +37,22 @@ def formRecommendation():
     finally:
         db.close()
 
+# CORS issue
+@homePage_bp.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    header['Access-Control-Allow-Headers'] = '*'
+    header['Access-Control-Allow-Methods'] = '*'
+    header['Content-type'] = 'application/json'
+    return response
+
+
+# get jwt function
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    return current_user
 
 # route
 @homePage_bp.route('/home', methods=['GET'])

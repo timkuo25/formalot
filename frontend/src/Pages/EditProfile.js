@@ -1,5 +1,8 @@
-import { useState } from "react";
+import '../css/EditProfile.css';
 import { Navbar } from './Components/Navbar';
+import { Footer } from './Components/Footer';
+import { useState, useEffect } from 'react';
+
 const EditProfile = () => {
     const [first_name, setFirstname] = useState("");
     const [last_name, setLastname] = useState("");
@@ -25,6 +28,24 @@ const EditProfile = () => {
         alert(resdata.message);
    
     };
+
+    const [Profile, setProfile] = useState([]);
+    useEffect(() => {
+        const callGetUserProfile = async () => {
+            const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
+                method: 'GET',
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                },
+            });
+            const dataJSON = await data.json();
+            console.log(dataJSON);
+            setProfile(dataJSON[0]);
+
+        };
+        callGetUserProfile();
+    }, []);
+
     return (
     <>
     <Navbar/>
@@ -36,7 +57,7 @@ const EditProfile = () => {
                 </div>
                 <div className="edit_input_content">
                     <h2>你的信箱</h2>
-                    <h3>r10725056@ntu.edu.tw</h3>
+                    <h3>{Profile.user_email}</h3>
                 </div>
                 <div className="edit_input_content">
                     <h3>姓氏</h3>
@@ -59,11 +80,12 @@ const EditProfile = () => {
                 
             
             <form>
-                <button className="edit_submit" onSubmit={calluserupdate}>修改</button>
+                <button className="edit_submit" onClick={calluserupdate}>修改</button>
             </form>
             
             </div>
         </div>
+        <Footer/>
     </>
     )
 }
