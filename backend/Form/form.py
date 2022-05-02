@@ -1,6 +1,5 @@
 from db.db import get_db
-from flask import Blueprint, request, session, jsonify
-from flasgger.utils import swag_from
+from flask import Blueprint, request, jsonify
 import psycopg2.extras  # get the results in form of dictionary
 import json
 import datetime
@@ -8,8 +7,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 form_bp = Blueprint('form', __name__)
 
-# DAO
 
+# DAO
 def replied(student_id):
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -28,7 +27,7 @@ def replied(student_id):
         db.rollback()
         return 'failed to retrieve form.'
     finally:
-        db.close() 
+        db.close()
 
 
 def created(student_id):
@@ -52,73 +51,46 @@ def created(student_id):
         db.close()
 
 
-'''
-@ Wei: 我把win_lottery_check和replied合併，讓查詢replied form 時只要I/O db一次
-'''
-# def replied(student_id):
-#     # input: User.student_id
-#     # output: Form.{form_title, form_picture, form_end_date, form_run_state, form_id}
-#     db = get_db()
-#     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-#     query = '''SELECT Form.form_title, Form.form_pic_url, Form.form_end_date, Form.form_run_state, Form_form_id
-#     from UserForm
-#     JOIN Users on student_id = UserForm.User_student_id
-#     JOIN Form on form_id = UserForm.Form_form_id
-#     WHERE Form.form_delete_state='0' AND Users.student_id = %s
-#     '''
-#     cursor.execute(query, [student_id])
-#     db.commit()
-#     db.close()
-#     return cursor.fetchall()
-
-
-# def win_lottery_check(form_id, student_id):
-#     # input: Userform.form_id, student_id
-#     # output: "未中獎"/"中獎"
-#     db = get_db()
-#     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-#     query = '''SELECT *
-#         FROM gift
-#         WHERE form_form_id = %s AND user_student_id= %s
-#         '''
-#     cursor.execute(query, (form_id, student_id))
-#     rows = cursor.fetchall()
-#     db.close()
-
-#     if rows != []:
-#         return "中獎"
-#     return "未中獎"
-
-
 def deleteForm(form_id):
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = '''UPDATE Form
-    SET form_delete_state = '1'
-    WHERE form_id = %s
-    '''
-    cursor.execute(query, [form_id])
-    db.commit()
-    db.close()
-    return True
+    try:
+        query = '''UPDATE Form
+        SET form_delete_state = '1'
+        WHERE form_id = (%s) AND form_run_state = 'Closed'
+        '''
+        cursor.execute(query, [form_id])
+        db.commit()
+        return True
+    except:
+        db.rollback()
+        return False
+    finally:
+        db.close()
 
 
 def closeForm(form_id):
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    query = '''UPDATE Form
-    SET form_run_state='Closed'
-    WHERE form_id = %s
-    '''
-    cursor.execute(query, [form_id])
-    db.commit()
-    db.close()
-    return True
+    try:
+        query = '''UPDATE Form
+        SET form_run_state='Closed'
+        WHERE form_id = (%s)
+        '''
+        cursor.execute(query, [form_id])
+        db.commit()
+        return True
+    except:
+        db.rollback()
+        return False
+    finally:
+        db.close()
 
 
 '''
 [Wei]: addForm可能會再更新，以確保db transaction process。（但變數不會改變，前端可以照用）
 '''
+
 def addForm(form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
     db = get_db()
     # db cursor is lightweight, so it's better to declare multiple curosrs instead of running multiple db connections.
@@ -126,7 +98,7 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
     cursor2 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cursor3 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cursor4 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    
+
     try:
         # Write Form
         query = """
@@ -157,7 +129,8 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         """
         for gift in gift_info:
             for i in range(gift['quantity']):
-                query += """({}, '{}', '{}', {}),""".format(form_id, gift['gift_name'], gift['gift_pic_url'], i)
+                query += """({}, '{}', '{}', {}),""".format(form_id,
+                                                            gift['gift_name'], gift['gift_pic_url'], i)
         query = query[:-1]
         cursor4.execute(query)
         print('Write Gift')
@@ -169,6 +142,22 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         db.rollback()
         return error
 
+    finally:
+        db.close()
+
+
+def getAns(form_id):
+    db = get_db()
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    try:
+        query = '''SELECT UserForm.answercontent, UserForm.user_student_id
+        FROM UserForm
+        WHERE UserForm.form_form_id = %s;
+        '''
+        cursor.execute(query, [form_id])
+    except:
+        db.rollback()
+        # return 'Failed to retrieve member.'
     finally:
         db.close()
 
@@ -209,17 +198,6 @@ def addResponse(student_id, form_id, answer_time, answercontent):
         db.close()
 
 
-# CORS issue
-@form_bp.after_request
-def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = '*'
-    header['Access-Control-Allow-Methods'] = '*'
-    header['Content-type'] = 'application/json'
-    return response
-
-
 # get jwt function
 @jwt_required()
 def protected():
@@ -228,7 +206,6 @@ def protected():
 
 
 # route
-
 @ form_bp.route('/FillForm', methods=['POST'])
 def FillForm():
     student_id = protected()
@@ -260,27 +237,12 @@ def FillForm():
 def returnForm():
     student_id = protected()
     # student_id = 'r10725051'  # test data
-    response = [{'replied':replied(student_id),
-                'created':created(student_id)}]
+    response = [{'replied': replied(student_id),
+                'created': created(student_id)}]
     return jsonify(response)
 
 
-# @ form_bp.route('/SurveyManagement', methods=["GET"])
-# @ swag_from('replier_form_specs.yml', methods=["GET"])
-# def returnReplierForm():
-#     student_id = protected()  # get id
-#     results = replied(student_id)  # list
-#     response = []
-#     for result in results:  # result: psycopg2.extras.DictRow
-#         result_dict = dict(result)
-#         form_id = result_dict['form_form_id']
-#         result_dict['winning_status'] = win_lottery_check(form_id, student_id)
-#         response.append(result_dict)
-#     return jsonify(response)
-
-
 @ form_bp.route('/SurveyManagement', methods=["PUT"])
-@ swag_from('modify_form_specs.yml', methods=["PUT"])
 def modifyForm():
     req_json = request.get_json()
     form_id = req_json["form_id"]
@@ -290,9 +252,12 @@ def modifyForm():
         "message": ""
     }
     if action == "delete":
-        deleteForm(form_id)
-        response_return["status"] = "success"
-        response_return["message"] = "Deleted form"
+        if deleteForm(form_id):
+            response_return["status"] = "success"
+            response_return["message"] = "Deleted form"
+        else:
+            response_return["status"] = "fail"
+            response_return["message"] = "Cannot delete form"
     elif action == "close":
         closeForm(form_id)
         response_return["status"] = "success"
@@ -313,7 +278,7 @@ def createForm():
     # form_pic_url = 'https://imgur.com/gallery/05YcgLz'  # test data
     # form_tag_name = '美妝保養類'  # test data
     # gift_info = [{"gift_name":"星巴克","gift_pic_url":"imgur.com/1","quantity":3},{"gift_name":"iPhone", "gift_pic_url":"imgur.com/2","quantity":2}]  # test data
-    
+
     req_json = request.get_json(force=True)
     form_title = req_json['form_title']
     form_description = req_json['form_description']
@@ -339,3 +304,8 @@ def createForm():
     return jsonify(response)
 
 
+@ form_bp.route('/SurveyManagement/detail', methods=['GET'])
+def statisticForm():
+    form_id = request.args.get('form_id')
+    response = getAns(form_id)
+    return jsonify(response)

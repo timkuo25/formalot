@@ -1,5 +1,3 @@
-# from asyncio.windows_events import NULL
-from cmath import nan
 from db.db import get_db
 from flask import request, jsonify, Blueprint, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -446,13 +444,17 @@ def FormOwnerCheck():
     db.commit()
     db.close()
     
-    id = protected()
+    if(len(result) != 0):
 
-    response["form_id"] = result[0]['form_id']
-    response["form_owener_id"] = result[0]['user_student_id']
-    if(id == result[0]['user_student_id']):
-        response["form_owner_status"] = True
+        id = protected()
+        response["form_id"] = result[0]['form_id']
+        response["form_owener_id"] = result[0]['user_student_id']
+        if(id == result[0]['user_student_id']):
+            response["form_owner_status"] = True
+        else:
+            response["form_owner_status"] = False
     else:
+        response["form_id"] = form_id
+        response["form_owener_id"] = 'The form is not exist!!!'
         response["form_owner_status"] = False
-        
     return jsonify(response)
