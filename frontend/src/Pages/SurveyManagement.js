@@ -7,8 +7,6 @@ import List from "./Components/survey_management_comp/List"
 import { Footer } from "./Components/Footer"
 // import Item from "./components/Item"
 import './Components/survey_management_comp/SurveyManagement.css'
-import "../App.css"
-import "../css/SurveyManagement.css"
 
 
 async function fetchData(setData) {

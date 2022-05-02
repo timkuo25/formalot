@@ -5,15 +5,18 @@ import { LotteryCard } from './Components/LotteryCard'
 import { ItemSlider } from './Components/ItemSlider'
 import ReactLoading from "react-loading";
 import React, { useState, useEffect } from 'react';
+import {useParams} from 'react-router-dom';
 
 
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:6};
 
 const Lottery = () => {
+    const props = useParams();
+    console.log("Props in lottery page", props.form_id)
+    const FORM_ID = props.form_id;
+
+    //For candidate slider
     const [activeItemIndex, setActiveItemIndex] = useState(0);
-
-
     console.log('----- invoke function component -----');
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
@@ -21,8 +24,9 @@ const Lottery = () => {
     const [lotteryResults, setLotteryResults] = useState({
         "status":"Open",
         "results":[],
-        "isLoading":true,
+        "isLoading":true,  // 控制是否還在 loading
     });
+
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -56,7 +60,7 @@ const Lottery = () => {
     const fetchCurrentGifts = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -89,7 +93,7 @@ const Lottery = () => {
     const fetchCandidateList = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetCandidate?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            `http://127.0.0.1:5000/GetCandidate?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -116,7 +120,7 @@ const Lottery = () => {
     const fetchFormDetail = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -168,7 +172,7 @@ const Lottery = () => {
     const fetchLotteryResults = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -193,9 +197,9 @@ const Lottery = () => {
 
   
     function SeeStatus(lotteryResults){
-        return lotteryResults.status == "Open" ? <h3>問卷還沒到抽獎日期！</h3>
-        : lotteryResults.status == "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
-        : lotteryResults.status == "WaitforDraw" ? <h3>問卷已到抽獎日，等待製作者手動抽獎。</h3> 
+        return lotteryResults.status === "Open" ? <h3>問卷還沒到抽獎日期！</h3>
+        : lotteryResults.status === "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
+        : lotteryResults.status === "WaitforDraw" ? <h3>問卷已到抽獎日，等待製作者手動抽獎。</h3> 
         : lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>);
     }
 
@@ -235,7 +239,7 @@ const Lottery = () => {
                         截止時間：{formDetail.form_end_date} <br />
                         抽獎時間：{formDetail.form_draw_date}<br/>
                         <h2> 獎品 </h2>
-                        {gifts.length == 0 ? <h3>此問卷沒有抽獎</h3> :  
+                        {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
                             gifts.map(gift => {
                                 return (
                                     <div className='prize-container' key={gift.gift_name}>
@@ -249,9 +253,8 @@ const Lottery = () => {
                     </section>
                 </section>
                 <div className='form-buttons'>
-                    <button class='form-button'> 填答結果</button>
-                    <button class='form-button'> 瀏覽問卷</button>
-                    {/* <button class='form-button' onClick={fetchCurrentGifts}> 重新整理</button> */}
+                    <button className='form-button'> 填答結果</button>
+                    <button className='form-button'> 瀏覽問卷</button>
                 </div>
             </section>
 

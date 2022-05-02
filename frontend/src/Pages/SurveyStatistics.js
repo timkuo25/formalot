@@ -113,6 +113,32 @@ const SurveyStatistics = () => {
         .catch(error => console.log(error))  
     };
 
+    // google.charts.load('current', {'packages':['corechart']});
+    // google.charts.setOnLoadCallback(drawChart);
+
+    // function drawChart() {
+
+    //   var data = google.visualization.arrayToDataTable([
+    //     ['Task', 'Hours per Day'],
+    //     ['Work',     11],
+    //     ['Eat',      2],
+    //     ['Commute',  2],
+    //     ['Watch TV', 2],
+    //     ['Sleep',    7]
+    //   ]);
+
+    //   var options = {
+    //     title: 'My Daily Activities'
+    //   };
+
+    //   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+    //   chart.draw(data, options);
+    // }
+
+
+
+
     const data = [
         { value: 'JavaScript', count: 38 },
         { value: 'React', count: 30 },
@@ -142,11 +168,26 @@ const SurveyStatistics = () => {
                 <section className='lottery-container'>
                     <section className='lottery-results'>
                         <h2> {formDetail.form_title} </h2>
-
+                        {/* <div className='lottery-card'>
+                            <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
+                            <div className='avator-container'>
+                                {candidateList.map( (candidate) => {
+                                    return (
+                                        <Avator
+                                            user_name={candidate.student_id}
+                                            user_pic_url={candidate.user_pic_url}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        </div> */}
+                        {/* 禮物與中獎人 */}
+                        {/* <LotteryCard results={lotteryResults} /> */}
                         {lotteryResults.map(result => {
                             return (
                                 <div className='lottery-card' key={result.gift_name}>
                                     <h2> {result.gift_name}   </h2>
+                                    {/* <img className='prize-image' src={result.gift_pic_url} alt=''/> */}
                                     <div>
                                         {console.log('winner', lotteryResults)}
                                         {result['winner'].map( (winner) => {
@@ -180,22 +221,22 @@ const SurveyStatistics = () => {
 
 
                     {/* 問卷右半部基本問卷資訊 */}
-                        <section className='form-info'>
-                            <h2> 問卷資訊 </h2>
-                            發布時間：{formDetail.form_create_date} <br />
-                            截止時間：{formDetail.form_end_date} <br />
-                            抽獎時間：{formDetail.form_draw_date}<br/>
-                            <h2> 獎品 </h2>
-                            {gifts.map(gift => {
-                                return (
-                                    <div className='prize-container' key={gift.gift_name}>
-                                        <h3> {gift.gift_name} × {gift.amount} </h3>
-                                        <img className='prize-image' src={gift.gift_pic_url} alt=''/>
-                                    </div>
-                                )
-                            })}
+                    <section className='form-info'>
+                        <h2> 問卷資訊 </h2>
+                        發布時間：{formDetail.form_create_date} <br />
+                        截止時間：{formDetail.form_end_date} <br />
+                        抽獎時間：{formDetail.form_draw_date}<br/>
+                        <h2> 獎品 </h2>
+                        {gifts.map(gift => {
+                            return (
+                                <div className='prize-container' key={gift.gift_name}>
+                                    <h3> {gift.gift_name} × {gift.amount} </h3>
+                                    <img className='prize-image' src={gift.gift_pic_url} alt=''/>
+                                </div>
+                            )
+                        })}
 
-                        </section>
+                    </section>
                 </section>
                 <div className='form-buttons'>
                     <button class='form-button'> 填答結果</button>

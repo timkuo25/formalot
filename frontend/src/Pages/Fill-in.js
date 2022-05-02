@@ -1,19 +1,21 @@
-import '../css/Fill-in.css';
+import '../css/Lottery.css'
+import '../css/Fill-in.css'
 import { Navbar } from './Components/Navbar';
-// import { Avator } from './Components/Avator';
-import {QuestionCard} from './Components/QuestionCard'
 import React, { useState, useEffect } from 'react';
+import {useHref, useParams} from 'react-router-dom';
 
-// 傳入想要看的 formID
-const FORM_SEARCH = {id:2};
 
 const Fillin = () => {
-
+    const props = useParams();
+    console.log("Props in lottery page", props.form_id)
+    const FORM_ID = props.form_id; // 傳入想要看的 formID
+    
+    
     console.log('----- invoke function component -----');
-
     const [gifts, setGifts] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
     const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState([]);
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -30,30 +32,30 @@ const Fillin = () => {
         }  
     }, []);  // dependency 
 
-    const fetchCurrentGifts = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            setGifts(response.data);
-            console.log('giftsdata',response.data)
-        })
-        .catch(error => console.log(error))  
+    const fetchCurrentGifts = async () => {
+        try {
+            const response = await fetch(
+                `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
+                    }
+                });
+            const responseJson = await response.json();
+            setGifts(responseJson.data);
+            console.log('giftsdata',response.data);
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
 
     const fetchFormDetail = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -70,11 +72,10 @@ const Fillin = () => {
         .catch(error => console.log(error))  
     };
 
-
     const fetchQuestions = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_SEARCH.id)}`,
+            `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -91,6 +92,68 @@ const Fillin = () => {
         .catch(error => console.log(error))  
     };
 
+    //決定要顯示哪些問題
+    function showQuestion(question){
+        const questionBox = [];
+        if (question.Type=="單選題"){
+            question.Options && question.Options.map(option => {
+                questionBox.push ( 
+                    <div className='question-card'>
+                        <label> {option}</label>
+                        <input type="radio" id={question.Question} name={question.Question} value={option} />
+                    </div>
+                )
+            })
+            return(questionBox)
+        }
+        else if (question.Type=="複選題"){
+            question.Options && question.Options.map(option => {
+                questionBox.push ( 
+                    <div className='question-card'>
+                        <label> {option}</label>
+                        <input type="checkbox" id={question.Question} name={question.Question} value={option} />
+                    </div>
+                )
+            })
+            return(questionBox)
+        }
+        else if (question.Type=="簡答題"){
+            return (
+                <textarea rows="6" type="text" placeholder="Answer" className='input-columns' name={question.Question}
+                style={{width: "100%", height:"90px"}}/>
+            )
+        }
+    }
+
+
+
+    // 提交回答
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        // 取得表單回覆
+        const formData = new FormData(e.target);
+        const formProps = Object.fromEntries(formData);
+        const tempAnsList = []
+        for(const key in formProps ){
+            const tempAns = {
+                Question : key,
+                Answer : formProps[key]
+            }
+            tempAnsList.push(tempAns)
+        }
+        console.log("tempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
+        
+        const result = await fetch("http://127.0.0.1:5000/FillForm", {
+            method: "POST",
+            body: JSON.stringify({
+                form_id: props.form_id,
+                answercontent: tempAnsList,
+            }),
+            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        });
+        let resJson = await result.json();
+        console.log("submit message", resJson.message);
+    }
 
 
     return (
@@ -101,10 +164,23 @@ const Fillin = () => {
                 {/* 問卷左半部問卷題目 */}
                 <section className='lottery-container'>
                     <section className='lottery-results card-shadow'>
-                        <h2> {formDetail.form_title} </h2>
-                        <QuestionCard questions={questions} />
+                        <h1> {formDetail.form_title} </h1>
+                        {/* 所有問題會顯示在這邊 */}
+                        <div className='questions'>
+                            {console.log('questions',questions)}
+                            <form onSubmit={handleSubmit}>
+                            {questions && questions.map(question => {
+                                return (
+                                    <div key={question.Question}>
+                                        <h2> {question.Question} </h2>
+                                        {showQuestion(question)}
+                                    </div>
+                            )})}
+                            <br/>
+                            <input type="submit" className='general-button Btn ' value="送出表單" />
+                            </form>
+                        </div>
                     </section>
-
 
 
                     {/* 問卷右半部基本問卷資訊 */}
@@ -114,14 +190,16 @@ const Fillin = () => {
                         截止時間：{formDetail.form_end_date} <br />
                         抽獎時間：{formDetail.form_draw_date}<br/>
                         <h2> 獎品 </h2>
-                        {gifts.map(gift => {
-                            return (
-                                <div className='prize-container' key={gift.gift_name}>
-                                    <h3> {gift.gift_name} × {gift.amount} </h3>
-                                    <img className='prize-image' src={gift.gift_pic_url} alt=''/>
-                                </div>
-                            )
-                        })}
+                        {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
+                            gifts.map(gift => {
+                                return (
+                                    <div className='prize-container' key={gift.gift_name}>
+                                        <h3> {gift.gift_name} × {gift.amount} </h3>
+                                        <img className='prize-image' src={gift.gift_pic_url} alt=''/>
+                                    </div>
+                                )
+                            })
+                        }
 
                     </section>
                 </section>

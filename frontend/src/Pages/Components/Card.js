@@ -1,5 +1,4 @@
 import '../../css/Card.css';
-import { useEffect, useState } from 'react';
 
 
 const Card = ({ info, type }) => {
@@ -9,7 +8,7 @@ const Card = ({ info, type }) => {
     if (type === 'home'){
         prize = 'prize name';
         num_prize = 'x';
-        image_path = `${process.env.PUBLIC_URL}/dog.png` //info.form_pic_url;
+        image_path = info.form_pic_url;
         title = info.form_title;
         due_time = info.form_end_date;
         lottery_time = 'lottery date';
@@ -19,14 +18,19 @@ const Card = ({ info, type }) => {
     if (type === 'explore'){
         prize = 'prize name';
         num_prize = 'x';
-        image_path = `${process.env.PUBLIC_URL}/dog.png` //info.form_pic_url;
+        image_path = info.form_pic_url;
         title = 'title';
         due_time = info.form_end_date;
         lottery_time = 'lottery date';
     }
 
+    function clickForm(){
+        console.log("form_id of this card is", info.form_id);
+        window.location.href='fillin/'+info.form_id;
+    }
+
     return (
-        <div className="card card-shadow">
+        <div className="card card-shadow" onClick={clickForm}>
             <div className="prize-tag">{`${prize} ${num_prize} 名`}</div>
             <img alt="" className="q-image" src={image_path}/>
             <h3 className='aaa'>{title}</h3>
@@ -36,6 +40,7 @@ const Card = ({ info, type }) => {
             </p>
             <button className='share-q'> <img className='share-image' src={process.env.PUBLIC_URL + 'share.png'} alt="分享"/></button>
         </div>
+
     )
 }
 

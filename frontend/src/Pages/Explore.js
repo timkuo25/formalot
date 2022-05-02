@@ -24,7 +24,7 @@ const Explore = ( ) => {
     useEffect(() => {
         const fetchData = async () => {
             tags.forEach(async item => {
-                const data = await fetch(`http://localhost:5000/GetFormByKeyWord?KeywordType=tag&Keyword=${item}類`);
+                const data = await fetch(`http://127.0.0.1:5000/GetFormByKeyWord?KeywordType=tag&Keyword=${item}類`);
                 const dataJSON = await data.json();
                 setShowList(prevShowList => {
                     let curShowList = prevShowList;
