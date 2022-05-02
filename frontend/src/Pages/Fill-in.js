@@ -1,11 +1,9 @@
 import '../css/Lottery.css'
+import '../css/Fill-in.css'
 import { Navbar } from './Components/Navbar';
 import React, { useState, useEffect } from 'react';
 import {useHref, useParams} from 'react-router-dom';
-import { Input } from 'antd';
 
-// 取得 access token
-const access_token =  localStorage.getItem('jwt');
 
 const Fillin = () => {
     const props = useParams();
@@ -94,29 +92,35 @@ const Fillin = () => {
         .catch(error => console.log(error))  
     };
 
-
+    //決定要顯示哪些問題
     function showQuestion(question){
         const questionBox = [];
         if (question.Type=="單選題"){
             question.Options && question.Options.map(option => {
-                questionBox.push ( <input type="radio" id={question.Question} name={question.Question} value={option} />)
-                questionBox.push ( <label> {option}</label>)
+                questionBox.push ( 
+                    <div className='question-card'>
+                        <label> {option}</label>
+                        <input type="radio" id={question.Question} name={question.Question} value={option} />
+                    </div>
+                )
             })
             return(questionBox)
         }
         else if (question.Type=="複選題"){
             question.Options && question.Options.map(option => {
-                questionBox.push ( <input type="checkbox" id={question.Question} name={question.Question} value={option} />)
-                questionBox.push ( <label> {option}</label>)
+                questionBox.push ( 
+                    <div className='question-card'>
+                        <label> {option}</label>
+                        <input type="checkbox" id={question.Question} name={question.Question} value={option} />
+                    </div>
+                )
             })
             return(questionBox)
         }
         else if (question.Type=="簡答題"){
-            const { TextArea } = Input;
             return (
-                <TextArea rows={4} className="input-columns" id={question.Question} name={question.Question} style={{width: "100%", height:"90px"}} />
-                // <input type="text" placeholder="Answer" className='input-columns' name={question.Question}
-                // style={{width: "100%", height:"90px"}}/>
+                <textarea rows="6" type="text" placeholder="Answer" className='input-columns' name={question.Question}
+                style={{width: "100%", height:"90px"}}/>
             )
         }
     }
@@ -162,7 +166,7 @@ const Fillin = () => {
                     <section className='lottery-results card-shadow'>
                         <h1> {formDetail.form_title} </h1>
                         {/* 所有問題會顯示在這邊 */}
-                        <div className='lottery-card'>
+                        <div className='questions'>
                             {console.log('questions',questions)}
                             <form onSubmit={handleSubmit}>
                             {questions && questions.map(question => {
@@ -186,14 +190,16 @@ const Fillin = () => {
                         截止時間：{formDetail.form_end_date} <br />
                         抽獎時間：{formDetail.form_draw_date}<br/>
                         <h2> 獎品 </h2>
-                        {gifts.map(gift => {
-                            return (
-                                <div className='prize-container' key={gift.gift_name}>
-                                    <h3> {gift.gift_name} × {gift.amount} </h3>
-                                    <img className='prize-image' src={gift.gift_pic_url} alt=''/>
-                                </div>
-                            )
-                        })}
+                        {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
+                            gifts.map(gift => {
+                                return (
+                                    <div className='prize-container' key={gift.gift_name}>
+                                        <h3> {gift.gift_name} × {gift.amount} </h3>
+                                        <img className='prize-image' src={gift.gift_pic_url} alt=''/>
+                                    </div>
+                                )
+                            })
+                        }
 
                     </section>
                 </section>
