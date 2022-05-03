@@ -21,12 +21,20 @@ def formRecommendation():
     
     try:
         query = """
-        SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, COUNT(DISTINCT UserForm.User_student_id) AS num_answer
-        FROM Form
-        LEFT JOIN UserForm
-        ON Form.form_id = UserForm.Form_form_id
-        WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open'
-        GROUP BY Form.form_id;
+        SELECT FormNumAnswer.form_id, FormNumAnswer.form_title, FormNumAnswer.form_run_state, FormNumAnswer.form_create_date, FormNumAnswer.form_end_date, FormNumAnswer.form_pic_url, FormNumAnswer.num_answer, COUNT(Gift.form_form_id) AS num_gift
+        FROM(
+            SELECT ValidForm.form_id, ValidForm.form_title, ValidForm.form_run_state, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_pic_url, COUNT(DISTINCT UserForm.User_student_id) AS num_answer
+            FROM (
+                SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url
+                FROM Form
+                WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open'
+                    ) AS ValidForm
+                LEFT JOIN UserForm
+                ON ValidForm.form_id = UserForm.Form_form_id
+                GROUP BY ValidForm.form_id, ValidForm.form_title, ValidForm.form_run_state, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_pic_url) AS FormNumAnswer
+        LEFT JOIN Gift
+        ON FormNumAnswer.form_id = Gift.form_form_id
+        GROUP BY FormNumAnswer.form_id, FormNumAnswer.form_title, FormNumAnswer.form_run_state, FormNumAnswer.form_create_date, FormNumAnswer.form_end_date, FormNumAnswer.form_pic_url, FormNumAnswer.num_answer;
         """
         cursor.execute(query)
         db.commit()

@@ -323,3 +323,21 @@ def FormRespondentCheck():
         
     else:
         return "False"
+
+# 取得該問卷的題目與題型
+@ form_bp.route('/GetUserForm', methods=["GET"])
+def getUserForm():
+    form_id = request.args.get('form_id')
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT form_id, form_description, form_pic_url, questioncontent
+    FROM form
+    WHERE form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
+    
+    return jsonify(result)
