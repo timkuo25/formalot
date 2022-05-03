@@ -18,4 +18,13 @@
     justify-content: center;
     cursor: pointer;
     background-color: var(--theme-extra-light);
+    margin: 5px;
+}
+
+.loading-container{
+    display:flex;
+    height: 40em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

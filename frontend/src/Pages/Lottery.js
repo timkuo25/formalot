@@ -149,7 +149,7 @@ const Lottery = (props) => {
                 {/* 禮物與中獎人 */}
                 <div >
                     {console.log("isLoading", lotteryResults.isLoading)}
-                    {lotteryResults.isLoading ? <ReactLoading type="spinningBubbles" color="#432a58" /> : 
+                    {lotteryResults.isLoading ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                         SeeStatus(lotteryResults)
                     }
 

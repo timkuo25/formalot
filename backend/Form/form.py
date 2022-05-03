@@ -340,9 +340,11 @@ def statisticForm():
 
 @ form_bp.route('/FormRespondentCheck', methods=["GET"])
 def FormRespondentCheck():
+    response = {
+        "has_responded":0
+    }
     student_id = protected()
-    req_json = request.get_json(force=True)
-    form_id = req_json["form_id"]
+    form_id = request.args.get('form_id')
     rows = searchResponseByID(student_id, form_id)
     print(rows)
     if rows != []:
