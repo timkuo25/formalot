@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 
-const ButtonGroup = ({ buttons, btnFunc}) => {
-  const [clickedId, setClickedId] = useState(-1);
+const ButtonGroup = ({ buttons, btnFunc, defaultvalue}) => {
+  let stateval = -1
+  for(let i=0; i<buttons.length; i++){
+    if(defaultvalue===buttons[i]){
+      stateval=i
+    }
+  }
+  const [clickedId, setClickedId] = useState(stateval);
   const handleClick = (event, id) => {
     setClickedId(id);
     btnFunc(event);
