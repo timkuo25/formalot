@@ -7,22 +7,10 @@ from flask_apscheduler import APScheduler
 lottery_bp = Blueprint('lottery', __name__)
 scheduler = APScheduler()
 
-@lottery_bp.after_request
-def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = '*'
-    header['Access-Control-Allow-Methods'] = '*'
-    header['Content-type'] = 'application/json'
-    return response
-
-
 @jwt_required()
 def protected():
     current_user = get_jwt_identity()
     return current_user
-
-
 
 def getFormDeleteStatueByFormId(form_id):
     db = get_db()

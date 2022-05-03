@@ -4,36 +4,17 @@ import re
 import uuid
 from smtplib import SMTPException
 from flask import Blueprint, request, jsonify, current_app
-from flask_jwt_extended import (
-    jwt_required, create_access_token, create_refresh_token,
-    # jwt_refresh_token_required, 
-    get_jwt_identity
-)
+from flask_jwt_extended import jwt_required, create_access_token, create_refresh_token, get_jwt_identity
 from flask_mail import Mail, Message
 import psycopg2.extras  # get the results in form of dictionary
+from datetime import timedelta
 
 members_bp = Blueprint('members_bp', __name__)
 
-@members_bp.after_request
-def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = '*'
-    header['Access-Control-Allow-Methods'] = '*'
-    header['Content-type'] = 'application/json'
-    return response
-
 @jwt_required()
 def protected():
-    # refresh()
     current_user = get_jwt_identity()
     return current_user
-
-# @jwt_refresh_token_required()
-# def refresh():
-#     current_user = get_jwt_identity()
-#     access_token = create_access_token(identity=current_user)
-#     return jsonify({'access_token': access_token})
 
 def addMember(user_email, user_firstname, user_lastname, student_id, user_hashed_pwd):
     db = get_db()
@@ -200,8 +181,9 @@ def Login():
         "test": ""
     }
     if login_check(email, password) == True:
-        access_token = create_access_token(identity=id)
-        refresh_token = create_refresh_token(identity=id)
+        # access_token = create_access_token(identity=id, expires_delta = timedelta(seconds=10))
+        access_token = create_access_token(identity=id, expires_delta = timedelta(minutes=120))
+        refresh_token = create_refresh_token(identity=id, expires_delta = timedelta(days=1))
         return jsonify({'access_token': access_token, 'refresh_token': refresh_token, "status": "success", "message": "登入成功"})
     elif login_check(email, password) == False:
         response_return["status"] = "error"
@@ -264,23 +246,30 @@ def UserUpdate():
         last_name = req_json["last_name"]
         password = req_json["password"]
         password2 = req_json["password2"]
+        detect = ""
         if len(first_name) != 0:
-            updateMemberInfo(first_name, id, first_name)
+            updateMemberInfo(first_name, id, "first_name")
             response_return["status"] = "success"
             response_return["message"] = "更新成功"
+            detect = 1
         if len(last_name) != 0:
-            updateMemberInfo(last_name, id, last_name)
+            updateMemberInfo(last_name, id, "last_name")
             response_return["status"] = "success"
             response_return["message"] = "更新成功"
+            detect = 1
         if len(password) != 0 or len(password2) != 0:
+            detect = 1
             if password_check(password, password2):
                 password_hash = str(md5(password.encode("utf-8")).hexdigest())
-                updateMemberInfo(password_hash, id, password)
+                updateMemberInfo(password_hash, id, "password")
                 response_return["status"] = "success"
                 response_return["message"] = "更新成功"
             else:
                 response_return["status"] = "error"
                 response_return["message"] = "密碼不一致"
+        if detect != 1:
+            response_return["status"] = "success"
+            response_return["message"] = "所有資料皆與原資料相同，故暫不進行變更！"
     else:
         response_return["status"] = "error"
         response_return["message"] = "請先登入"

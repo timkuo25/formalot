@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flasgger import Swagger
 from Form.form import form_bp
 from Member.member import members_bp
@@ -7,7 +7,7 @@ from Homepage.homePage import homePage_bp
 from Explore.exploreform import explore_bp
 from datetime import timedelta
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
 # pip3 install flask_apscheduler
 
 
@@ -26,9 +26,6 @@ app.config['JWT_SECRET_KEY'] = 'this-should-be-change'
 app.config["JWT_COOKIE_SECURE"] = False
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config['CORS_HEADERS'] = 'Content-Type'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # 設定access_token的有效時間
-# app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 15  # 設定access_token的有效時間
-app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=1)  # 設定refresh_token的有效時間
 jwt = JWTManager(app)
 
 # set email
@@ -50,12 +47,25 @@ app.config.update(
 # flasgger
 swag = Swagger(app)
 
-
-
 @app.route('/')
 def index():
     return "home"
 
+@app.route("/refresh", methods=["POST"])
+@jwt_required(refresh=True)
+def refresh():
+    identity = get_jwt_identity()
+    access_token = create_access_token(identity=identity, expires_delta = timedelta(minutes=120))
+    return jsonify(access_token=access_token, message = "test")
+
+@app.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    header['Access-Control-Allow-Headers'] = '*'
+    header['Access-Control-Allow-Methods'] = '*'
+    header['Content-type'] = 'application/json'
+    return response
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', debug=True)

@@ -11,6 +11,7 @@ const Navbar = () => {
     const calllogout = async (e) => {
         e.preventDefault();
         localStorage.removeItem('jwt');
+        localStorage.removeItem('refresh_token');
         console.log("Logout Success");
         alert("Logout Success");
         window.location.reload();
