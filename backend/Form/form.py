@@ -309,3 +309,17 @@ def statisticForm():
     form_id = request.args.get('form_id')
     response = getAns(form_id)
     return jsonify(response)
+
+
+@ form_bp.route('/FormRespondentCheck', methods=["GET"])
+def FormRespondentCheck():
+    student_id = protected()
+    req_json = request.get_json(force=True)
+    form_id = req_json["form_id"]
+    rows = searchResponseByID(student_id, form_id)
+    print(rows)
+    if rows != []:
+        return "True"
+        
+    else:
+        return "False"
