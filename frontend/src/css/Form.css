@@ -1,0 +1,21 @@
+
+/* Form page --------------------------*/
+.page-navbar {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    /* background-color: var(--theme-extra-light); */
+    margin: 3% 5%;
+}
+
+.page-navbar-item{
+    height: 3em;
+    width: 33%;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: var(--theme-extra-light);
+}

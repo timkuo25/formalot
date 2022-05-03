@@ -10,72 +10,30 @@ import {useParams} from 'react-router-dom';
 
 // 傳入想要看的 formID
 
-const Lottery = () => {
-    const props = useParams();
-    console.log("Props in lottery page", props.form_id)
+const Lottery = (props) => {
     const FORM_ID = props.form_id;
 
     //For candidate slider
     const [activeItemIndex, setActiveItemIndex] = useState(0);
     console.log('----- invoke function component -----');
-    const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
-    const [formDetail, setFormDetail] = useState([]);
     const [lotteryResults, setLotteryResults] = useState({
         "status":"Open",
         "results":[],
         "isLoading":true,  // 控制是否還在 loading
     });
 
-
-    // 取得 access token
-    // const access_token =  localStorage.getItem('jwt');
-
     // 使用 useEffect Hook
     useEffect(() => {
         console.log('execute function in useEffect');
         let abortController = new AbortController();  
-        fetchCurrentGifts();
         fetchCandidateList();
-        fetchFormDetail();
         fetchLotteryResults();
         return () => {  
             abortController.abort();  
         }  
     }, []);  // dependency 
 
-
-    // gifts
-    // {
-    //     "data": [
-    //         {
-    //             "amount": 1,
-    //             "gift_name": "LG 樂金直驅變頻上下門冰箱393公升",
-    //             "gift_pic_url": "https://i.imgur.com/j7aXj81.jpg"
-    //         },
-    //     ],
-    //     "message": "Get gifts successfully!!!",
-    //     "status": "success", "error"
-    // }
-    const fetchCurrentGifts = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            setGifts(response.data);
-            console.log('giftsdata',response)
-        })
-        .catch(error => console.log(error))  
-    };
 
     // candidateList
     // {
@@ -110,32 +68,7 @@ const Lottery = () => {
         .catch(error => console.log(error))  
     };
 
-    // formDetail
-    // {
-    //     "form_create_date": "Mon, 21 Mar 2022 12:59:59 GMT",
-    //     "form_draw_date": "Sun, 22 May 2022 12:59:59 GMT",
-    //     "form_end_date": "Sat, 21 May 2022 12:59:59 GMT",
-    //     "form_title": "對儀式感的看法之探討"
-    // }
-    const fetchFormDetail = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('Form Detail',response)
-            setFormDetail(response);
-        })
-        .catch(error => console.log(error))  
-    };
+ 
 
     // lotteryResults
     // {
@@ -206,56 +139,23 @@ const Lottery = () => {
     
     return (
         <>
-            <Navbar/>
-            {console.log('render')}
-            <section className='lottery-page-container'>
-                {/* 問卷左半部抽獎結果 */}
-                <section className='lottery-container'>
-                    <section className='lottery-results card-shadow'>
-                        <h1> {formDetail.form_title} </h1>
-                        <div className='lottery-card card-shadow'>
-                            <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
-                            <ItemSlider candidateList={candidateList} 
-                            activeItemIndex={activeItemIndex} setActiveItemIndex={setActiveItemIndex}/>
-                        </div>
-                        {/* 禮物與中獎人 */}
-                        <div >
-                            {console.log("isLoading", lotteryResults.isLoading)}
-                            {lotteryResults.isLoading ? <ReactLoading type="spinningBubbles" color="#432a58" /> : 
-                                SeeStatus(lotteryResults)
-                            }
-
-                        </div>
-
-
-                    </section>
-
-
-
-                    {/* 問卷右半部基本問卷資訊 */}
-                    <section className='form-info card-shadow'>
-                        <h2> 問卷資訊 </h2>
-                        發布時間：{formDetail.form_create_date} <br />
-                        截止時間：{formDetail.form_end_date} <br />
-                        抽獎時間：{formDetail.form_draw_date}<br/>
-                        <h2> 獎品 </h2>
-                        {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
-                            gifts.map(gift => {
-                                return (
-                                    <div className='prize-container' key={gift.gift_name}>
-                                        <h3> {gift.gift_name} × {gift.amount} </h3>
-                                        <img className='prize-image' src={gift.gift_pic_url} alt=''/>
-                                    </div>
-                                )
-                            })
-                        }
-
-                    </section>
-                </section>
-                <div className='form-buttons'>
-                    <button className='form-button'> 填答結果</button>
-                    <button className='form-button'> 瀏覽問卷</button>
+            <section className='lottery-results card-shadow'>
+                <h1> {props.form_title} </h1>
+                <div className='lottery-card card-shadow'>
+                    <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
+                    <ItemSlider candidateList={candidateList} 
+                    activeItemIndex={activeItemIndex} setActiveItemIndex={setActiveItemIndex}/>
                 </div>
+                {/* 禮物與中獎人 */}
+                <div >
+                    {console.log("isLoading", lotteryResults.isLoading)}
+                    {lotteryResults.isLoading ? <ReactLoading type="spinningBubbles" color="#432a58" /> : 
+                        SeeStatus(lotteryResults)
+                    }
+
+                </div>
+
+
             </section>
 
         </>

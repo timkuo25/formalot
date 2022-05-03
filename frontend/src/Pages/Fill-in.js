@@ -2,20 +2,15 @@ import '../css/Lottery.css'
 import '../css/Fill-in.css'
 import { Navbar } from './Components/Navbar';
 import React, { useState, useEffect } from 'react';
-import {useHref, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 
-const Fillin = () => {
-    const props = useParams();
-    console.log("Props in lottery page", props.form_id)
+const Fillin = (props) => {
+
+
     const FORM_ID = props.form_id; // 傳入想要看的 formID
-    
-    
     console.log('----- invoke function component -----');
-    const [gifts, setGifts] = useState([]);
-    const [formDetail, setFormDetail] = useState([]);
-    const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState([]);
+    const [formContent, setFormContent] = useState([]);
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -23,54 +18,11 @@ const Fillin = () => {
     // 使用 useEffect Hook
     useEffect(() => {
         let abortController = new AbortController();  
-        console.log('execute function in useEffect');
-        fetchCurrentGifts();
-        fetchFormDetail();
         fetchQuestions();
         return () => {  
             abortController.abort();  
         }  
     }, []);  // dependency 
-
-    const fetchCurrentGifts = async () => {
-        try {
-            const response = await fetch(
-                `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
-                    }
-                });
-            const responseJson = await response.json();
-            setGifts(responseJson.data);
-            console.log('giftsdata',response.data);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    };
-
-    const fetchFormDetail = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('Form Detail',response)
-            setFormDetail(response);
-        })
-        .catch(error => console.log(error))  
-    };
 
     const fetchQuestions = () =>
     {
@@ -87,8 +39,11 @@ const Fillin = () => {
         .then(response => response.json())
         .then(response => {
             console.log('questions',response)
-            setQuestions(response[0]['questioncontent']);
-        })
+            setFormContent({
+                description: response[0]['form_description'],
+                picture: response[0]['form_pic_url'],
+                questions: response[0]['questioncontent']
+        })})
         .catch(error => console.log(error))  
     };
 
@@ -149,63 +104,40 @@ const Fillin = () => {
                 form_id: props.form_id,
                 answercontent: tempAnsList,
             }),
-            headers: {
-            Authorization: `Bearer ${localStorage.getItem('jwt')}`}
+
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`
+            }
         });
         let resJson = await result.json();
         console.log("submit message", resJson.message);
+        console.log("submit status", resJson.status);
+        alert(resJson.message);
     }
 
 
     return (
         <>
-            <Navbar/>
-            {console.log('render')}
-            <section className='lottery-page-container'>
-                {/* 問卷左半部問卷題目 */}
-                <section className='lottery-container'>
-                    <section className='lottery-results card-shadow'>
-                        <h1> {formDetail.form_title} </h1>
-                        {/* 所有問題會顯示在這邊 */}
-                        <div className='questions'>
-                            {console.log('questions',questions)}
-                            <form onSubmit={handleSubmit}>
-                            {questions && questions.map(question => {
-                                return (
-                                    <div key={question.Question}>
-                                        <h2> {question.Question} </h2>
-                                        {showQuestion(question)}
-                                    </div>
-                            )})}
-                            <br/>
-                            <input type="submit" className='general-button Btn ' value="送出表單" />
-                            </form>
-                        </div>
-                    </section>
-
-
-                    {/* 問卷右半部基本問卷資訊 */}
-                    <section className='form-info card-shadow'>
-                        <h2> 問卷資訊 </h2>
-                        發布時間：{formDetail.form_create_date} <br />
-                        截止時間：{formDetail.form_end_date} <br />
-                        抽獎時間：{formDetail.form_draw_date}<br/>
-                        <h2> 獎品 </h2>
-                        {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
-                            gifts.map(gift => {
-                                return (
-                                    <div className='prize-container' key={gift.gift_name}>
-                                        <h3> {gift.gift_name} × {gift.amount} </h3>
-                                        <img className='prize-image' src={gift.gift_pic_url} alt=''/>
-                                    </div>
-                                )
-                            })
-                        }
-
-                    </section>
-                </section>
+            {/* 問卷左半部問卷題目 */}
+            <section className='lottery-results card-shadow'>
+            <h1> {props.form_title} </h1>
+            <section className='form-description'> {formContent.description} </section>
+                {/* 所有問題會顯示在這邊 */}
+                <div className='questions'>
+                    {console.log('questions',formContent.questions)}
+                    <form onSubmit={handleSubmit}>
+                    {formContent.questions && formContent.questions.map(question => {
+                        return (
+                            <div key={question.Question}>
+                                <h3> {question.Question} </h3>
+                                {showQuestion(question)}
+                            </div>
+                    )})}
+                    <br/>
+                    <input type="submit" className='general-button Btn ' value="送出表單" />
+                    </form>
+                </div>
             </section>
-
         </>
     )
 }

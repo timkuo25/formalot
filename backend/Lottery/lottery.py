@@ -1,4 +1,3 @@
-from cmath import nan
 from db.db import get_db
 from flask import request, jsonify, Blueprint, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -388,6 +387,8 @@ def AutolotteryOnTime():
 
     return 'lottery running'
     
+
+# 取得該問卷的題目與題型
 @lottery_bp.route('/GetUserForm', methods=["GET"])
 def getUserForm():
     form_id = request.args.get('form_id')
@@ -406,3 +407,42 @@ def getUserForm():
     return jsonify(result)
 
 
+
+# 確認某表單的製作者是否為該登入的用戶
+@lottery_bp.route('/FormOwnerCheck', methods=["GET"])
+@jwt_required()
+def FormOwnerCheck():
+
+    response = {
+        "form_id": 0,
+        "form_owner_status": False,
+        "form_owener_id": 0
+    }
+
+    form_id = request.args.get('form_id')
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT form_id, user_student_id
+    FROM form
+    WHERE form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
+    
+    if(len(result) != 0):
+
+        id = protected()
+        response["form_id"] = result[0]['form_id']
+        response["form_owener_id"] = result[0]['user_student_id']
+        if(id == result[0]['user_student_id']):
+            response["form_owner_status"] = True
+        else:
+            response["form_owner_status"] = False
+    else:
+        response["form_id"] = form_id
+        response["form_owener_id"] = 'The form is not exist!!!'
+        response["form_owner_status"] = False
+    return jsonify(response)
