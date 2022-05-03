@@ -38,7 +38,7 @@ const Fillin = (props) => {
         )
         .then(response => response.json())
         .then(response => {
-            console.log('questions',response)
+            // console.log('response of getUserForm',response)
             setFormContent({
                 description: response[0]['form_description'],
                 picture: response[0]['form_pic_url'],
@@ -88,31 +88,41 @@ const Fillin = (props) => {
         // 取得表單回覆
         const formData = new FormData(e.target);
         const formProps = Object.fromEntries(formData);
-        const tempAnsList = []
+        const tempAnsList = [];
+        var continued = 1;
         for(const key in formProps ){
-            const tempAns = {
-                Question : key,
-                Answer : formProps[key]
+            if (formProps[key] ==""){
+                alert(key+ "\n 需要填答此問題，才能成功提交表單，參加抽獎喔！");
+                continued = 0;
+            } else {
+                const tempAns = {
+                    Question : key,
+                    Answer : formProps[key]
+                }
+                tempAnsList.push(tempAns)
             }
-            tempAnsList.push(tempAns)
         }
-        console.log("tempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
-        
-        const result = await fetch("http://127.0.0.1:5000/FillForm", {
-            method: "POST",
-            body: JSON.stringify({
-                form_id: props.form_id,
-                answercontent: tempAnsList,
-            }),
-            headers:{
-                Authorization: `Bearer ${localStorage.getItem('jwt')}`
-            }
-        });
-        let resJson = await result.json();
-        console.log("submit message", resJson.message);
-        console.log("submit status", resJson.status);
-        alert(resJson.message);
+        if(continued === 1){
+            console.log("tempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
+
+            const result = await fetch("http://127.0.0.1:5000/FillForm", {
+                method: "POST",
+                body: JSON.stringify({
+                    form_id: props.form_id,
+                    answercontent: tempAnsList,
+                }),
+                headers:{
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`
+                }
+            });
+            let resJson = await result.json();
+            console.log("submit message", resJson.message);
+            console.log("submit status", resJson.status);
+            alert(resJson.message);
+        }
+
     }
+
 
 
     return (
@@ -123,8 +133,8 @@ const Fillin = (props) => {
             <section className='form-description'> {formContent.description} </section>
                 {/* 所有問題會顯示在這邊 */}
                 <div className='questions'>
-                    {console.log('questions',formContent.questions)}
-                    <form onSubmit={handleSubmit}>
+                    {/* {console.log('questions',formContent.questions)} */}
+                    <form onSubmit={handleSubmit} >
                     {formContent.questions && formContent.questions.map(question => {
                         return (
                             <div key={question.Question}>

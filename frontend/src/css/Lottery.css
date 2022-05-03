@@ -34,9 +34,8 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    /* transform: translate(5px, 5px); */
     padding: 1em;
-    margin: 1em;
+    /* margin: 1em; */
     font-size: 1em;
     font-weight: 600;
     /* background-color: var(--theme-light-grey); */

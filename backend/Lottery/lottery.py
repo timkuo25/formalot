@@ -428,15 +428,18 @@ def FormOwnerCheck():
     response = {
         "form_id": 0,
         "form_owner_status": False,
-        "form_owener_id": 0
+        "form_owner_id": 0,
+        "form_owner_pic_url":0
     }
 
     form_id = request.args.get('form_id')
     db = get_db()
     cursor = db.cursor()
     query = '''
-    SELECT form_id, user_student_id
+    SELECT form_id, user_student_id, user_pic_url
     FROM form
+    JOIN users
+    ON form.user_student_id = users.student_id
     WHERE form_id = (%s);
     '''
     cursor.execute(query, [form_id])
@@ -448,13 +451,14 @@ def FormOwnerCheck():
 
         id = protected()
         response["form_id"] = result[0]['form_id']
-        response["form_owener_id"] = result[0]['user_student_id']
+        response["form_owner_id"] = result[0]['user_student_id']
+        response["form_owner_pic_url"] =  result[0]['user_pic_url']
         if(id == result[0]['user_student_id']):
             response["form_owner_status"] = True
         else:
             response["form_owner_status"] = False
     else:
         response["form_id"] = form_id
-        response["form_owener_id"] = 'The form is not exist!!!'
+        response["form_owner_id"] = 'The form is not exist!!!'
         response["form_owner_status"] = False
     return jsonify(response)
