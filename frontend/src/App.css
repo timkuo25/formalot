@@ -1,4 +1,3 @@
-/* Home page --------------------------*/
 * {
   box-sizing: border-box;
 }
@@ -24,21 +23,6 @@ body {
   color: #000;
 }
 
-h1 {
-  font-size: 2.2em;
-  font-weight: bold;
-  color:var(--theme-dark-purple);
-}
-
-h2 {
-  font-size: 1.5em;
-  font-weight: bold;
-}
-
-h3 {
-  font-size: 1.2em;
-  font-weight: bold;
-}
 
 /* General CSS  (everyone can use) --------*/
 .card-shadow{
@@ -72,6 +56,662 @@ h3 {
   text-align: center;
   position: initial;
   }
+/* Header --------------------------*/
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  transition: all .7s ease-in;
+  background-color: var(--theme-extra-light);
+  /* border-bottom: var(--theme-dark-purple) solid 4px; */
+}
+
+.scrolled{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--theme-extra-light);
+}
+
+button:hover{
+  cursor: pointer;
+}
+
+.app-title {
+  flex-grow: 1;
+  margin-left: 2em;
+}
+
+.app-title > a {
+  text-decoration: none;
+  color: var(--theme-purple);
+}
+
+.app-title > a:active {
+  color: var(--theme-pink);
+}
+
+.navbar {
+  flex-grow: 0.2;
+  display: flex;
+  justify-content: center;
+  height: 6vh;
+  transform: translateX(-5vw);  
+}
+
+.nav-option {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-grow: 1;
+  font-weight: 700;
+  cursor: pointer;
+  color:var(--theme-dark-purple);
+}
+
+.nav-option:hover {
+  color: var(--theme-purple);
+}
+
+.user-dropdown-options{
+  display: none;
+  position: absolute;
+  top: -3em;
+  width: 6vw;
+  height: 10vh;
+  background-color: var(--theme-extra-light);
+  box-shadow: var(--shadow);
+  transform: translateY(10vh);
+}
+
+.user-dropdown:hover .user-dropdown-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.user-dropdown-options > * {
+  all: unset;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:rgb(75, 71, 71);
+  font-weight: 500;
+}
+
+.user-dropdown-options > *:hover {
+  color: var(--theme-purple);
+}
+
+/* Card --------------------------*/
+
+.card {
+  width: 17%;
+  border-radius: 0.5em;
+  padding: 0.8em;
+  margin: 0.8em 0.2em;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  /* transform: translate(20px, 20px); */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card > h3{
+  color: var(--theme-dark-purple);
+  font-weight: 600;
+}
+
+.prize-tag {
+  width: max-content;
+  padding: 0.2em 0.8em;
+  margin-bottom: 1em;
+  background-color: var(--theme-purple);
+  color: #ffffff;
+  border-radius: 1em;
+}
+
+
+.share-image {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.share-q {
+  all: unset;
+  width: 2em;
+  height: 2em;
+  /* border: var(--theme-purple) solid 0.4em; */
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 0.5em;
+  text-align: center;
+  font-weight: 600;
+}
+
+
+.share-q:hover{
+  background-color: var(--theme-light-grey);
+}
+
+
+
+/* Footer --------------------------*/
+.footer{
+  margin-top: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5em;
+  background-color: var(--theme-dark-purple);
+}
+
+.copyright{
+  transform: translateX(80%);
+  font-weight: 400;
+  color: var(--theme-light-grey);
+}
+
+.footer-link{
+  display: flex;
+  width: 20em;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--theme-light-grey);
+}
+
+.footer-link > a {
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: 300;
+  color: var(--theme-light-grey);
+}
+
+/* Home page --------------------------*/
+
+.call-to-action {
+  background-image: url('./img/LandingPage.svg') ;
+  background-size: cover;
+  background-clip: border-box;
+  background-color: var(--theme-purple);
+  color: #fbfafc;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  z-index:1;
+  height: 50em;
+  margin-top:-20ex;
+}
+
+/* .main-image {
+  height: 100%;
+  width: 100%;
+  z-index:1;
+} */
+
+.description {
+  padding-left: 5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 30em;
+  transform: translateY(-2em);
+  color: var(--theme-dark-purple)
+}
+
+.description > h2 {
+  font-size: 2.5em;
+  color: var(--theme-dark-purple)
+}
+.description > h3 {
+  font-weight: 100;
+  font-size: 1.3em;
+  transform: translateY(-2em);
+}
+
+.cta-button {
+  transform: translateY(-2em);
+}
+
+.explore-button {
+  all: unset;
+  border: var(--theme-extra-light) solid 0.25em;
+  border-radius: 0.7em;
+  background-color: var(--theme-dark-purple);
+  color: var(--theme-extra-light);
+  margin-left: 1.3em;
+  width: 5.75em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.make-survey-button {
+  all: unset;
+  border: var(--theme-dark-purple) solid 0.25em;
+  border-radius: 0.7em;
+  background-color: #fbfafc;
+  color: var(--theme-dark-purple);
+  margin-left: 1.3em;
+  width: 5.75em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.showcase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  font-weight: 900;
+  padding: 2em;
+  background-color: var(--theme-light-grey);
+}
+
+.showcase-image {
+  width: 5em;
+  margin: 0.6em;
+}
+
+.latest-q {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: #000000 solid 1px; */
+
+}
+
+.latest-q-container {
+  width: 90em;
+  height: 90em;
+}
+
+.latest-q-container > h2{
+  text-align: center;
+  font-size: 3em;
+  font-weight: 900;
+  color: var(--theme-dark-purple);
+}
+
+.latest-q-container > h3 {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 900;
+  transform: translateY(-1em);
+  color: var(--theme-dark-purple);
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+}
+
+.page-div {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5em;  
+}
+
+.page {
+  width: 3em;
+  height: 3em;
+}
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* border: #000000 solid 1px; */
+
+/* Explore page --------------------------*/
+.explore-title{
+  display: flex;
+  justify-content: center;
+}
+
+.explore-title > h2{
+  font-size: 3em;
+}
+
+.tag-select {
+  width: 40em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--theme-extra-light);
+}
+
+.tag-item{
+  height: 3em;
+  width: 5em;
+  /* border: #000000 solid 1px; */
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+
+/* Lottery page ---------------------------------------------------*/
+
+/* whole lottery page */
+.lottery-page-container{
+  display:flex;
+  flex-direction: column;
+}
+
+
+/* left-hand side */
+.lottery-container{
+  display:flex;
+  flex-direction: row;
+}
+
+.lottery-results{
+  height: 100%;
+  width: 60%;
+  margin: 5%;
+  margin-right: 1%;
+  padding: 0.5em 2em;
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.lottery-results > h2{
+  font-size: 2em;
+  font-weight: bold;
+  color:#0f0b2b;
+}
+
+/* 用戶框架 */
+.avator{
+  width: 6em;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  /* transform: translate(5px, 5px); */
+  padding: 1em;
+  margin: 1em;
+  font-size: 1em;
+  font-weight: 600;
+  /* background-color: var(--theme-light-grey); */
+}
+
+/* 用戶照片 */
+.avator-image{
+  width: 5.5em;
+  margin: 0em;
+  border-radius: 100%;
+  border: var(--theme-light-grey) solid 0.1em;
+  box-shadow: var(--shadow);
+}
+
+/* 橫向用戶照片 */
+.avator-container{
+  display: flex;
+  justify-content: left;
+}
+
+/* 獎品照片 */
+.prize-image {
+  width: 15em;
+  margin: 1em;
+  border-radius: 0.5em;
+  border: var(--theme-light-grey) solid 0.1em;
+  box-shadow: var(--shadow);
+}
+
+/* 獎品與中獎者框框 */
+.lottery-card {
+  padding: 0.8em;
+  margin: 0.8em 0em;
+  display: flex;
+  flex-direction: column;
+}
+
+.lottery-card > h2{
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* 基本表單資訊 */
+.form-info{
+  height: 100%;
+  width: 40%;
+  margin: 5%;
+  margin-left: 0%;
+  padding: 0.5em 2em;
+  margin-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-info > h2{
+  color:#0f0b2b;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* 獎品資訊 */
+.prize-container{
+  display: flex;
+  /* justify-content: left; */
+  flex-direction: column;
+  margin-bottom: 1em; 
+  align-items: left;
+}
+
+.prize-container > h3{
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Fill-in page --------------------------*/
+.question-card {
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+  justify-content: center;
+}
+
+
+
+/* Register page --------------------------*/
+.reg_card_container{
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+  justify-content: center;
+}
+
+.register_card_left {
+  width: 48em;
+  height:55em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 1em 1em 1em 1em;
+  display: flex;
+  flex-direction: row;
+  transform: translate(20px, 20px);
+  float:left;
+  text-align: center;
+}
+
+.reg_description {
+  padding-left: 6em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 45em;
+  transform: translateY(-2em);
+  margin: 0.5em 5.5em;
+  color: var(--theme-purple);
+}
+
+.register_card_right {
+  width: 50em;
+  height:55em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 1em 1em 1em 1em;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+  float:left;
+  text-align:left;
+}
+.input_content{
+  margin: 0.6em 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.register_verification{
+  margin: 0.4em 0em;
+  display:flex;
+  flex-direction: row;
+  justify-content:left;
+  float:left;
+}
+
+.ver_submit{
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: var(--theme-purple);
+  color: #ffffff;
+  margin: 0em 3em;
+  width: 10em;
+  height: 1.8em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+  float:left;
+  flex-direction: row;
+}
+
+.reg_submit{
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: #fbfafc;
+  color: var(--theme-dark-purple);
+  margin: 3em 1em;
+  width: 5em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.reg_inputbar{
+  width: 45%;
+  border-radius: 0.3em;
+  height: 2.5em;
+  display:flex;
+  flex-direction: row;
+  justify-content:left;
+  float:left;
+}
+
+/* end Register page --------------------------*/
+
+/* LoginModal Components --------------------------*/
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(142, 141, 141, 0.573);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+}
+
+.modalContainer {
+  width: 500px;
+  height: 500px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.titleCloseBtn {
+  display: flex;
+  justify-content: flex-end;
+  border: 0em;
+  background-color: #ffffff;
+  color: var(--theme-dark-purple);
+}
+
+.inputbar{
+  width: 60%;
+  border-radius: 0.3em;
+  height: 3em;
+  display: flex;
+  text-align: left;
+  margin: auto;
+  margin-top: 3em;
+}
+
+.forget-password{
+  border: 0em;
+  background-color: #ffffff;
+  color:#b1adad;
+  margin-top: 2em;
+}
+
+.submit{
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.2em;
+  background-color: #fbfafc;
+  color: var(--theme-dark-purple);
+  margin: 1em 0em 0em 0em;
+  width: 5em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.login-button{
+  flex-direction: row;
+  float:left;
+}
+
+.create-account-button{
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.2em;
+  background-color: var(--theme-dark-purple);
+  color: #fbfafc;
+  margin: 1em 0em 0em 0em;
+  width: 6em;
+  height: 2.5em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* End LoginModal Components --------------------------*/
 
 /* 右下角的紫色按鈕 */
 .form-buttons{
@@ -80,33 +720,19 @@ h3 {
   justify-content: flex-end;
   margin-bottom: 3%;
 }
-
 .form-button {
   all: unset;
   background-color: var(--theme-dark-purple);
   border-radius: 0.4em;
   width: 6em;
   height: 2.5em;
-  font-weight: 500;
+  font-size: 1.3em;
+  font-weight: 700;
   text-align: center;
   margin:0.5em;
   color: #FFFFFF;
 }
 
-/* 輸入框 */
-
-.input-columns {
-  width: 60%;
-  height: 40px;
-  border: var(--theme-light-grey) solid 1.5px;
-  border-radius: 4px;
-  outline-style: none;
-}
-
-.input-columns:focus {
-  border: var(--theme-purple) solid 2px;
-}
-
 /* survey_management */
 
 .survey-container {
@@ -121,49 +747,28 @@ h3 {
 }
 
 h2.manage-header {
-  font-size: 3em;
+  font-size: 2em;
   text-align: left;
+  color: var(--theme-dark-purple);
 }
 
 h3.manage-header {
-  font-size: 1.7em;
+  font-size: 1.5em;
   text-align: left;
   padding: 0;
   margin-bottom: 0;
   margin-top: 0;
+  color: var(--theme-dark-purple);
 }
 
-.stat-items{
-  height: 15px; 
-  display:inline-block; 
-  border-left: 2px solid #777; 
-  padding:0 15px;
-  padding-bottom:20px;
-  color:#777;
-  margin-top:10px;
-}
-
-#no-border{
-  border:none;
-  }
-
-/* .survey-card {
-  width: 18em;
-  border-radius: 0.5em;
-  box-shadow: var(--shadow);
-  padding: 0.8em;
-  margin: 0.8em 0.2em;
+.survey-card {
+  /* border-radius: 0.5em; */
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 2em;
+  margin: 0.8em 0.8em;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  transform: translate(20px, 20px); 
-} */
-
-/* .survey-card:hover {
-  transform: translateY(-5px);
-} */
-
-
+}
 
 .survey-manage-buttons{
   display:flex;
@@ -177,73 +782,10 @@ h3.manage-header {
 }
 
 
-/* survey_management */
-
-.survey-container {
-  width: 90em;
-  height: 110em;
-}
-
-.survey-bar {
-  display: flex;
-  align-items: left;
-  justify-content: center;
-}
-
-h2.manage-header {
-  font-size: 3em;
-  text-align: left;
-}
-
-h3.manage-header {
-  font-size: 1.7em;
-  text-align: left;
-  padding: 0;
-  margin-bottom: 0;
-  margin-top: 0;
-}
-
-.stat-items{
-  height: 15px; 
-  display:inline-block; 
-  border-left: 2px solid #777; 
-  padding:0 15px;
-  padding-bottom:20px;
-  color:#777;
-  margin-top:10px;
-}
-
-#no-border{
-  border:none;
-  }
-
-/* .survey-card {
-  width: 18em;
-  border-radius: 0.5em;
-  box-shadow: var(--shadow);
-  padding: 0.8em;
-  margin: 0.8em 0.2em;
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  transform: translate(20px, 20px); 
-} */
-
-/* .survey-card:hover {
-  transform: translateY(-5px);
-} */
-
-
-
-.survey-manage-buttons{
-  display:flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-
-.instruction-container {
-  width: 70em;
-  height: 80em;
+.divide-line {
+  width: 100%;
+  height: 20px;
+  border-top: var(--theme-purple) solid 1.5px;
 }
 
 .prize-tag-management {
@@ -257,13 +799,9 @@ h3.manage-header {
   display: inline-block;
 }
 
-
-
 .tag-container {
-  text-align:right;
+  text-align:center;
 }
-
-
 
 .share-q-management {
   all: unset;
@@ -276,15 +814,7 @@ h3.manage-header {
   display: inline-block;
 }
 
-.overflow-text{
-  position: relative;
-  line-height: 1;
 
-  display: inline;
-  white-space: pre-wrap;
-  border-width: 0.25em 0;
-
-}
 
 .dropdown {
   position: relative;
@@ -324,3 +854,396 @@ h3.manage-header {
 
 
 
+/* make survey page by Jui Hsin Hsiao-----------------------*/
+
+.page-container {
+  display:flex;
+  flex-direction: column;
+}
+
+.breadcrumb{
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  letter-spacing: 10px;
+  font-size: 1.5em;
+  margin: 1em;
+  padding-left: 1%;
+  color: var(--theme-purple);
+}
+
+.makeSurvey-container{
+  display:flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.makeSurvey-results{
+  height: 100%;
+  width: 60%;
+  padding: 0em 2em;
+  margin-bottom: 1em;
+  margin-left: 10px;
+  /*border: var(--theme-light-grey) solid 0.1em;*/
+  display: flex;
+  flex-direction: column;
+}
+
+.makeSurvey-results > h2{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+
+.makeSurvey-card {
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 2px #dadada;
+  padding: 1em;
+  margin: 0.8em 0.2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.makeSurvey-card > h2{
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.makeSurvey-info{
+  height: 100%;
+  width: 40%;
+  /* margin-top: 5%; */
+  margin-left: 2.5%;
+  /* padding: 0em 0em; */
+  margin-bottom: 1em;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.makeSurvey-info > h2{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+
+.SurveyDescriptionBtn {
+  width: 200px;
+  height: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  background-color: #fff;
+  border-color: #e7e7e7;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+  }
+
+
+
+  .SurveyOptionBtn {
+    width: 200px;
+    height: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+    }
+
+  .sticky-div {
+      position: fixed;
+  }
+
+  .NextBtn {
+    width: 110px;
+    height: 40px;
+    /* font-family: 'Roboto', sans-serif; */
+    /* font-size: 11px; */
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #ebe9f0;
+    background-color: var(--theme-dark-purple);
+    border: 1px;
+    border-color: #e7e7e7;
+    border-radius: 3px;
+    box-shadow: 0px 1px 2.5px 1px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+    position: initial;
+    margin: 1em;
+    }
+
+  .BtnGroupContainer{
+    flex-direction: row;
+  }
+  .BtnGroup{
+    width: 160px;
+    height: 80px;
+    letter-spacing: 0.5px;
+    background-color: #ebe9f0;
+    color:#432a58;
+    font-size: 15px;
+    border: 1.5px solid #ebe9f0;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-content: space-between;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+  }
+.BtnGroupActive {
+    background-color: #8864b3;
+    border: 1.5px solid #8864b3;
+    color: white;
+  }
+
+.input-columns {
+  width: 60%;
+  height: 40px;
+  border: var(--theme-light-grey) solid 1.5px;
+  border-radius: 4px;
+  outline-style: none;
+}
+
+.input-columns:focus {
+  border: var(--theme-purple) solid 2px;
+}
+
+.add-giftBtn {
+  width: 100px;
+  height: 100px;
+  /* font-family: 'Roboto', sans-serif; */
+  /* font-size: 11px; */
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 400;
+  color: #000;
+  border: 1px;
+  border-color: #e7e7e7;
+  border-radius: 40px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  left: 50%;
+}
+
+.add-gift-image {
+    width: 80px;
+    height: 80px;
+  }
+/* make survey page done */
+
+/* profile page */
+.profile-header{
+  margin: 1em 1em 1em 1em;
+}
+.profile_card_container{
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+}
+
+.profile_card{
+  background-color: var(--theme-purple);
+  color: #ffffff;
+  width: 40%;
+  height:40em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+  text-align: center;
+  justify-content:center;
+}
+
+.profile_card_right{
+  background-color: #ffffff;
+  width: 50%;
+  height:30em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+  text-align: center;
+  justify-content:center;
+  margin-left: 30px;
+}
+
+.top-section{
+  justify-content:left;
+  margin-left: 0;
+}
+
+.top-section img{
+  width: 40%;
+  border-radius: 50%;
+}
+
+.top-section p{
+  margin: 5px 0 5px 0;
+}
+
+.top-section .name{
+  font-size: 30px;
+  margin-top: 20px;
+}
+
+.edit-profile{
+  margin-top: 80px;
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: #fbfafc;
+  color: var(--theme-dark-purple);
+  width: 8em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+  justify-content:right;
+}
+/* profile page done */
+
+/* ForgetPassword page start--------------------------*/
+.forget_card_container{
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+  justify-content: center;
+}
+
+
+.forget_card_right {
+  width: 50em;
+  height:55em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 1em 1em 1em 1em;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+  float:left;
+  text-align:left;
+}
+.forget_input_content{
+  margin: 0.6em 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.forget_verification{
+  margin: 0.4em 0em;
+  display:flex;
+  flex-direction: row;
+  justify-content:left;
+  float:left;
+}
+
+.forget_ver_submit{
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: var(--theme-purple);
+  color: #ffffff;
+  margin: 0em 3em;
+  width: 10em;
+  height: 1.8em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+  float:left;
+  flex-direction: row;
+}
+
+.forget_submit{
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: #fbfafc;
+  color: var(--theme-dark-purple);
+  margin: 3em 1em;
+  width: 5em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.forget_inputbar{
+  width: 45%;
+  border-radius: 0.3em;
+  height: 2.5em;
+  display:flex;
+  flex-direction: row;
+  justify-content:left;
+  float:left;
+}
+
+/* end ForgetPassword page --------------------------*/
+
+/* EditProfile page start--------------------------*/
+.edit_card_container{
+  display:flex;
+  flex-direction: row;
+  display: flex; 
+  justify-content: center;
+}
+
+.edit_card_right {
+  width: 50em;
+  height:55em;
+  border-radius: 0.5em;
+  box-shadow: 0px 1px 2.5px 1px #dadada;
+  padding: 0.8em;
+  margin: 1em 1em 1em 1em;
+  flex-direction: column;
+  transform: translate(20px, 20px);
+  float:left;
+  text-align:left;
+}
+.edit_input_content{
+  margin: 0.6em 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.edit_submit{
+  border: var(--theme-dark-purple) solid 0.15em;
+  border-radius: 0.3em;
+  background-color: #fbfafc;
+  color: var(--theme-dark-purple);
+  margin: 3em 1em;
+  width: 5em;
+  height: 2.25em;
+  font-size: 1.2em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.edit_inputbar{
+  width: 45%;
+  border-radius: 0.3em;
+  height: 2.5em;
+  display:flex;
+  flex-direction: row;
+  justify-content:left;
+  float:left;
+}
+
+/* end EditProfile page --------------------------*/
+
+
+
+/* Fill-in page -------------------*/
