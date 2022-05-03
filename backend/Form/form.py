@@ -91,6 +91,7 @@ def closeForm(form_id):
 [Wei]: addForm可能會再更新，以確保db transaction process。（但變數不會改變，前端可以照用）
 '''
 
+
 def addForm(form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_tag_name, gift_info):
     db = get_db()
     # db cursor is lightweight, so it's better to declare multiple curosrs instead of running multiple db connections.
@@ -105,7 +106,8 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         INSERT INTO Form(form_id, form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
         SELECT Max(form_id)+1, %s, %s, %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
         """
-        cursor1.execute(query, [form_title, form_description, questioncontent, form_create_date, form_end_date,form_draw_date, student_id, form_pic_url])
+        cursor1.execute(query, [form_title, form_description, questioncontent,
+                        form_create_date, form_end_date, form_draw_date, student_id, form_pic_url])
 
         # Find Max form_id
         query = """SELECT MAX(form_id) FROM form;"""
@@ -155,9 +157,11 @@ def getAns(form_id):
         WHERE UserForm.form_form_id = %s;
         '''
         cursor.execute(query, [form_id])
+        db.commit()
+        return cursor.fetchall()
     except:
         db.rollback()
-        # return 'Failed to retrieve member.'
+        return False
     finally:
         db.close()
 
@@ -180,6 +184,7 @@ def searchResponseByID(student_id, form_id):
     finally:
         db.close()
 
+
 def addResponse(student_id, form_id, answer_time, answercontent):
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -188,7 +193,8 @@ def addResponse(student_id, form_id, answer_time, answercontent):
         INSERT INTO UserForm(User_student_id, Form_form_id, Form_answer_time, Answercontent)
         values (%s,%s,%s,%s);
         """
-        cursor.execute(query, [student_id, form_id, answer_time, answercontent])
+        cursor.execute(query, [student_id, form_id,
+                       answer_time, answercontent])
         db.commit()
         return True
     except psycopg2.DatabaseError as error:
@@ -221,7 +227,8 @@ def FillForm():
         response["status"] = "error"
         response["message"] = "您已填寫過此表單"
     else:
-        answercontent = json.dumps(req_json["answercontent"], ensure_ascii=False)
+        answercontent = json.dumps(
+            req_json["answercontent"], ensure_ascii=False)
         answer_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if addResponse(student_id, form_id, answer_time, answercontent):
             response["status"] = 'success'
@@ -229,7 +236,7 @@ def FillForm():
         else:
             response["status"] = 'fail'
             response["message"] = 'Reponse aborted.'
-    
+
     return jsonify(response)
 
 
@@ -282,7 +289,8 @@ def createForm():
     req_json = request.get_json(force=True)
     form_title = req_json['form_title']
     form_description = req_json['form_description']
-    questioncontent = json.dumps(req_json['questioncontent'], ensure_ascii=False)
+    questioncontent = json.dumps(
+        req_json['questioncontent'], ensure_ascii=False)
     form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     form_end_date = req_json['form_end_date']
     form_draw_date = req_json['form_draw_date']
@@ -307,7 +315,26 @@ def createForm():
 @ form_bp.route('/SurveyManagement/detail', methods=['GET'])
 def statisticForm():
     form_id = request.args.get('form_id')
-    response = getAns(form_id)
+    results = getAns(form_id)
+    response = {
+        "status": "",
+        "data": [],
+        "message": ""
+    }
+
+    if(len(results) == 0):
+        response["status"] = "fail"
+        response["message"] = "The form does not exist or the number of the repliers is 0"
+    else:
+        for i in results:
+            response["status"] = "success"
+            temp = {
+                "reply": i["answercontent"],
+                "user": i["user_student_id"]
+            }
+            response["data"].append(temp)
+            response["message"] = "Get answer successfully"
+
     return jsonify(response)
 
 
@@ -320,11 +347,13 @@ def FormRespondentCheck():
     print(rows)
     if rows != []:
         return "True"
-        
+
     else:
         return "False"
 
 # 取得該問卷的題目與題型
+
+
 @ form_bp.route('/GetUserForm', methods=["GET"])
 def getUserForm():
     form_id = request.args.get('form_id')
@@ -336,8 +365,9 @@ def getUserForm():
     WHERE form_id = (%s);
     '''
     cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    result = [dict((cursor.description[i][0], value)
+                   for i, value in enumerate(row)) for row in cursor.fetchall()]
     db.commit()
     db.close()
-    
+
     return jsonify(result)
