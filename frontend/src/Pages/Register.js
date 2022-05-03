@@ -2,6 +2,7 @@ import '../css/Register.css';
 import { useState,useRef } from "react";
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
+// import { Button } from 'react-native';
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -88,12 +89,14 @@ const Register = () => {
     // if (!email) {
     // errors.email = 'Email is required';
     // } else 
+    
     if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
-    errors.email = '請使用有效台大信箱註冊！';
+        errors.email = '請使用大專院校信箱註冊！';
     }
     else{
         errors.pass = '可使用的電子郵件！';
     }
+
     // if (!password) {
     // errors.password = 'Password is required';
     // }

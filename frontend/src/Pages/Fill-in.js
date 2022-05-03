@@ -102,6 +102,7 @@ const Fillin = (props) => {
                 tempAnsList.push(tempAns)
             }
         }
+<<<<<<< HEAD
         if(continued === 1){
             console.log("tempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
 
@@ -121,6 +122,25 @@ const Fillin = (props) => {
             alert(resJson.message);
         }
 
+=======
+        console.log("tempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
+        
+        const result = await fetch("http://127.0.0.1:5000/FillForm", {
+            method: "POST",
+            body: JSON.stringify({
+                form_id: props.form_id,
+                answercontent: tempAnsList,
+            }),
+
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`
+            }
+        });
+        let resJson = await result.json();
+        console.log("submit message", resJson.message);
+        console.log("submit status", resJson.status);
+        alert(resJson.message);
+>>>>>>> origin/form
     }
 
 

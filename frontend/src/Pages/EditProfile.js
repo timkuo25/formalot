@@ -2,6 +2,8 @@ import '../css/EditProfile.css';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useState, useEffect } from 'react';
+import callrefresh from '../refresh.js';
+
 
 const EditProfile = () => {
     const [first_name, setFirstname] = useState("");
@@ -17,31 +19,40 @@ const EditProfile = () => {
               Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
             body: JSON.stringify({
-                first_name: "",
-                last_name : "",
-                password : "",
-                password2 : "",
+                first_name: first_name,
+                last_name : last_name,
+                password : password,
+                password2 : password2,
             }),
         });
-        const resdata = await getprotected;
-        console.log(resdata);
-        alert(resdata.message);
-   
+        console.log(getprotected.status);
+        if(getprotected.status === 401){
+            callrefresh();
+        }else{
+            const resdata = await getprotected.json();
+            console.log(resdata);
+            console.log(resdata.message);
+            alert(resdata.message);
+        }
     };
-
+    
     const [Profile, setProfile] = useState([]);
     useEffect(() => {
         const callGetUserProfile = async () => {
             const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
                 method: 'GET',
                 headers: {
-                  Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
                 },
             });
-            const dataJSON = await data.json();
-            console.log(dataJSON);
-            setProfile(dataJSON[0]);
-
+            console.log(data.status);
+            if(data.status === 401){
+                callrefresh("reload");
+            }else{
+                const dataJSON = await data.json();
+                console.log(dataJSON);
+                setProfile(dataJSON[0]);
+            }            
         };
         callGetUserProfile();
     }, []);
@@ -61,11 +72,11 @@ const EditProfile = () => {
                 </div>
                 <div className="edit_input_content">
                     <h3>姓氏</h3>
-                    <input value={last_name} onChange={(e) => setLastname(e.target.value)} type="text" placeholder="LastName" className="edit_inputbar"/>
-                </div>
+                    <input defaultValue = {Profile.user_lastname} onChange={(e) => setLastname(e.target.value)} type="text" placeholder="LastName" className="edit_inputbar"/>
+                    </div>
                 <div className="edit_input_content">
                     <h3>名字</h3>
-                    <input value={first_name} onChange={(e) => setFirstname(e.target.value)} type="text" placeholder="FirstName" className="edit_inputbar"/>
+                    <input defaultValue = {Profile.user_firstname} onChange={(e) => setFirstname(e.target.value)} type="text" placeholder="FirstName" className="edit_inputbar"/>
                 </div>
 
                 <div className="edit_input_content">
@@ -77,8 +88,6 @@ const EditProfile = () => {
                     <input value={password2} onChange={(e) => setPassword2(e.target.value)} type="password" placeholder="Confirm Password" className="edit_inputbar"/>
                 </div>
                 
-                
-            
             <form>
                 <button className="edit_submit" onClick={calluserupdate}>修改</button>
             </form>

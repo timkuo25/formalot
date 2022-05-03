@@ -23,6 +23,7 @@ function LoginModal( {closeModal}){
         let resJson = await result.json();
         if (resJson.access_token){
             localStorage.setItem('jwt', resJson.access_token);
+            localStorage.setItem('refresh_token', resJson.refresh_token);
             console.log("Login Success");
             console.log(resJson.access_token);
             alert("Login Success");
@@ -115,7 +116,7 @@ function LoginModal( {closeModal}){
         // }
       
         if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
-          errors.email = '請輸入台大信箱格式';
+          errors.email = '請使用大專院校信箱！';
         } 
         // else if (!/\S+@\S+\.\S+/.test(email)) {
         //     errors.email = '信箱格式錯誤';
