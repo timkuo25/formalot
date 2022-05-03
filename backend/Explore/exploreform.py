@@ -49,18 +49,24 @@ def retrieveInfo():
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cursor.execute("""
-    SELECT form_id, form_title, form_description, form_create_date, form_end_date, form_pic_url, form_run_state, Tag.tag_name, Field.field_name 
-    FROM (SELECT form_id, form_title, form_description, form_create_date, form_end_date, form_pic_url, form_run_state
+    SELECT FormWithTags.form_id, FormWithTags.form_title, FormWithTags.form_description, FormWithTags.form_create_date, FormWithTags.form_end_date, FormWithTags.form_pic_url, FormWithTags.form_run_state, FormWithTags.tag_name, FormWithTags.field_name, COUNT(Gift.form_form_id) AS num_gift
+    FROM(
+        SELECT ValidForm.form_id, ValidForm.form_title, ValidForm.form_description, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_pic_url, ValidForm.form_run_state, Tag.tag_name, Field.field_name 
+        FROM (
+            SELECT form_id, form_title, form_description, form_create_date, form_end_date, form_pic_url, form_run_state
             FROM Form
-            WHERE form_run_state = 'Open' AND form_delete_state = 0) AS validForm
-    LEFT JOIN Formtag
-    ON validForm.form_id = Formtag.form_form_id
-    LEFT JOIN Tag
-    ON Tag.tag_id = Formtag.tag_tag_id
-    LEFT JOIN Formfield
-    ON validForm.form_id = Formfield.form_form_id
-    LEFT JOIN Field
-    ON Formfield.field_field_id = Field.field_id;
+            WHERE form_run_state = 'Open' AND form_delete_state = 0) AS ValidForm
+        LEFT JOIN Formtag
+        ON ValidForm.form_id = Formtag.form_form_id
+        LEFT JOIN Tag
+        ON Tag.tag_id = Formtag.tag_tag_id
+        LEFT JOIN Formfield
+        ON ValidForm.form_id = Formfield.form_form_id
+        LEFT JOIN Field
+        ON Formfield.field_field_id = Field.field_id) AS FormWithTags
+    LEFT JOIN Gift
+    ON FormWithTags.form_id = Gift.form_form_id
+    GROUP BY FormWithTags.form_id, FormWithTags.form_title, FormWithTags.form_description, FormWithTags.form_create_date, FormWithTags.form_end_date, FormWithTags.form_pic_url, FormWithTags.form_run_state, FormWithTags.tag_name, FormWithTags.field_name;
     """)
     result = cursor.fetchall()
     return result
