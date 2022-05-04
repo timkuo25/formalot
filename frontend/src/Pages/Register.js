@@ -2,6 +2,10 @@ import '../css/Register.css';
 import { useState,useRef } from "react";
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
+import React from "react";
+import { AiFillEyeInvisible } from "react-icons/ai";
+import { AiFillEye } from "react-icons/ai";
+
 // import { Button } from 'react-native';
 
 const Register = () => {
@@ -13,27 +17,10 @@ const Register = () => {
     const [code, setCode] = useState("");
     //const [image, setImage] = useState('');
     //const [loading, setLoading] = useState(false)
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState({img:null,display:null });
     const inputFile = useRef(null) 
 
-    const callregisterApi = async (e) => {
-        e.preventDefault();
-        const result = await fetch("http://127.0.0.1:5000/Register", {
-            method: "POST",
-            body: JSON.stringify({
-                email: email,
-                first_name: first_name,
-                last_name: last_name,
-                password: password,
-                password2: password2,
-                code: code,
-                session_code: sessionStorage.getItem('code')
-            }),
-        });
-        let resJson = await result.json();
-        console.log(resJson);
-        alert(resJson.message);
-    };
+    
     const callemailApi = async (e) => {
         e.preventDefault();
         const result = await fetch("http://127.0.0.1:5000/Email?condition=register", {
@@ -70,12 +57,7 @@ const Register = () => {
     //     setLoading(false)
     //   };
     
-    const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-        let img = event.target.files[0];
-        setImage(URL.createObjectURL(img))
-    }
-    };
+
 
     let errors = {};
     
@@ -102,13 +84,92 @@ const Register = () => {
     // }
 
 
+    const onImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            let img = event.target.files[0];
+            setImage({img:img,display:URL.createObjectURL(img)})
+        }
+        
+    };
+    const callregisterApi = async (e) => {
+        const formdata = new FormData() 
+        formdata.append("image", image.img)
+
+        //上傳照片到imgur
+        fetch('https://api.imgur.com/3/image/', {
+            method:"POST",
+            headers:{
+            Authorization: "Client-ID 5535a8facba4790"
+            },
+            body: formdata
+        }).then(data => data.json())
+        .then(data => {
+            //我們要的imgur網址
+            let imgururl = data.data.link
+            console.log(imgururl)
+        })
+
+        e.preventDefault();
+        const result = await fetch("http://127.0.0.1:5000/Register", {
+            method: "POST",
+            body: JSON.stringify({
+                email: email,
+                first_name: first_name,
+                last_name: last_name,
+                password: password,
+                password2: password2,
+                code: code,
+                session_code: sessionStorage.getItem('code')
+            }),
+        });
+        let resJson = await result.json();
+        console.log(resJson);
+        alert(resJson.message);
+    
+    };
+
+    const [values, setValues] = React.useState({
+        password: "",
+        showPassword: false,
+      });
+      
+      const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+      };
+      
+      const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+      };
+      
+      const handlePasswordChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+      };
+
+      const [values2, setValues2] = React.useState({
+        password: "",
+        showPassword: false,
+      });
+      
+      const handleClickShowPassword2 = () => {
+        setValues2({ ...values2, showPassword: !values2.showPassword });
+      };
+      
+      const handleMouseDownPassword2 = (event) => {
+        event.preventDefault();
+      };
+      
+      const handlePasswordChange2 = (prop) => (event) => {
+        setValues({ ...values2, [prop]: event.target.value });
+      };
+    
+
     return (
     <>
     <Navbar />
         <div className="reg_card_container" align='center'>
             <div className="register_card_left">
                 <div className='reg_description'>
-                    <h1>加入 FORMALOT<br/>輕鬆填寫問卷、參加抽獎<br/>隨時查看抽獎進度<br/>把一對獎品免費帶回家</h1>
+                    <h1>加入 FORMALOT<br/>輕鬆填寫問卷、參加抽獎<br/>隨時查看抽獎進度<br/>把一堆獎品免費帶回家</h1>
                 </div>
             </div>
             <div className="register_card_right">
@@ -130,11 +191,23 @@ const Register = () => {
                 </div>
                 <div className="input_content">
                     <h3>密碼</h3>
-                    <input type="password" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} className="reg_inputbar"/>
+                    <div className='reg-password-content'>
+                        <input type={values.showPassword ? "text" : "password"} value={password} placeholder="Password" 
+                        onChange={(e) => setPassword(e.target.value)} className="reg_inputbar"/>
+                        <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                            {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                        </button>
+                    </div>
                 </div>
                 <div className="input_content">
                     <h3>確認密碼</h3>
-                    <input type="password" value={password2} placeholder="Confirm Password" onChange={(e) => setPassword2(e.target.value)} className="reg_inputbar"/>
+                    <div className='reg-password-content'>
+                        <input type={values2.showPassword ? "text" : "password"} value={password2} placeholder="Confirm Password" 
+                        onChange={(e) => setPassword2(e.target.value)} className="reg_inputbar"/>
+                        <button className='eye' onClick={handleClickShowPassword2} onMouseDown={handleMouseDownPassword2}>
+                            {values2.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                        </button>
+                    </div>
                 </div>
 
                 {/* <div className="input_content">
@@ -151,7 +224,7 @@ const Register = () => {
                         </div>
                         <br/>
                         <div>
-                            <img src={image} style={{  height: '150px', width: '200px'}}/>
+                            <img src={image.display} style={{  height: '150px', width: '200px'}}/>
                         </div>
                 </div>
 
@@ -159,14 +232,18 @@ const Register = () => {
                     <h3>信箱驗證碼</h3>
                     
                     <form onSubmit={callemailApi} className="register_verification">                        
-                    <input type="text" value={code} placeholder="Verification code" onChange={(e) => setCode(e.target.value)} className="reg_inputbar"/>
-                        <button className="ver_submit">取得驗證碼</button>
+                        <input type="text" value={code} placeholder="Verification code" onChange={(e) => setCode(e.target.value)} className="reg_inputbar"/>
+                        {errors.email && <button className="ver_submit" disabled={true}>取得驗證碼</button>}
+                        {errors.pass && <button className="ver_submit">取得驗證碼</button>}
+                        {/* <button className="ver_submit">取得驗證碼</button> */}
                     </form>
                 </div>
                 
             
             <form onSubmit={callregisterApi}>
-                <button className="reg_submit">註冊</button>
+                {errors.email && <button className="reg_submit" disabled={true}>註冊</button>}
+                {errors.pass && <button className="reg_submit">註冊</button>}
+                {/* <button className="reg_submit">註冊</button> */}
             </form>
             
             </div>
