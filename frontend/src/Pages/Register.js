@@ -145,6 +145,24 @@ const Register = () => {
         setValues({ ...values, [prop]: event.target.value });
       };
 
+      const [values2, setValues2] = React.useState({
+        password: "",
+        showPassword: false,
+      });
+      
+      const handleClickShowPassword2 = () => {
+        setValues2({ ...values2, showPassword: !values2.showPassword });
+      };
+      
+      const handleMouseDownPassword2 = (event) => {
+        event.preventDefault();
+      };
+      
+      const handlePasswordChange2 = (prop) => (event) => {
+        setValues({ ...values2, [prop]: event.target.value });
+      };
+    
+
     return (
     <>
     <Navbar />
@@ -184,10 +202,10 @@ const Register = () => {
                 <div className="input_content">
                     <h3>確認密碼</h3>
                     <div className='reg-password-content'>
-                        <input type={values.showPassword ? "text" : "password"} value={password2} placeholder="Confirm Password" 
-                        onChange={(e) => setPassword(e.target.value)} className="reg_inputbar"/>
-                        <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
-                            {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                        <input type={values2.showPassword ? "text" : "password"} value={password2} placeholder="Confirm Password" 
+                        onChange={(e) => setPassword2(e.target.value)} className="reg_inputbar"/>
+                        <button className='eye' onClick={handleClickShowPassword2} onMouseDown={handleMouseDownPassword2}>
+                            {values2.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
                         </button>
                     </div>
                 </div>
