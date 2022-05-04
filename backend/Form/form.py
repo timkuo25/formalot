@@ -342,7 +342,6 @@ def statisticForm():
 
     return jsonify(response)
 
-
 @ form_bp.route('/FormRespondentCheck', methods=["GET"])
 def FormRespondentCheck():
     response = {
@@ -353,10 +352,11 @@ def FormRespondentCheck():
     rows = searchResponseByID(student_id, form_id)
     print(rows)
     if rows != []:
-        return "True"
-
+        response["has_responded"] = True
     else:
-        return "False"
+        response["has_responded"] = True
+
+    return jsonify(response) 
 
 # 取得該問卷的題目與題型
 
