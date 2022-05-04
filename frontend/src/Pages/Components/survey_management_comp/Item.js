@@ -15,7 +15,7 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
 
     const deleteFormAPI = async (e) => {
         e.preventDefault();
-        const getprotected = await fetch('https://82b059bd-354d-4944-934b-b8fdb2402159.mock.pstmn.io/stuff/',{
+        const getprotected = await fetch('http://127.0.0.1:5000/SurveyManagement',{
             method: 'PUT',
             body: JSON.stringify({
                 form_id: form_id,
@@ -30,7 +30,7 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
 
     const closeFormAPI = async (e) => {
         e.preventDefault();
-        const getprotected = await fetch('https://82b059bd-354d-4944-934b-b8fdb2402159.mock.pstmn.io/stuff/',{
+        const getprotected = await fetch('http://127.0.0.1:5000/SurveyManagement',{
             method: 'PUT',
             body: JSON.stringify({
                 form_id: form_id,
@@ -48,8 +48,8 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
 
     return (
 
-            <div className="card-container ">
-                <div className="card">
+            <div className="card-container-management ">
+                <div className="card-management">
                     <div className="tag-container">
                         <div className="prize-tag-management">{`${form_run_state}`}</div>
                         <div class="dropdown">

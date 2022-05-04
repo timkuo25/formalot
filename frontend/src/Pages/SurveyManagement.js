@@ -10,7 +10,7 @@ import './Components/survey_management_comp/SurveyManagement.css'
 
 
 async function fetchData(setData) {
-    const res = await fetch(`https://82b059bd-354d-4944-934b-b8fdb2402159.mock.pstmn.io/stuff/?id=123`)
+    const res = await fetch(`http://127.0.0.1:5000/SurveyManagement`)
     const data = await res.json()
     console.log(data)
     setData(data)
