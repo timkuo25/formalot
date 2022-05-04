@@ -31,6 +31,15 @@
     margin: 70px 5px 5px 60px;
 }
 
+.top-section .camera{
+    width: 40px;
+    height:40px;
+    border-radius: 50%;
+    margin-top: 240px;
+    margin-left: -50px;
+    border-width: 0;
+}
+
 .top-section .name{
     font-size: 35px;
     margin: 120px 5px 5px 150px;
@@ -102,12 +111,10 @@ hr.solid {
 }
 
 .profile-bar{
-    margin: 50px 10px;
+    margin: 58px 10px;
     width: 45%;
     height: 40px;
-    border-color:#cccccc;
-    border-width: 1px;
-    border-radius: 0;
+    color:var(--theme-purple);
     font-size: 20px;
 }
 
@@ -119,17 +126,17 @@ hr.solid {
 }
 
 .edit-profile{
-    margin-top: 30px;
-    border: var(--theme-dark-purple) solid 0.15em;
-    border-radius: 0.3em;
-    background-color: #fbfafc;
-    color: var(--theme-dark-purple);
-    width: 8em;
-    height: 2.25em;
+    margin-top: -10px;
     font-size: 1.2em;
-    font-weight: 700;
-    text-align: center;
     justify-content:right;
-    margin-left: 80%;
+    margin-left: 85%;
+    background-color: var(--theme-dark-purple);
+    border-color: var(--theme-dark-purple);
+    border-radius: 0.4em;
+    width: 6em;
+    height: 2.5em;
+    font-weight: 500;
+    text-align: center;
+    color: #FFFFFF;
 }
 /* profile page done */
