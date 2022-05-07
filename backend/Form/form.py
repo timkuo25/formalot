@@ -107,7 +107,8 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         INSERT INTO Form(form_id, form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
         SELECT Max(form_id)+1, %s, %s, %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
         """
-        cursor1.execute(query, [form_title, form_description, questioncontent, form_create_date, form_end_date,form_draw_date, student_id, form_pic_url])
+        cursor1.execute(query, [form_title, form_description, questioncontent,
+                        form_create_date, form_end_date, form_draw_date, student_id, form_pic_url])
 
         # Find Max form_id
         query = """SELECT MAX(form_id) FROM form;"""
@@ -293,7 +294,8 @@ def createForm():
     req_json = request.get_json(force=True)
     form_title = req_json['form_title']
     form_description = req_json['form_description']
-    questioncontent = json.dumps(req_json['questioncontent'], ensure_ascii=False)
+    questioncontent = json.dumps(
+        req_json['questioncontent'], ensure_ascii=False)
     form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     form_end_date = req_json['form_end_date']
     form_draw_date = req_json['form_draw_date']
@@ -316,7 +318,6 @@ def createForm():
     return jsonify(response)
 
 
-
 @ form_bp.route('/SurveyManagement/detail', methods=['GET'])
 def statisticForm():
     form_id = request.args.get('form_id')
@@ -331,14 +332,21 @@ def statisticForm():
         response["status"] = "fail"
         response["message"] = "The form does not exist or the number of the repliers is 0"
     else:
-        for i in results:
-            response["status"] = "success"
-            temp = {
-                "reply": i["answercontent"],
-                "user": i["user_student_id"]
-            }
-            response["data"].append(temp)
-            response["message"] = "Get answer successfully"
+        response["status"] = "success"
+        questionNum = len(results[0]["answercontent"])
+        for i in range(questionNum):
+            data_temp = {}  # return data based on question
+            replies = []
+            for result in results:
+                single_reply = {
+                    "answer": result["answercontent"][i]["Answer"],
+                    "user": result["user_student_id"]
+                }
+                replies.append(single_reply)
+            data_temp["replies"] = replies
+            data_temp["question"] = results[0]["answercontent"][i]["Question"]
+            response["data"].append(data_temp)
+        response["message"] = "Get answer successfully"
 
     return jsonify(response)
 
@@ -346,7 +354,7 @@ def statisticForm():
 @ form_bp.route('/FormRespondentCheck', methods=["GET"])
 def FormRespondentCheck():
     response = {
-        "has_responded":0
+        "has_responded": 0
     }
     student_id = protected()
     form_id = request.args.get('form_id')
