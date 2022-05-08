@@ -1,8 +1,13 @@
+from urllib import response
 from db.db import get_db
 from flask import request, jsonify, Blueprint, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import random
 from flask_apscheduler import APScheduler
+from flask_mail import Mail, Message
+from hashlib import md5
+import uuid
+from smtplib import SMTPException
 
 lottery_bp = Blueprint('lottery', __name__)
 scheduler = APScheduler()
@@ -124,9 +129,10 @@ def getUserAvatar(student_id):
     WHERE student_id = (%s); 
     '''
     cursor.execute(query, [student_id])
+    result = cursor.fetchone()[0]
     db.commit()
     db.close()
-    result = cursor.fetchone()[0]
+    
 
     return result
 
@@ -192,6 +198,22 @@ def getFormDetailByFormId(form_id):
                    for i, value in enumerate(row)) for row in cursor.fetchall()]
     db.commit()
     db.close()
+    return result
+
+def getGiftWinner(form_id):
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT gift.gift_name as gift_name, gift.user_student_id as winner_student_id, form.form_title as form_title, userform.form_answer_time as form_answer_time
+    FROM gift JOIN form on gift.form_form_id = form.form_id
+    JOIN  userform on userform.form_form_id = form.form_id and gift.user_student_id = userform.user_student_id
+    where gift.form_form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
+    
     return result
 
 
@@ -450,3 +472,119 @@ def FormOwnerCheck():
         response["form_owner_id"] = 'The form is not exist!!!'
         response["form_owner_status"] = False
     return jsonify(response)
+
+
+def checkSendEmail(form_id):
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    SELECT form_form_id, send_email
+    FROM gift
+    WHERE form_form_id = (%s); 
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    
+    db.commit()
+    db.close()
+
+    return result
+
+# Check whether the form sent email or not
+@lottery_bp.route('/CheckSendEmail', methods=["GET"])
+def CheckSendEmail():
+    response = {
+        "status": '',
+        "message": '',
+        "data":''
+    }
+    form_id = request.args.get('form_id')
+    result = checkSendEmail(form_id)
+    if(len(result) == 0):
+        response["status"] = 'error'
+        response["message"] = 'The form is not exist!!!'
+    else:
+        response['status'] = 'success'
+        response['message'] = 'Fetch email status successfully!!!'
+        response['data'] = result[0]
+
+    return jsonify(response)
+
+# Send email to winners
+@lottery_bp.route('/SendEmailPage', methods=["GET"])
+def SendEmailPage():
+    response = {
+        "status": '',
+        "message": ''
+    }
+    form_id = request.args.get('form_id')
+    check_email_state = checkSendEmail(form_id)
+    if(len(check_email_state) == 0):
+        response["status"] = 'error'
+        response["message"] = 'The form is not exist!!!'
+    else:
+        email_state = check_email_state[0]['send_email']
+        if(email_state == 0):
+            form_state = getFormRunStatueByFormId(form_id)[0]['form_run_state']
+            if(form_state == 'Closed'):
+                # 已抽獎，尚未寄信給中獎者
+                get_gift_winners = getGiftWinner(form_id)
+                for winner in get_gift_winners:
+                    sendEmail(winner['winner_student_id'],winner['form_title'], winner['form_answer_time'], winner['gift_name'])
+                
+                modifyEmailStatus(form_id)
+                response["status"] = 'success'
+                response["message"] = 'Sent email to winners successfully!!!!'
+            else:
+                response["status"] = 'error'
+                response["message"] = 'Form state is not Closed!!! Please contact backend staff!!!'
+        else:
+            response["status"] = 'error'
+            response["message"] = 'You have already sent email to winners!!!!'
+    return jsonify(response)
+    # return jsonify(form_state)
+
+def modifyEmailStatus(form_id):
+    db = get_db()
+    cursor = db.cursor()
+    query = '''
+    UPDATE gift 
+    SET send_email = 1 
+    where form_form_id = (%s);
+    '''
+    
+    cursor.execute(query, [form_id])
+    db.commit()
+    db.close()
+
+    return 0
+
+def sendEmail(recipient, form_title, form_ans_time, gift_name):
+
+    response = {
+        "status": "",
+        "message": "",
+    }
+    msg = Message('Formalot 中獎通知', sender='sdmg42022@gmail.com', recipients=['r10725053@ntu.edu.tw'])
+    msg.body = f"""
+    親愛的 Formalot 用戶您好：\n\n
+    感謝您於 {form_ans_time} 填寫表單 {form_title} \n
+    恭喜您幸運抽中 {gift_name} \n 
+    
+    中獎者將會進一步使用電郵聯繫您獎品領取方式
+
+    Formalot 上
+    """
+
+    with current_app.app_context():
+        mail = Mail(current_app)
+        try:
+            mail.send(msg)
+            print('已寄出')
+
+        except SMTPException as e:
+            current_app.logger.error(e.message)
+            print()
+    return 0
+
+
