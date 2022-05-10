@@ -307,13 +307,13 @@ def sendemail(recipient, condition):
     }
     code = str(uuid.uuid1())[:6]
     if condition == "register":
-        msg = Message('Activate your account!',
+        msg = Message('Formalot 開始使用你的帳號!',
                       sender='sdmg42022@gmail.com', recipients=[recipient])
-        msg.body = "Please activate your account. This is your verification code: " + code
+        msg.body = "請使用驗證碼激活您的 Formalot 帳號。 這是您的驗證碼: " + code
     elif condition == "forget_psw":
-        msg = Message('Update your password!',
+        msg = Message('Formalot 請更新您的密碼!',
                       sender='sdmg42022@gmail.com', recipients=[recipient])
-        msg.body = "Please update your password with verification code. Here is your verification code: " + code
+        msg.body = "請使用驗證碼更改您的 Formalot 密碼。 這是您的驗證碼:: " + code
 
     with current_app.app_context():
         mail = Mail(current_app)
