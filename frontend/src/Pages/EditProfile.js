@@ -3,6 +3,9 @@ import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useState, useEffect } from 'react';
 import callrefresh from '../refresh.js';
+import React from "react";
+import { AiFillEyeInvisible } from "react-icons/ai";
+import { AiFillEye } from "react-icons/ai";
 
 
 const EditProfile = () => {
@@ -57,6 +60,33 @@ const EditProfile = () => {
         callGetUserProfile();
     }, []);
 
+    const [values, setValues] = React.useState({
+        password: "",
+        showPassword: false,
+      });
+      
+      const handleClickShowPassword = () => {
+        setValues({ ...values, showPassword: !values.showPassword });
+      };
+      
+      const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+      };
+      
+
+      const [values2, setValues2] = React.useState({
+        password: "",
+        showPassword: false,
+      });
+      
+      const handleClickShowPassword2 = () => {
+        setValues2({ ...values2, showPassword: !values2.showPassword });
+      };
+      
+      const handleMouseDownPassword2 = (event) => {
+        event.preventDefault();
+      };
+
     return (
     <>
     <Navbar/>
@@ -81,11 +111,23 @@ const EditProfile = () => {
 
                 <div className="edit_input_content">
                     <h3>輸入新密碼</h3>
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="edit_inputbar"/>
+                    <div className='edit-password-content'>
+                        <input type={values.showPassword ? "text" : "password"} value={password} placeholder="Password" 
+                        onChange={(e) => setPassword(e.target.value)} className="edit_inputbar"/>
+                        <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                            {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                        </button>
+                    </div>
                 </div>
                 <div className="edit_input_content">
                     <h3>確認新密碼</h3>
-                    <input value={password2} onChange={(e) => setPassword2(e.target.value)} type="password" placeholder="Confirm Password" className="edit_inputbar"/>
+                    <div className='edit-password-content'>
+                        <input type={values2.showPassword ? "text" : "password"} value={password2} placeholder="Password" 
+                        onChange={(e) => setPassword2(e.target.value)} className="edit_inputbar"/>
+                        <button className='eye' onClick={handleClickShowPassword2} onMouseDown={handleMouseDownPassword2}>
+                            {values2.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                        </button>
+                    </div>
                 </div>
                 
             <form>

@@ -2,6 +2,9 @@ import '../css/ForgetPassword.css';
 import { useState } from "react";
 import { Navbar } from './Components/Navbar';
 import { Footer } from "./Components/Footer";
+import React from "react";
+import { AiFillEyeInvisible } from "react-icons/ai";
+import { AiFillEye } from "react-icons/ai";
 const ForgetPassword = () => {
         // 忘記密碼
         const [email, setEmail] = useState("");
@@ -38,6 +41,34 @@ const ForgetPassword = () => {
             alert(resJson.message);
             sessionStorage.setItem('code', resJson.code);
         };
+
+        const [values, setValues] = React.useState({
+            password: "",
+            showPassword: false,
+          });
+          
+          const handleClickShowPassword = () => {
+            setValues({ ...values, showPassword: !values.showPassword });
+          };
+          
+          const handleMouseDownPassword = (event) => {
+            event.preventDefault();
+          };
+          
+    
+          const [values2, setValues2] = React.useState({
+            password: "",
+            showPassword: false,
+          });
+          
+          const handleClickShowPassword2 = () => {
+            setValues2({ ...values2, showPassword: !values2.showPassword });
+          };
+          
+          const handleMouseDownPassword2 = (event) => {
+            event.preventDefault();
+          };
+
     return (
     <>
     <Navbar/>
@@ -61,11 +92,23 @@ const ForgetPassword = () => {
 
                 <div className="forget_input_content">
                     <h3>輸入新密碼</h3>
-                    <input value={newpsw} onChange={(e) => setNewPsw(e.target.value)} type="password" placeholder="Password" className="forget_inputbar"/>
+                    <div className='new-password-content'>
+                        <input type={values.showPassword ? "text" : "password"} value={newpsw} placeholder="Password" 
+                        onChange={(e) => setNewPsw(e.target.value)} className="forget_inputbar"/>
+                        <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                            {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                        </button>
+                    </div>
                 </div>
                 <div className="forget_input_content">
                     <h3>確認新密碼</h3>
-                    <input value={newpsw2} onChange={(e) => setNewPsw2(e.target.value)} type="password" placeholder="Confirm Password" className="forget_inputbar"/>
+                    <div className='new-password-content'>
+                        <input type={values2.showPassword ? "text" : "password"} value={newpsw2} placeholder="Password" 
+                        onChange={(e) => setNewPsw2(e.target.value)} className="forget_inputbar"/>
+                        <button className='eye' onClick={handleClickShowPassword2} onMouseDown={handleMouseDownPassword2}>
+                            {values2.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                        </button>
+                    </div>
                 </div>
                 
                 

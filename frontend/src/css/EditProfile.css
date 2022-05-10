@@ -27,10 +27,10 @@
 }
 
 .edit_submit{
-    border: var(--theme-dark-purple) solid 0.15em;
+    background-color: var(--theme-dark-purple);
+    border-color: var(--theme-dark-purple);
     border-radius: 0.3em;
-    background-color: #fbfafc;
-    color: var(--theme-dark-purple);
+    color: #ffffff;
     margin: 3em 1em;
     width: 5em;
     height: 2.25em;
@@ -47,6 +47,19 @@
     flex-direction: row;
     justify-content:left;
     float:left;
+}
+
+.edit-password-content{
+    display:flex;
+    flex-direction: row;
+    display: flex; 
+    justify-content: left;
+}
+
+.eye{
+    background: none;
+    border-width: 0;
+    margin-top: 5px;
 }
 
 /* end EditProfile page --------------------------*/
