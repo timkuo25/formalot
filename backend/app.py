@@ -56,7 +56,8 @@ def index():
 def refresh():
     identity = get_jwt_identity()
     access_token = create_access_token(identity=identity, expires_delta = timedelta(minutes=120))
-    return jsonify(access_token=access_token, message = "test")
+    # access_token = create_access_token(identity=identity, expires_delta = timedelta(seconds=10))
+    return jsonify(access_token=access_token, message = "success")
 
 @app.after_request
 def after_request(response):

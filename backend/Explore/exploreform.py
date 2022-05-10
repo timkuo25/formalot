@@ -15,23 +15,37 @@ def getForm(KeywordType,Keyword):
     try:
         if KeywordType == "tag":
             query = """
-            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, Tag.tag_name
+            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, Tag.tag_name, Field.field_name, COUNT(Gift.form_form_id) AS num_gift
             FROM Form
-            RIGHT JOIN FormTag
-            ON Form.form_id = FormTag.Tag_Tag_id
+            LEFT JOIN FormTag
+            ON Form.form_id = FormTag.form_form_id
             LEFT JOIN Tag
             ON FormTag.Tag_Tag_id = Tag.Tag_id
-            WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open' AND Tag.Tag_name = (%s);
-            """
-        elif KeywordType == "field":
-            query = """
-            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, Field.field_name
-            FROM Form
-            RIGHT JOIN FormField
+            LEFT JOIN FormField
             ON Form.form_id = FormField.form_form_id
             LEFT JOIN Field
             ON FormField.field_field_id = Field.field_id
-            WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open' AND Field.field_name = (%s);
+            LEFT JOIN Gift
+            ON Form.form_id = Gift.form_form_id
+            WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open' AND Tag.Tag_name = (%s)
+            GROUP BY Form.form_id, Tag.tag_name, Field.field_name;
+            """
+        elif KeywordType == "field":
+            query = """
+            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, Tag.tag_name, Field.field_name, COUNT(Gift.form_form_id) AS num_gift
+            FROM Form
+            LEFT JOIN FormTag
+            ON Form.form_id = FormTag.form_form_id
+            LEFT JOIN Tag
+            ON FormTag.Tag_Tag_id = Tag.Tag_id
+            LEFT JOIN FormField
+            ON Form.form_id = FormField.form_form_id
+            LEFT JOIN Field
+            ON FormField.field_field_id = Field.field_id
+            LEFT JOIN Gift
+            ON Form.form_id = Gift.form_form_id
+            WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open' AND Field.field_name = (%s)
+            GROUP BY Form.form_id, Tag.tag_name, Field.field_name;
             """
 
         cursor.execute(query,[Keyword])
@@ -81,14 +95,14 @@ def fuzzySearch(keyword, formInfo):
     return formInfo
 
 # CORS issue
-@explore_bp.after_request
-def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = '*'
-    header['Access-Control-Allow-Methods'] = '*'
-    header['Content-type'] = 'application/json'
-    return response
+# @explore_bp.after_request
+# def after_request(response):
+#     header = response.headers
+#     header['Access-Control-Allow-Origin'] = '*'
+#     header['Access-Control-Allow-Headers'] = '*'
+#     header['Access-Control-Allow-Methods'] = '*'
+#     header['Content-type'] = 'application/json'
+#     return response
 
 # route
 @explore_bp.route('/GetFormByKeyWord', methods=['GET'])
@@ -96,6 +110,7 @@ def GetFormByKeyWord():
     KeywordType = request.args.get('KeywordType')
     Keyword = request.args.get('Keyword')
     result = getForm(KeywordType,Keyword)
+    print(result)
     result.sort(key=lambda x: x['form_create_date'], reverse = True)
     return jsonify(result)
 

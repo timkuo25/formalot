@@ -13,7 +13,7 @@ const Navbar = () => {
         localStorage.removeItem('jwt');
         localStorage.removeItem('refresh_token');
         console.log("Logout Success");
-        alert("Logout Success");
+        alert("登出成功");
         window.location.reload();
         navigate(<Homepage/>);
     };

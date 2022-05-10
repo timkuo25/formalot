@@ -28,32 +28,32 @@ const Profile = () => {
         callGetUserProfile();
     }, []);
 
-    const [image, setImage] = useState({img:null,display:null });
+    // const [image, setImage] = useState({img:null,display:null });
     const inputFile = useRef(null);
-    const onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            let img = event.target.files[0];
-            setImage({img:img,display:URL.createObjectURL(img)})
+    // const onImageChange = (event) => {
+    //     if (event.target.files && event.target.files[0]) {
+    //         let img = event.target.files[0];
+    //         setImage({img:img,display:URL.createObjectURL(img)})
 
-            const formdata = new FormData() 
-            formdata.append("image", image.img)
+    //         const formdata = new FormData() 
+    //         formdata.append("image", image.img)
     
-            //上傳照片到imgur
-            fetch('https://api.imgur.com/3/image/', {
-                method:"POST",
-                headers:{
-                Authorization: "Client-ID 5535a8facba4790"
-                },
-                body: formdata
-            }).then(data => data.json())
-            .then(data => {
-                //我們要的imgur網址
-                let imgururl = data.data.link
-                console.log(imgururl)
-            })
-        }
+    //         //上傳照片到imgur
+    //         fetch('https://api.imgur.com/3/image/', {
+    //             method:"POST",
+    //             headers:{
+    //             Authorization: "Client-ID 5535a8facba4790"
+    //             },
+    //             body: formdata
+    //         }).then(data => data.json())
+    //         .then(data => {
+    //             //我們要的imgur網址
+    //             let imgururl = data.data.link
+    //             console.log(imgururl)
+    //         })
+    //     }
         
-    };
+    // };
 
     return (
         <>
@@ -61,8 +61,9 @@ const Profile = () => {
             <div className="profile_card_container" align='center'>
                 <div className="profile_card_right">
                     <div className="top-section">
-                        <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
-                        <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/>
+                        {/* <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
+                        <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
+                        <img className="photo" src={Profile.user_pic_url|| process.env.PUBLIC_URL + 'dog.png'}/>
                         <button className='camera' onClick={()=>inputFile.current.click()}>
                             <AiFillCamera size='20px'/>
                         </button>
