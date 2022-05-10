@@ -1,6 +1,7 @@
 import '../css/Homepage.css';
 import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
+import { MobileNav } from './Components/MobileNav';
 import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
 import ReactLoading from "react-loading";
@@ -39,14 +40,16 @@ const Homepage = () => {
     
     return (
         <>
-            <Navbar />
+            {window.innerWidth > 600 ? <Navbar /> : <MobileNav/>}
             <section className='call-to-action'>
                 {/* <img className='main-image' src={process.env.PUBLIC_URL + 'LandingPage.svg'} alt=''/> */}
                 <div className='description'>
-                    <h2>填寫問卷，參與抽獎，<br/>發布專屬於你的抽獎問卷</h2>
-                    <h3>Formalot 是問卷抽獎管理的首選平台！</h3>
+                    <div className='caption'>
+                        <h2>填寫問卷，參與抽獎，<br/>發布專屬於你的抽獎問卷</h2>
+                        <h3>Formalot 是問卷抽獎管理的首選平台！</h3>
+                    </div>
                     <div className='cta-button'>
-                        <button className='explore-button'>探索抽獎</button>
+                        <button className='explore-button' onClick={()=>{window.location.href = "/explore"}}>探索抽獎</button>
                         <button className='make-survey-button' onClick={()=>{window.location.href = "/MakeSurvey"}}>製作問卷</button>
                     </div>
                 </div>
@@ -117,6 +120,7 @@ const Homepage = () => {
             <Footer />
         </>
     )
+
 }
 
 export { Homepage }
