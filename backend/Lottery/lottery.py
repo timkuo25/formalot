@@ -342,7 +342,7 @@ def getLotteryResults():
         if(form_run_state == 'Closed' and form_del_state == 0):
             gift_categoryamount = getClosedFormResult(form_id)[0]
             gift_total = getClosedFormResult(form_id)[1]
-            response['data']['禮物數量'] = (gift_categoryamount).tostring()
+            response['data']['禮物數量'] = gift_categoryamount
 
             for gift in gift_total:
                 response['data']['results'].append(gift)
@@ -571,9 +571,11 @@ def sendEmail(recipient, form_title, form_ans_time, gift_name):
     感謝您於 {form_ans_time} 填寫表單 {form_title} \n
     恭喜您幸運抽中 {gift_name} \n 
     
-    中獎者將會進一步使用電郵聯繫您獎品領取方式
+    表單發布者將會進一步使用電郵聯繫您獎品領取方式
 
-    Formalot 上
+    祝 事事順利
+    
+    Formalot團隊 
     """
 
     with current_app.app_context():
