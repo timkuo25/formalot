@@ -155,9 +155,6 @@ const Register = () => {
         event.preventDefault();
       };
       
-      const handlePasswordChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-      };
 
       const [values2, setValues2] = React.useState({
         password: "",
@@ -172,9 +169,6 @@ const Register = () => {
         event.preventDefault();
       };
       
-      const handlePasswordChange2 = (prop) => (event) => {
-        setValues({ ...values2, [prop]: event.target.value });
-      };
     
 
     return (
