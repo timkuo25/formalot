@@ -17,6 +17,8 @@ const Navbar = () => {
         window.location.reload();
         navigate(<Homepage/>);
     };
+
+
     if (!(localStorage.getItem('jwt'))){                // 未登入狀態
         return(
         
@@ -43,7 +45,6 @@ const Navbar = () => {
 
     else{                                           // 已登入狀態
         return(
-        
             <header className="header">
             <h1 className="app-title"><a href='/'>Formalot</a></h1>
             <nav className="navbar">

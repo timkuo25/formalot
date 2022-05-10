@@ -17,7 +17,8 @@
 html,
 body {
   height: 100%;
-  margin: 0%;
+  width: 100vw;
+  margin: 0;
   font-family: 14px 'Montserrat', Helvetica, Arial, sans-serif;
   background: var(--theme-light-grey);
   overflow: visible;

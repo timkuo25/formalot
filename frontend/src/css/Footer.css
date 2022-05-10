@@ -28,3 +28,31 @@
     font-weight: 300;
     color: var(--theme-light-grey);
 }
+
+@media only screen and (max-width: 600px) {
+
+    .footer > * {
+        all: unset;
+        font-size: 0.5em;
+    }
+
+    .footer {
+        justify-content: center;
+        align-items: center;
+
+    }
+
+    .copyright{
+        /* transform: translate(-2em, -2em); */
+    }
+    
+    .footer-link{
+        display: flex;
+        width: 20em;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--theme-light-grey);
+        transform: translate(2em, 0em);
+    }
+
+}
