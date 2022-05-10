@@ -69,18 +69,19 @@ def deleteForm(form_id):
         db.close()
 
 
-def closeForm(form_id):
+def closeForm(form_id, form_close_date, form_draw_date):
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     try:
         query = '''UPDATE Form
-        SET form_run_state='Closed'
+        SET form_run_state='Closed', form_end_date = (%s), form_draw_date = (%s)
         WHERE form_id = (%s)
         '''
-        cursor.execute(query, [form_id])
+        cursor.execute(query, [form_close_date, form_draw_date, form_id])
         db.commit()
         return True
-    except:
+    except psycopg2.DatabaseError as error:
+        print(error)
         db.rollback()
         return False
     finally:
@@ -271,7 +272,9 @@ def modifyForm():
             response_return["status"] = "fail"
             response_return["message"] = "Cannot delete form"
     elif action == "close":
-        closeForm(form_id)
+        form_close_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        form_draw_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+        closeForm(form_id, form_close_date, form_draw_date)
         response_return["status"] = "success"
         response_return["message"] = "Closed form"
     return jsonify(response_return)

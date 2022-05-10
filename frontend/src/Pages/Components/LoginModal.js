@@ -26,7 +26,7 @@ function LoginModal( {closeModal}){
             localStorage.setItem('refresh_token', resJson.refresh_token);
             console.log("Login Success");
             console.log(resJson.access_token);
-            alert("Login Success");
+            alert("登入成功");
             window.location.reload();
             navigate(<Homepage/>);
             
@@ -37,73 +37,6 @@ function LoginModal( {closeModal}){
     };
 
 
-    // 登出
-    // const calllogout = async (e) => {
-    //     e.preventDefault();
-    //     localStorage.removeItem('jwt');
-    //     console.log("Logout Success");
-    //     alert("Logout Success");
-   
-    // };
-
-    // 更新使用者資訊
-    // const calluserupdate = async (e) => {
-    //     e.preventDefault();
-    //     const getprotected = await fetch('http://127.0.0.1:5000/UserUpdate',{
-    //         method: 'PUT',
-    //         headers: {
-    //           Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-    //         },
-    //         body: JSON.stringify({
-    //             first_name: "testupdate",
-    //             last_name : "",
-    //             password : "",
-    //             password2 : "",
-    //         }),
-    //     });
-    //     const resdata = await getprotected.json();
-    //     console.log(resdata);
-    //     alert(resdata.message);
-   
-    // };
-
-    // 忘記密碼
-    // const [newpsw, setNewPsw] = useState("");
-    // const [newpsw2, setNewPsw2] = useState("");
-    // const [code, setCode] = useState("");
-    // const callforgetpasswordApi = async (e) => {
-    //     e.preventDefault();
-    //     const getprotected = await fetch('http://127.0.0.1:5000/ForgetPsw',{
-    //         method: 'PUT',
-    //         body: JSON.stringify({
-    //             email: email,
-    //             password : newpsw,
-    //             password2 : newpsw2,
-    //             code: code,
-    //             session_code: sessionStorage.getItem('code')
-    //         }),
-    //     });
-    //     const resdata = await getprotected.json();
-    //     console.log(resdata);
-    //     alert(resdata.message);
-
-    // };
-
-
-    // 傳送驗證碼 api
-    // const callemailApi = async (e) => {
-    //     e.preventDefault();
-    //     const result = await fetch("http://127.0.0.1:5000/Email?condition=forget_psw", {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //             email: email
-    //         }),
-    //     });
-    //     let resJson = await result.json();
-    //     console.log(resJson);
-    //     alert(resJson.message);
-    //     sessionStorage.setItem('code', resJson.code);
-    // };
 
     // validation
         let errors = {};

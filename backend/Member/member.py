@@ -16,14 +16,14 @@ def protected():
     current_user = get_jwt_identity()
     return current_user
 
-def addMember(user_email, user_firstname, user_lastname, student_id, user_hashed_pwd):
+def addMember(user_email, user_firstname, user_lastname, student_id, user_hashed_pwd, user_pic_url):
     db = get_db()
     cursor = db.cursor()
     try:
         query = '''
-        INSERT into Users (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd) values (%s,%s,%s,%s,%s);
+        INSERT into Users (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd, user_pic_url) values (%s,%s,%s,%s,%s,%s);
         '''
-        cursor.execute(query, (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd))
+        cursor.execute(query, (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd, user_pic_url))
         db.commit()
         # return 'Succeed in adding member.'
         print('Succeed in adding member.')
@@ -149,6 +149,7 @@ def Register():
         last_name = req_json["last_name"]
         password = req_json["password"]
         password2 = req_json["password2"]
+        user_pic_url = req_json["user_pic_url"]
 
         rows = getMemberByStudentId(id)
         if rows != []:
@@ -157,7 +158,7 @@ def Register():
         else:
             if password_check(password, password2):
                 password_hash = str(md5(password.encode("utf-8")).hexdigest())
-                addMember(email, first_name, last_name, id, password_hash)
+                addMember(email, first_name, last_name, id, password_hash, user_pic_url)
                 response_return["status"] = "success"
                 response_return["message"] = "註冊成功"
             else:
@@ -182,6 +183,7 @@ def Login():
     }
     if login_check(email, password) == True:
         # access_token = create_access_token(identity=id, expires_delta = timedelta(seconds=10))
+        # refresh_token = create_refresh_token(identity=id, expires_delta = timedelta(seconds=20))
         access_token = create_access_token(identity=id, expires_delta = timedelta(minutes=120))
         refresh_token = create_refresh_token(identity=id, expires_delta = timedelta(days=1))
         return jsonify({'access_token': access_token, 'refresh_token': refresh_token, "status": "success", "message": "登入成功"})

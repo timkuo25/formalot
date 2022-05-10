@@ -91,23 +91,36 @@ const Register = () => {
         }
         
     };
+
+
     const callregisterApi = async (e) => {
         const formdata = new FormData() 
         formdata.append("image", image.img)
 
         //上傳照片到imgur
-        fetch('https://api.imgur.com/3/image/', {
+        e.preventDefault();
+        const imgururl_result = await fetch('https://api.imgur.com/3/image/', {
             method:"POST",
             headers:{
-            Authorization: "Client-ID 5535a8facba4790"
+                Authorization: "Client-ID 5535a8facba4790"
             },
             body: formdata
-        }).then(data => data.json())
-        .then(data => {
-            //我們要的imgur網址
-            let imgururl = data.data.link
-            console.log(imgururl)
+            // }).then(data => data.json())
+            // .then(data => {
+            //     //我們要的imgur網址
+            //     let imgururl = data.data.link
+            //     console.log(imgururl)
+            //     return imgururl
+            
         })
+        
+        if(imgururl_result.status === 429){
+            var imgururl = ""
+        }else{
+            let data = await imgururl_result.json();
+            var imgururl = data.data.link
+            console.log(imgururl)        
+        }
 
         e.preventDefault();
         const result = await fetch("http://127.0.0.1:5000/Register", {
@@ -119,7 +132,8 @@ const Register = () => {
                 password: password,
                 password2: password2,
                 code: code,
-                session_code: sessionStorage.getItem('code')
+                session_code: sessionStorage.getItem('code'),
+                user_pic_url: imgururl
             }),
         });
         let resJson = await result.json();

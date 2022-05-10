@@ -15,9 +15,11 @@ const callrefresh = async (type) => {
         }
         window.location.reload();   
     }else{
-        localStorage.setItem('jwt', resJson.access_token);
-        localStorage.setItem('refresh_token', resJson.refresh_token);
-        console.log("Please Login again!");
+        localStorage.removeItem('jwt', resJson.access_token);
+        localStorage.removeItem('refresh_token', resJson.refresh_token);
+        console.log("Refresh 已過期，請重新登入!");
+        alert("請重新登入!");
+        window.location.replace("/")
     };
 };
 
