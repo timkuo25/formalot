@@ -3,6 +3,8 @@ from flask import Blueprint, request, jsonify
 import psycopg2.extras  # get the results in form of dictionary
 import json
 import datetime
+import jieba
+import collections
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 form_bp = Blueprint('form', __name__)
@@ -154,22 +156,55 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         db.close()
 
 
+# [Wei] 加入回傳QuestionType資訊
 def getAns(form_id):
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor1 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor2 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         query = '''SELECT UserForm.answercontent, UserForm.user_student_id
         FROM UserForm
         WHERE UserForm.form_form_id = %s;
         '''
-        cursor.execute(query, [form_id])
+        cursor1.execute(query, [form_id])
         db.commit()
-        return cursor.fetchall()
+
+        cursor2.execute("""
+        SELECT questioncontent 
+        FROM Form 
+        WHERE form_id = %s;
+        """, [form_id])
+
+        questionType = []
+        for question in  cursor2.fetchall()[0]['questioncontent']:
+            questionType.append(question['Type'])
+        
+        response = {"answercontent":cursor1.fetchall(),
+                    "questionType":questionType}
+        return response
     except:
         db.rollback()
         return False
     finally:
-        db.close()
+        db.close() 
+
+
+# def getAns(form_id):
+#     db = get_db()
+#     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+#     try:
+#         query = '''SELECT UserForm.answercontent, UserForm.user_student_id
+#         FROM UserForm
+#         WHERE UserForm.form_form_id = %s;
+#         '''
+#         cursor.execute(query, [form_id])
+#         db.commit()
+#         return cursor.fetchall()
+#     except:
+#         db.rollback()
+#         return False
+#     finally:
+#         db.close()
 
 
 def searchResponseByID(student_id, form_id):
@@ -249,7 +284,6 @@ def FillForm():
 @ form_bp.route('/SurveyManagement', methods=['GET'])
 def returnForm():
     student_id = protected()
-    # student_id = 'r10725051'  # test data
     response = [{'replied': replied(student_id),
                 'created': created(student_id)}]
     return jsonify(response)
@@ -283,17 +317,6 @@ def modifyForm():
 @ form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
 def createForm():
 
-    # form_title = 'addForm測試'  # test data
-    # questioncontent = '[{"測試題目":"測試題目"}]'  # test data
-    # form_description = '這是一份測試問卷'
-    # form_create_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # test data
-    # form_end_date = datetime.datetime(2022, 9, 10, 23, 59, 59)  # test data
-    # form_draw_date = datetime.datetime(2022,9, 11, 23, 59, 59)  # test data
-    # student_id = 'r10725051'  # test data
-    # form_pic_url = 'https://imgur.com/gallery/05YcgLz'  # test data
-    # form_tag_name = '美妝保養類'  # test data
-    # gift_info = [{"gift_name":"星巴克","gift_pic_url":"imgur.com/1","quantity":3},{"gift_name":"iPhone", "gift_pic_url":"imgur.com/2","quantity":2}]  # test data
-
     req_json = request.get_json(force=True)
     form_title = req_json['form_title']
     form_description = req_json['form_description']
@@ -321,6 +344,8 @@ def createForm():
     return jsonify(response)
 
 
+# 回傳問卷回答統計資訊
+# [Wei] 加入回傳關鍵字tf
 @ form_bp.route('/SurveyManagement/detail', methods=['GET'])
 def statisticForm():
     form_id = request.args.get('form_id')
@@ -331,27 +356,76 @@ def statisticForm():
         "message": ""
     }
 
-    if(len(results) == 0):
+    if(len(results['answercontent']) == 0):
         response["status"] = "fail"
         response["message"] = "The form does not exist or the number of the repliers is 0"
+
     else:
         response["status"] = "success"
-        questionNum = len(results[0]["answercontent"])
+        questionNum = len(results['questionType'])
         for i in range(questionNum):
+
             data_temp = {}  # return data based on question
             replies = []
-            for result in results:
+            for result in results['answercontent']:
+                
                 single_reply = {
                     "answer": result["answercontent"][i]["Answer"],
                     "user": result["user_student_id"]
                 }
                 replies.append(single_reply)
+            
+            if results['questionType'][i] == '簡答題':
+                reply_contents = []
+                for reply in replies:
+                    reply_contents.append(reply['answer'][0] if type(reply['answer']) == list else reply['answer'])
+
+                tokens = []
+                for content in reply_contents:
+                    tokens.extend(jieba.lcut(content))
+                keywordCount = [dict(collections.Counter(tokens))]
+            else:
+                keywordCount = []
+
             data_temp["replies"] = replies
-            data_temp["question"] = results[0]["answercontent"][i]["Question"]
+            data_temp['keywordCount'] = keywordCount
+            data_temp["question"] = results['answercontent'][0]["answercontent"][i]["Question"]
             response["data"].append(data_temp)
         response["message"] = "Get answer successfully"
 
     return jsonify(response)
+
+# @ form_bp.route('/SurveyManagement/detail', methods=['GET'])
+# def statisticForm():
+#     form_id = request.args.get('form_id')
+#     results = getAns(form_id)
+#     response = {
+#         "status": "",
+#         "data": [],
+#         "message": ""
+#     }
+
+#     if(len(results) == 0):
+#         response["status"] = "fail"
+#         response["message"] = "The form does not exist or the number of the repliers is 0"
+#     else:
+#         response["status"] = "success"
+#         questionNum = len(results[0]["answercontent"])
+#         for i in range(questionNum):
+#             data_temp = {}  # return data based on question
+#             replies = []
+#             for result in results:
+#                 single_reply = {
+#                     "answer": result["answercontent"][i]["Answer"],
+#                     "user": result["user_student_id"]
+#                 }
+#                 replies.append(single_reply)
+#             data_temp["replies"] = replies
+#             data_temp["question"] = results[0]["answercontent"][i]["Question"]
+#             response["data"].append(data_temp)
+#         response["message"] = "Get answer successfully"
+
+#     return jsonify(response)
 
 
 @ form_bp.route('/FormRespondentCheck', methods=["GET"])
@@ -370,8 +444,6 @@ def FormRespondentCheck():
         return "False"
 
 # 取得該問卷的題目與題型
-
-
 @ form_bp.route('/GetUserForm', methods=["GET"])
 def getUserForm():
     form_id = request.args.get('form_id')
