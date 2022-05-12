@@ -5,6 +5,8 @@ import { useEffect, useState,useRef } from 'react';
 import callrefresh from '../refresh.js';
 
 import { AiFillCamera } from "react-icons/ai";
+import {CropperModal} from './Components/CropperModal';
+import React from 'react';
 
 const Profile = () => {
     const [Profile, setProfile] = useState([]);
@@ -28,32 +30,34 @@ const Profile = () => {
         callGetUserProfile();
     }, []);
 
-    // const [image, setImage] = useState({img:null,display:null });
+    const [image, setImage] = useState({img:null,display:null });
     const inputFile = useRef(null);
-    // const onImageChange = (event) => {
-    //     if (event.target.files && event.target.files[0]) {
-    //         let img = event.target.files[0];
-    //         setImage({img:img,display:URL.createObjectURL(img)})
+    const onImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            let img = event.target.files[0];
+            setImage({img:img,display:URL.createObjectURL(img)})
+            // const formdata = new FormData() 
+            // formdata.append("image", image.img)
+            //上傳照片到imgur
+            // fetch('https://api.imgur.com/3/image/', {
+            //     method:"POST",
+            //     headers:{
+            //     Authorization: "Client-ID 5535a8facba4790"
+            //     },
+            //     body: formdata
+            // }).then(data => data.json())
+            // .then(data => {
+            //     //我們要的imgur網址
+            //     let imgururl = data.data.link
+            //     console.log(imgururl)
+            // })
+            setFile(event.target.files[0]);
+        }
+        event.target.value = null;
+    };
 
-    //         const formdata = new FormData() 
-    //         formdata.append("image", image.img)
-    
-    //         //上傳照片到imgur
-    //         fetch('https://api.imgur.com/3/image/', {
-    //             method:"POST",
-    //             headers:{
-    //             Authorization: "Client-ID 5535a8facba4790"
-    //             },
-    //             body: formdata
-    //         }).then(data => data.json())
-    //         .then(data => {
-    //             //我們要的imgur網址
-    //             let imgururl = data.data.link
-    //             console.log(imgururl)
-    //         })
-    //     }
-        
-    // };
+    const [file, setFile] = React.useState(null);
+	const [resizedImage, setResizedImage] = React.useState(null);
 
     return (
         <>
@@ -61,12 +65,16 @@ const Profile = () => {
             <div className="profile_card_container" align='center'>
                 <div className="profile_card_right">
                     <div className="top-section">
-                        {/* <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
-                        <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
-                        <img className="photo" src={Profile.user_pic_url|| process.env.PUBLIC_URL + 'dog.png'}/>
-                        <button className='camera' onClick={()=>inputFile.current.click()}>
-                            <AiFillCamera size='20px'/>
-                        </button>
+                    <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}} />
+                            {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
+                            <img className="photo" src={resizedImage || Profile.user_pic_url || process.env.PUBLIC_URL + 'default.png'} />
+                            <button className='camera' onClick={()=>inputFile.current.click()}>
+                                <AiFillCamera size='20px'/>
+                            </button>
+                            <CropperModal file={file} onConfirm={( croppedFile ) => { setResizedImage(window.URL.createObjectURL(croppedFile)); }} onCompleted={() => setFile(null)} />
+                        
+                        {/* <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
+                        
                         
                         <div>
                             <p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>
@@ -74,6 +82,7 @@ const Profile = () => {
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>
                     </div>
+                    
                     <hr className="solid"></hr>
                         
                     <div className="profile-content">

@@ -17,7 +17,7 @@ import {SurveyStatistics} from './Pages/SurveyStatistics';
 
 
 import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import { Container } from 'react-bootstrap';
 const App = () => {
   // const [form_id, setFormid] = useState(0);
 
@@ -40,6 +40,7 @@ const App = () => {
         <Route path='/SurveyStatistics' element={<SurveyStatistics/>}/>
       </Routes>
     </Router>
+    
   );
 }
 

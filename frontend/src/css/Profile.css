@@ -26,7 +26,8 @@
 }
 
 .top-section .photo{
-    width: 20%;
+    width: 210px;
+    height: 210px;
     border-radius: 50%;
     margin: 70px 5px 5px 60px;
 }
@@ -139,4 +140,5 @@ hr.solid {
     text-align: center;
     color: #FFFFFF;
 }
+
 /* profile page done */
