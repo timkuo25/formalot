@@ -9,7 +9,7 @@ const Card = ({ info, type }) => {
         prize = 'prize name';
         num_prize = 'x';
         image_path = info.form_pic_url;
-        title = info.form_title;
+        title = info.form_title.length > 30 ? info.form_title.substring(0, 30) + '...' : info.form_title;
         // due_time = info.form_end_date;
         due_time = new Intl.DateTimeFormat('zh-TW', {
             year: 'numeric', 

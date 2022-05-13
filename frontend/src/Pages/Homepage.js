@@ -10,7 +10,6 @@ const Homepage = () => {
     const [page, setPage] = useState(0);
     const [maxPage, setMaxPage] = useState(0);
     const [forms, setForms] = useState(null);
-
     
     useEffect(() => {
         const fetchData = async () => {
@@ -73,20 +72,9 @@ const Homepage = () => {
                         :<>
                             <div className='card-container'>
                                 {
-                                    [...Array(4)]
+                                    [...Array(8)]
                                     .map((_, i) => 8*(page-1) + i)
                                     .map(item => {
-                                        console.log(item);
-                                        return item > forms.length ? <Card key={item} info={null} type='home'/> : <Card key={item} info={forms[item]} type='home'/>
-                                    })
-                                }
-                            </div>
-                            <div className='card-container'>
-                                {
-                                    [...Array(4)]
-                                    .map((_, i) => 8*(page-1) + 4 + i)
-                                    .map(item => {
-                                        console.log(item);
                                         return item > forms.length ? <Card key={item} info={null} type='home'/> : <Card key={item} info={forms[item]} type='home'/>
                                     })
                                 }

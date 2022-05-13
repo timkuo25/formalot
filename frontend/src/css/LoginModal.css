@@ -101,4 +101,10 @@
     text-align: center;
 }
 
+@media only screen and (max-width: 600px) {
+    .modalContainer {
+      width: 80%;
+    }
+}
+
 /* End LoginModal Components --------------------------*/

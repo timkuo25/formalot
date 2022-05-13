@@ -71,6 +71,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     font-size: 2em;
     font-weight: 900;
     padding: 2em;
@@ -92,7 +93,7 @@
 }
 
 .latest-q-container {
-    width: 100%;
+    width: 90%;
     height: auto;
 }
 
@@ -129,6 +130,7 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
 }
 
