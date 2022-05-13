@@ -22,6 +22,7 @@ body {
   font-family: 14px 'Montserrat', Helvetica, Arial, sans-serif;
   background: var(--theme-light-grey);
   overflow: visible;
+  overflow-y: auto;
   color: #000;
 }
 
@@ -323,8 +324,4 @@ h3.manage-header {
 }
 
 
-@media only screen and (max-width: 600px) {
-  html {
-    width: 100vw;
-  }
-}
+

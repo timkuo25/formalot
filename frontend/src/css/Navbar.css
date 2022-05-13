@@ -7,6 +7,7 @@
     box-shadow: var(--shadow);
     transition: all .7s ease-in;
     background-color: var(--theme-extra-light);
+    position: relative;
     /* border-bottom: var(--theme-dark-purple) solid 4px; */
 }
 
@@ -36,11 +37,45 @@ button:hover{
 }
 
 .navbar {
-    flex-grow: 0.2;
+    width: 300px;
     display: flex;
     justify-content: center;
     height: 6vh;
     transform: translateX(-5vw);  
+}
+
+.toggle-button {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+}
+
+.toggle-button > .bar {
+    height: 3px;
+    width: 100%;
+    background-color: var(--theme-dark-purple);
+    border-radius: 10px;
+}
+
+.navbar-links {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-links-mobile {
+    width: 100%;
+    height: 200px;
+    display: none;
+    flex-direction: column;
+    background-color: var(--theme-extra-light);
+    position: absolute;
 }
 
 .nav-option {
@@ -74,11 +109,11 @@ button:hover{
     display: none;
     position: absolute;
     top: -3em;
-    width: 6vw;
-    height: 10vh;
+    width: 6em;
+    height: 10em;
     background-color: var(--theme-extra-light);
     box-shadow: var(--shadow);
-    transform: translateY(10vh);
+    transform: translateY(4.5em);
 }
 
 .user-dropdown:hover .user-dropdown-options {
@@ -99,4 +134,24 @@ button:hover{
 
 .user-dropdown-options > *:hover {
     color: var(--theme-purple);
+}
+
+@media only screen and (max-width: 600px) {
+    .toggle-button {
+        display: flex;
+    }
+
+    .navbar-links {
+        display: none;
+    }
+
+    .user-dropdown:hover .user-dropdown-options{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .navbar-links-mobile {
+        display: none;
+    }
 }
