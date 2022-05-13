@@ -1,4 +1,4 @@
-import '../../css/Navbar.css';
+    import '../../css/Navbar.css';
 import { LoginModal } from './LoginModal';
 import React, { useState } from 'react';
 import { useNavigate, NavLink } from "react-router-dom";
