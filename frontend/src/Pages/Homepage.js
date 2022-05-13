@@ -1,7 +1,6 @@
 import '../css/Homepage.css';
 import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
-import { MobileNav } from './Components/MobileNav';
 import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
 import ReactLoading from "react-loading";
@@ -40,7 +39,7 @@ const Homepage = () => {
     
     return (
         <>
-            {window.innerWidth > 600 ? <Navbar /> : <MobileNav/>}
+            <Navbar />
             <section className='call-to-action'>
                 {/* <img className='main-image' src={process.env.PUBLIC_URL + 'LandingPage.svg'} alt=''/> */}
                 <div className='description'>

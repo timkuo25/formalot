@@ -17,7 +17,7 @@
 html,
 body {
   height: 100%;
-  width: 100vw;
+  width: 100%;
   margin: 0;
   font-family: 14px 'Montserrat', Helvetica, Arial, sans-serif;
   background: var(--theme-light-grey);
@@ -323,4 +323,8 @@ h3.manage-header {
 }
 
 
-
+@media only screen and (max-width: 600px) {
+  html {
+    width: 100vw;
+  }
+}

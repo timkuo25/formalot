@@ -92,7 +92,7 @@
 }
 
 .latest-q-container {
-    width: 90em;
+    width: 100%;
     height: auto;
 }
 
@@ -129,6 +129,7 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
+    width: 100%;
 }
 
 .page-div {
@@ -151,7 +152,6 @@ input::-webkit-inner-spin-button {
 
 
 @media only screen and (max-width: 600px) {
-
     .call-to-action {
         height: 100vh;
         flex-direction: column;
@@ -193,6 +193,7 @@ input::-webkit-inner-spin-button {
 
     .explore-button {
         margin-left: 0em;
+        margin-bottom: 1em;
     }
 
     .make-survey-button {
@@ -202,6 +203,12 @@ input::-webkit-inner-spin-button {
     .latest-q-container {
         display: flex;
         flex-direction: column;
+        align-items: center;
         width: 80vw;
+    }
+
+    .card-container {
+        flex-direction: column;
+        width: 80%;
     }
 }
