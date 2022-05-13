@@ -24,9 +24,9 @@ const Card = ({ info, type }) => {
 
     if (type === 'explore'){
         prize = 'prize name';
-        num_prize = 'x';
+        num_prize = info.num_gift;
         image_path = info.form_pic_url;
-        title = 'title';
+        title = info.form_title;
         due_time = info.form_end_date;
         lottery_time = 'lottery date';
     }

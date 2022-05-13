@@ -1,4 +1,10 @@
 /* Explore page --------------------------*/
+.explore {
+    display: flex;
+    justify-content: center;
+
+}
+
 .explore-title{
     display: flex;
     justify-content: center;
@@ -9,12 +15,24 @@
 }
 
 .tag-select {
-    width: 40em;
-    box-shadow: 0px 1px 2.5px 1px #dadada;
+    width: 20em;
+    /* box-shadow: 0px 1px 2.5px 1px #dadada; */
+    margin-left: 10%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--theme-extra-light);
+    background-color: var(--theme-light-grey);
+}
+
+.tag-select > select {
+    height: 3em;
+    margin-left: 1em;
+}
+
+.tag-select > input{
+    height: 3em;
+    margin-left: 1em;
+    width: 10em;
 }
 
 .tag-item{
@@ -27,3 +45,5 @@
     justify-content: center;
     cursor: pointer;
 }
+
+
