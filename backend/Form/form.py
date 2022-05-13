@@ -6,8 +6,11 @@ import datetime
 import jieba
 import collections
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_apscheduler import APScheduler
+
 
 form_bp = Blueprint('form', __name__)
+scheduler = APScheduler()
 
 
 # DAO
@@ -64,7 +67,8 @@ def deleteForm(form_id):
         cursor.execute(query, [form_id])
         db.commit()
         return True
-    except:
+    except psycopg2.DatabaseError as error:
+        print(error)
         db.rollback()
         return False
     finally:
@@ -156,55 +160,39 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         db.close()
 
 
-# [Wei] 加入回傳QuestionType資訊
 def getAns(form_id):
     db = get_db()
     cursor1 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cursor2 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        query = '''SELECT UserForm.answercontent, UserForm.user_student_id
+        query_ans = '''SELECT UserForm.answercontent, UserForm.user_student_id
         FROM UserForm
         WHERE UserForm.form_form_id = %s;
         '''
-        cursor1.execute(query, [form_id])
-        db.commit()
+        cursor1.execute(query_ans, [form_id])
 
-        cursor2.execute("""
+        query_question_type = '''
         SELECT questioncontent 
         FROM Form 
         WHERE form_id = %s;
-        """, [form_id])
+        '''
+        cursor2.execute(query_question_type, [form_id])
+
+        db.commit()
 
         questionType = []
-        for question in  cursor2.fetchall()[0]['questioncontent']:
+        for question in cursor2.fetchall()[0]['questioncontent']:
             questionType.append(question['Type'])
-        
-        response = {"answercontent":cursor1.fetchall(),
-                    "questionType":questionType}
+
+        response = {"answercontent": cursor1.fetchall(),
+                    "questionType": questionType}
+
         return response
     except:
         db.rollback()
         return False
     finally:
-        db.close() 
-
-
-# def getAns(form_id):
-#     db = get_db()
-#     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-#     try:
-#         query = '''SELECT UserForm.answercontent, UserForm.user_student_id
-#         FROM UserForm
-#         WHERE UserForm.form_form_id = %s;
-#         '''
-#         cursor.execute(query, [form_id])
-#         db.commit()
-#         return cursor.fetchall()
-#     except:
-#         db.rollback()
-#         return False
-#     finally:
-#         db.close()
+        db.close()
 
 
 def searchResponseByID(student_id, form_id):
@@ -221,7 +209,6 @@ def searchResponseByID(student_id, form_id):
         return cursor.fetchall()
     except:
         db.rollback()
-        # return 'Failed to retrieve member.'
     finally:
         db.close()
 
@@ -245,6 +232,44 @@ def addResponse(student_id, form_id, answer_time, answercontent):
         db.close()
 
 
+def updateWaitForDraw():
+    db = get_db()
+    cursor_check = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cursor_set = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    try:
+        # e.g. Current time is 20:00, Select form_end_date between 20:00 to 20:59
+        query_check = '''
+        SET timezone to 'Asia/Taipei';
+        SELECT form_id
+        FROM form
+        WHERE form_end_date BETWEEN date_trunc('hour', current_timestamp) AND date_trunc('minute', current_timestamp + interval '59 mins');
+        '''
+        cursor_check.execute(query_check)
+        results = cursor_check.fetchall()
+
+        query_set = '''
+        UPDATE Form
+        SET form_run_state = 'WaitForDraw'
+        WHERE form_id = (%s)
+        '''
+
+        for i in results:
+            form_id = i['form_id']
+            cursor_set.execute(query_set, [form_id])
+            print('Form ' + str(form_id) +
+                  ' is set to WaitForDraw.')
+
+        db.commit()
+        return True
+    except psycopg2.DatabaseError as error:
+        print(error)
+        db.rollback()
+        return False
+    finally:
+        db.close()
+
+
 # get jwt function
 @jwt_required()
 def protected():
@@ -253,7 +278,9 @@ def protected():
 
 
 # route
-@ form_bp.route('/FillForm', methods=['POST'])
+
+# 填寫問卷
+@form_bp.route('/FillForm', methods=['POST'])
 def FillForm():
     student_id = protected()
     req_json = request.get_json(force=True)
@@ -263,10 +290,10 @@ def FillForm():
         "message": ""
     }
     rows = searchResponseByID(student_id, form_id)
-    print(rows)
+    # print(rows)
     if rows != []:
         response["status"] = "error"
-        response["message"] = "您已填寫過此表單"
+        response["message"] = "您已填寫過此問卷"
     else:
         answercontent = json.dumps(
             req_json["answercontent"], ensure_ascii=False)
@@ -281,7 +308,7 @@ def FillForm():
     return jsonify(response)
 
 
-@ form_bp.route('/SurveyManagement', methods=['GET'])
+@form_bp.route('/SurveyManagement', methods=['GET'])
 def returnForm():
     student_id = protected()
     response = [{'replied': replied(student_id),
@@ -289,7 +316,8 @@ def returnForm():
     return jsonify(response)
 
 
-@ form_bp.route('/SurveyManagement', methods=["PUT"])
+# 發布者刪除或關閉問卷
+@form_bp.route('/SurveyManagement', methods=["PUT"])
 def modifyForm():
     req_json = request.get_json()
     form_id = req_json["form_id"]
@@ -307,14 +335,16 @@ def modifyForm():
             response_return["message"] = "Cannot delete form"
     elif action == "close":
         form_close_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        form_draw_date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+        form_draw_date = (datetime.datetime.now(
+        ) + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
         closeForm(form_id, form_close_date, form_draw_date)
         response_return["status"] = "success"
         response_return["message"] = "Closed form"
     return jsonify(response_return)
 
 
-@ form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
+# 建立問卷
+@form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
 def createForm():
 
     req_json = request.get_json(force=True)
@@ -345,8 +375,7 @@ def createForm():
 
 
 # 回傳問卷回答統計資訊
-# [Wei] 加入回傳關鍵字tf
-@ form_bp.route('/SurveyManagement/detail', methods=['GET'])
+@form_bp.route('/SurveyManagement/detail', methods=['GET'])
 def statisticForm():
     form_id = request.args.get('form_id')
     results = getAns(form_id)
@@ -368,17 +397,18 @@ def statisticForm():
             data_temp = {}  # return data based on question
             replies = []
             for result in results['answercontent']:
-                
+
                 single_reply = {
                     "answer": result["answercontent"][i]["Answer"],
                     "user": result["user_student_id"]
                 }
                 replies.append(single_reply)
-            
+
             if results['questionType'][i] == '簡答題':
                 reply_contents = []
                 for reply in replies:
-                    reply_contents.append(reply['answer'][0] if type(reply['answer']) == list else reply['answer'])
+                    reply_contents.append(reply['answer'][0] if type(
+                        reply['answer']) == list else reply['answer'])
 
                 tokens = []
                 for content in reply_contents:
@@ -395,40 +425,8 @@ def statisticForm():
 
     return jsonify(response)
 
-# @ form_bp.route('/SurveyManagement/detail', methods=['GET'])
-# def statisticForm():
-#     form_id = request.args.get('form_id')
-#     results = getAns(form_id)
-#     response = {
-#         "status": "",
-#         "data": [],
-#         "message": ""
-#     }
 
-#     if(len(results) == 0):
-#         response["status"] = "fail"
-#         response["message"] = "The form does not exist or the number of the repliers is 0"
-#     else:
-#         response["status"] = "success"
-#         questionNum = len(results[0]["answercontent"])
-#         for i in range(questionNum):
-#             data_temp = {}  # return data based on question
-#             replies = []
-#             for result in results:
-#                 single_reply = {
-#                     "answer": result["answercontent"][i]["Answer"],
-#                     "user": result["user_student_id"]
-#                 }
-#                 replies.append(single_reply)
-#             data_temp["replies"] = replies
-#             data_temp["question"] = results[0]["answercontent"][i]["Question"]
-#             response["data"].append(data_temp)
-#         response["message"] = "Get answer successfully"
-
-#     return jsonify(response)
-
-
-@ form_bp.route('/FormRespondentCheck', methods=["GET"])
+@form_bp.route('/FormRespondentCheck', methods=["GET"])
 def FormRespondentCheck():
     response = {
         "has_responded": 0
@@ -436,15 +434,16 @@ def FormRespondentCheck():
     student_id = protected()
     form_id = request.args.get('form_id')
     rows = searchResponseByID(student_id, form_id)
-    print(rows)
+    # print(rows)
     if rows != []:
         return "True"
 
     else:
         return "False"
 
+
 # 取得該問卷的題目與題型
-@ form_bp.route('/GetUserForm', methods=["GET"])
+@form_bp.route('/GetUserForm', methods=["GET"])
 def getUserForm():
     form_id = request.args.get('form_id')
     db = get_db()
@@ -461,3 +460,13 @@ def getUserForm():
     db.close()
 
     return jsonify(result)
+
+
+# 檢查問卷end_date是否截止並設為WaitForDraw
+@form_bp.route('/AutoWaitForDraw', methods=["GET"])
+def autoWaitForDraw():
+    scheduler.add_job(id='AutoWaitForDraw',
+                      func=updateWaitForDraw, trigger="cron", minute=0)
+    scheduler.start()
+
+    return 'Auto update WaitForDraw is running.'
