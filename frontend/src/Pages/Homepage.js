@@ -4,12 +4,15 @@ import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
 import ReactLoading from "react-loading";
+import { LoginModal } from './Components/LoginModal';
 
 
 const Homepage = () => {
     const [page, setPage] = useState(0);
     const [maxPage, setMaxPage] = useState(0);
     const [forms, setForms] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+
     
     useEffect(() => {
         const fetchData = async () => {
@@ -35,10 +38,19 @@ const Homepage = () => {
         cursor: page === maxPage ? null : 'pointer',
         opacity: page === maxPage ? '0.2' : '1',
     }
-    
+
+    const makeForm = ()=>{
+        if(!(localStorage.getItem('jwt'))){
+            setModalOpen(true)
+        }
+        else{
+            window.location.href = "/MakeSurvey"
+        }
+    }    
     return (
         <>
             <Navbar />
+            {modalOpen && <LoginModal closeModal={setModalOpen} />}
             <section className='call-to-action'>
                 {/* <img className='main-image' src={process.env.PUBLIC_URL + 'LandingPage.svg'} alt=''/> */}
                 <div className='description'>
@@ -48,7 +60,7 @@ const Homepage = () => {
                     </div>
                     <div className='cta-button'>
                         <button className='explore-button' onClick={()=>{window.location.href = "/explore"}}>探索抽獎</button>
-                        <button className='make-survey-button' onClick={()=>{window.location.href = "/MakeSurvey"}}>製作問卷</button>
+                        <button className='make-survey-button' onClick={makeForm}>製作問卷</button>
                     </div>
                 </div>
             </section>

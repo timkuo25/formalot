@@ -74,7 +74,7 @@ const MakeSurvey2 = () => {
             id:gift_info.length,
             gift_name:"",
             gift_pic_url:"",
-            quantity:""
+            quantity:0
           }
           setGiftInfo((gift_info.concat(gift)));
         }
@@ -93,7 +93,7 @@ const MakeSurvey2 = () => {
         id:gift_info.length,
         gift_name:"",
         gift_pic_url:"",
-        quantity:""
+        quantity:0
       }
       setGiftInfo((gift_info.concat(gift)));
     }
@@ -133,11 +133,28 @@ const MakeSurvey2 = () => {
     }
 
 
-    const onImageChange = async(event) => {
+    const onImageChange = (event) => {
       if (event.target.files && event.target.files[0]) {
         //console.log(event.target.files[0])
         let img = event.target.files[0];
         setImage({img:img,display:URL.createObjectURL(img)})
+
+        const formdata = new FormData() 
+        formdata.append("image", img)
+
+        fetch('https://api.imgur.com/3/image/', {
+          method:"POST",
+          headers:{
+            Authorization: "Client-ID 5535a8facba4790"
+          },
+          body: formdata
+        }).then(data => data.json())
+        .then(data => {
+          //我們要的imgur網址
+          let imgururl = data.data.link
+          console.log(imgururl)
+          setImgurURL(imgururl)
+        })
       }
     };
 
@@ -161,52 +178,75 @@ const MakeSurvey2 = () => {
 
     
 
-    const handleSubmit =()=>{
+    const handleSubmit = async()=>{
+
       let surveycontent = window.sessionStorage.getItem('form')
       surveycontent = JSON.parse(surveycontent)
-      const formdata = new FormData() 
-      formdata.append("image", image.img)
 
-      //上傳照片到imgur
-      fetch('https://api.imgur.com/3/image/', {
-        method:"POST",
+
+
+
+
+
+      let dateForlotbeforeProcess = DateForLottery.getTime()
+      let date = new Date(dateForlotbeforeProcess);
+      let dataValues = [
+          date.getFullYear(),
+          date.getMonth() + 1,
+          date.getDate(),
+          date.getHours(),
+          date.getMinutes(),
+          date.getSeconds(),
+        ];
+      let dateForlot  = dataValues[0]+'-'+dataValues[1]+'-'+dataValues[2]+' '+dataValues[3]+":"+ dataValues[4]+":"+dataValues[5]
+
+
+
+      let dateForEndbeforeProcess = DateForFormEnd.getTime()
+      let dateEnd = new Date(dateForEndbeforeProcess);
+      let dataValuesEnd = [
+        dateEnd.getFullYear(),
+        dateEnd.getMonth() + 1,
+        dateEnd.getDate(),
+        dateEnd.getHours(),
+        dateEnd.getMinutes(),
+        dateEnd.getSeconds(),
+        ];
+      let dateForEnd  = dataValuesEnd[0]+'-'+dataValuesEnd[1]+'-'+dataValuesEnd[2]+' '+dataValuesEnd[3]+":"+ dataValuesEnd[4]+":"+dataValuesEnd[5]
+      console.log(dateForEnd)
+
+      let surveyData = {
+        form_title: surveycontent.form_title,
+        form_description: surveycontent.form_description,
+        questioncontent: surveycontent.questioncontent,
+        form_end_date: dateForEnd,
+        form_draw_date: dateForlot,
+        form_pic_url: imgurURL,
+        form_gift_type: giftType,
+        form_field_type: formType,
+        gift_info:gift_info
+      }
+
+
+      console.log(surveyData)
+      const result =  await fetch("http://127.0.0.1:5000/SurveyManagement/new", {
+        method: "POST",
         headers:{
-          Authorization: "Client-ID 5535a8facba4790"
-        },
-        body: formdata
-      }).then(data => data.json())
-      .then(data => {
-        //我們要的imgur網址
-        let imgururl = data.data.link
-        console.log(imgururl)
-
-        let surveyData = {
-          form_title: surveycontent.form_title,
-          form_description: surveycontent.form_description,
-          questioncontent: surveycontent.questioncontent,
-          form_end_date: DateForFormEnd,
-          form_draw_date: DateForLottery,
-          form_pic_url: imgururl,
-          form_gift_type: giftType,
-          form_field_type: formType,
-          gift_info:gift_info
-        }
-
-
-        /*const result = fetch("http://127.0.0.1:5000/SurveyManagement/new", {
-          method: "POST",
-          body: surveyData,
-        });
-        let resJson = result.json();
-        console.log(resJson);
-        alert(resJson.message);*/
-        
-        console.log(surveyData)
-      })
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      },
+        body: JSON.stringify(surveyData),
+      });
+      console.log(result);
       
-      window.sessionStorage.setItem('form', '');
-      window.sessionStorage.setItem('form_info', '');
-      //window.location.href = "/";//暫時用jS去寫換頁
+      if (result.status===200){
+        window.sessionStorage.setItem('form', '');
+        window.sessionStorage.setItem('form_info', '');
+        alert("問卷製作成功")
+        window.location.href = "/";
+      }
+
+
+      //
     }
 
     const changeGiftName = evt =>{
@@ -233,7 +273,7 @@ const MakeSurvey2 = () => {
     console.log(evt.target.id)
     let id = Number(evt.target.id)
     let tempArr = gift_info
-    tempArr[id].quantity=evt.target.value
+    tempArr[id].quantity=Number(evt.target.value)
     setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
         
       setGiftInfo(tempArr)
@@ -270,8 +310,6 @@ const deleteGift =evt=>{
   
 }
 
-
-
     return (
         <>
         <Navbar/>
@@ -296,11 +334,11 @@ const deleteGift =evt=>{
                     <h3 style={{textAlign: "center"}}>截止與抽獎時間</h3>
                     <h4>問卷截止時間</h4>
                     <p>
-                    <DateTimePicker value={DateForFormEnd} onChange={(date:Date) => setDateForFormEnd(date)}  className='input-columns' />
+                    <DateTimePicker value={DateForFormEnd} onChange={(date) => setDateForFormEnd(date)}   format={"y-MM-dd h:mm:ss a"} className='input-columns' />
                     </p>
                     <h4>抽獎時間</h4>
                     <p>
-                    <DateTimePicker value={DateForLottery} onChange={(date:Date) => setDateForLottery(date)} className='input-columns'/>
+                    <DateTimePicker value={DateForLottery} onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns'/>
                     </p>
                     <h4>問卷縮圖圖片</h4>
                     <div>

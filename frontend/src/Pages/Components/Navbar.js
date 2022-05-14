@@ -33,7 +33,7 @@ const Navbar = () => {
                         </div>
                         <div className='navbar-links'>
                             <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore'> 探索 </NavLink>
-                            <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey'> 製作 </NavLink>
+                    
                             <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction'> 說明 </NavLink>
                             <div className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
                                 User

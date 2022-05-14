@@ -160,7 +160,7 @@ const MakeSurvey = () =>{
         const msg = {
             id:surveyQDict.length,
             Question:"Question",
-            Type: '多選題',
+            Type: '複選題',
             Options:['選項 1', '選項 2']
         };
         setSurveyQDict(surveyQDict.concat(msg))
