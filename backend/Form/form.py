@@ -28,7 +28,8 @@ def replied(student_id):
         cursor.execute(query, [student_id])
         db.commit()
         return cursor.fetchall()
-    except:
+    except psycopg2.DatabaseError as error:
+        print(error)
         db.rollback()
         return 'failed to retrieve form.'
     finally:
@@ -36,8 +37,6 @@ def replied(student_id):
 
 
 def created(student_id):
-    # input: User.student_id
-    # output: Form.{form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state}
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
@@ -49,7 +48,8 @@ def created(student_id):
         cursor.execute(query, [student_id])
         db.commit()
         return cursor.fetchall()
-    except:
+    except psycopg2.DatabaseError as error:
+        print(error)
         db.rollback()
         return 'failed to retrieve form.'
     finally:
@@ -62,11 +62,11 @@ def deleteForm(form_id):
     try:
         query = '''UPDATE Form
         SET form_delete_state = '1'
-        WHERE form_id = (%s) AND form_run_state = 'Closed'
+        WHERE form_run_state = 'Closed' AND form_id = (%s)
         '''
         cursor.execute(query, [form_id])
         db.commit()
-        return True
+        return cursor.rowcount  # check effected row
     except psycopg2.DatabaseError as error:
         print(error)
         db.rollback()
@@ -151,11 +151,10 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
 
         db.commit()
         return True
-
     except psycopg2.DatabaseError as error:
+        print(error)
         db.rollback()
-        return error
-
+        return False
     finally:
         db.close()
 
@@ -188,7 +187,8 @@ def getAns(form_id):
                     "questionType": questionType}
 
         return response
-    except:
+    except psycopg2.DatabaseError as error:
+        print(error)
         db.rollback()
         return False
     finally:
@@ -207,8 +207,10 @@ def searchResponseByID(student_id, form_id):
         cursor.execute(query, [form_id, student_id])
         db.commit()
         return cursor.fetchall()
-    except:
+    except psycopg2.DatabaseError as error:
+        print(error)
         db.rollback()
+        return False
     finally:
         db.close()
 
@@ -228,6 +230,7 @@ def addResponse(student_id, form_id, answer_time, answercontent):
     except psycopg2.DatabaseError as error:
         db.rollback()
         print(error)
+        return False
     finally:
         db.close()
 
@@ -308,6 +311,7 @@ def FillForm():
     return jsonify(response)
 
 
+# Return replied and created forms by user
 @form_bp.route('/SurveyManagement', methods=['GET'])
 def returnForm():
     student_id = protected()
@@ -316,7 +320,7 @@ def returnForm():
     return jsonify(response)
 
 
-# 發布者刪除或關閉問卷
+# Creator close or delete forms
 @form_bp.route('/SurveyManagement', methods=["PUT"])
 def modifyForm():
     req_json = request.get_json()
@@ -327,23 +331,30 @@ def modifyForm():
         "message": ""
     }
     if action == "delete":
-        if deleteForm(form_id):
+        effected_row = deleteForm(form_id)
+        if effected_row == 1:
             response_return["status"] = "success"
-            response_return["message"] = "Deleted form"
+            response_return["message"] = "Deleted form."
+        elif effected_row == 0:
+            response_return["status"] = "fail"
+            response_return["message"] = "Please make sure the form is closed."
         else:
             response_return["status"] = "fail"
-            response_return["message"] = "Cannot delete form"
+            response_return["message"] = "DB error or cannot found result."
     elif action == "close":
         form_close_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         form_draw_date = (datetime.datetime.now(
         ) + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
-        closeForm(form_id, form_close_date, form_draw_date)
-        response_return["status"] = "success"
-        response_return["message"] = "Closed form"
+        if closeForm(form_id, form_close_date, form_draw_date):
+            response_return["status"] = "success"
+            response_return["message"] = "Closed form."
+        else:
+            response_return["status"] = "fail"
+            response_return["message"] = "DB error or cannot found result."
     return jsonify(response_return)
 
 
-# 建立問卷
+# Create form
 @form_bp.route('/SurveyManagement/new', methods=['GET', 'POST'])
 def createForm():
 
@@ -374,7 +385,7 @@ def createForm():
     return jsonify(response)
 
 
-# 回傳問卷回答統計資訊
+# Return replied answers and term frequency of form
 @form_bp.route('/SurveyManagement/detail', methods=['GET'])
 def statisticForm():
     form_id = request.args.get('form_id')
@@ -426,6 +437,7 @@ def statisticForm():
     return jsonify(response)
 
 
+# Check if the user has already replied to the form
 @form_bp.route('/FormRespondentCheck', methods=["GET"])
 def FormRespondentCheck():
     response = {
@@ -442,7 +454,7 @@ def FormRespondentCheck():
         return "False"
 
 
-# 取得該問卷的題目與題型
+# Get questions and question types of form
 @form_bp.route('/GetUserForm', methods=["GET"])
 def getUserForm():
     form_id = request.args.get('form_id')
@@ -462,11 +474,19 @@ def getUserForm():
     return jsonify(result)
 
 
-# 檢查問卷end_date是否截止並設為WaitForDraw
+# Check if form end date has expired and set form run state to WaitForDraw
 @form_bp.route('/AutoWaitForDraw', methods=["GET"])
 def autoWaitForDraw():
-    scheduler.add_job(id='AutoWaitForDraw',
-                      func=updateWaitForDraw, trigger="cron", minute=0)
-    scheduler.start()
+    response = {
+        "status": "",
+        "message": ""
+    }
+    if scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="cron", minute=0):
+        scheduler.start()
+        response["status"] = 'success'
+        response["message"] = 'Auto update WaitForDraw is running.'
+    else:
+        response["status"] = 'fail'
+        response["message"] = 'Scheduler error.'
 
-    return 'Auto update WaitForDraw is running.'
+    return jsonify(response)
