@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from db.db import get_db
 from flask import Blueprint, request, jsonify
 import psycopg2.extras  # get the results in form of dictionary
@@ -74,18 +75,51 @@ def deleteForm(form_id):
     finally:
         db.close()
 
+def getFormById(form_id):
+    # input: form_id
+    # output: Form.{form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state}
+    db = get_db()
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    try:
+        query = """
+        SELECT form_draw_date
+        FROM Form 
+        WHERE form_id = %s;
+        """
+        cursor.execute(query, [form_id])
+        db.commit()
+        return cursor.fetchone()
+    except:
+        db.rollback()
+        return 'failed to retrieve form.'
+    finally:
+        db.close()
 
 def closeForm(form_id, form_close_date, form_draw_date):
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    result = getFormById(form_id)
+    # print(result['form_draw_date'])
+    # if result
     try:
-        query = '''UPDATE Form
-        SET form_run_state='Closed', form_end_date = (%s), form_draw_date = (%s)
-        WHERE form_id = (%s)
-        '''
-        cursor.execute(query, [form_close_date, form_draw_date, form_id])
-        db.commit()
-        return True
+        if result['form_draw_date'] == None:
+            query = '''UPDATE Form
+            SET form_run_state='Closed', form_end_date = (%s)
+            WHERE form_id = (%s)
+            '''
+            cursor.execute(query, [form_close_date, form_id])
+            db.commit()
+            return True
+
+        else:
+            query = '''UPDATE Form
+            SET form_run_state='WaitForDraw', form_end_date = (%s), form_draw_date = (%s)
+            WHERE form_id = (%s)
+            '''
+            cursor.execute(query, [form_close_date, form_draw_date, form_id])
+            db.commit()
+            return True
+
     except psycopg2.DatabaseError as error:
         print(error)
         db.rollback()

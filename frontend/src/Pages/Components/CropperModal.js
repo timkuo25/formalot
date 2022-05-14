@@ -3,6 +3,7 @@ import * as PropTypes from 'prop-types';
 import ReactCropper from 'react-cropper';
 import { Button, Modal, Row, Col } from 'react-bootstrap';
 import Slider from 'rc-slider';
+import callrefresh from '../../refresh.js';
 
 // Types
 import {Cropper, Object,} from 'cropperjs';
@@ -132,18 +133,57 @@ function CropperModal ( props: Props ) {
         const formdata = new FormData() 
         formdata.append("image", file)
 
-        fetch('https://api.imgur.com/3/image/', {
-                method:"POST",
-                headers:{
+        // fetch('https://api.imgur.com/3/image/', {
+        //         method:"POST",
+        //         headers:{
+        //         Authorization: "Client-ID 5535a8facba4790"
+        //         },
+        //         body: formdata
+        //     }).then(data => data.json())
+        //     .then(data => {
+        //         //我們要的imgur網址
+        //         let imgururl = data.data.link
+        //         console.log(imgururl)
+		// 		// return imgururl
+        //     })
+
+		e.preventDefault();
+		const imgururl_result = await fetch('https://api.imgur.com/3/image/', {
+            method:"POST",
+            headers:{
                 Authorization: "Client-ID 5535a8facba4790"
-                },
-                body: formdata
-            }).then(data => data.json())
-            .then(data => {
-                //我們要的imgur網址
-                let imgururl = data.data.link
-                console.log(imgururl)
-            })
+            },
+            body: formdata
+        })
+        
+        if(imgururl_result.status === 429){
+            var imgururl = ""
+        }else{
+            let data = await imgururl_result.json();
+            var imgururl = data.data.link;
+			console.log(imgururl)
+            // return imgururl;
+        }
+
+		e.preventDefault();
+        const result = await fetch("http://127.0.0.1:5000/UpdateMemberPhoto", {
+            method: "PUT",
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+			},
+            body: JSON.stringify({
+                pic_url: imgururl
+            }),
+        });
+		console.log(result.status);
+        if(result.status === 401){
+            callrefresh();
+        }else{
+			let resJson = await result.json();
+			console.log(resJson);
+			alert(resJson.message);
+        }
+
 	};
 
     

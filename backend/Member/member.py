@@ -44,10 +44,10 @@ def updateMember(password_hash, student_id):
         '''
         cursor.execute(query, (password_hash, student_id))
         db.commit()
-        # return 'Succeed in adding member.'
+        # return 'Succeed in updating member password.'
     except:
         db.rollback()
-        # return 'Failed to add member.'
+        # return 'Failed to update member password.'
     finally:
         db.close()
 
@@ -73,10 +73,28 @@ def updateMemberInfo(Info, student_id, diffinfo):
 
         cursor.execute(query, (Info, student_id))
         db.commit()
-        # return 'Succeed in adding member.'
+        # return 'Succeed in updating member info.'
     except:
         db.rollback()
-        # return 'Failed to add member.'
+        # return 'Failed to update member info.'
+    finally:
+        db.close()
+
+def updateMemberphoto(user_pic_url, student_id):
+    db = get_db()
+    cursor = db.cursor()
+    try:
+        query = '''
+        UPDATE Users SET user_pic_url = (%s)
+        WHERE student_id = (%s);
+        '''
+        cursor.execute(query, (user_pic_url, student_id))
+        db.commit()
+        # return 'Succeed in  updating member photo.'
+    except psycopg2.DatabaseError as error:
+        db.rollback()
+        print(error)
+        # return 'Failed to update member photo.'
     finally:
         db.close()
 
@@ -283,6 +301,19 @@ def GetUserProfile():
     id = protected()
     rows = getMemberByStudentId(id)
     return jsonify(rows)
+
+@members_bp.route('/UpdateMemberPhoto', methods=["PUT"])
+def UpdateMemberPhoto():
+    response_return = {
+        "message": ""
+    }
+    req_json = request.get_json(force=True)
+    pic_url = req_json["pic_url"]
+    id = protected()
+    updateMemberphoto(pic_url, id)
+    
+    response_return["message"] = "使用者照片更新成功"
+    return jsonify(response_return)
 
 def password_check(password, password2):
     if password == password2:
