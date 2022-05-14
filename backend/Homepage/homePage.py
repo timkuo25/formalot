@@ -7,6 +7,16 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 homePage_bp = Blueprint('homePage', __name__)
 
+@homePage_bp.after_request
+def after_request(response):
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    header['Access-Control-Allow-Headers'] = '*'
+    header['Access-Control-Allow-Methods'] = '*'
+    header['Content-type'] = 'application/json'
+    return response
+
+
 # DAO
 def formRecommendation():
 
