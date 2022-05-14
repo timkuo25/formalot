@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from db.db import get_db
 from flask import Blueprint, request, jsonify
 import psycopg2.extras  # get the results in form of dictionary
