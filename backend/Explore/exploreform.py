@@ -16,7 +16,7 @@ def getForm(KeywordType, Keyword):
     try:
         if KeywordType == "tag":
             query = """
-            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, Tag.tag_name, Field.field_name, COUNT(Gift.form_form_id) AS num_gift
+            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_draw_date, Form.form_pic_url, Tag.tag_name, Field.field_name, COUNT(Gift.form_form_id) AS num_gift
             FROM Form
             LEFT JOIN FormTag
             ON Form.form_id = FormTag.form_form_id
@@ -33,7 +33,7 @@ def getForm(KeywordType, Keyword):
             """
         elif KeywordType == "field":
             query = """
-            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url, Tag.tag_name, Field.field_name, COUNT(Gift.form_form_id) AS num_gift
+            SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_draw_date, Form.form_pic_url, Tag.tag_name, Field.field_name, COUNT(Gift.form_form_id) AS num_gift
             FROM Form
             LEFT JOIN FormTag
             ON Form.form_id = FormTag.form_form_id
@@ -65,11 +65,11 @@ def retrieveInfo():
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         cursor.execute("""
-        SELECT FormWithTags.form_id, FormWithTags.form_title, FormWithTags.form_description, FormWithTags.form_create_date, FormWithTags.form_end_date, FormWithTags.form_pic_url, FormWithTags.form_run_state, FormWithTags.tag_name, FormWithTags.field_name, COUNT(Gift.form_form_id) AS num_gift
+        SELECT FormWithTags.form_id, FormWithTags.form_title, FormWithTags.form_description, FormWithTags.form_create_date, FormWithTags.form_end_date, FormWithTags.form_draw_date, FormWithTags.form_pic_url, FormWithTags.form_run_state, FormWithTags.tag_name, FormWithTags.field_name, COUNT(Gift.form_form_id) AS num_gift
         FROM(
-            SELECT ValidForm.form_id, ValidForm.form_title, ValidForm.form_description, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_pic_url, ValidForm.form_run_state, Tag.tag_name, Field.field_name 
+            SELECT ValidForm.form_id, ValidForm.form_title, ValidForm.form_description, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_draw_date, ValidForm.form_pic_url, ValidForm.form_run_state, Tag.tag_name, Field.field_name 
             FROM (
-                SELECT form_id, form_title, form_description, form_create_date, form_end_date, form_pic_url, form_run_state
+                SELECT form_id, form_title, form_description, form_create_date, form_end_date, form_draw_date, form_pic_url, form_run_state
                 FROM Form
                 WHERE form_run_state = 'Open' AND form_delete_state = 0) AS ValidForm
             LEFT JOIN Formtag
@@ -82,13 +82,14 @@ def retrieveInfo():
             ON Formfield.field_field_id = Field.field_id) AS FormWithTags
         LEFT JOIN Gift
         ON FormWithTags.form_id = Gift.form_form_id
-        GROUP BY FormWithTags.form_id, FormWithTags.form_title, FormWithTags.form_description, FormWithTags.form_create_date, FormWithTags.form_end_date, FormWithTags.form_pic_url, FormWithTags.form_run_state, FormWithTags.tag_name, FormWithTags.field_name;
+        GROUP BY FormWithTags.form_id, FormWithTags.form_title, FormWithTags.form_description, FormWithTags.form_create_date, FormWithTags.form_end_date, FormWithTags.form_draw_date, FormWithTags.form_pic_url, FormWithTags.form_run_state, FormWithTags.tag_name, FormWithTags.field_name;
         """)
         result = cursor.fetchall()
         db.commit()
         return result
-    except:
+    except psycopg2.DatabaseError as error:
         db.rollback()
+        print(error)
         return 'Failed to retrieve form by keyword.'
     finally:
         db.close()
