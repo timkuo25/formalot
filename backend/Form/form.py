@@ -1,5 +1,6 @@
+from base64 import encode
 from db.db import get_db
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, stream_with_context, Response
 import psycopg2.extras  # get the results in form of dictionary
 import json
 import datetime
@@ -7,6 +8,8 @@ import jieba
 import collections
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_apscheduler import APScheduler
+from io import StringIO
+import csv
 
 
 form_bp = Blueprint('form', __name__)
@@ -42,7 +45,7 @@ def created(student_id):
     try:
         query = """
         SELECT form_id, form_title, form_pic_url, form_create_date, form_end_date, form_draw_date, form_run_state
-        FROM Form 
+        FROM Form
         WHERE User_student_id = %s AND form_delete_state = 0;
         """
         cursor.execute(query, [student_id])
@@ -74,6 +77,7 @@ def deleteForm(form_id):
     finally:
         db.close()
 
+
 def getFormById(form_id):
     # input: form_id
     # output: Form.{form_id, form_title, form_pic_url, form_create_date, form_end_date, form_run_state}
@@ -82,7 +86,7 @@ def getFormById(form_id):
     try:
         query = """
         SELECT form_draw_date
-        FROM Form 
+        FROM Form
         WHERE form_id = %s;
         """
         cursor.execute(query, [form_id])
@@ -93,6 +97,7 @@ def getFormById(form_id):
         return 'failed to retrieve form.'
     finally:
         db.close()
+
 
 def closeForm(form_id, form_close_date, form_draw_date):
     db = get_db()
@@ -166,7 +171,7 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         # Write Gift
         query = """
         INSERT INTO Gift(form_form_id, gift_name, gift_pic_url, number)
-        VALUES 
+        VALUES
         """
         for gift in gift_info:
             for i in range(gift['quantity']):
@@ -197,27 +202,29 @@ def getAns(form_id):
     cursor1 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cursor2 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        query_ans = '''SELECT UserForm.answercontent, UserForm.user_student_id
+        query_ans = '''SELECT UserForm.answercontent, UserForm.user_student_id, Userform.form_answer_time
         FROM UserForm
-        WHERE UserForm.form_form_id = %s;
+        WHERE UserForm.form_form_id = (%s);
         '''
         cursor1.execute(query_ans, [form_id])
 
         query_question_type = '''
-        SELECT questioncontent 
-        FROM Form 
-        WHERE form_id = %s;
+        SELECT questioncontent, form_title
+        FROM Form
+        WHERE form_id = (%s);
         '''
         cursor2.execute(query_question_type, [form_id])
 
         db.commit()
-
+        cursor1_results = cursor1.fetchall()
+        cursor2_results = cursor2.fetchall()
         questionType = []
-        for question in cursor2.fetchall()[0]['questioncontent']:
+        for question in cursor2_results[0]['questioncontent']:
             questionType.append(question['Type'])
 
-        response = {"answercontent": cursor1.fetchall(),
-                    "questionType": questionType}
+        response = {"userReply": cursor1_results,
+                    "questionType": questionType,
+                    "title":  cursor2_results[0]["form_title"]}
 
         return response
     except psycopg2.DatabaseError as error:
@@ -314,8 +321,7 @@ def protected():
 
 
 # route
-
-# 填寫問卷
+# Reply form
 @form_bp.route('/FillForm', methods=['POST'])
 def FillForm():
     student_id = protected()
@@ -429,18 +435,17 @@ def statisticForm():
         "message": ""
     }
 
-    if(len(results['answercontent']) == 0):
+    if(len(results["userReply"]) == 0):
         response["status"] = "fail"
         response["message"] = "The form does not exist or the number of the repliers is 0"
-
     else:
         response["status"] = "success"
-        questionNum = len(results['questionType'])
-        for i in range(questionNum):
+        num_question = len(results["questionType"])
+        for i in range(num_question):
 
             data_temp = {}  # return data based on question
             replies = []
-            for result in results['answercontent']:
+            for result in results["userReply"]:
 
                 single_reply = {
                     "answer": result["answercontent"][i]["Answer"],
@@ -448,11 +453,11 @@ def statisticForm():
                 }
                 replies.append(single_reply)
 
-            if results['questionType'][i] == '簡答題':
+            if results["questionType"][i] == "簡答題":
                 reply_contents = []
                 for reply in replies:
-                    reply_contents.append(reply['answer'][0] if type(
-                        reply['answer']) == list else reply['answer'])
+                    reply_contents.append(reply["answer"][0] if type(
+                        reply["answer"]) == list else reply["answer"])
 
                 tokens = []
                 for content in reply_contents:
@@ -462,12 +467,62 @@ def statisticForm():
                 keywordCount = []
 
             data_temp["replies"] = replies
-            data_temp['keywordCount'] = keywordCount
-            data_temp["question"] = results['answercontent'][0]["answercontent"][i]["Question"]
+            data_temp["keywordCount"] = keywordCount
+            data_temp["question"] = results["userReply"][0]["answercontent"][i]["Question"]
+            data_temp["question_type"] = results["questionType"][i]
             response["data"].append(data_temp)
         response["message"] = "Get answer successfully"
 
     return jsonify(response)
+
+
+# Export CSV
+@form_bp.route('/SurveyManagement/downloadResponse', methods=['GET'])
+def exportCSV():
+    form_id = request.args.get('form_id')
+    results = getAns(form_id)
+    if(results["userReply"] == []):
+        print("Fail. The form does not exist or the number of the repliers is 0")
+        return "False"
+    else:
+        data = []  # csv content
+        for result in results["userReply"]:
+            data.append(result)
+
+        def generate():
+            io = StringIO()  # write with stream
+            w = csv.writer(io)  # write csv in io
+            # filename
+            temp_filename = []
+            temp_filename.append(results['title'] + ".csv")
+            w.writerow(temp_filename)
+            yield io.getvalue()  # return streaming content
+            io.seek(0)  # set stream position to beginning
+            io.truncate(0)  # clear current row
+            # csv header
+            temp_header = []
+            temp_header.extend(['填寫時間', '填答者學號'])
+            for i in data[0]["answercontent"]:
+                temp_header.append(i["Question"])
+            w.writerow(temp_header)
+            yield io.getvalue()  # return streaming content
+            io.seek(0)  # set stream position to beginning
+            io.truncate(0)  # clear current row
+            # csv replied answers
+            for i in data:
+                temp_ans = []
+                temp_ans.append(i["form_answer_time"])
+                temp_ans.append(i["user_student_id"])
+                for j in i["answercontent"]:
+                    temp_ans.append(j["Answer"][0])
+                w.writerow(temp_ans)
+                yield io.getvalue()  # return streaming content
+                io.seek(0)  # set stream position to beginning
+                io.truncate(0)  # clear current row
+            io.close()
+        response = Response(
+            stream_with_context(generate()), mimetype='text/csv')
+        return response
 
 
 # Check if the user has already replied to the form
@@ -516,10 +571,10 @@ def autoWaitForDraw():
     }
     if scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="cron", minute=0):
         scheduler.start()
-        response["status"] = 'success'
-        response["message"] = 'Auto update WaitForDraw is running.'
+        response["status"] = "success"
+        response["message"] = "Auto update WaitForDraw is running."
     else:
-        response["status"] = 'fail'
-        response["message"] = 'Scheduler error.'
+        response["status"] = "fail"
+        response["message"] = "Scheduler error."
 
     return jsonify(response)
