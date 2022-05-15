@@ -7,14 +7,14 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 homePage_bp = Blueprint('homePage', __name__)
 
-@homePage_bp.after_request
-def after_request(response):
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
-    header['Access-Control-Allow-Headers'] = '*'
-    header['Access-Control-Allow-Methods'] = '*'
-    header['Content-type'] = 'application/json'
-    return response
+# @homePage_bp.after_request
+# def after_request(response):
+#     header = response.headers
+#     header['Access-Control-Allow-Origin'] = '*'
+#     header['Access-Control-Allow-Headers'] = '*'
+#     header['Access-Control-Allow-Methods'] = '*'
+#     header['Content-type'] = 'application/json'
+#     return response
 
 
 # DAO
@@ -31,26 +31,27 @@ def formRecommendation():
     
     try:
         query = """
-        SELECT FormNumAnswer.form_id, FormNumAnswer.form_title, FormNumAnswer.form_run_state, FormNumAnswer.form_create_date, FormNumAnswer.form_end_date, FormNumAnswer.form_pic_url, FormNumAnswer.num_answer, COUNT(Gift.form_form_id) AS num_gift
+        SELECT FormNumAnswer.form_id, FormNumAnswer.form_title, FormNumAnswer.form_run_state, FormNumAnswer.form_create_date, FormNumAnswer.form_end_date, FormNumAnswer.form_draw_date, FormNumAnswer.form_pic_url, FormNumAnswer.num_answer, COUNT(Gift.form_form_id) AS num_gift
         FROM(
-            SELECT ValidForm.form_id, ValidForm.form_title, ValidForm.form_run_state, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_pic_url, COUNT(DISTINCT UserForm.User_student_id) AS num_answer
+            SELECT ValidForm.form_id, ValidForm.form_title, ValidForm.form_run_state, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_draw_date, ValidForm.form_pic_url, COUNT(DISTINCT UserForm.User_student_id) AS num_answer
             FROM (
-                SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_pic_url
+                SELECT Form.form_id, Form.form_title, Form.form_run_state, Form.form_create_date, Form.form_end_date, Form.form_draw_date, Form.form_pic_url
                 FROM Form
                 WHERE Form.form_delete_state = 0 AND Form.form_run_state = 'Open'
                     ) AS ValidForm
                 LEFT JOIN UserForm
                 ON ValidForm.form_id = UserForm.Form_form_id
-                GROUP BY ValidForm.form_id, ValidForm.form_title, ValidForm.form_run_state, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_pic_url) AS FormNumAnswer
+                GROUP BY ValidForm.form_id, ValidForm.form_title, ValidForm.form_run_state, ValidForm.form_create_date, ValidForm.form_end_date, ValidForm.form_draw_date, ValidForm.form_pic_url) AS FormNumAnswer
         LEFT JOIN Gift
         ON FormNumAnswer.form_id = Gift.form_form_id
-        GROUP BY FormNumAnswer.form_id, FormNumAnswer.form_title, FormNumAnswer.form_run_state, FormNumAnswer.form_create_date, FormNumAnswer.form_end_date, FormNumAnswer.form_pic_url, FormNumAnswer.num_answer;
+        GROUP BY FormNumAnswer.form_id, FormNumAnswer.form_title, FormNumAnswer.form_run_state, FormNumAnswer.form_create_date, FormNumAnswer.form_end_date, FormNumAnswer.form_draw_date, FormNumAnswer.form_pic_url, FormNumAnswer.num_answer;
         """
         cursor.execute(query)
         db.commit()
         return cursor.fetchall()
-    except:
+    except psycopg2.DatabaseError as error:
         db.rollback()
+        print(error)
         return 'Failed to retrieve form.'
     finally:
         db.close()
