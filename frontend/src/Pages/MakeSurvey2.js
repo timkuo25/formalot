@@ -30,9 +30,7 @@ const MakeSurvey2 = () => {
     const [rerenderkey, setrerenderkey] = useState(0)
     const [loading, setload] = useState(false)
     const [formImageLoading, setFormImageLoading] = useState(false)
-    const [giftLoading, setGiftImageLoading] = useState(false)
     const inputFormFile = useRef(null) 
-    const inputGiftFile = useRef(null) 
 
 
 
@@ -101,13 +99,14 @@ const MakeSurvey2 = () => {
         quantity:1
       }
       setGiftInfo((gift_info.concat(gift)));
+
     }
 
 
     const DisplayGiftBtn = ()=>{
       return(
         <div>
-          <button className='add-giftBtn Btn ' onClick={addGift}><img className='add-gift-image' src={process.env.PUBLIC_URL + 'giftbox.png'} alt='Gift'/></button>
+          <button className='add-giftBtn Btn' onClick={addGift}>新增禮物</button>
         </div>
     
       );
@@ -353,10 +352,12 @@ const MakeSurvey2 = () => {
     /*
 
     */
-    setGiftImageLoading(true)
     console.log(event.target.id)
 
+
     if (event.target.files && event.target.files[0]) {
+
+  
       //console.log(event.target.files[0])
       let img = event.target.files[0];
       console.log(img)
@@ -375,7 +376,8 @@ const MakeSurvey2 = () => {
       }).then(data => data.json())
       .then(data => {
         //我們要的imgur網址
-        setGiftImageLoading(false)
+  
+
         let imgururl = data.data.link
         if (imgururl===undefined){
           alert("上傳圖片失敗")
@@ -450,7 +452,7 @@ const deleteGift =evt=>{
                       </div>
                       <br></br>
                       <div>
-                      <input className='Btn SurveyOptionBtn' ref={inputFormFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
+                      <input className='Btn SurveyOptionBtn' ref={inputFormFile} type="file" name="myImage" onChange={onImageChange} accept="image/png, image/jpeg" style={{display:'none'}}/>
                       <button className='Btn SurveyOptionBtn card-shadow' onClick={()=>inputFormFile.current.click()}>
                         選擇圖片
                       </button>
@@ -498,13 +500,11 @@ const deleteGift =evt=>{
                                   <p>
                                       {/*<input id={item.id} type="text" placeholder="獎品圖片url網址"  className='input-columns' defaultValue={item.gift_pic_url}  onChange={changeGiftURL}/>*/}
                                       
-                                      {giftLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:<img src={item.gift_pic_url} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>}
+                                      <img id={item.id} src={item.gift_pic_url} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>
                                       <br></br>
 
-                                      <input className='Btn SurveyOptionBtn' ref={inputGiftFile} type="file" name="myImage" onChange={changeGiftURL} style={{display:'none'}}/>
-                                      <button className='Btn SurveyOptionBtn card-shadow' onClick={()=>inputGiftFile.current.click()}>
-                                        選擇獎品圖片
-                                      </button>
+                                      <input id={item.id}  type="file" name="myImage" accept="image/png, image/jpeg" onChange={changeGiftURL} />
+
 
 
                                   </p>
