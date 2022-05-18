@@ -69,6 +69,26 @@ const ForgetPassword = () => {
             event.preventDefault();
           };
 
+          let errors = {};
+            
+            if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
+                errors.email='請使用大專院校信箱註冊！';
+            }
+            else{
+                errors.pass = '可使用的電子郵件！';
+            }
+
+            if (newpsw.length < 8) {
+                errors.errorpwd = '密碼長度至少8碼以上！';
+            }
+            else{
+                errors.correctpwd = '可使用的密碼！';
+            }
+
+            const callAlert = () => {
+                alert('請輸入正確格式的密碼！')
+            }
+
     return (
     <>
     <Navbar/>
@@ -81,8 +101,10 @@ const ForgetPassword = () => {
                 <div className="forget_input_content">
                     <h3>你的信箱</h3>
                     <form onSubmit={callemailApi} className="forget_verification">                        
-                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="Your Email" className="forget_inputbar"/>
-                        <button className="forget_ver_submit">取得驗證碼</button>
+                        <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="Your Email" className="forget_inputbar"/>
+                        {errors.email && <button className="Btn forget_ver_submit" disabled={true}>取得驗證碼</button>}
+                        {errors.pass && <button className="Btn forget_ver_submit">取得驗證碼</button>}
+                        {/* <button className="forget_ver_submit">取得驗證碼</button> */}
                     </form>
                 </div>
                 <div className="forget_input_content">
@@ -98,6 +120,8 @@ const ForgetPassword = () => {
                         <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                             {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
                         </button>
+                        {errors.errorpwd && <font>{errors.errorpwd}</font>}
+                        {errors.correctpwd && <text>{errors.correctpwd}</text>}
                     </div>
                 </div>
                 <div className="forget_input_content">
@@ -114,7 +138,9 @@ const ForgetPassword = () => {
                 
             
             <form>
-                <button className="forget_submit" onClick={callforgetpasswordApi}>修改</button>
+                {errors.errorpwd && <button className="Btn forget_submit" onClick={callAlert} >修改</button>}
+                {errors.correctpwd && <button className="Btn forget_submit" onClick={callforgetpasswordApi}>修改</button>}
+                {/* <button className="Btn forget_submit" onClick={callforgetpasswordApi}>修改</button> */}
             </form>
           
             </div> 
