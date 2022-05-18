@@ -34,54 +34,7 @@ const Register = () => {
         alert(resJson.message);
         sessionStorage.setItem('code', resJson.code);
     };
-
-    // const uploadImage = async e => {
-    //     const files = e.target.files
-    //     const data = new FormData()
-    //     data.append('file', files[0])
-    //     data.append('upload_preset', 'darwin')
-    //     setLoading(true)
-    //     const res = await fetch(
-    //       '	https://api.imgur.com/3/upload',
-    //       {
-    //         method: 'POST',
-    //         headers:{
-    //             Authorization:"Client-ID "
-    //         },
-    //         body: data
-    //       }
-    //     )
-    //     const file = await res.json()
-    //       console.log(file.secure_url)
-    //     setImage(file.secure_url)
-    //     setLoading(false)
-    //   };
     
-
-
-    let errors = {};
-    
-    // if (!email.trim()) {
-    //   errors.username = 'Username required';
-    // }
-    // else if (!/^[A-Za-z]+/.test(values.name.trim())) {
-    //   errors.name = 'Enter a valid name';
-    // }
-
-    // if (!email) {
-    // errors.email = 'Email is required';
-    // } else 
-    
-    if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
-        errors.email = '請使用大專院校信箱註冊！';
-    }
-    else{
-        errors.pass = '可使用的電子郵件！';
-    }
-
-    // if (!password) {
-    // errors.password = 'Password is required';
-    // }
 
 
     const onImageChange = (event) => {
@@ -105,12 +58,6 @@ const Register = () => {
                 Authorization: "Client-ID 5535a8facba4790"
             },
             body: formdata
-            // }).then(data => data.json())
-            // .then(data => {
-            //     //我們要的imgur網址
-            //     let imgururl = data.data.link
-            //     console.log(imgururl)
-            //     return imgururl
             
         })
         
@@ -169,7 +116,45 @@ const Register = () => {
         event.preventDefault();
       };
       
+
+      let errors = {};
+     
     
+    if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
+        errors.email = '請使用大專院校信箱註冊！';
+    }
+    else{
+        errors.pass = '可使用的電子郵件！';
+    }
+
+    if (password.length < 8) {
+        errors.errorpwd = '密碼長度至少8碼以上！';
+    }
+    else{
+        errors.correctpwd = '可使用的密碼！';
+    }
+
+    const callErrorEmailAlert = () => {
+        alert('請輸入正確格式的電子郵件！')
+    }
+
+    const callAlert = () => {
+        alert('請提供完整、正確的資訊並同意會員規範後再進行註冊！')
+    }
+
+    const [agree, setAgree] = React.useState(null);
+    
+    const callCheckedbox = (e) => {
+        // 判斷按鈕是否被按
+        if(e.target.checked===true){
+            setAgree(true);
+        }
+        else{
+            setAgree(false);
+        }
+        
+    }
+
 
     return (
     <>
@@ -205,6 +190,8 @@ const Register = () => {
                         <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                             {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
                         </button>
+                        {errors.errorpwd && <font>{errors.errorpwd}</font>}
+                        {errors.correctpwd && <text>{errors.correctpwd}</text>}
                     </div>
                 </div>
                 <div className="input_content">
@@ -218,12 +205,6 @@ const Register = () => {
                     </div>
                 </div>
 
-                {/* <div className="input_content">
-                    <h3>上傳頭貼</h3>
-                    <input type="file" name="file" placeholder="Upload an image" onChange={uploadImage} />
-                    {loading ? (<h3>Loading...</h3>) : ( <img src={image} style={{ width: '50px', height: '50px' }} />)}
-                </div> */}
-
                 <div className="input_content">
                     <h3>上傳頭貼</h3>
                         <div>
@@ -232,25 +213,31 @@ const Register = () => {
                         </div>
                         <br/>
                         <div>
-                            <img src={image.display} style={{  height: '150px', width: '200px'}}/>
+                            <img src={image.display} style={{  height: '200px', width: '200px'}}/>
                         </div>
                 </div>
 
                 <div className="input_content">
                     <h3>信箱驗證碼</h3>
                     
-                    <form onSubmit={callemailApi} className="register_verification">                        
+                    <form className="register_verification">                        
                         <input type="text" value={code} placeholder="Verification code" onChange={(e) => setCode(e.target.value)} className="reg_inputbar"/>
-                        {errors.email && <button className="ver_submit" disabled={true}>取得驗證碼</button>}
-                        {errors.pass && <button className="ver_submit">取得驗證碼</button>}
+                        {errors.email && <button className="Btn ver_submit" onClick={callErrorEmailAlert}>取得驗證碼</button>}
+                        {errors.pass && <button className="Btn ver_submit" onClick={callemailApi}>取得驗證碼</button>}
                         {/* <button className="ver_submit">取得驗證碼</button> */}
                     </form>
                 </div>
-                
+                <br/>
+                <br/>
+                <div className="member_rule">
+                    <input type="checkbox" className='box' id='agree' value={agree} onChange={callCheckedbox}/>
+                    <font>我已詳閱
+                        <button className='member_info' onClick={() => {window.location.href='instruction'}}>會員須知</button>並同意所有會員規範</font>
+                </div>
             
-            <form onSubmit={callregisterApi}>
-                {errors.email && <button className="reg_submit" disabled={true}>註冊</button>}
-                {errors.pass && <button className="reg_submit">註冊</button>}
+            <form>
+                {(errors.email || errors.errorpwd || agree!==true) && <button className="reg_submit_gray" onClick={callAlert} >註冊</button>}
+                {(errors.pass && errors.correctpwd && agree===true) && <button className="Btn reg_submit" onClick={callregisterApi}>註冊</button>}
                 {/* <button className="reg_submit">註冊</button> */}
             </form>
             

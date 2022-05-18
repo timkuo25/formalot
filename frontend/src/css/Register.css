@@ -8,7 +8,7 @@
 
 .register_card_left {
     width: 48em;
-    height:70em;
+    height:77em;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;
     padding: 0.8em;
@@ -34,7 +34,7 @@
 
 .register_card_right {
     width: 50em;
-    height:70em;
+    height:77em;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;
     padding: 0.8em;
@@ -72,6 +72,19 @@
     text-align: center;
     float:left;
     flex-direction: row;
+}
+
+.reg_submit_gray{
+    border: #dadada solid 0.15em;
+    border-radius: 0.3em;
+    background-color: #fbfafc;
+    color: #dadada;
+    margin: 3em 1em;
+    width: 5em;
+    height: 2.25em;
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: center;
 }
 
 .reg_submit{
@@ -126,9 +139,60 @@
     justify-content: left;
 }
 
+.reg-password-content font {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    color: #f00e0e;
+    margin-left: 2em;
+}
+
+.reg-password-content text {
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+    color: #0ef03b;
+    margin-left: 2em;
+}
+
 .eye{
     background: none;
     border-width: 0;
     margin-top: 5px;
+}
+
+.member_rule{
+    margin:0.8em, 1em;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.box{
+    width: 50px;
+    height: 25px;
+}
+
+.member_rule font{
+    margin-top: 6px;
+}
+
+.member_info{
+    border: 0em;
+    background-color: #ffffff;
+    color: var(--theme-purple);
+    font-size: medium;
+}
+
+.SurveyOptionBtn {
+    width: 120px;
+    height: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+    background-color: #ffffff;
+    border-color: #e5e3e3;
 }
 /* end Register page --------------------------*/
