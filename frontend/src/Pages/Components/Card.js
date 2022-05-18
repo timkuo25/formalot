@@ -8,7 +8,7 @@ const Card = ({ info, type }) => {
     if (type === 'home'){
         prize = 'prize name';
         num_prize = 'x';
-        image_path = info.form_pic_url;
+        image_path = info.form_pic_url || (process.env.PUBLIC_URL + 'form_preview_default.png');
         title = info.form_title.length > 30 ? info.form_title.substring(0, 30) + '...' : info.form_title;
         // due_time = info.form_end_date;
         due_time = new Intl.DateTimeFormat('zh-TW', {
@@ -25,7 +25,7 @@ const Card = ({ info, type }) => {
     if (type === 'explore'){
         prize = 'prize name';
         num_prize = info.num_gift;
-        image_path = info.form_pic_url;
+        image_path = info.form_pic_url || (process.env.PUBLIC_URL + 'form_preview_default.png');
         title = info.form_title;
         due_time = info.form_end_date;
         lottery_time = 'lottery date';
