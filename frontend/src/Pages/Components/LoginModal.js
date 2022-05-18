@@ -68,6 +68,10 @@ function LoginModal( {closeModal}){
         // } else if (values.password2 !== values.password) {
         //   errors.password2 = 'Passwords do not match';
         // }
+
+        const callAlert = () => {
+            alert('請輸入正確的帳號密碼！')
+        }
       
 
         return ReactDom.createPortal(
@@ -91,11 +95,14 @@ function LoginModal( {closeModal}){
                         </div>
 
                         <div align="center">
-                            <button className="submit" onClick={callLoginApi}>登入</button><br/>
+                        {(errors.email || errors.password) && <button className="Btn submit" onClick={callAlert}>登入</button>}
+                        {(!errors.email && !errors.password) &&<button className="Btn submit" onClick={callLoginApi}>登入</button>}
+                            {/* <button className="submit" onClick={callLoginApi}>登入</button> */}
+                            <br/>
                             <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼?</button>
                         </div>                                
                         <div className="login-button" align="center">
-                            <button className="create-account-button" onClick={() => {window.location.href='register'}}>建立新帳號</button>
+                            <button className="Btn create-account-button" onClick={() => {window.location.href='register'}}>建立新帳號</button>
                             {/* <button className="forget-password">忘記密碼？</button><br/> */}
                         </div>
                 </div>

@@ -136,10 +136,11 @@ function CropperModal ( props: Props ) {
 		const blobcropfile = await new Promise(resolve => canvasData.toBlob(resolve));
 		const cropfile = new File([blobcropfile], fileInfo.filename, {type: blobcropfile.type, lastModified: new Date()});
 		console.log(cropfile)
-        // upload image to imgur
-		
-        const formdata = new FormData()
-        formdata.append("image", cropfile)
+
+
+		// upload image to imgur
+		const formdata = new FormData() 
+		formdata.append("image", cropfile)
 
         // fetch('https://api.imgur.com/3/image/', {
         //         method:"POST",
@@ -203,35 +204,6 @@ function CropperModal ( props: Props ) {
 		typeof props.onCompleted === 'function' && props.onCompleted();
 	};
 
-    const submitCroppedImage = async (e) => {
-        const formdata = new FormData() 
-        formdata.append("image", file)
-
-        //上傳照片到imgur
-        e.preventDefault();
-        const imgururl_result = await fetch('https://api.imgur.com/3/image/', {
-            method:"POST",
-            headers:{
-                Authorization: "Client-ID 5535a8facba4790"
-            },
-            body: formdata
-        //     }).then(data => data.json())
-        //     .then(data => {
-        //         //我們要的imgur網址
-        //         let imgururl = data.data.link
-        //         return imgururl;
-        //         console.log(imgururl);
-        })
-        
-        if(imgururl_result.status === 429){
-            var imgururl = ""
-        }else{
-            let data = await imgururl_result.json();
-            var imgururl = data.data.link;
-            return imgururl;
-        }
-    
-    };
 	
 	return (
             <Modal show={(!!file && !!image)} onHide={handleClose}
@@ -286,7 +258,7 @@ function CropperModal ( props: Props ) {
 						alignSelf: 'center',
 						justifyContent: 'flex-end',
 					}}>
-                            <Button variant="primary" onClick={onConfirm} className='modalconfirm' onSubmit={submitCroppedImage}>
+                            <Button variant="primary" onClick={onConfirm} className='modalconfirm'>
                                 {labels.confirm}
                             </Button>
                             

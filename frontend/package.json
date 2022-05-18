@@ -25,7 +25,7 @@
     "react-items-carousel": "^2.8.0",
     "react-loading": "^2.0.3",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.0",
+    "react-scripts": "^5.0.0",
     "react-tagcloud": "^2.2.0",
     "react-viewer": "^3.2.2",
     "source-map-loader": "^3.0.1",

@@ -87,6 +87,19 @@ const EditProfile = () => {
         event.preventDefault();
       };
 
+      let errors = {};
+
+      if (password.length < 8) {
+        errors.errorpwd = '密碼長度至少8碼以上！';
+    }
+    else{
+        errors.correctpwd = '可使用的密碼！';
+    }
+
+    const callAlert = () => {
+        alert('請輸入正確格式的密碼！')
+    }
+
     return (
     <>
     <Navbar/>
@@ -102,11 +115,11 @@ const EditProfile = () => {
                 </div>
                 <div className="edit_input_content">
                     <h3>姓氏</h3>
-                    <input defaultValue = {Profile.user_lastname} onChange={(e) => setLastname(e.target.value)} type="text" placeholder="LastName" className="edit_inputbar"/>
+                    <input maxLength="45" defaultValue = {Profile.user_lastname} onChange={(e) => setLastname(e.target.value)} type="text" placeholder="LastName" className="edit_inputbar"/>
                     </div>
                 <div className="edit_input_content">
                     <h3>名字</h3>
-                    <input defaultValue = {Profile.user_firstname} onChange={(e) => setFirstname(e.target.value)} type="text" placeholder="FirstName" className="edit_inputbar"/>
+                    <input maxLength="45" defaultValue = {Profile.user_firstname} onChange={(e) => setFirstname(e.target.value)} type="text" placeholder="FirstName" className="edit_inputbar"/>
                 </div>
 
                 <div className="edit_input_content">
@@ -117,6 +130,8 @@ const EditProfile = () => {
                         <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                             {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
                         </button>
+                        {errors.errorpwd && <font>{errors.errorpwd}</font>}
+                        {errors.correctpwd && <text>{errors.correctpwd}</text>}
                     </div>
                 </div>
                 <div className="edit_input_content">
@@ -131,7 +146,9 @@ const EditProfile = () => {
                 </div>
                 
             <form>
-                <button className="edit_submit" onClick={calluserupdate}>修改</button>
+                {errors.errorpwd && <button className="Btn edit_submit" onClick={callAlert}>修改</button>}
+                {errors.correctpwd && <button className="Btn edit_submit" onClick={calluserupdate}>修改</button>}
+                {/* <button className="Btn edit_submit" onClick={calluserupdate}>修改</button> */}
             </form>
             
             </div>

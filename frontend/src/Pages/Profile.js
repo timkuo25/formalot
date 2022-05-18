@@ -3,6 +3,8 @@ import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useEffect, useState,useRef } from 'react';
 import callrefresh from '../refresh.js';
+import { Card } from 'react-bootstrap';
+import Viewer from 'react-viewer';
 
 import { AiFillCamera } from "react-icons/ai";
 import {CropperModal} from './Components/CropperModal';
@@ -37,8 +39,8 @@ const Profile = () => {
             let img = event.target.files[0];
             setImage({img:img,display:URL.createObjectURL(img)})
             // const formdata = new FormData() 
-            // formdata.append("image", image.img)
-            //上傳照片到imgur
+            // formdata.append("image", resizedImage)
+            // //上傳照片到imgur
             // fetch('https://api.imgur.com/3/image/', {
             //     method:"POST",
             //     headers:{
@@ -57,6 +59,8 @@ const Profile = () => {
     };
 
     const [file, setFile] = React.useState(null);
+
+    // resizedImage為切過的照片
 	const [resizedImage, setResizedImage] = React.useState(null);
 
     return (
@@ -68,11 +72,12 @@ const Profile = () => {
                     <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}} />
                             {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
                             <img className="photo" src={resizedImage || Profile.user_pic_url || process.env.PUBLIC_URL + 'default.png'} />
-                            <button className='camera' onClick={()=>inputFile.current.click()}>
+                            <button className='Btn camera' onClick={()=>inputFile.current.click()}>
                                 <AiFillCamera size='20px'/>
                             </button>
-                            <CropperModal file={file} onConfirm={( croppedFile ) => { setResizedImage(window.URL.createObjectURL(croppedFile)); }} onCompleted={() => setFile(null)} />
-                        
+                            <CropperModal file={file} 
+                            onConfirm={( croppedFile ) => { setResizedImage(window.URL.createObjectURL(croppedFile));}} onCompleted={() => setFile(null)} />
+                            
                         {/* <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
                         
                         
@@ -106,7 +111,7 @@ const Profile = () => {
                         <p className="profile-bar">{Profile.user_firstname}</p>
                         {/* <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/> */}
                     </div>
-                        <button className="edit-profile" onClick={() => {window.location.href='editProfile'}}>Edit Profile</button>
+                        <button className="Btn edit-profile" onClick={() => {window.location.href='editProfile'}}>編輯個人資訊</button>
                 </div>
             </div>
         <Footer />
