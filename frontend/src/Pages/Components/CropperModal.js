@@ -118,20 +118,28 @@ function CropperModal ( props: Props ) {
 		};
 		
 		const canvasData = cropper.getCroppedCanvas(croppedCanvas);
-		
+
 		const fileInfo = getFileInfo(file, props.mime);
 		
+
 		canvasData.toBlob((blob) => {
 			const croppedFile = new File([blob], fileInfo.filename, {type: blob.type, lastModified: new Date()});
 			typeof props.onConfirm === 'function' && props.onConfirm(croppedFile);
 			typeof props.onCompleted === 'function' && props.onCompleted();
+
 			setImage(null);
 			setCropper(null);
+
+		
 		}, fileInfo.mime, props.quality);
 
+		const blobcropfile = await new Promise(resolve => canvasData.toBlob(resolve));
+		const cropfile = new File([blobcropfile], fileInfo.filename, {type: blobcropfile.type, lastModified: new Date()});
+		console.log(cropfile)
         // upload image to imgur
-        const formdata = new FormData() 
-        formdata.append("image", file)
+		
+        const formdata = new FormData()
+        formdata.append("image", cropfile)
 
         // fetch('https://api.imgur.com/3/image/', {
         //         method:"POST",
