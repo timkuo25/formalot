@@ -201,6 +201,14 @@ const MakeSurvey = () =>{
 
 
     }
+    const cancel =()=>{
+        
+        
+        window.sessionStorage.removeItem('form_info'); 
+        window.sessionStorage.removeItem('form'); 
+        //event.preventDefault();
+        window.location.href = "/";//暫時用jS去寫換頁
+      }
     
 
 
@@ -244,7 +252,10 @@ const MakeSurvey = () =>{
         {/*react dnd*/}
         <section className='page-container' key={rerenderkey}>
                 <div className='breadcrumb'>
-                <button className='Btn SurveyOptionBtn card-shadow'>
+                    <button className='Btn SurveyOptionBtn card-shadow' onClick={cancel}>
+                        取消
+                    </button>
+                    <button className='Btn SurveyOptionBtn card-shadow'>
                         製作問卷
                     </button>
                     <button className='Btn SurveyOptionBtn card-shadow' onClick={handleSubmit}>

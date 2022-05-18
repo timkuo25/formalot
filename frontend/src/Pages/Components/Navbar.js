@@ -18,6 +18,11 @@ const Navbar = () => {
         window.location.reload();
         navigate(<Homepage/>);
     };
+    const clearform =()=>{
+        window.sessionStorage.removeItem('form_info'); 
+        window.sessionStorage.removeItem('form'); 
+        //event.preventDefault();
+      }
 
 
     if (!(localStorage.getItem('jwt'))){                // 未登入狀態
@@ -34,7 +39,7 @@ const Navbar = () => {
                         <div className='navbar-links'>
                             <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore'> 探索 </NavLink>
                     
-                            <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction'> 說明 </NavLink>
+                            <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction' > 說明 </NavLink>
                             <div className="nav-option user-dropdown" onClick={() => setModalOpen(true)}>
                                 User
                                 <div className="user-dropdown-options" >
@@ -72,16 +77,16 @@ const Navbar = () => {
         return(
             <>
                 <header className="header">
-                    <h1 className="app-title"><a href='/'>Formalot</a></h1>
+                    <h1 className="app-title"><a href='/' onClick={clearform}>Formalot</a></h1>
                     <nav className="navbar">
-                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore'> 探索 </NavLink>
-                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey'> 製作 </NavLink>
-                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction'> 說明 </NavLink>
+                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore' onClick={clearform}> 探索 </NavLink>
+                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey' onClick={clearform}> 製作 </NavLink>
+                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction' onClick={clearform}> 說明 </NavLink>
                         <button className="nav-option user-dropdown">
                             User
                             <div className="user-dropdown-options" >
-                                <button onClick={()=>{window.location.href = "/SurveyManagement"}}>管理問卷</button>
-                                <button onClick={()=>{window.location.href = "/Profile"}}>個人資料</button>
+                                <button onClick={()=>{window.location.href = "/SurveyManagement";  window.sessionStorage.removeItem('form_info'); window.sessionStorage.removeItem('form'); }}>管理問卷</button>
+                                <button onClick={()=>{window.location.href = "/Profile"; window.sessionStorage.removeItem('form_info'); window.sessionStorage.removeItem('form'); }}>個人資料</button>
                                 <button onClick={calllogout}>登出</button>
                             </div>
                         </button>

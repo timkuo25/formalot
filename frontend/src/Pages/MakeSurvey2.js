@@ -5,6 +5,8 @@ import React, {Component, useState, useRef, useEffect} from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DateTimePicker from 'react-datetime-picker';
+import ReactLoading from "react-loading";
+import moment from 'moment';
 import {axios} from 'axios';
 
 //import { DndProvider } from "react-dnd";
@@ -21,13 +23,17 @@ const MakeSurvey2 = () => {
     const [DateForLottery, setDateForLottery] = useState(new Date());
     const [displayBtnOrNot, setDisplayBtnOrNot] = useState("否");
     const [giftNum, setGiftNum] = useState(0);
-    const [image, setImage] = useState({img:null,display:null });
     const [imgurURL, setImgurURL] = useState("");
     const [giftType, setGiftType] = useState("無抽獎活動");
     const [formType, setFormType] = useState("商業及管理學門");
     const [gift_info, setGiftInfo] = useState([])
     const [rerenderkey, setrerenderkey] = useState(0)
-    const inputFile = useRef(null) 
+    const [loading, setload] = useState(false)
+    const [formImageLoading, setFormImageLoading] = useState(false)
+    const [giftLoading, setGiftImageLoading] = useState(false)
+    const inputFormFile = useRef(null) 
+    const inputGiftFile = useRef(null) 
+
 
 
     useEffect(() => {
@@ -38,9 +44,8 @@ const MakeSurvey2 = () => {
         setDateForFormEnd(new Date(form_info.form_end_date))
         setDateForLottery(new Date(form_info.form_draw_date))
         setGiftNum(form_info.giftNum)
-        setImage(form_info.formimage)
         setGiftInfo(form_info.gift_info)
-
+        setImgurURL(form_info.imgurURL)
         setFormType(form_info.form_field_type)
         setDisplayBtnOrNot(form_info.displayBtnOrNot)
         setGiftType(form_info.form_gift_type)
@@ -58,11 +63,11 @@ const MakeSurvey2 = () => {
         form_field_type:formType,
         displayBtnOrNot:displayBtnOrNot,
         gift_info:gift_info,
-        formimage:image
+        imgurURL:imgurURL
 
       }
       window.sessionStorage.setItem('form_info', JSON.stringify(form_info));
-  }, [DateForFormEnd, DateForLottery, displayBtnOrNot, giftNum, giftType, formType, gift_info]);
+  }, [DateForFormEnd, DateForLottery, displayBtnOrNot, giftNum, giftType, formType, gift_info, imgurURL]);
 
 
     const displayBtn = (event) => {
@@ -74,7 +79,7 @@ const MakeSurvey2 = () => {
             id:gift_info.length,
             gift_name:"",
             gift_pic_url:"",
-            quantity:0
+            quantity:1
           }
           setGiftInfo((gift_info.concat(gift)));
         }
@@ -93,7 +98,7 @@ const MakeSurvey2 = () => {
         id:gift_info.length,
         gift_name:"",
         gift_pic_url:"",
-        quantity:0
+        quantity:1
       }
       setGiftInfo((gift_info.concat(gift)));
     }
@@ -135,9 +140,12 @@ const MakeSurvey2 = () => {
 
     const onImageChange = (event) => {
       if (event.target.files && event.target.files[0]) {
+        setFormImageLoading(true)
         //console.log(event.target.files[0])
         let img = event.target.files[0];
-        setImage({img:img,display:URL.createObjectURL(img)})
+        console.log(img)
+        console.log(URL.createObjectURL(img))
+        
 
         const formdata = new FormData() 
         formdata.append("image", img)
@@ -151,10 +159,20 @@ const MakeSurvey2 = () => {
         }).then(data => data.json())
         .then(data => {
           //我們要的imgur網址
+          setFormImageLoading(false)
           let imgururl = data.data.link
-          console.log(imgururl)
-          setImgurURL(imgururl)
+          if (imgururl===undefined){
+            alert("上傳圖片失敗")
+          }
+          else{
+            console.log(imgururl)
+
+            setImgurURL(imgururl)
+            setrerenderkey(rerenderkey+1)
+
+          }
         })
+        
       }
     };
 
@@ -168,41 +186,32 @@ const MakeSurvey2 = () => {
         form_field_type:formType,
         displayBtnOrNot:displayBtnOrNot,
         gift_info:gift_info,
-        formimage:image
+        imgurURL:imgurURL
 
       }
       window.sessionStorage.setItem('form_info', JSON.stringify(form_info));
+      
       //event.preventDefault();
       window.location.href = "/MakeSurvey";//暫時用jS去寫換頁
+    }
+    const cancel =()=>{
+        
+        
+      window.sessionStorage.removeItem('form_info'); 
+      window.sessionStorage.removeItem('form'); 
+      //event.preventDefault();
+      window.location.href = "/";//暫時用jS去寫換頁
     }
 
     
 
     const handleSubmit = async()=>{
-
+      setload(true)
+      var legalsubmit=1
       let surveycontent = window.sessionStorage.getItem('form')
       surveycontent = JSON.parse(surveycontent)
 
-
-
-
-
-
-      let dateForlotbeforeProcess = DateForLottery.getTime()
-      let date = new Date(dateForlotbeforeProcess);
-      let dataValues = [
-          date.getFullYear(),
-          date.getMonth() + 1,
-          date.getDate(),
-          date.getHours(),
-          date.getMinutes(),
-          date.getSeconds(),
-        ];
-      let dateForlot  = dataValues[0]+'-'+dataValues[1]+'-'+dataValues[2]+' '+dataValues[3]+":"+ dataValues[4]+":"+dataValues[5]
-
-
-
-      let dateForEndbeforeProcess = DateForFormEnd.getTime()
+      var dateForEndbeforeProcess = DateForFormEnd.getTime()
       let dateEnd = new Date(dateForEndbeforeProcess);
       let dataValuesEnd = [
         dateEnd.getFullYear(),
@@ -215,37 +224,95 @@ const MakeSurvey2 = () => {
       let dateForEnd  = dataValuesEnd[0]+'-'+dataValuesEnd[1]+'-'+dataValuesEnd[2]+' '+dataValuesEnd[3]+":"+ dataValuesEnd[4]+":"+dataValuesEnd[5]
       console.log(dateForEnd)
 
+
+
+      let dateForlotbeforeProcess = DateForLottery.getTime()
+      let dateForlot = new Date(dateForlotbeforeProcess);
+      let dataValueslot = [
+          dateForlot.getFullYear(),
+          dateForlot.getMonth() + 1,
+          dateForlot.getDate(),
+          dateForlot.getHours(),
+          dateForlot.getMinutes(),
+          dateForlot.getSeconds(),
+        ];
+      var dateForlottory  = dataValueslot[0]+'-'+dataValueslot[1]+'-'+dataValueslot[2]+' '+dataValueslot[3]+":"+ dataValueslot[4]+":"+dataValueslot[5]
+
       let surveyData = {
         form_title: surveycontent.form_title,
         form_description: surveycontent.form_description,
         questioncontent: surveycontent.questioncontent,
         form_end_date: dateForEnd,
-        form_draw_date: dateForlot,
+        form_draw_date: dateForlottory,
         form_pic_url: imgurURL,
         form_gift_type: giftType,
         form_field_type: formType,
         gift_info:gift_info
       }
 
+      //做合法性判斷
+      if(displayBtnOrNot==="是")
+      {
+        if(giftType==="無抽獎活動"){
+          legalsubmit=0
+        }
+        for(let i=0; i<surveyData.gift_info.length;i++){
+          if(surveyData.gift_info[i].gift_name===""){
 
-      console.log(surveyData)
-      const result =  await fetch("http://127.0.0.1:5000/SurveyManagement/new", {
-        method: "POST",
-        headers:{
-          Authorization: `Bearer ${localStorage.getItem('jwt')}`
-      },
-        body: JSON.stringify(surveyData),
-      });
-      console.log(result);
-      
-      if (result.status===200){
-        window.sessionStorage.setItem('form', '');
-        window.sessionStorage.setItem('form_info', '');
-        alert("問卷製作成功")
-        window.location.href = "/";
+            legalsubmit=0
+          }
+        }
+      }
+      else{
+        dateForlottory=null
       }
 
+      if(surveyData.form_title===""){
+        legalsubmit=0
+      }
+      if(surveyData.questioncontent.length===0){
+        legalsubmit=0
+      }
+      if (dateForEndbeforeProcess>=dateForlotbeforeProcess)
+      {
+        legalsubmit=0
+      }
 
+  
+      console.log(surveyData)
+      console.log("---------")
+      console.log(legalsubmit)
+      
+      if(legalsubmit===1)
+      {
+        
+        const result =  await fetch("http://127.0.0.1:5000/SurveyManagement/new", {
+          method: "POST",
+          headers:{
+            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        },
+          body: JSON.stringify(surveyData),
+        });
+        console.log(result);
+        setload(false)
+        
+        if (result.status===200){
+  
+          window.sessionStorage.removeItem('form_info'); 
+          window.sessionStorage.removeItem('form'); 
+          alert("問卷製作成功")
+          window.location.href = "/";
+        }
+        else{
+
+          alert("問卷製作失敗，請稍候再試一次")
+          
+        }
+      }
+      else{
+        alert("問卷資訊填寫不完整，請再試一次")
+        setload(false)
+      }
       //
     }
 
@@ -280,23 +347,58 @@ const MakeSurvey2 = () => {
         return gift_info
     })
 
-
   }
   
-  const changeGiftURL = evt =>{
+  const changeGiftURL = event =>{
     /*
-    change question content(get by id)
+
     */
-    console.log(evt.target.id)
-    let id = Number(evt.target.id)
-    let tempArr = gift_info
-    tempArr[id].gift_pic_url=evt.target.value
-    setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
-        
-      setGiftInfo(tempArr)
-        return gift_info
-    })
+    setGiftImageLoading(true)
+    console.log(event.target.id)
+
+    if (event.target.files && event.target.files[0]) {
+      //console.log(event.target.files[0])
+      let img = event.target.files[0];
+      console.log(img)
+      console.log(URL.createObjectURL(img))
+      
+
+      const formdata = new FormData() 
+      formdata.append("image", img)
+
+      fetch('https://api.imgur.com/3/image/', {
+        method:"POST",
+        headers:{
+          Authorization: "Client-ID 5535a8facba4790"
+        },
+        body: formdata
+      }).then(data => data.json())
+      .then(data => {
+        //我們要的imgur網址
+        setGiftImageLoading(false)
+        let imgururl = data.data.link
+        if (imgururl===undefined){
+          alert("上傳圖片失敗")
+        }
+        else{
+
+          console.log(imgururl)
+          let id = Number(event.target.id)
+          let tempArr = gift_info
+          tempArr[id].gift_pic_url=imgururl
+          setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
+            setGiftInfo(tempArr)
+            setrerenderkey(rerenderkey+1)
+            return gift_info
+          })
+
+        }
+      })
+
+    }
 }
+
+
 
 const deleteGift =evt=>{
 
@@ -316,6 +418,9 @@ const deleteGift =evt=>{
         {/*react dnd*/}
         <section className='page-container'>
           <div className='breadcrumb'>
+                    <button className='Btn SurveyOptionBtn card-shadow' onClick={cancel}>
+                        取消
+                    </button>
                     <button className='Btn SurveyOptionBtn card-shadow' onClick={back}>
                         製作問卷
                     </button>
@@ -325,6 +430,7 @@ const deleteGift =evt=>{
                     <button className='Btn SurveyOptionBtn card-shadow' onClick={handleSubmit}>
                         發布問卷
                     </button>
+                    {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
 
 
           </div>
@@ -334,20 +440,18 @@ const deleteGift =evt=>{
                     <h3 style={{textAlign: "center"}}>截止與抽獎時間</h3>
                     <h4>問卷截止時間</h4>
                     <p>
-                    <DateTimePicker value={DateForFormEnd} onChange={(date) => setDateForFormEnd(date)}   format={"y-MM-dd h:mm:ss a"} className='input-columns' />
+                    <DateTimePicker value={DateForFormEnd} minDate={moment().toDate()} onChange={(date) => setDateForFormEnd(date)}   format={"y-MM-dd h:mm:ss a"} className='input-columns' />
                     </p>
-                    <h4>抽獎時間</h4>
-                    <p>
-                    <DateTimePicker value={DateForLottery} onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns'/>
-                    </p>
+
+                    {displayBtnOrNot==="是" ?  <><h4>抽獎時間</h4><p><DateTimePicker value={DateForLottery} minDate={moment().toDate()} onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns'/></p></>  : null}
                     <h4>問卷縮圖圖片</h4>
                     <div>
-                      <img src={image.display} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>
+                    {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:<img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>}
                       </div>
                       <br></br>
                       <div>
-                      <input className='Btn SurveyOptionBtn' ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
-                      <button className='Btn SurveyOptionBtn card-shadow' onClick={()=>inputFile.current.click()}>
+                      <input className='Btn SurveyOptionBtn' ref={inputFormFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
+                      <button className='Btn SurveyOptionBtn card-shadow' onClick={()=>inputFormFile.current.click()}>
                         選擇圖片
                       </button>
 
@@ -392,7 +496,17 @@ const deleteGift =evt=>{
                                       <input id={item.id} type="text" pattern="[0-9]*" placeholder="獎品數量"  className='input-columns' defaultValue={item.quantity}  onChange={changeGiftquantity}/>
                                   </p>
                                   <p>
-                                      <input id={item.id} type="text" placeholder="獎品圖片url網址"  className='input-columns' defaultValue={item.gift_pic_url}  onChange={changeGiftURL}/>
+                                      {/*<input id={item.id} type="text" placeholder="獎品圖片url網址"  className='input-columns' defaultValue={item.gift_pic_url}  onChange={changeGiftURL}/>*/}
+                                      
+                                      {giftLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:<img src={item.gift_pic_url} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>}
+                                      <br></br>
+
+                                      <input className='Btn SurveyOptionBtn' ref={inputGiftFile} type="file" name="myImage" onChange={changeGiftURL} style={{display:'none'}}/>
+                                      <button className='Btn SurveyOptionBtn card-shadow' onClick={()=>inputGiftFile.current.click()}>
+                                        選擇獎品圖片
+                                      </button>
+
+
                                   </p>
 
                                 </div>
