@@ -131,12 +131,7 @@ def closeForm(form_id, form_close_date, form_draw_date):
     finally:
         db.close()
 
-
-'''
-[Wei]: addForm可能會再更新，以確保db transaction process。（但變數不會改變，前端可以照用）
-'''
-
-
+# Create Form API
 def addForm(form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_field_type, form_gift_type, gift_info):
     db = get_db()
     # db cursor is lightweight, so it's better to declare multiple curosrs instead of running multiple db connections.
@@ -169,16 +164,19 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         cursor3.execute(query, [form_id, form_gift_type])
 
         # Write Gift
-        query = """
-        INSERT INTO Gift(form_form_id, gift_name, gift_pic_url, number)
-        VALUES
-        """
-        for gift in gift_info:
-            for i in range(gift['quantity']):
-                query += """({}, '{}', '{}', {}),""".format(form_id,
-                                                            gift['gift_name'], gift['gift_pic_url'], i)
-        query = query[:-1]
-        cursor4.execute(query)
+        if len(gift_info) > 0:
+            query = """
+            INSERT INTO Gift(form_form_id, gift_name, gift_pic_url, number)
+            VALUES
+            """
+            for gift in gift_info:
+                for i in range(gift['quantity']):
+                    query += """({}, '{}', '{}', {}),""".format(form_id,
+                                                                gift['gift_name'], gift['gift_pic_url'], i)
+            query = query[:-1]
+            cursor4.execute(query)
+        else:
+            pass
 
         # Write FormField
         query = """
@@ -190,7 +188,7 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
         db.commit()
         return True
     except psycopg2.DatabaseError as error:
-        print(error)
+        # print(error)
         db.rollback()
         return False
     finally:
