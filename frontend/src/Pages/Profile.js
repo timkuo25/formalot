@@ -82,7 +82,7 @@ const Profile = () => {
                         
                         
                         <div>
-                            <p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>
+                            <p className="name">{Profile.user_lastname} {Profile.user_firstname}</p>
                             <p className="email">{Profile.user_email}</p>
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>

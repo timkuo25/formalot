@@ -8,7 +8,7 @@
 
 .register_card_left {
     width: 48em;
-    height:77em;
+    height:65em;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;
     padding: 0.8em;
@@ -34,7 +34,7 @@
 
 .register_card_right {
     width: 50em;
-    height:77em;
+    height:65em;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;
     padding: 0.8em;

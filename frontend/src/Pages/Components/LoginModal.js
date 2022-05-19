@@ -4,6 +4,7 @@ import ReactDom from "react-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Homepage } from "../Homepage";
+import { useForm } from "react-hook-form";
 
 function LoginModal( {closeModal}){
     const [email, setEmail] = useState("");
@@ -37,28 +38,33 @@ function LoginModal( {closeModal}){
     };
 
 
+    const { trigger } = useForm();
+    
+    const handleKeyUp = (e) => {
+        console.log(e.keyCode);
+    }
 
-    // validation
+        // validation
         let errors = {};
-      
+        
         // if (!email.trim()) {
         //   errors.username = 'Username required';
         // }
         // else if (!/^[A-Za-z]+/.test(values.name.trim())) {
         //   errors.name = 'Enter a valid name';
         // }
-      
+    
         if (!/\S+@\S+\.edu+\.tw+/.test(email)) {
-          errors.email = '請使用大專院校信箱！';
+        errors.email = '請使用大專院校信箱！';
         } 
         // else if (!/\S+@\S+\.\S+/.test(email)) {
         //     errors.email = '信箱格式錯誤';
         // }
 
 
-        if (!password) {
-          errors.password = '請輸入密碼';
-        } 
+        // if (!password) {
+        // errors.password = '請輸入密碼';
+        // } 
         // else if (values.password.length < 6) {
         //   errors.password = 'Password needs to be 6 characters or more';
         // }
@@ -84,14 +90,14 @@ function LoginModal( {closeModal}){
 
                         <div className='login-form-input'>
                             {/* <label className='form-label'>帳號</label> */}
-                            <input placeholder="電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)}></input>
-                            {errors.email && <font>{errors.email}</font>}
+                            <input placeholder="電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)} ></input>
+                            {(email.length>0 && errors.email) && <font>{errors.email}</font>}
                         </div>
                         <p></p>
                         <div className='login-form-input'>
                             {/* <label className='form-label'>密碼</label> */}
                             <input type="password" placeholder="密碼" className="inputbar" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                            {errors.password && <font>{errors.password}</font>}
+                            {/* {(errors.password) && <font>{errors.password}</font>} */}
                         </div>
 
                         <div align="center">
