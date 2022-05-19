@@ -6,6 +6,7 @@ import callrefresh from '../refresh.js';
 import React from "react";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { AiFillEye } from "react-icons/ai";
+import ReactLoading from "react-loading";
 
 
 const EditProfile = () => {
@@ -13,9 +14,12 @@ const EditProfile = () => {
     const [last_name, setLastname] = useState("");
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
+    const [loading, setload] = useState(false)
+    const [readload, setreadload] = useState(false)
     // 修改個人資料
     const calluserupdate = async (e) => {
         e.preventDefault();
+        setload(true)
         const getprotected = await fetch('http://127.0.0.1:5000/UserUpdate',{
             method: 'PUT',
             headers: {
@@ -29,6 +33,7 @@ const EditProfile = () => {
             }),
         });
         console.log(getprotected.status);
+        setload(false)
         if(getprotected.status === 401){
             callrefresh();
         }else{
@@ -36,11 +41,13 @@ const EditProfile = () => {
             console.log(resdata);
             console.log(resdata.message);
             alert(resdata.message);
+            window.location.href = "/Profile"
         }
     };
     
     const [Profile, setProfile] = useState([]);
     useEffect(() => {
+        setreadload(true)
         const callGetUserProfile = async () => {
             const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
                 method: 'GET',
@@ -48,6 +55,7 @@ const EditProfile = () => {
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
                 },
             });
+            setreadload(false)
             console.log(data.status);
             if(data.status === 401){
                 callrefresh("reload");
@@ -108,10 +116,11 @@ const EditProfile = () => {
             <div className="edit_card_right">
                 <div className="edit_input_content">
                     <h1>編輯個人資訊</h1>
+                    
                 </div>
                 <div className="edit_input_content">
                     <h2>你的信箱</h2>
-                    <h3>{Profile.user_email}</h3>
+                    <h3>{readload ?   <ReactLoading type="spinningBubbles" color="#432a58"/>:Profile.user_email}</h3>
                 </div>
                 <div className="edit_input_content">
                     <h3>姓氏</h3>
@@ -148,6 +157,7 @@ const EditProfile = () => {
             <form>
                 {errors.errorpwd && <button className="Btn edit_submit" onClick={callAlert}>修改</button>}
                 {errors.correctpwd && <button className="Btn edit_submit" onClick={calluserupdate}>修改</button>}
+                {loading ?   <div className='card-container'><ReactLoading type="balls" color="#432a58"/></div>:null}
                 {/* <button className="Btn edit_submit" onClick={calluserupdate}>修改</button> */}
             </form>
             
