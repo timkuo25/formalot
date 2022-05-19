@@ -4,15 +4,17 @@ import ReactDom from "react-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Homepage } from "../Homepage";
-import { useForm } from "react-hook-form";
+
 
 function LoginModal( {closeModal}){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setload] = useState(false)
     const navigate = useNavigate();
 
     // 登入
     const callLoginApi = async (e) => {
+        setload(true)
         e.preventDefault();
         const result = await fetch("http://127.0.0.1:5000/Login", {
             method: "POST",
@@ -22,6 +24,7 @@ function LoginModal( {closeModal}){
             }),
         });
         let resJson = await result.json();
+        setload(false)
         if (resJson.access_token){
             localStorage.setItem('jwt', resJson.access_token);
             localStorage.setItem('refresh_token', resJson.refresh_token);
@@ -37,12 +40,6 @@ function LoginModal( {closeModal}){
         };
     };
 
-
-    const { trigger } = useForm();
-    
-    const handleKeyUp = (e) => {
-        console.log(e.keyCode);
-    }
 
         // validation
         let errors = {};
@@ -84,10 +81,11 @@ function LoginModal( {closeModal}){
             <div className='modalBackground'>
                 <div className="modalContainer">
                     <button onClick={() => closeModal(false)} className="titleCloseBtn">X</button>
+                        
                         <div align="center" className="title">
                             <h2>登入</h2>
                         </div>
-
+                        
                         <div className='login-form-input'>
                             {/* <label className='form-label'>帳號</label> */}
                             <input placeholder="電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)} ></input>
@@ -110,7 +108,10 @@ function LoginModal( {closeModal}){
                         <div className="login-button" align="center">
                             <button className="Btn create-account-button" onClick={() => {window.location.href='register'}}>建立新帳號</button>
                             {/* <button className="forget-password">忘記密碼？</button><br/> */}
+                            {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58"/></div>:null}
+                            
                         </div>
+                        
                 </div>
             </div>,
             document.getElementById("portal")
