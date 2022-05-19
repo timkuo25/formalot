@@ -47,6 +47,7 @@ const Register = () => {
 
 
     const callregisterApi = async (e) => {
+
         // const formdata = new FormData() 
         // formdata.append("image", image.img)
 
@@ -80,7 +81,7 @@ const Register = () => {
                 password2: password2,
                 code: code,
                 session_code: sessionStorage.getItem('code'),
-                user_pic_url: ''
+                user_pic_url: process.env.PUBLIC_URL + 'default.png'
             }),
         });
         let resJson = await result.json();

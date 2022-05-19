@@ -71,7 +71,7 @@ const Profile = () => {
                     <div className="top-section">
                     <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}} />
                             {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
-                            <img className="photo" src={resizedImage || Profile.user_pic_url || process.env.PUBLIC_URL + 'default.png'} />
+                            <img className="photo" src={resizedImage || Profile.user_pic_url} />
                             <button className='Btn camera' onClick={()=>inputFile.current.click()}>
                                 <AiFillCamera size='20px'/>
                             </button>
