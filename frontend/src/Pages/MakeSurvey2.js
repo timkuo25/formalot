@@ -252,30 +252,37 @@ const MakeSurvey2 = () => {
       //做合法性判斷
       if(displayBtnOrNot==="是")
       {
+        console.log("flag 1")
         if(giftType==="無抽獎活動"){
+          console.log("flag 2")
+          legalsubmit=0
+        }
+        if (dateForEndbeforeProcess>=dateForlotbeforeProcess)
+        {
+          console.log("flag 7")
           legalsubmit=0
         }
         for(let i=0; i<surveyData.gift_info.length;i++){
           if(surveyData.gift_info[i].gift_name===""){
-
+            console.log("flag 3")
             legalsubmit=0
           }
         }
       }
       else{
-        dateForlottory=null
+        console.log("flag 4")
+        surveyData.form_draw_date=null
       }
 
       if(surveyData.form_title===""){
+        console.log("flag 5")
         legalsubmit=0
       }
       if(surveyData.questioncontent.length===0){
+        console.log("flag 6")
         legalsubmit=0
       }
-      if (dateForEndbeforeProcess>=dateForlotbeforeProcess)
-      {
-        legalsubmit=0
-      }
+
 
   
       console.log(surveyData)
