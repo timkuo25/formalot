@@ -272,7 +272,8 @@ const MakeSurvey = () =>{
                            <input type="text" placeholder="問卷題目" className='input-columns' style={{width: "100%"}} defaultValue={surveyTitle} onChange={handleChangeTitle}/>
                         </p>
                         <p>
-                            <input type="text" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}} defaultValue={SurveyDescription} onChange={handleChangeDescription}/>
+                            {/*<input type="text" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}} defaultValue={SurveyDescription} onChange={handleChangeDescription}/>*/}
+                            <textarea placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}} defaultValue={SurveyDescription} onChange={handleChangeDescription}></textarea>
                         </p>
     
                     </div>
