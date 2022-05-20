@@ -259,7 +259,7 @@ const MakeSurvey = () =>{
                         製作問卷
                     </button>
                     <button className='Btn SurveyOptionBtn card-shadow' onClick={handleSubmit}>
-                        填寫抽獎資訊
+                        填寫資訊
                     </button>
                 </div>
             <section className='makeSurvey-container'>

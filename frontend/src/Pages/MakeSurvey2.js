@@ -458,7 +458,7 @@ const deleteGift =evt=>{
                         製作問卷
                     </button>
                     <button className='Btn SurveyOptionBtn card-shadow' >
-                        填寫抽獎資訊
+                        填寫資訊
                     </button>
                     <button className='Btn SurveyOptionBtn card-shadow' onClick={handleSubmit}>
                         發布問卷
