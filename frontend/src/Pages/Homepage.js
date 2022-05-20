@@ -5,9 +5,7 @@ import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
 import ReactLoading from "react-loading";
 import { LoginModal } from './Components/LoginModal';
-import { message } from 'antd';
-
-
+import { CopyMessage } from './Components/CopyMessage';
 
 const Homepage = () => {
     const [page, setPage] = useState(0);
@@ -70,10 +68,6 @@ const Homepage = () => {
         }
     }
 
-    const copyURL = () => {
-        message.success('URL copied!');
-    };
-
     return (
         <>
             <Navbar />
@@ -118,7 +112,6 @@ const Homepage = () => {
                                             info={forms[show][item]}
                                             openModal={() => setModalOpen(true)}
                                             type='home'
-                                            copyURL={() => copyURL()}
                                         />
                                     })
                                 }
@@ -149,6 +142,7 @@ const Homepage = () => {
                 />
             </section>
             <Footer />
+            <CopyMessage/>
         </>
     )
 
