@@ -76,7 +76,7 @@ const MakeSurvey2 = () => {
           let gift={
             id:gift_info.length,
             gift_name:"",
-            gift_pic_url:"",
+            gift_pic_url:"https://i.imgur.com/sKBuD6v.png",
             quantity:1
           }
           setGiftInfo((gift_info.concat(gift)));
@@ -95,7 +95,7 @@ const MakeSurvey2 = () => {
       let gift={
         id:gift_info.length,
         gift_name:"",
-        gift_pic_url:"",
+        gift_pic_url:"https://i.imgur.com/sKBuD6v.png",
         quantity:1
       }
       setGiftInfo((gift_info.concat(gift)));
@@ -206,6 +206,7 @@ const MakeSurvey2 = () => {
 
     const handleSubmit = async()=>{
       setload(true)
+      var errorMsg = ""
       var legalsubmit=1
       let surveycontent = window.sessionStorage.getItem('form')
       surveycontent = JSON.parse(surveycontent)
@@ -256,16 +257,24 @@ const MakeSurvey2 = () => {
         if(giftType==="無抽獎活動"){
           console.log("flag 2")
           legalsubmit=0
+          errorMsg = "抽獎獎品類別未選擇"
         }
-        if (dateForEndbeforeProcess>=dateForlotbeforeProcess)
+        if (dateForEndbeforeProcess>dateForlotbeforeProcess)
         {
           console.log("flag 7")
           legalsubmit=0
+          errorMsg = "問卷截止日不得晚於問卷抽獎日"
         }
         for(let i=0; i<surveyData.gift_info.length;i++){
           if(surveyData.gift_info[i].gift_name===""){
             console.log("flag 3")
             legalsubmit=0
+            errorMsg = "禮物名稱不得為空"
+          }
+          if(!Number.isInteger(surveyData.gift_info[i].quantity) || surveyData.gift_info[i].quantity<=0){
+            console.log("flag 3")
+            legalsubmit=0
+            errorMsg = "禮物數量請填入正整數"
           }
         }
       }
@@ -277,10 +286,12 @@ const MakeSurvey2 = () => {
       if(surveyData.form_title===""){
         console.log("flag 5")
         legalsubmit=0
+        errorMsg = "問卷標題未填寫"
       }
       if(surveyData.questioncontent.length===0){
         console.log("flag 6")
         legalsubmit=0
+        errorMsg = "問卷問題未製作"
       }
 
 
@@ -316,7 +327,7 @@ const MakeSurvey2 = () => {
         }
       }
       else{
-        alert("問卷資訊填寫不完整，請再試一次")
+        alert(errorMsg)
         setload(false)
       }
       //
@@ -336,6 +347,19 @@ const MakeSurvey2 = () => {
           return gift_info
       })
 
+
+  }
+  const deleteGiftImage = evt =>{
+    console.log(evt.target.id)
+
+    let id = Number(evt.target.id)
+    let tempArr = gift_info
+    tempArr[id].gift_pic_url="https://i.imgur.com/sKBuD6v.png"
+    setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
+      setGiftInfo(tempArr)
+      setrerenderkey(rerenderkey+1)
+      return gift_info
+    })
 
   }
 
@@ -455,7 +479,7 @@ const deleteGift =evt=>{
                     {displayBtnOrNot==="是" ?  <><h4>抽獎時間</h4><p><DateTimePicker value={DateForLottery} minDate={moment().toDate()} onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns'/></p></>  : null}
                     <h4>問卷縮圖圖片</h4>
                     <div>
-                    {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:<img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>}
+                    {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:imgurURL==="" ? <img src={"https://i.imgur.com/sKBuD6v.png"} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>:<img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>}
                       </div>
                       <br></br>
                       <div>
@@ -508,7 +532,8 @@ const deleteGift =evt=>{
                                       {/*<input id={item.id} type="text" placeholder="獎品圖片url網址"  className='input-columns' defaultValue={item.gift_pic_url}  onChange={changeGiftURL}/>*/}
                                       
                                       <img id={item.id} src={item.gift_pic_url} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>
-                                      <br></br>
+                                      {item.gift_pic_url==='https://i.imgur.com/sKBuD6v.png'? null:<button id={item.id} className={'Btn NextBtn'} onClick={deleteGiftImage}>Ｘ</button>}
+                                      <br/>
 
                                       <input id={item.id}  type="file" name="myImage" accept="image/png, image/jpeg" onChange={changeGiftURL} />
 
