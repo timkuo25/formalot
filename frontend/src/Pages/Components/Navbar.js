@@ -2,7 +2,6 @@ import '../../css/Navbar.css';
 import { LoginModal } from './LoginModal';
 import React, { useState } from 'react';
 import { useNavigate, NavLink } from "react-router-dom";
-import { Homepage } from "../Homepage";
 
 const Navbar = () => {
     const [modalOpen, setModalOpen] = useState(false);

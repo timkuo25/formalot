@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import './App.css';
 import { Homepage } from './Pages/Homepage';
 import { MakeSurvey } from './Pages/MakeSurvey';
@@ -13,11 +12,10 @@ import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
 import { Fillin } from './Pages/Fill-in'
 import { Form } from './Pages/Form'
-import {SurveyStatistics} from './Pages/SurveyStatistics';
+import { SurveyStatistics } from './Pages/SurveyStatistics';
 
 
 import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
 const App = () => {
   // const [form_id, setFormid] = useState(0);
 
