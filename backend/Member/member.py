@@ -311,8 +311,12 @@ def UpdateMemberPhoto():
     pic_url = req_json["pic_url"]
     id = protected()
     updateMemberphoto(pic_url, id)
+
+    if pic_url != "" :
+        response_return["message"] = "使用者照片更新成功"
+    else:
+        response_return["message"] = "使用者照片更新失敗"
     
-    response_return["message"] = "使用者照片更新成功"
     return jsonify(response_return)
 
 def password_check(password, password2):
