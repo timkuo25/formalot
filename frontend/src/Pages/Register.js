@@ -80,8 +80,8 @@ const Register = () => {
                 password: password,
                 password2: password2,
                 code: code,
-                session_code: sessionStorage.getItem('code'),
-                user_pic_url: process.env.PUBLIC_URL + 'default.png'
+                session_code: sessionStorage.getItem('code')
+                // user_pic_url: process.env.PUBLIC_URL + 'default.png'
             }),
         });
         let resJson = await result.json();

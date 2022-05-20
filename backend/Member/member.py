@@ -16,14 +16,14 @@ def protected():
     current_user = get_jwt_identity()
     return current_user
 
-def addMember(user_email, user_firstname, user_lastname, student_id, user_hashed_pwd, user_pic_url):
+def addMember(user_email, user_firstname, user_lastname, student_id, user_hashed_pwd):
     db = get_db()
     cursor = db.cursor()
     try:
         query = '''
-        INSERT into Users (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd, user_pic_url) values (%s,%s,%s,%s,%s,%s);
+        INSERT into Users (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd) values (%s,%s,%s,%s,%s);
         '''
-        cursor.execute(query, (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd, user_pic_url))
+        cursor.execute(query, (user_email, user_firstname, user_lastname, student_id, user_hashed_pwd))
         db.commit()
         # return 'Succeed in adding member.'
         print('Succeed in adding member.')
@@ -167,7 +167,6 @@ def Register():
         last_name = req_json["last_name"]
         password = req_json["password"]
         password2 = req_json["password2"]
-        user_pic_url = req_json["user_pic_url"]
 
         rows = getMemberByStudentId(id)
         if rows != []:
@@ -176,7 +175,7 @@ def Register():
         else:
             if password_check(password, password2):
                 password_hash = str(md5(password.encode("utf-8")).hexdigest())
-                addMember(email, first_name, last_name, id, password_hash, user_pic_url)
+                addMember(email, first_name, last_name, id, password_hash)
                 response_return["status"] = "success"
                 response_return["message"] = "註冊成功"
             else:
