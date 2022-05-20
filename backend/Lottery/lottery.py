@@ -321,7 +321,7 @@ def getGift():
 def autoLottery(form_id):
     num_of_lottery = 0
     candidate_list = []
-
+    print('HI')
     # form_id = request.args.get('form_id')
 
     # get_form_det = getFormDetailByFormId(form_id)
@@ -426,34 +426,31 @@ def getFormDetail():
 def autolotteryfunc():
     db = get_db()
     cursor = db.cursor()
-    try:
-        query = '''
-        SELECT form_id
-        FROM form
-        WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
-        '''
-        cursor.execute(query)
-        result = [dict((cursor.description[i][0], value)
-                    for i, value in enumerate(row)) for row in cursor.fetchall()]
-        db.commit()
-   
 
-        for i in result:
-            form_id = i['form_id']
-            autoLottery(form_id)
-            print(str(form_id) + 'lottery is complete!')
+    query = '''
+    SELECT form_id
+    FROM form
+    WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP + (8 * interval '1 hour') ;
+    '''
+    cursor.execute(query)
+    result = [dict((cursor.description[i][0], value)
+                for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
 
-        return "complete"       
-    except:
-        db.rollback()
-    finally:
-        db.close()
+
+    for i in result:
+        form_id = i['form_id']
+        autoLottery(form_id)
+        print(str(form_id) + 'lottery is complete!')
+
+    return "complete"       
+
 
 
 
 @lottery_bp.route('/AutolotteryOnTime', methods=["GET"])
 def AutolotteryOnTime():
-    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=0)
+    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=9)
     scheduler.start()
 
     return 'lottery running'
@@ -474,7 +471,7 @@ def getUserForm():
         cursor.execute(query, [form_id])
         result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
         db.commit()
-        return jsonify(result)
+        
     except:
         db.rollback()
     finally:
@@ -499,62 +496,50 @@ def FormOwnerCheck():
     form_id = request.args.get('form_id')
     db = get_db()
     cursor = db.cursor()
-    try:
-        query = '''
-        SELECT form_id, user_student_id, user_pic_url
-        FROM form
-        JOIN users
-        ON form.user_student_id = users.student_id
-        WHERE form_id = (%s);
-        '''
-        cursor.execute(query, [form_id])
-        result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
-        db.commit()
-        db.close()
-        
-        if(len(result) != 0):
-
-            id = protected()
-            response["form_id"] = result[0]['form_id']
-            response["form_owner_id"] = result[0]['user_student_id']
-            response["form_owner_pic_url"] =  result[0]['user_pic_url']
-            if(id == result[0]['user_student_id']):
-                response["form_owner_status"] = True
-            else:
-                response["form_owner_status"] = False
-        else:
-            response["form_id"] = form_id
-            response["form_owner_id"] = 'The form is not exist!!!'
-            response["form_owner_status"] = False
-        return jsonify(response)
-    except:
-        db.rollback()
-    finally:
-        db.close()
+    query = '''
+    SELECT form_id, user_student_id, user_pic_url
+    FROM form
+    JOIN users
+    ON form.user_student_id = users.student_id
+    WHERE form_id = (%s);
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+    db.commit()
+    db.close()
     
+    if(len(result) != 0):
+
+        id = protected()
+        response["form_id"] = result[0]['form_id']
+        response["form_owner_id"] = result[0]['user_student_id']
+        response["form_owner_pic_url"] =  result[0]['user_pic_url']
+        if(id == result[0]['user_student_id']):
+            response["form_owner_status"] = True
+        else:
+            response["form_owner_status"] = False
+    else:
+        response["form_id"] = form_id
+        response["form_owner_id"] = 'The form is not exist!!!'
+        response["form_owner_status"] = False
+    return jsonify(response)
 
 
 def checkSendEmail(form_id):
     db = get_db()
     cursor = db.cursor()
-    try:
-        query = '''
-        SELECT form_form_id, send_email
-        FROM gift
-        WHERE form_form_id = (%s); 
-        '''
-        cursor.execute(query, [form_id])
-        result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
-        
-        db.commit()
-        return result
-    except:
-        db.rollback()
-    finally:
-        db.close()
+    query = '''
+    SELECT form_form_id, send_email
+    FROM gift
+    WHERE form_form_id = (%s); 
+    '''
+    cursor.execute(query, [form_id])
+    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
     
+    db.commit()
+    db.close()
 
-    
+    return result
 
 # Check whether the form sent email or not
 @lottery_bp.route('/CheckSendEmail', methods=["GET"])
@@ -613,20 +598,17 @@ def SendEmailPage():
 def modifyEmailStatus(form_id):
     db = get_db()
     cursor = db.cursor()
-    try:
-        query = '''
-        UPDATE gift 
-        SET send_email = 1 
-        where form_form_id = (%s);
-        '''
-        
-        cursor.execute(query, [form_id])
-        db.commit()
-        return 0
-    except:
-        db.rollback()
-    finally:
-        db.close()
+    query = '''
+    UPDATE gift 
+    SET send_email = 1 
+    where form_form_id = (%s);
+    '''
+    
+    cursor.execute(query, [form_id])
+    db.commit()
+    db.close()
+
+    return 0
 
 def sendEmail(recipient, form_title, form_ans_time, gift_name):
 
