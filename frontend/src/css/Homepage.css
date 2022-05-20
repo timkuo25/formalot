@@ -67,22 +67,6 @@
     text-align: center;
 }
 
-.showcase {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    font-size: 2em;
-    font-weight: 900;
-    padding: 2em;
-    background-color: var(--theme-light-grey);
-}
-
-
-.showcase-image {
-    width: 5em;
-    margin: 0.6em;
-}
 
 .latest-q {
     display: flex;
@@ -90,6 +74,7 @@
     justify-content: center;
     /* border: #000000 solid 1px; */
     height: 100%;
+    margin-top: 5%;
 }
 
 .latest-q-container {
@@ -151,6 +136,11 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+.ant-message {
+    position: absolute;
+    bottom: 20px;
+    top: unset;
+}
 
 
 @media only screen and (max-width: 600px) {
