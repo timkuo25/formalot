@@ -1,3 +1,4 @@
+import 'antd/dist/antd.css';
 import './App.css';
 import { Homepage } from './Pages/Homepage';
 import { MakeSurvey } from './Pages/MakeSurvey';
@@ -12,7 +13,6 @@ import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
 import { Fillin } from './Pages/Fill-in'
 import { Form } from './Pages/Form'
-import { useEffect, useState, Link } from 'react';
 import {SurveyStatistics} from './Pages/SurveyStatistics';
 
 

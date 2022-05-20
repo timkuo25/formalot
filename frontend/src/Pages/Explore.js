@@ -53,10 +53,6 @@ const Explore = ( ) => {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        console.log(showList[show]);
-    }, [show]);
-
     return (
         <>
             <Navbar />
