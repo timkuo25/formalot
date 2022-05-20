@@ -47,27 +47,28 @@ const Register = () => {
 
 
     const callregisterApi = async (e) => {
-        const formdata = new FormData() 
-        formdata.append("image", image.img)
 
-        //上傳照片到imgur
-        e.preventDefault();
-        const imgururl_result = await fetch('https://api.imgur.com/3/image/', {
-            method:"POST",
-            headers:{
-                Authorization: "Client-ID 5535a8facba4790"
-            },
-            body: formdata
+        // const formdata = new FormData() 
+        // formdata.append("image", image.img)
+
+        // //上傳照片到imgur
+        // e.preventDefault();
+        // const imgururl_result = await fetch('https://api.imgur.com/3/image/', {
+        //     method:"POST",
+        //     headers:{
+        //         Authorization: "Client-ID 5535a8facba4790"
+        //     },
+        //     body: formdata
             
-        })
+        // })
         
-        if(imgururl_result.status === 429){
-            var imgururl = ""
-        }else{
-            let data = await imgururl_result.json();
-            var imgururl = data.data.link
-            console.log(imgururl)        
-        }
+        // if(imgururl_result.status === 429){
+        //     var imgururl = ""
+        // }else{
+        //     let data = await imgururl_result.json();
+        //     var imgururl = data.data.link
+        //     console.log(imgururl)        
+        // }
 
         e.preventDefault();
         const result = await fetch("http://127.0.0.1:5000/Register", {
@@ -80,7 +81,7 @@ const Register = () => {
                 password2: password2,
                 code: code,
                 session_code: sessionStorage.getItem('code'),
-                user_pic_url: imgururl
+                user_pic_url: process.env.PUBLIC_URL + 'default.png'
             }),
         });
         let resJson = await result.json();
@@ -170,7 +171,7 @@ const Register = () => {
                     <h3>電子郵件</h3>
                     <div className = 'reg-valid'>
                         <input type="text" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} className="reg_inputbar"/>
-                        {errors.email && <font>{errors.email}</font>}
+                        {(email.length>0 && errors.email) && <font>{errors.email}</font>}
                         {errors.pass && <text>{errors.pass}</text>}
                     </div>
                 </div>
@@ -190,7 +191,7 @@ const Register = () => {
                         <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                             {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
                         </button>
-                        {errors.errorpwd && <font>{errors.errorpwd}</font>}
+                        {(password.length>0 && errors.errorpwd)&& <font>{errors.errorpwd}</font>}
                         {errors.correctpwd && <text>{errors.correctpwd}</text>}
                     </div>
                 </div>
@@ -205,7 +206,7 @@ const Register = () => {
                     </div>
                 </div>
 
-                <div className="input_content">
+                {/* <div className="input_content">
                     <h3>上傳頭貼</h3>
                         <div>
                             <input className='Btn SurveyOptionBtn' ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}}/>
@@ -215,7 +216,7 @@ const Register = () => {
                         <div>
                             <img src={image.display} style={{  height: '200px', width: '200px'}}/>
                         </div>
-                </div>
+                </div> */}
 
                 <div className="input_content">
                     <h3>信箱驗證碼</h3>

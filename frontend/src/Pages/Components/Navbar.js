@@ -16,7 +16,8 @@ const Navbar = () => {
         console.log("Logout Success");
         alert("登出成功");
         window.location.reload();
-        navigate(<Homepage/>);
+        window.location.href = "/"
+        //navigate(<Homepage/>);
     };
     const clearform =()=>{
         window.sessionStorage.removeItem('form_info'); 

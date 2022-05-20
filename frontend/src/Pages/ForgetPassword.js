@@ -102,7 +102,7 @@ const ForgetPassword = () => {
                     <h3>你的信箱</h3>
                     <form onSubmit={callemailApi} className="forget_verification">                        
                         <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="Your Email" className="forget_inputbar"/>
-                        {errors.email && <button className="Btn forget_ver_submit" disabled={true}>取得驗證碼</button>}
+                        {errors.email && <button className="forget_ver_submit_gray" disabled={true}>取得驗證碼</button>}
                         {errors.pass && <button className="Btn forget_ver_submit">取得驗證碼</button>}
                         {/* <button className="forget_ver_submit">取得驗證碼</button> */}
                     </form>
@@ -120,7 +120,7 @@ const ForgetPassword = () => {
                         <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                             {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
                         </button>
-                        {errors.errorpwd && <font>{errors.errorpwd}</font>}
+                        {(newpsw.length>0 && errors.errorpwd) && <font>{errors.errorpwd}</font>}
                         {errors.correctpwd && <text>{errors.correctpwd}</text>}
                     </div>
                 </div>

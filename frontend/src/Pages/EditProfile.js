@@ -139,7 +139,7 @@ const EditProfile = () => {
                         <button className='eye' onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                             {values.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
                         </button>
-                        {errors.errorpwd && <font>{errors.errorpwd}</font>}
+                        {(password.length>0 && errors.errorpwd) && <font>{errors.errorpwd}</font>}
                         {errors.correctpwd && <text>{errors.correctpwd}</text>}
                     </div>
                 </div>

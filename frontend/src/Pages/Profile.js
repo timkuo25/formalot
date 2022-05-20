@@ -75,7 +75,7 @@ const Profile = () => {
                     <div className="top-section">
                     <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}} />
                             {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
-                            <img className="photo" src={resizedImage || Profile.user_pic_url || process.env.PUBLIC_URL + 'default.png'} />
+                            <img className="photo" src={resizedImage || Profile.user_pic_url} />
                             <button className='Btn camera' onClick={()=>inputFile.current.click()}>
                                 <AiFillCamera size='20px'/>
                             </button>
@@ -86,8 +86,7 @@ const Profile = () => {
                         
                         
                         <div>
-                            {loading ?   <div className='name'><ReactLoading type="balls" color="#432a58"/></div>:<p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>}
-                            
+                            {loading ?   <div className='name'><ReactLoading type="balls" color="#432a58"/></div>:<p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>}                            
                             <p className="email">{Profile.user_email}</p>
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>
