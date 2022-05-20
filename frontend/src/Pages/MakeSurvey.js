@@ -273,7 +273,7 @@ const MakeSurvey = () =>{
                         </p>
                         <p>
                             {/*<input type="text" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}} defaultValue={SurveyDescription} onChange={handleChangeDescription}/>*/}
-                            <textarea placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}} defaultValue={SurveyDescription} onChange={handleChangeDescription}></textarea>
+                            <textarea placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px", resize:'vertical'}} defaultValue={SurveyDescription} onChange={handleChangeDescription}></textarea>
                         </p>
     
                     </div>
@@ -322,22 +322,22 @@ const MakeSurvey = () =>{
                         </p>
 
                         <p>
-                            <button className='Btn SurveyOptionBtn card-shadow' onClick={renderSingleChoice}>
+                            <button className='Btn SurveyDescriptionBtn card-shadow' onClick={renderSingleChoice}>
                             單選題
                             </button>
                         </p>
                         <p>
-                            <button className='Btn SurveyOptionBtn card-shadow' onClick={renderMultipleChoice}>
-                            多選題
+                            <button className='Btn SurveyDescriptionBtn card-shadow' onClick={renderMultipleChoice}>
+                            複選題
                             </button>
                         </p>
                         <p>
-                            <button className='Btn SurveyOptionBtn card-shadow' onClick={renderDropDown}>
+                            <button className='Btn SurveyDescriptionBtn card-shadow' onClick={renderDropDown}>
                             下拉式選單
                             </button>
                         </p>
                         <p>
-                            <button className='Btn SurveyOptionBtn card-shadow' disabled={1}>
+                            <button className='Btn SurveyDescriptionBtn card-shadow' disabled={1}>
                             線性量表問題
                             </button>
                         </p>

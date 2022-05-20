@@ -5,6 +5,7 @@ import { useEffect, useState,useRef } from 'react';
 import callrefresh from '../refresh.js';
 import { Card } from 'react-bootstrap';
 import Viewer from 'react-viewer';
+import ReactLoading from "react-loading";
 
 import { AiFillCamera } from "react-icons/ai";
 import {CropperModal} from './Components/CropperModal';
@@ -12,8 +13,10 @@ import React from 'react';
 
 const Profile = () => {
     const [Profile, setProfile] = useState([]);
+    const [loading, setload] = useState(false)
     useEffect(() => {
         const callGetUserProfile = async () => {
+            setload(true)
             const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
                 method: 'GET',
                 headers: {
@@ -21,6 +24,7 @@ const Profile = () => {
                 },
             });
             console.log(data.status);
+            setload(false)
             if(data.status === 401){
                 callrefresh("reload");
             }else{
@@ -82,7 +86,8 @@ const Profile = () => {
                         
                         
                         <div>
-                            <p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>
+                            {loading ?   <div className='name'><ReactLoading type="balls" color="#432a58"/></div>:<p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>}
+                            
                             <p className="email">{Profile.user_email}</p>
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>
