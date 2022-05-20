@@ -73,7 +73,7 @@ const Profile = () => {
             <div className="profile_card_container" align='center'>
                 <div className="profile_card_right">
                     <div className="top-section">
-                    <input ref={inputFile} type="file" name="myImage" onChange={onImageChange} style={{display:'none'}} />
+                    <input ref={inputFile} type="file" accept="image/png, image/jpeg" name="myImage" onChange={onImageChange} style={{display:'none'}} />
                             {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
                             <img className="photo" src={resizedImage || Profile.user_pic_url} />
                             <button className='Btn camera' onClick={()=>inputFile.current.click()}>
