@@ -322,7 +322,7 @@ def getGift():
 def autoLottery(form_id):
     num_of_lottery = 0
     candidate_list = []
-    print('HI')
+    # print('HI')
     # form_id = request.args.get('form_id')
 
     # get_form_det = getFormDetailByFormId(form_id)
@@ -452,7 +452,7 @@ def autolotteryfunc():
 @lottery_bp.route('/AutolotteryOnTime', methods=["GET"])
 @jwt_required()
 def AutolotteryOnTime():
-    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=0)
+    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="interval", minutes=1)
     scheduler.start()
 
     return 'lottery running'
@@ -564,8 +564,12 @@ def CheckSendEmail():
     return jsonify(response)
 
 # Send email to winners
-@lottery_bp.route('/SendEmailPage', methods=["GET"])
+@lottery_bp.route('/SendEmailPage', methods=["POST"])
 def SendEmailPage():
+    req_json = request.get_json(force=True)
+    time = req_json["time"]
+    place = req_json["place"]
+    info = req_json["issuer_info"]
     response = {
         "status": '',
         "message": ''
@@ -583,7 +587,7 @@ def SendEmailPage():
                 # 已抽獎，尚未寄信給中獎者
                 get_gift_winners = getGiftWinner(form_id)
                 for winner in get_gift_winners:
-                    sendEmail(winner['winner_student_id'],winner['form_title'], winner['form_answer_time'], winner['gift_name'])
+                    sendEmail(winner['winner_student_id'],winner['form_title'], winner['form_answer_time'], winner['gift_name'], time, place, info)
                 
                 modifyEmailStatus(form_id)
                 response["status"] = 'success'
@@ -612,19 +616,24 @@ def modifyEmailStatus(form_id):
 
     return 0
 
-def sendEmail(recipient, form_title, form_ans_time, gift_name):
+def sendEmail(recipient, form_title, form_ans_time, gift_name, time, place, info):
 
     response = {
         "status": "",
         "message": "",
     }
-    msg = Message('Formalot 中獎通知', sender='sdmg42022@gmail.com', recipients=[recipient])
+    recipient_email = recipient + '@ntu.edu.tw'
+    msg = Message('Formalot 中獎通知', sender='sdmg42022@gmail.com', recipients=[recipient_email])
     msg.body = f"""
     親愛的 Formalot 用戶您好：\n\n
     感謝您於 {form_ans_time} 填寫表單 {form_title} \n
     恭喜您幸運抽中 {gift_name} \n 
     
-    表單發布者將會進一步使用電郵聯繫您獎品領取方式
+    獎品領取地點：{place}\n 
+    獎品領取時間: {time}\n 
+    發布者聯絡方式：{info}\n
+
+    若有其他疑問，歡迎聯繫 Formalot 團隊
 
     祝 事事順利
     
