@@ -51,7 +51,7 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
             <div className="card-container-management ">
                 <div className="card-management">
                     <div className="tag-container">
-                        <div className="prize-tag-management">{`${form_run_state}`}</div>
+                        
                         <div class="dropdown">
                             <button class="prize-tag-management">選項</button>
                                 <div class="dropdown-content">
@@ -59,11 +59,11 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
                                     <button className="forget_submit" onClick={closeFormAPI}>刪除問卷</button>
                                 </div>
                         </div>
-                        <button className="prize-tag-management">{`${form_run_state}`}</button>
+                        <div className="prize-tag-management">{`${form_run_state}`}</div>
 
                     </div>
                     
-                    <img alt="" className="q-image" src={form_pic_url} width="260" height="300" />
+                    <img alt=""  src={form_pic_url} width="260" height="280" />
                     <h3 className="overflow-text">{form_title}</h3>
                     <p>
                         {`截止時間：${form_end_date}`} <br/>
@@ -85,13 +85,13 @@ const Item = ({form_id, form_title, form_create_date, form_end_date, form_draw_d
 
 
 Item.defaultProps = {
-    form_create_date: "Fri, 01 Apr 2022 23:59:59 GMT",
-    form_draw_date: "Sat, 30 Apr 2022 23:59:59 GMT",
-    form_end_date: "Thu, 28 Apr 2022 23:59:59 GMT",
+    form_create_date: "",
+    form_draw_date: "",
+    form_end_date: "",
     form_id: 15,
-    form_pic_url: "https://imgur.com/gallery/3Nnlo",
-    form_run_state: "Open",
-    form_title: "2022【醫美認知與消費意願之研究】調查表問卷"
+    form_pic_url: "",
+    form_run_state: "",
+    form_title: ""
 }
 
 export default Item

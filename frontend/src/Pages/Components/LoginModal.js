@@ -4,7 +4,7 @@ import ReactDom from "react-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Homepage } from "../Homepage";
-
+import ReactLoading from 'react-loading';
 
 function LoginModal( {closeModal}){
     const [email, setEmail] = useState("");

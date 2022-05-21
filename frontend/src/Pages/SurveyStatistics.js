@@ -5,6 +5,9 @@ import {LotteryCard} from './Components/LotteryCard'
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import { TagCloud } from 'react-tagcloud'
+import { WordCloud } from "wordcloud"
+import swal from 'sweetalert'
+import { saveAs } from 'file-saver';
 
 
 // 傳入想要看的 formID
@@ -18,7 +21,8 @@ const SurveyStatistics = () => {
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
     const [lotteryResults, setLotteryResults] = useState([]);
-
+    let chart_title = ['Item', 'Numbers']
+    let chart_item = ['Item', 'Numbers']
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
 
@@ -34,7 +38,7 @@ const SurveyStatistics = () => {
     const fetchCurrentGifts = () =>
     {
         fetch(
-            `https://82b059bd-354d-4944-934b-b8fdb2402159.mock.pstmn.io/stuff//GetGift`,
+            `http://127.0.0.1:5000/GetGift?form_id=1`,
             {
                 method: "GET",
                 headers: {
@@ -54,7 +58,7 @@ const SurveyStatistics = () => {
     const fetchCandidateList = () =>
     {
         fetch(
-            `https://82b059bd-354d-4944-934b-b8fdb2402159.mock.pstmn.io/stuff//GetCandidate`,
+            ` http://127.0.0.1:5000/GetCandidate?form_id=1`,
             {
                 method: "GET",
                 headers: {
@@ -74,7 +78,7 @@ const SurveyStatistics = () => {
     const fetchFormDetail = () =>
     {
         fetch(
-            `https://82b059bd-354d-4944-934b-b8fdb2402159.mock.pstmn.io/stuff//GetFormDetail`,
+            ` http://127.0.0.1:5000/GetFormDetail?form_id=1`,
             {
                 method: "GET",
                 headers: {
@@ -96,7 +100,7 @@ const SurveyStatistics = () => {
     const fetchLotteryResults = () =>
     {
         fetch(
-            `https://82b059bd-354d-4944-934b-b8fdb2402159.mock.pstmn.io/stuff//GetLotteryResults`,
+            `http://127.0.0.1:5000/SurveyManagement/detail?form_id=1`,
             {
                 method: "GET",
                 headers: {
@@ -108,11 +112,17 @@ const SurveyStatistics = () => {
         .then(response => response.json())
         .then(response => {
             console.log('lottery results22',response.data)
-            setLotteryResults(response.data['results']);
+            setLotteryResults(response.data);
         })
-        .catch(error => console.log(error))  
+        .catch(error => console.log(error))
     };
 
+    // var el = document.getElementById("1");
+    // if(el){
+    //   el.addEventListener("click",function(){
+    //     swal("Good job!", "You clicked the button!", "success");
+    // }); 
+    // }
     // google.charts.load('current', {'packages':['corechart']});
     // google.charts.setOnLoadCallback(drawChart);
 
@@ -139,14 +149,10 @@ const SurveyStatistics = () => {
 
 
 
+
     const data = [
-        { value: 'JavaScript', count: 38 },
-        { value: 'React', count: 30 },
-        { value: 'Nodejs', count: 28 },
-        { value: 'Express.js', count: 25 },
-        { value: 'HTML5', count: 33 },
-        { value: 'MongoDB', count: 18 },
-        { value: 'CSS3', count: 20 },
+        { value: '喜歡', count: 38 },
+        { value: '喜翻', count: 30 }
       ]
       
     const SimpleCloud = () => (
@@ -157,7 +163,7 @@ const SurveyStatistics = () => {
           onClick={tag => alert(`'${tag.value}' was selected!`)}
         />
       )
-    
+
     return (
         <>
             <Navbar/>
@@ -168,6 +174,14 @@ const SurveyStatistics = () => {
                 <section className='lottery-container'>
                     <section className='lottery-results'>
                         <h2> {formDetail.form_title} </h2>
+                        <a
+                            href={`data:text/json;charset=utf-8,${encodeURIComponent(
+                            JSON.stringify(lotteryResults)
+                            )}`}
+                            download="filename.json"
+                        >
+                            {`Download Json`}
+                        </a>
                         {/* <div className='lottery-card'>
                             <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
                             <div className='avator-container'>
@@ -183,34 +197,48 @@ const SurveyStatistics = () => {
                         </div> */}
                         {/* 禮物與中獎人 */}
                         {/* <LotteryCard results={lotteryResults} /> */}
+                       
                         {lotteryResults.map(result => {
                             return (
-                                <div className='lottery-card' key={result.gift_name}>
-                                    <h2> {result.gift_name}   </h2>
-                                    {/* <img className='prize-image' src={result.gift_pic_url} alt=''/> */}
+                                <div className='lottery-card' key={result.question}>
+                                    
+                                    <h2> {result.question}   </h2>
+                                    <div className="prize-tag-stat" >{`${result.question_type}`}</div>
+                                    {/* <button id={1}> {`${result.question}`} </button> */}
+
+
+
                                     <div>
-                                        {console.log('winner', lotteryResults)}
-                                        {result['winner'].map( (winner) => {
+                                        {console.log('replies', lotteryResults)}
+                                        {/* {result['replies'].map( (replies) => {
                                             return(
+
+                                            
                                             <div>
-                                                <div id="no-border" class="stat-items">{winner.user_pic_url}</div>
-                                                <div class="stat-items">{winner.user_student_id}</div>
-                                            </div>    
+                                                <div id="no-border" class="stat-items">{replies.answer}</div>
+                                                <div class="stat-items">{replies.user}</div>
+                                            </div> 
                                             )
-                                        })}
+
+                                        })} */}
+                                        
+                                        {console.log('result.keywordCount', chart_item =  Object.entries(result.keywordCount[0])) }
+                                        {console.log('result.keywordCount', chart_item.unshift(chart_title)) }
+
+                                        {/* dont delete */}
                                         <Chart
                                         chartType="PieChart"
-                                        data={[
-                                            ['Item', 'Numbers'],
-                                            ['Item 1', 5000],
-                                            ['Item 2', 20000],
-                                            ['Item 3', 6000],
-                                        ]}
+                                        data={chart_item}
                                         width="100%"
                                         height="400px"
                                         legendToggle
                                         />
-                                        <SimpleCloud/>
+                                        <TagCloud
+                                        minSize={12}
+                                        maxSize={35}
+                                        tags={data}
+                                        onClick={tag => alert(`'${tag.value}' was selected!`)}
+                                        />
                                     </div>
                                 </div>
                             )
@@ -229,8 +257,8 @@ const SurveyStatistics = () => {
                         <h2> 獎品 </h2>
                         {gifts.map(gift => {
                             return (
-                                <div className='prize-container' key={gift.gift_name}>
-                                    <h3> {gift.gift_name} × {gift.amount} </h3>
+                                <div className='prize-container' key={gift.question}>
+                                    <h3> {gift.question} × {gift.amount} </h3>
                                     <img className='prize-image' src={gift.gift_pic_url} alt=''/>
                                 </div>
                             )
@@ -240,7 +268,7 @@ const SurveyStatistics = () => {
                 </section>
                 <div className='form-buttons'>
                     <button class='form-button'> 填答結果</button>
-                    <button class='form-button'> 瀏覽問卷</button>
+                    <button class='form-button'> 瀏覽問卷</button>.
                     {/* <button class='form-button' onClick={fetchCurrentGifts}> 重新整理</button> */}
                 </div>
             </section>
