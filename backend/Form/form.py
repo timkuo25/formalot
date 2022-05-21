@@ -22,7 +22,7 @@ def replied(student_id):
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         # 直覺寫法（有更有效率的結構但我還沒想到怎麼寫QQ）
-        query = '''SELECT UserForm.Form_form_id, Form.Form_title, Form.Form_end_date, Form.Form_draw_date, Form.Form_run_state, Form.Form_pic_url, Gift.Gift_name AS draw_result
+        query = '''SELECT UserForm.Form_form_id AS form_id, Form.Form_title, Form.Form_end_date, Form.Form_draw_date, Form.Form_run_state, Form.Form_pic_url, Gift.Gift_name AS draw_result
         FROM UserForm
         LEFT JOIN Form ON UserForm.Form_form_id = Form.Form_id
         LEFT JOIN Gift ON UserForm.Form_form_id = Gift.Form_form_id AND UserForm.User_student_id = Gift.User_student_id
@@ -132,10 +132,12 @@ def closeForm(form_id, form_close_date, form_draw_date):
         db.close()
 
 # Create Form API
+
+
 def addForm(form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_field_type, form_gift_type, gift_info):
     db = get_db()
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    try:  
+    try:
         query = """
         BEGIN;
         INSERT INTO Form(form_id, form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
@@ -157,14 +159,16 @@ def addForm(form_title, form_description, questioncontent, form_create_date, for
                 VALUES
                 """
             for gift in gift_info:
-                    for i in range(gift['quantity']):
-                        query += """((SELECT MAX(form_id) FROM Form), '{}', '{}', {}),""".format(gift['gift_name'], gift['gift_pic_url'], i)
+                for i in range(gift['quantity']):
+                    query += """((SELECT MAX(form_id) FROM Form), '{}', '{}', {}),""".format(
+                        gift['gift_name'], gift['gift_pic_url'], i)
             query = query[:-1]
         else:
             pass
         query += """; 
         COMMIT;"""
-        cursor.execute(query, [form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_gift_type, form_field_type])
+        cursor.execute(query, [form_title, form_description, questioncontent, form_create_date,
+                       form_end_date, form_draw_date, student_id, form_pic_url, form_gift_type, form_field_type])
         db.commit()
         db.close()
         return True

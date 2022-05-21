@@ -6,6 +6,8 @@ import { Footer } from "./Components/Footer";
 import React from "react";
 import ReactLoading from "react-loading";
 
+
+
 const SurveyManagement = () => {
   const [createdData, setCreatedData] = useState(
     {
@@ -20,8 +22,10 @@ const SurveyManagement = () => {
     }
   );
 
+
   // 使用 useEffect Hook
   useEffect(() => {
+
     console.log('execute function in useEffect');
     let abortController = new AbortController();  
     fetchFormData();
@@ -85,6 +89,7 @@ const SurveyManagement = () => {
                     )
                 })
               }
+
             </div>
           </div>
           <div className="survey-manage-buttons">
