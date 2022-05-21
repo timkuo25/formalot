@@ -3,7 +3,6 @@ import { Navbar } from './Components/Navbar';
 import React from 'react';
 import { useState } from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 
 
@@ -35,7 +34,7 @@ const MakeSurvey = () =>{
         }
 
         window.sessionStorage.setItem('form', JSON.stringify(form));
-    }, [surveyQDict]);
+    }, [surveyQDict, surveyTitle, SurveyDescription]);
     
     //const [storedChoice, setStoredChoice] = useState([]);
  

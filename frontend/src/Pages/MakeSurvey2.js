@@ -1,13 +1,11 @@
 import '../css/MakeSurvey.css';
 import { Navbar } from './Components/Navbar';
 import {ButtonGroup} from "./Components/ButtonGroup";
-import React, {Component, useState, useRef, useEffect} from 'react';
-import DatePicker from "react-datepicker";
+import React, {useState, useRef, useEffect} from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import DateTimePicker from 'react-datetime-picker';
 import ReactLoading from "react-loading";
 import moment from 'moment';
-import {axios} from 'axios';
 
 //import { DndProvider } from "react-dnd";
 //import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -49,7 +47,7 @@ const MakeSurvey2 = () => {
         setGiftType(form_info.form_gift_type)
 
       }
-      setrerenderkey(rerenderkey+1)
+      setrerenderkey(r=>r+1)
     }, []);
 
     useEffect(() => {
@@ -479,7 +477,7 @@ const deleteGift =evt=>{
                     {displayBtnOrNot==="是" ?  <><h4>抽獎時間</h4><p><DateTimePicker value={DateForLottery} minDate={moment().toDate()} onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns'/></p></>  : null}
                     <h4>問卷縮圖圖片</h4>
                     <div>
-                    {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:imgurURL==="" ? <img src={"https://i.imgur.com/sKBuD6v.png"} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>:<img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>}
+                    {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:imgurURL==="" ? <img src={"https://i.imgur.com/sKBuD6v.png"} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="form"/>:<img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="form"/>}
                       </div>
                       <br></br>
                       <div>
@@ -531,7 +529,7 @@ const deleteGift =evt=>{
                                   <p>
                                       {/*<input id={item.id} type="text" placeholder="獎品圖片url網址"  className='input-columns' defaultValue={item.gift_pic_url}  onChange={changeGiftURL}/>*/}
                                       
-                                      <img id={item.id} src={item.gift_pic_url} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns'/>
+                                      <img id={item.id} src={item.gift_pic_url} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="gift"/>
                                       {item.gift_pic_url==='https://i.imgur.com/sKBuD6v.png'? null:<button id={item.id} className={'Btn NextBtn'} onClick={deleteGiftImage}>Ｘ</button>}
                                       <br/>
 
