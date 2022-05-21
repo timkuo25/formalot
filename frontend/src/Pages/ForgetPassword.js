@@ -30,7 +30,7 @@ const ForgetPassword = () => {
 
         const callemailApi = async (e) => {
             e.preventDefault();
-            const result = await fetch("http://127.0.0.1:5000/Email?condition=register", {
+            const result = await fetch("http://127.0.0.1:5000/Email?condition=forget_psw", {
                 method: "POST",
                 body: JSON.stringify({
                     email: email
