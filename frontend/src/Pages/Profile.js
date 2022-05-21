@@ -14,6 +14,7 @@ import React from 'react';
 const Profile = () => {
     const [Profile, setProfile] = useState([]);
     const [loading, setload] = useState(false)
+    const [uploadimgloading, setuploadimgloading] = React.useState(false)
     useEffect(() => {
         const callGetUserProfile = async () => {
             setload(true)
@@ -62,10 +63,61 @@ const Profile = () => {
         event.target.value = null;
     };
 
+
+
     const [file, setFile] = React.useState(null);
 
     // resizedImage為切過的照片
 	const [resizedImage, setResizedImage] = React.useState(null);
+
+    const uploadImage = async(croppedFile)=>{
+        setuploadimgloading(true)
+        setResizedImage(window.URL.createObjectURL(croppedFile));
+
+        		// upload image to imgur
+		const formdata = new FormData() 
+		formdata.append("image", croppedFile)
+
+		const imgururl_result = await fetch('https://api.imgur.com/3/image/', {
+            method:"POST",
+            headers:{
+                Authorization: "Client-ID 5535a8facba4790"
+            },
+            body: formdata
+        })
+        
+        if(imgururl_result.status === 429){
+            var imgururl = ""
+        }else{
+            let data = await imgururl_result.json();
+            var imgururl = data.data.link;
+			console.log(imgururl)
+            // return imgururl;
+        }
+
+		
+        const result = await fetch("http://127.0.0.1:5000/UpdateMemberPhoto", {
+            method: "PUT",
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+			},
+            body: JSON.stringify({
+                pic_url: imgururl
+            }),
+        });
+		console.log(result.status);
+        
+        if(result.status === 401){
+            
+            callrefresh();
+        }else{
+			let resJson = await result.json();
+			console.log(resJson);
+			setload(false)
+			alert(resJson.message);
+        }
+        setuploadimgloading(false)
+    }
 
     return (
         <>
@@ -74,13 +126,15 @@ const Profile = () => {
                 <div className="profile_card_right">
                     <div className="top-section">
                     <input ref={inputFile} type="file" accept="image/png, image/jpeg" name="myImage" onChange={onImageChange} style={{display:'none'}} />
+
                             {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
-                            <img className="photo" src={resizedImage || Profile.user_pic_url} />
+                            
+                            {uploadimgloading ?   <div className='photo'><ReactLoading type="spinningBubbles" color="#432a58"/></div>:<img className="photo" src={resizedImage || Profile.user_pic_url} />}
                             <button className='Btn camera' onClick={()=>inputFile.current.click()}>
                                 <AiFillCamera size='20px'/>
                             </button>
                             <CropperModal file={file} 
-                            onConfirm={( croppedFile ) => { setResizedImage(window.URL.createObjectURL(croppedFile));}} onCompleted={() => setFile(null)} />
+                            onConfirm={( croppedFile ) => { uploadImage(croppedFile); }} onCompleted={() => setFile(null)} />
                             
                         {/* <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
                         
