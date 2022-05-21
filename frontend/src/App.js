@@ -12,12 +12,10 @@ import { ForgetPassword } from './Pages/ForgetPassword';
 import { EditProfile } from './Pages/EditProfile';
 import { Fillin } from './Pages/Fill-in'
 import { Form } from './Pages/Form'
-import { useEffect, useState, Link } from 'react';
-import {SurveyStatistics} from './Pages/SurveyStatistics';
+import { SurveyStatistics } from './Pages/SurveyStatistics';
 
 
 import  { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
 const App = () => {
   // const [form_id, setFormid] = useState(0);
 

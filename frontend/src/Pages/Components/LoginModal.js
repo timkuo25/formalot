@@ -4,7 +4,7 @@ import ReactDom from "react-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Homepage } from "../Homepage";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 
 function LoginModal( {closeModal}){
     const [email, setEmail] = useState("");
@@ -103,10 +103,10 @@ function LoginModal( {closeModal}){
                         {(!errors.email && !errors.password) &&<button className="Btn submit" onClick={callLoginApi}>登入</button>}
                             {/* <button className="submit" onClick={callLoginApi}>登入</button> */}
                             <br/>
-                            <button className="forget-password" onClick={() => {window.location.href='ForgetPassword'}}>忘記密碼?</button>
+                            <button className="forget-password" onClick={() => {window.location.href='/ForgetPassword'}}>忘記密碼?</button>
                         </div>                                
                         <div className="login-button" align="center">
-                            <button className="Btn create-account-button" onClick={() => {window.location.href='register'}}>建立新帳號</button>
+                            <button className="Btn create-account-button" onClick={() => {window.location.href='/register'}}>建立新帳號</button>
                             {/* <button className="forget-password">忘記密碼？</button><br/> */}
                             {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58"/></div>:null}
                             

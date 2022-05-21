@@ -5,26 +5,46 @@ import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
 import ReactLoading from "react-loading";
 import { LoginModal } from './Components/LoginModal';
-
+import { CopyMessage } from './Components/CopyMessage';
 
 const Homepage = () => {
     const [page, setPage] = useState(0);
     const [maxPage, setMaxPage] = useState(0);
-    const [forms, setForms] = useState(null);
+    const [forms, setForms] = useState({
+        '熱門': null,
+        '最新': null,
+    });
     const [modalOpen, setModalOpen] = useState(false);
-
+    const [show, setShow] = useState('熱門');
+    
     
     useEffect(() => {
         const fetchData = async () => {
-            const data = await fetch('http://127.0.0.1:5000/home',{
+            let data = await fetch('http://127.0.0.1:5000/home',{
                 headers: {'Content-Type': 'application/json'}
             });
-            const dataJSON = await data.json();
+            let dataJSON = await data.json();
             console.log(dataJSON);
             
             setMaxPage(Math.ceil((dataJSON.length) / 8));
             setPage(1);
-            setForms(dataJSON);
+            setForms( prevForms => {
+                return {
+                    ...prevForms,
+                    '熱門': dataJSON
+                };
+            });
+
+            data = await fetch('http://127.0.0.1:5000/home?sortBy=newest',{
+                headers: {'Content-Type': 'application/json'}
+            });
+            dataJSON = await data.json();
+            setForms( prevForms => {
+                return {
+                    ...prevForms,
+                    '最新': dataJSON
+                };
+            });
         }
         fetchData();
     }, []);
@@ -41,12 +61,13 @@ const Homepage = () => {
 
     const makeForm = ()=>{
         if(!(localStorage.getItem('jwt'))){
-            setModalOpen(true)
+            setModalOpen(true);
         }
         else{
-            window.location.href = "/MakeSurvey"
+            window.location.href = "/MakeSurvey";
         }
-    }    
+    }
+
     return (
         <>
             <Navbar />
@@ -64,19 +85,16 @@ const Homepage = () => {
                     </div>
                 </div>
             </section>
-            <section className='showcase'>
-                超多高級好禮
-                <img className='showcase-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
-                <img className='showcase-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
-                <img className='showcase-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
-                <img className='showcase-image' src={process.env.PUBLIC_URL + 'dog.png'} alt=''/>
-                快點帶回家
-            </section>
             <section className='latest-q'>
                 <div className='latest-q-container'>
-                    <h2>最新問卷</h2>
+                    <h2>{show}問卷</h2>
                     <h3>點擊問卷，快速填寫問卷，即可參加抽獎，幸運星即將降臨</h3>
-                    {!forms
+                    <select value={show} onChange={e => {setShow(e.currentTarget.value)}}>
+                        {['熱門', '最新'].map(item => {
+                            return (<option value={item}>{item}</option>);
+                        })}
+                    </select>  
+                    {!forms[show]
                         ?
                             <div className='card-container'>
                                 <ReactLoading type="spinningBubbles" color="#432a58" />
@@ -87,7 +105,14 @@ const Homepage = () => {
                                     [...Array(8)]
                                     .map((_, i) => 8*(page-1) + i)
                                     .map(item => {
-                                        return item > forms.length ? <Card key={item} info={null} type='home'/> : <Card key={item} info={forms[item]} type='home'/>
+                                        return item > forms[show].length
+                                        ? <Card key={item} info={null} type='home'/> 
+                                        : <Card 
+                                            key={item}
+                                            info={forms[show][item]}
+                                            openModal={() => setModalOpen(true)}
+                                            type='home'
+                                        />
                                     })
                                 }
                             </div>
@@ -117,6 +142,7 @@ const Homepage = () => {
                 />
             </section>
             <Footer />
+            <CopyMessage/>
         </>
     )
 

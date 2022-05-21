@@ -3,10 +3,10 @@ from db.db import get_db
 from flask import request, jsonify, Blueprint, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import random
+import psycopg2
 from flask_apscheduler import APScheduler
 from flask_mail import Mail, Message
 from hashlib import md5
-import uuid
 from smtplib import SMTPException
 
 lottery_bp = Blueprint('lottery', __name__)
@@ -20,201 +20,245 @@ def protected():
 def getFormDeleteStatueByFormId(form_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT form_delete_state
-    FROM form
-    WHERE form_id = (%s);
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
-    return result
+    try:
+        query = '''
+        SELECT form_delete_state
+        FROM form
+        WHERE form_id = (%s);
+        '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value)
+                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
+   
 
 def getCandidateByFormId(form_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT student_id, user_pic_url 
-    FROM users 
-    JOIN userform 
-    ON users.student_id = userform.user_student_id
-    WHERE form_form_id = (%s) ;
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
-    return result
+    try:
+        query = '''
+        SELECT student_id, user_pic_url 
+        FROM users 
+        JOIN userform 
+        ON users.student_id = userform.user_student_id
+        WHERE form_form_id = (%s) ;
+        '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value)
+                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
+
 
 
 def getGiftAmountByFormId(form_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT  gift_name, COUNT(gift_name), gift_pic_url
-    from gift
-    WHERE form_form_id = (%s)
-    GROUP BY gift_name, gift_pic_url;
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
-    return result
+    try:
+        query = '''
+        SELECT  gift_name, COUNT(gift_name), gift_pic_url
+        from gift
+        WHERE form_form_id = (%s)
+        GROUP BY gift_name, gift_pic_url;
+        '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value)
+                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
+
 
 
 def getGiftDetailByFormId(form_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT gift_name, number
-    FROM gift
-    WHERE form_form_id = (%s);
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
-    return result
+    try:
+        query = '''
+        SELECT gift_name, number
+        FROM gift
+        WHERE form_form_id = (%s);
+        '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value)
+                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
 
 
 def getFormRunStatueByFormId(form_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT form_run_state
-    FROM form
-    WHERE form_id = (%s);
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
-    return result
+    try:
+        query = '''
+        SELECT form_run_state
+        FROM form
+        WHERE form_id = (%s);
+        '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value)
+                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
 
 
 def updateWinner(form_id, student_id, num, gift_name):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    UPDATE gift SET user_student_id = (%s)
-    WHERE number = (%s) AND gift_name = (%s) AND form_form_id = (%s);
-    '''
-    cursor.execute(query, [student_id, num, gift_name, form_id])
+    try:
+        query = '''
+        UPDATE gift SET user_student_id = (%s)
+        WHERE number = (%s) AND gift_name = (%s) AND form_form_id = (%s);
+        '''
+        cursor.execute(query, [student_id, num, gift_name, form_id])
 
-    stateQuery = '''
-    UPDATE form SET form_run_state = 'Closed'
-    WHERE form_id = (%s);
-    '''
-    cursor.execute(stateQuery, [form_id])
-    db.commit()
-    db.close()
-
-    # result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
-    return 
+        stateQuery = '''
+        UPDATE form SET form_run_state = 'Closed'
+        WHERE form_id = (%s);
+        '''
+        cursor.execute(stateQuery, [form_id])
+        db.commit()
+        return 
+    except:
+        db.rollback()
+    finally:
+        db.close()
 
 
 def getUserAvatar(student_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT user_pic_url
-    FROM USERS
-    WHERE student_id = (%s); 
-    '''
-    cursor.execute(query, [student_id])
-    result = cursor.fetchone()[0]
-    db.commit()
-    db.close()
-    
+    try:
+        query = '''
+        SELECT user_pic_url
+        FROM USERS
+        WHERE student_id = (%s); 
+        '''
+        cursor.execute(query, [student_id])
+        result = cursor.fetchone()[0]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
 
-    return result
 
 
 def getClosedFormResult(form_id):
     db = get_db()
     cursor = db.cursor()
+    try:
+        count_query = '''
+        SELECT count(distinct(gift_name))
+        FROM gift
+        WHERE form_form_id = (%s);
+        '''
 
-    count_query = '''
-    SELECT count(distinct(gift_name))
-    FROM gift
-    WHERE form_form_id = (%s);
-    '''
+        cursor.execute(count_query, [form_id])
+        count_result = [dict((cursor.description[i][0], value)
+                            for i, value in enumerate(row)) for row in cursor.fetchall()]
+        count = count_result[0]["count"]
 
-    cursor.execute(count_query, [form_id])
-    count_result = [dict((cursor.description[i][0], value)
-                         for i, value in enumerate(row)) for row in cursor.fetchall()]
-    count = count_result[0]["count"]
+        get_detail_query = '''
+        SELECT gift_name, count(gift_name) AS amount, gift_pic_url
+        FROM gift
+        WHERE form_form_id = (%s)
+        GROUP BY gift_name, gift_pic_url;
+        '''
+        cursor.execute(get_detail_query, [form_id])
+        detail_result = [dict((cursor.description[i][0], value)
+                            for i, value in enumerate(row)) for row in cursor.fetchall()]
 
-    get_detail_query = '''
-    SELECT gift_name, count(gift_name) AS amount, gift_pic_url
-    FROM gift
-    WHERE form_form_id = (%s)
-    GROUP BY gift_name, gift_pic_url;
-    '''
-    cursor.execute(get_detail_query, [form_id])
-    detail_result = [dict((cursor.description[i][0], value)
-                          for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return count, detail_result
+    except:
+        db.rollback()
+    finally:
+        db.close()
 
-    db.commit()
-    db.close()
-    return count, detail_result
 
 
 def getClosedFormWinner(form_id, gift_name):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT user_student_id, user_pic_url
-    FROM gift 
-    JOIN users ON users.student_id = gift.user_student_id
-    WHERE form_form_id = (%s) AND gift_name = (%s);
-    '''
-    cursor.execute(query, [form_id, gift_name])
-    result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
+    try:
+        query = '''
+        SELECT user_student_id, user_pic_url
+        FROM gift 
+        JOIN users ON users.student_id = gift.user_student_id
+        WHERE form_form_id = (%s) AND gift_name = (%s);
+        '''
+        cursor.execute(query, [form_id, gift_name])
+        result = [dict((cursor.description[i][0], value)
+                    for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
 
-    return result
 
 
 def getFormDetailByFormId(form_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT form_title, form_create_date, form_end_date, form_draw_date
-    FROM form
-    WHERE form_id = (%s);
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
-    return result
+    try:
+        query = '''
+            SELECT form_title, form_create_date, form_end_date, form_draw_date
+            FROM form
+            WHERE form_id = (%s);
+            '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value)
+                        for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
+
 
 def getGiftWinner(form_id):
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT gift.gift_name as gift_name, gift.user_student_id as winner_student_id, form.form_title as form_title, userform.form_answer_time as form_answer_time
-    FROM gift JOIN form on gift.form_form_id = form.form_id
-    JOIN  userform on userform.form_form_id = form.form_id and gift.user_student_id = userform.user_student_id
-    where gift.form_form_id = (%s);
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
-    
-    return result
+    try:
+        query = '''
+        SELECT gift.gift_name as gift_name, gift.user_student_id as winner_student_id, form.form_title as form_title, userform.form_answer_time as form_answer_time
+        FROM gift JOIN form on gift.form_form_id = form.form_id
+        JOIN  userform on userform.form_form_id = form.form_id and gift.user_student_id = userform.user_student_id
+        where gift.form_form_id = (%s);
+        '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        return result
+    except:
+        db.rollback()
+    finally:
+        db.close()
 
 
 @lottery_bp.route('/GetCandidate', methods=["GET"])
@@ -277,7 +321,7 @@ def getGift():
 def autoLottery(form_id):
     num_of_lottery = 0
     candidate_list = []
-
+    print('HI')
     # form_id = request.args.get('form_id')
 
     # get_form_det = getFormDetailByFormId(form_id)
@@ -382,6 +426,7 @@ def getFormDetail():
 def autolotteryfunc():
     db = get_db()
     cursor = db.cursor()
+
     query = '''
     SELECT form_id
     FROM form
@@ -389,22 +434,23 @@ def autolotteryfunc():
     '''
     cursor.execute(query)
     result = [dict((cursor.description[i][0], value)
-                   for i, value in enumerate(row)) for row in cursor.fetchall()]
+                for i, value in enumerate(row)) for row in cursor.fetchall()]
     db.commit()
-    db.close()
+
 
     for i in result:
         form_id = i['form_id']
         autoLottery(form_id)
         print(str(form_id) + 'lottery is complete!')
 
-    return "complete"
+    return "complete"       
+
 
 
 
 @lottery_bp.route('/AutolotteryOnTime', methods=["GET"])
 def AutolotteryOnTime():
-    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=0)
+    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=9)
     scheduler.start()
 
     return 'lottery running'
@@ -416,17 +462,22 @@ def getUserForm():
     form_id = request.args.get('form_id')
     db = get_db()
     cursor = db.cursor()
-    query = '''
-    SELECT form_id, form_description, form_pic_url, questioncontent
-    FROM form
-    WHERE form_id = (%s);
-    '''
-    cursor.execute(query, [form_id])
-    result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
-    db.commit()
-    db.close()
+    try:
+        query = '''
+        SELECT form_id, form_description, form_pic_url, questioncontent
+        FROM form
+        WHERE form_id = (%s);
+        '''
+        cursor.execute(query, [form_id])
+        result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+        db.commit()
+        
+    except:
+        db.rollback()
+    finally:
+        db.close()
     
-    return jsonify(result)
+    
 
 
 
@@ -565,7 +616,7 @@ def sendEmail(recipient, form_title, form_ans_time, gift_name):
         "status": "",
         "message": "",
     }
-    msg = Message('Formalot 中獎通知', sender='sdmg42022@gmail.com', recipients=['r10725053@ntu.edu.tw'])
+    msg = Message('Formalot 中獎通知', sender='sdmg42022@gmail.com', recipients=[recipient])
     msg.body = f"""
     親愛的 Formalot 用戶您好：\n\n
     感謝您於 {form_ans_time} 填寫表單 {form_title} \n
