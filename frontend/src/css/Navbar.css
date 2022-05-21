@@ -8,6 +8,7 @@
     transition: all .7s ease-in;
     background-color: var(--theme-extra-light);
     position: relative;
+    z-index: 1;
     /* border-bottom: var(--theme-dark-purple) solid 4px; */
 }
 
