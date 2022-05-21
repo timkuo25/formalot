@@ -449,8 +449,9 @@ def autolotteryfunc():
 
 
 @lottery_bp.route('/AutolotteryOnTime', methods=["GET"])
+@jwt_required()
 def AutolotteryOnTime():
-    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=9)
+    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", minute=0)
     scheduler.start()
 
     return 'lottery running'
