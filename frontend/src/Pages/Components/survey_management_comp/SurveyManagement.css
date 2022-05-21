@@ -123,11 +123,25 @@ input {
   color: #ffffff;
   border-radius: 1em;
   display: inline-block;
-  float:right ;
+  float:left ;
   /* text-align:left; */
 
 }
 
+.prize-tag-stat {
+  width: max-content;
+  padding: 0.4em 0.1em;
+
+  margin-bottom: 1em;
+  margin-right: 0.5em;
+  background-color: var(--theme-purple);
+  color: #ffffff;
+  border-radius: 1em;
+  display: inline-block;
+  float:right ;
+  text-align:right;
+
+}
 
 
 

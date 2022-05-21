@@ -8,23 +8,31 @@ import { Footer } from "./Components/Footer";
 // import Item from "./components/Item"
 import "./Components/survey_management_comp/SurveyManagement.css";
 
+
+
 async function fetchData(setData) {
-  const res = await fetch(`http://127.0.0.1:5000/SurveyManagement`);
+  const res = await fetch('http://127.0.0.1:5000/SurveyManagement',{
+        method: 'GET',
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        },
+    });
   const data = await res.json();
   console.log(data);
   setData(data);
 }
 
+
 const SurveyManagement = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([123]);
 
   useEffect(() => {
     fetchData(setData);
   }, []);
-
-  let createdData = data["created"];
-  let repliedData = data["replied"];
-  console.log(createdData);
+  
+  let createdData = data[0]["created"];
+  let repliedData = data[0]["replied"];
+  console.log(repliedData);
 
   // console.log("data",data);
 
@@ -42,13 +50,13 @@ const SurveyManagement = () => {
             <div className="survey-card">
               <h3 className="manage-header">&#10004; 已填寫問卷</h3>
               <div className="card-container-management">
-                <List listData={createdData} />
+                <List listData={repliedData} />
               </div>
             </div>
             <div className="survey-card">
               <h3 className="manage-header">&#10004; 已發佈問卷</h3>
               <div className="card-container-management">
-                <List listData={repliedData} />
+                <List listData={createdData} />
               </div>
             </div>
             <div className="survey-manage-buttons">
