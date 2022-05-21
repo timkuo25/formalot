@@ -3,6 +3,8 @@ import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
+import { CopyMessage } from './Components/CopyMessage';
+
 
 const Explore = ( ) => {
     const [type, setType] = useState('分類方式');
@@ -48,14 +50,22 @@ const Explore = ( ) => {
                     curShowList[item] = dataJSON;
                     return curShowList;
                 });
-            })
+            });
+
+            let data = await fetch('http://127.0.0.1:5000/home',{
+                headers: {'Content-Type': 'application/json'}
+            });
+            let dataJSON = await data.json();
+            setShowList( prevShowList => {
+                return {
+                    ...prevShowList,
+                    '類別': dataJSON,
+                    '分類方式': dataJSON
+                };
+            });
         }
         fetchData();
     }, []);
-
-    useEffect(() => {
-        console.log(showList[show]);
-    }, [show]);
 
     return (
         <>
@@ -71,7 +81,10 @@ const Explore = ( ) => {
                 </select>             
                 {type === '分類方式'
                     ? null
-                    : <select value={show} onChange={e => {setShow(e.currentTarget.value)}}>
+                    : <select value={show} onChange={e => {
+                        console.log(showList)
+                        setShow(e.currentTarget.value)
+                    }}>
                         {type === '以獎品搜尋'
                             ?  gift_list.map(item => {return (<option value={item}>{item}</option>);})
                             : field_list.map(item => {return (<option value={item}>{item}</option>);})
@@ -89,12 +102,15 @@ const Explore = ( ) => {
                         if (e.key !== 'Enter') return;
                         const data = await fetch(`http://localhost:5000/explore?keyword=${e.currentTarget.value}`);
                         const dataJSON = await data.json();
-                        const _ = await setShowList(prevShowList => {
+                        setShowList(prevShowList => {
                             let curShowList = prevShowList;
                             curShowList['搜尋結果'] = dataJSON;
                             return curShowList;
                         });
-                        setShow('搜尋結果');
+
+                        // to guarantee a refresh
+                        setShow('類別');
+                        setShow('搜尋結果'); 
                     }}
                 />
             </div>
@@ -106,6 +122,7 @@ const Explore = ( ) => {
                 </div>
             </section>
             <Footer />
+            <CopyMessage/>
         </>
     )
 }

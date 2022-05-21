@@ -134,61 +134,42 @@ def closeForm(form_id, form_close_date, form_draw_date):
 # Create Form API
 def addForm(form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_field_type, form_gift_type, gift_info):
     db = get_db()
-    # db cursor is lightweight, so it's better to declare multiple curosrs instead of running multiple db connections.
-    cursor1 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cursor2 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cursor3 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cursor4 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cursor5 = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-
-    try:
-        # Write Form
+    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    try:  
         query = """
+        BEGIN;
         INSERT INTO Form(form_id, form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, form_run_state, form_delete_state, User_student_id, form_pic_url)
         SELECT Max(form_id)+1, %s, %s, %s, %s, %s, %s, 'Open', 0, %s, %s FROM Form;
-        """
-        cursor1.execute(query, [form_title, form_description, questioncontent,
-                        form_create_date, form_end_date, form_draw_date, student_id, form_pic_url])
 
-        # Find Max form_id
-        query = """SELECT MAX(form_id) FROM form;"""
-        cursor2.execute(query)
-        result = cursor2.fetchall()
-        form_id = result[0]['max']
-
-        # Write Formtag
-        query = """
         INSERT INTO Formtag(form_form_id, tag_tag_id)
-        SELECT %s, tag_id FROM Tag WHERE tag_name = %s;
-        """
-        cursor3.execute(query, [form_id, form_gift_type])
+        VALUES(
+            (SELECT MAX(form_id) FROM Form),
+            (SELECT tag_id FROM Tag WHERE tag_name = %s));    
 
-        # Write Gift
+        INSERT INTO FormField(form_form_id, field_field_id)
+        VALUES(
+            (SELECT MAX(form_id) FROM Form),
+            (SELECT field_id FROM Field WHERE field_name = %s));
+        """
         if len(gift_info) > 0:
-            query = """
-            INSERT INTO Gift(form_form_id, gift_name, gift_pic_url, number)
-            VALUES
-            """
+            query += """
+                INSERT INTO Gift(form_form_id, gift_name, gift_pic_url, number)
+                VALUES
+                """
             for gift in gift_info:
-                for i in range(gift['quantity']):
-                    query += """({}, '{}', '{}', {}),""".format(form_id,
-                                                                gift['gift_name'], gift['gift_pic_url'], i)
+                    for i in range(gift['quantity']):
+                        query += """((SELECT MAX(form_id) FROM Form), '{}', '{}', {}),""".format(gift['gift_name'], gift['gift_pic_url'], i)
             query = query[:-1]
-            cursor4.execute(query)
         else:
             pass
-
-        # Write FormField
-        query = """
-        INSERT INTO FormField(form_form_id, field_field_id)
-        SELECT %s, field_id FROM Field WHERE field_name = %s;
-        """
-        cursor5.execute(query, [form_id, form_field_type])
-
+        query += """; 
+        COMMIT;"""
+        cursor.execute(query, [form_title, form_description, questioncontent, form_create_date, form_end_date, form_draw_date, student_id, form_pic_url, form_gift_type, form_field_type])
         db.commit()
+        db.close()
         return True
     except psycopg2.DatabaseError as error:
-        # print(error)
+        print(error)
         db.rollback()
         return False
     finally:
