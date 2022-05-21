@@ -226,8 +226,9 @@ def getFormDetailByFormId(form_id):
     cursor = db.cursor()
     try:
         query = '''
-            SELECT form_title, form_create_date, form_end_date, form_draw_date
-            FROM form
+            SELECT form_title, form_create_date, form_end_date, form_draw_date, user_student_id, user_pic_url
+            FROM form JOIN users
+            ON form.user_student_id = users.student_id
             WHERE form_id = (%s);
             '''
         cursor.execute(query, [form_id])
