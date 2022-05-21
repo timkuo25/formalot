@@ -44,6 +44,10 @@ const MakeSurvey2 = () => {
 
 
     useEffect(() => {
+      if (!(localStorage.getItem('jwt'))){
+        alert("你沒登入，請先登入")
+        window.location.href="/"
+      }
 
       let form_info = window.sessionStorage.getItem('form_info')
 
