@@ -21,6 +21,7 @@ const SurveyStatistics = () => {
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
     const [lotteryResults, setLotteryResults] = useState([]);
+    let [csvResults, setcsvResults] = useState([]);
     let chart_title = ['Item', 'Numbers']
     let chart_item = ['Item', 'Numbers']
     // 取得 access token
@@ -33,6 +34,7 @@ const SurveyStatistics = () => {
         fetchCandidateList();
         fetchFormDetail();
         fetchLotteryResults();
+        fetchcsvResults();
     }, []);  // dependency 
 
     const fetchCurrentGifts = () =>
@@ -111,8 +113,27 @@ const SurveyStatistics = () => {
         )
         .then(response => response.json())
         .then(response => {
-            console.log('lottery results22',response.data)
+            console.log('lottery results',response.data)
             setLotteryResults(response.data);
+        })
+        .catch(error => console.log(error))
+    };
+
+    const fetchcsvResults = () =>
+    {
+        fetch(
+            `http://127.0.0.1:5000/SurveyManagement/downloadResponse?form_id=1`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                }
+            }
+        )
+        .then(response => response.text())
+        .then(response => {
+            console.log('csv results',response)
+            setcsvResults(response);
         })
         .catch(error => console.log(error))
     };
@@ -167,36 +188,32 @@ const SurveyStatistics = () => {
     return (
         <>
             <Navbar/>
-
             {console.log('render')}
             <section className='lottery-page-container'>
                 {/* 問卷左半部抽獎結果 */}
                 <section className='lottery-container'>
                     <section className='lottery-results'>
                         <h2> {formDetail.form_title} </h2>
-                        <a
-                            href={`data:text/json;charset=utf-8,${encodeURIComponent(
-                            JSON.stringify(lotteryResults)
-                            )}`}
-                            download="filename.json"
+                        {console.log("csvResults",csvResults)}
+                        <a  
+                            href={
+                                `data:text/csv;charset=utf-8,%EF%BB%BF`+  `${encodeURI(csvResults)}`
+                            }
+                            // href={`data:text/csv;charset=utf-8;,${encodeURIComponent(
+                            // csvResults
+                            // )}`}
+
+
+
+
+                            download={formDetail.form_title + `.csv`}
                         >
                             {`Download Json`}
                         </a>
-                        {/* <div className='lottery-card'>
-                            <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
-                            <div className='avator-container'>
-                                {candidateList.map( (candidate) => {
-                                    return (
-                                        <Avator
-                                            user_name={candidate.student_id}
-                                            user_pic_url={candidate.user_pic_url}
-                                        />
-                                    )
-                                })}
-                            </div>
-                        </div> */}
-                        {/* 禮物與中獎人 */}
-                        {/* <LotteryCard results={lotteryResults} /> */}
+                        {console.log("csvResults_3",`data:text/csv;charset=utf-8;,${encodeURIComponent(
+                            csvResults
+                            )}`)}
+
                        
                         {lotteryResults.map(result => {
                             return (
@@ -204,24 +221,11 @@ const SurveyStatistics = () => {
                                     
                                     <h2> {result.question}   </h2>
                                     <div className="prize-tag-stat" >{`${result.question_type}`}</div>
-                                    {/* <button id={1}> {`${result.question}`} </button> */}
 
 
 
                                     <div>
-                                        {console.log('replies', lotteryResults)}
-                                        {/* {result['replies'].map( (replies) => {
-                                            return(
-
-                                            
-                                            <div>
-                                                <div id="no-border" class="stat-items">{replies.answer}</div>
-                                                <div class="stat-items">{replies.user}</div>
-                                            </div> 
-                                            )
-
-                                        })} */}
-                                        
+                                        {console.log('replies', lotteryResults)}                              
                                         {console.log('result.keywordCount', chart_item =  Object.entries(result.keywordCount[0])) }
                                         {console.log('result.keywordCount', chart_item.unshift(chart_title)) }
 
