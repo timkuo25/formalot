@@ -1,0 +1,17 @@
+/* whole lottery page */
+
+.survey-bar {
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    height: 120%;
+}
+
+.instruction-container{
+    display:flex;
+    flex-direction: column;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding:2em;
+    height: 100%;
+}
