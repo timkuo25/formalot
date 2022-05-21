@@ -18,6 +18,10 @@ const MakeSurvey = () =>{
 
     useEffect(() => {
 
+        if (!(localStorage.getItem('jwt'))){
+            alert("你沒登入，請先登入")
+            window.location.href="/"
+        }
         let form = window.sessionStorage.getItem('form')
         if (form){
             form = JSON.parse(form)
@@ -251,13 +255,13 @@ const MakeSurvey = () =>{
         {/*react dnd*/}
         <section className='page-container' key={rerenderkey}>
                 <div className='breadcrumb'>
-                    <button className='Btn SurveyOptionBtn card-shadow' onClick={cancel}>
+                    <button className='SurveyOptionBtn card-shadow' onClick={cancel}>
                         取消
                     </button>
-                    <button className='Btn SurveyOptionBtn card-shadow'>
+                    <button className='makeSurveypageBtn card-shadow'>
                         製作問卷
                     </button>
-                    <button className='Btn SurveyOptionBtn card-shadow' onClick={handleSubmit}>
+                    <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
                         填寫資訊
                     </button>
                 </div>
