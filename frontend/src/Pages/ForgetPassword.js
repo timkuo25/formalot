@@ -24,8 +24,12 @@ const ForgetPassword = () => {
                 }),
             });
             const resdata = await getprotected.json();
-            console.log(resdata);
+            console.log(resdata.status);
             alert(resdata.message);
+
+            if (resdata.status === 'success'){
+                window.location.href = "/"
+            }
         };
 
         const callemailApi = async (e) => {

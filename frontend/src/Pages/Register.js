@@ -87,7 +87,10 @@ const Register = () => {
         let resJson = await result.json();
         console.log(resJson);
         alert(resJson.message);
-    
+        
+        if(resJson.status === 'success'){
+            window.location.href = "/"
+        }
     };
 
     const [values, setValues] = React.useState({
