@@ -4,6 +4,7 @@ import '../css/Form.css'
 import { Navbar } from './Components/Navbar';
 import { Fillin } from './Fill-in';
 import { Lottery } from './Lottery';
+import { SurveyStatistics } from './SurveyStatistics';
 import { TagList } from './SetTagList';
 import React, { useState, useEffect, useCallback } from 'react';
 import {useParams} from 'react-router-dom';
@@ -11,7 +12,6 @@ import ReactLoading from "react-loading";
 import Loading from 'react-loading';
 import { Avator } from './Components/Avator';
 import { Modal } from 'react-bootstrap';
-import { SurveyStatistics } from './SurveyStatistics';
 
 
 const Form = () => {
@@ -191,7 +191,7 @@ const Form = () => {
             return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
         }
         else if (showTag === "填答結果"){
-            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
+            return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title}/> 
         }
         else{
             return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
