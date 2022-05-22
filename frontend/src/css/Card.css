@@ -37,6 +37,14 @@
     border-radius: 1em;
 }
 
+.pink {
+    background-color: var(--theme-pink);
+}
+
+.black {
+    background-color: black;
+}
+
 
 .share-image {
     height: 1.5em;

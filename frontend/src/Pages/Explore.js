@@ -119,7 +119,7 @@ const Explore = ( ) => {
             <section className='explore'>
                 <div className='card-container'>
                     {showList[show].map(item => {
-                        return <Card type='explore' info={item}/>
+                        return <Card type='home' info={item}/>
                     })}
                 </div>
             </section>
