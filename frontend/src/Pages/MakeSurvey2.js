@@ -6,6 +6,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import DateTimePicker from 'react-datetime-picker';
 import ReactLoading from "react-loading";
 import moment from 'moment';
+import callrefresh from '../refresh.js';
+
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import AlertTitle from '@mui/material/AlertTitle';
+import CloseIcon from '@mui/icons-material/Close';
+import { FaLastfmSquare } from 'react-icons/fa';
 
 //import { DndProvider } from "react-dnd";
 //import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -17,6 +26,7 @@ import moment from 'moment';
 
 const MakeSurvey2 = () => {
     //const [myTasks, moveMyTask] = useState(props.tasks);
+  
     const [DateForFormEnd, setDateForFormEnd] = useState(new Date());
     const [DateForLottery, setDateForLottery] = useState(new Date());
     const [displayBtnOrNot, setDisplayBtnOrNot] = useState("否");
@@ -29,12 +39,18 @@ const MakeSurvey2 = () => {
     const [loading, setload] = useState(false)
     const [formImageLoading, setFormImageLoading] = useState(false)
     const inputFormFile = useRef(null) 
-
+    const [openAlert, setOpenAlert] = useState(false);
+    const [errorMessage, setErrorMsg] = useState("");
 
 
     useEffect(() => {
+      if (!(localStorage.getItem('jwt'))){
+        alert("你沒登入，請先登入")
+        window.location.href="/"
+      }
 
       let form_info = window.sessionStorage.getItem('form_info')
+
       if (form_info){
         form_info = JSON.parse(form_info)
         setDateForFormEnd(new Date(form_info.form_end_date))
@@ -203,6 +219,7 @@ const MakeSurvey2 = () => {
     
 
     const handleSubmit = async()=>{
+      setOpenAlert(false)
       setload(true)
       var errorMsg = ""
       var legalsubmit=1
@@ -289,7 +306,7 @@ const MakeSurvey2 = () => {
       if(surveyData.questioncontent.length===0){
         console.log("flag 6")
         legalsubmit=0
-        errorMsg = "問卷問題未製作"
+        errorMsg = "問卷題目未製作"
       }
 
 
@@ -318,15 +335,20 @@ const MakeSurvey2 = () => {
           alert("問卷製作成功")
           window.location.href = "/";
         }
-        else{
+        else if(result.status===401){
 
+          callrefresh();
+          alert("再試一次喔")
+        }
+        else{
           alert("問卷製作失敗，請稍候再試一次")
-          
         }
       }
       else{
-        alert(errorMsg)
+        
+        setErrorMsg(errorMsg)
         setload(false)
+        setOpenAlert(true);
       }
       //
     }
@@ -447,18 +469,42 @@ const deleteGift =evt=>{
         <>
         <Navbar/>
         {/*react dnd*/}
+          <Box sx={{ width: '100%' }}>
+            <Collapse in={openAlert}>
+              <Alert
+              severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setOpenAlert(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2 }}
+              >
+              <AlertTitle>問卷製作失敗，請再試一次</AlertTitle>
+                {errorMessage}
+              </Alert>
+            </Collapse>
+
+        </Box>
         <section className='page-container'>
           <div className='breadcrumb'>
-                    <button className='Btn SurveyOptionBtn card-shadow' onClick={cancel}>
+                    <button className='SurveyOptionBtn card-shadow' onClick={cancel}>
                         取消
                     </button>
-                    <button className='Btn SurveyOptionBtn card-shadow' onClick={back}>
+                    <button className='SurveyOptionBtn card-shadow' onClick={back}>
                         製作問卷
                     </button>
-                    <button className='Btn SurveyOptionBtn card-shadow' >
+                    <button className='makeSurveypageBtn card-shadow' >
                         填寫資訊
                     </button>
-                    <button className='Btn SurveyOptionBtn card-shadow' onClick={handleSubmit}>
+                    <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
                         發布問卷
                     </button>
                     {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
@@ -519,9 +565,10 @@ const deleteGift =evt=>{
                           <>
                               <div className='lottery-card card-shadow'>
                               {item.id !== 0 ? <button id={item.id} className="titleCloseBtn" style={{background:"#fbfafc"}} onClick={deleteGift}>X</button> : null}
+                              
                                 <h4>輸入獎品資訊</h4>
                                   <p>
-                                      <input id={item.id} type="text" placeholder="獎品名稱"  className='input-columns' defaultValue={item.gift_name}  onChange={changeGiftName}/>
+                                      <input id={item.id} maxLength="45" type="text" placeholder="獎品名稱"  className='input-columns' defaultValue={item.gift_name}  onChange={changeGiftName}/>
                                   </p>
                                   <p>
                                       <input id={item.id} type="text" pattern="[0-9]*" placeholder="獎品數量"  className='input-columns' defaultValue={item.quantity}  onChange={changeGiftquantity}/>

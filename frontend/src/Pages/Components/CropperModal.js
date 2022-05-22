@@ -9,6 +9,7 @@ import callrefresh from '../../refresh.js';
 import {Cropper, Object,} from 'cropperjs';
 import { ReactCropperProps } from 'react-cropper';
 import { ModalProps } from 'react-bootstrap';
+import ReactLoading from "react-loading";
 
 // Utils
 
@@ -84,6 +85,7 @@ function CropperModal ( props: Props ) {
 	const [zoom, setZoom] = React.useState(props.initialZoom);
 	const [rotate, setRotate] = React.useState(props.initialRotate);
 	
+	
 	React.useEffect(() => {
 		if ( file !== null ) {
 			const reader = new FileReader();
@@ -132,67 +134,7 @@ function CropperModal ( props: Props ) {
 
 		
 		}, fileInfo.mime, props.quality);
-
-		const blobcropfile = await new Promise(resolve => canvasData.toBlob(resolve));
-		const cropfile = new File([blobcropfile], fileInfo.filename, {type: blobcropfile.type, lastModified: new Date()});
-		console.log(cropfile)
-
-
-		// upload image to imgur
-		const formdata = new FormData() 
-		formdata.append("image", cropfile)
-
-        // fetch('https://api.imgur.com/3/image/', {
-        //         method:"POST",
-        //         headers:{
-        //         Authorization: "Client-ID 5535a8facba4790"
-        //         },
-        //         body: formdata
-        //     }).then(data => data.json())
-        //     .then(data => {
-        //         //我們要的imgur網址
-        //         let imgururl = data.data.link
-        //         console.log(imgururl)
-		// 		// return imgururl
-        //     })
-
 		e.preventDefault();
-		const imgururl_result = await fetch('https://api.imgur.com/3/image/', {
-            method:"POST",
-            headers:{
-                Authorization: "Client-ID 5535a8facba4790"
-            },
-            body: formdata
-        })
-        
-        if(imgururl_result.status === 429){
-            var imgururl = ""
-        }else{
-            let data = await imgururl_result.json();
-            var imgururl = data.data.link;
-			console.log(imgururl)
-            // return imgururl;
-        }
-
-		e.preventDefault();
-        const result = await fetch("http://127.0.0.1:5000/UpdateMemberPhoto", {
-            method: "PUT",
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-			},
-            body: JSON.stringify({
-                pic_url: imgururl
-            }),
-        });
-		console.log(result.status);
-        if(result.status === 401){
-            callrefresh();
-        }else{
-			let resJson = await result.json();
-			console.log(resJson);
-			alert(resJson.message);
-        }
-
 	};
 
     
@@ -266,6 +208,7 @@ function CropperModal ( props: Props ) {
                             <Button variant="secondary" onClick={handleClose} className='modaldiscard'>
                                 {labels.discard}
                             </Button>
+							
                         
 						
 					</Col>

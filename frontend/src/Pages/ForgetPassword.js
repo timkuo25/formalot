@@ -24,13 +24,17 @@ const ForgetPassword = () => {
                 }),
             });
             const resdata = await getprotected.json();
-            console.log(resdata);
+            console.log(resdata.status);
             alert(resdata.message);
+
+            if (resdata.status === 'success'){
+                window.location.href = "/"
+            }
         };
 
         const callemailApi = async (e) => {
             e.preventDefault();
-            const result = await fetch("http://127.0.0.1:5000/Email?condition=register", {
+            const result = await fetch("http://127.0.0.1:5000/Email?condition=forget_psw", {
                 method: "POST",
                 body: JSON.stringify({
                     email: email
@@ -109,7 +113,7 @@ const ForgetPassword = () => {
                 </div>
                 <div className="forget_input_content">
                     <h3>驗證碼</h3>
-                    <input value={code} onChange={(e) => setCode(e.target.value)} type="password" placeholder="Verification code" className="forget_inputbar"/>
+                    <input value={code} onChange={(e) => setCode(e.target.value)} type="text" placeholder="Verification code" className="forget_inputbar"/>
                 </div>
 
                 <div className="forget_input_content">

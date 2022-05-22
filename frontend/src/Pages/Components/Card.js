@@ -53,8 +53,8 @@ const Card = ({ info, type, openModal }) => {
             <img alt="" className="q-image" src={image_path}/>
             <div className='card-form-title'> <h3>{title}</h3> </div>
             <p>
-                {`截止時間：${due_time}`} <br/>
-                {`抽獎時間：${lottery_time}`}
+                {`截止時間：`}<br/>{due_time} <br/>
+                {`抽獎時間：`}<br/>{lottery_time}
             </p>
             <FaRegCopy
                 className='share-q' 

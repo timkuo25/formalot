@@ -11,6 +11,7 @@ import ReactLoading from "react-loading";
 import Loading from 'react-loading';
 import { Avator } from './Components/Avator';
 import { Modal } from 'react-bootstrap';
+import { SurveyStatistics } from './SurveyStatistics';
 
 
 const Form = () => {

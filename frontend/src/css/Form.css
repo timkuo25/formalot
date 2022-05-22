@@ -28,3 +28,52 @@
     justify-content: center;
     align-items: center;
 }
+
+.stat_table
+{
+    padding-left: 15%;
+    table-layout: fixed;
+    width: 90%;
+    height: 50%;
+    
+}
+
+.stat-items{
+    height: 15px; 
+    display:inline-block; 
+    border-left: 2px solid #777; 
+    padding:0 15px;
+    padding-bottom:20px;
+    color:#777;
+    margin-top:10px;
+    font-size: 20px;
+    
+  }
+
+.stat_a{
+    height: 15px; 
+    display:inline-block; 
+    padding:0 15px;
+    padding-bottom:20px;
+    margin-top:10px;
+    font-size: 20px;
+    color:var(--theme-dark-purple);
+    text-align:right;
+    
+}
+
+.stat_table td
+{
+    height:1px;
+    overflow: auto;
+    
+}
+
+.stat_scroll{
+    overflow: auto; 
+    max-height: 200px;
+}
+
+#no-border{
+border:none;
+}

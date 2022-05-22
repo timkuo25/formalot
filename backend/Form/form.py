@@ -325,10 +325,10 @@ def FillForm():
         answer_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if addResponse(student_id, form_id, answer_time, answercontent):
             response["status"] = 'success'
-            response["message"] = 'Reponse added.'
+            response["message"] = '問卷填寫成功！'
         else:
             response["status"] = 'fail'
-            response["message"] = 'Reponse aborted.'
+            response["message"] = '問卷填寫失敗'
 
     return jsonify(response)
 

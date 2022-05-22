@@ -174,4 +174,18 @@
     width: 80px;
     height: 80px;
 }
+
+.makeSurveypageBtn {
+    background-color: var(--theme-purple);
+    color: #fff;
+    width: 150px;
+    height: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+}
 /* make survey page done */

@@ -18,6 +18,10 @@ const MakeSurvey = () =>{
 
     useEffect(() => {
 
+        if (!(localStorage.getItem('jwt'))){
+            alert("你沒登入，請先登入")
+            window.location.href="/"
+        }
         let form = window.sessionStorage.getItem('form')
         if (form){
             form = JSON.parse(form)
@@ -251,13 +255,13 @@ const MakeSurvey = () =>{
         {/*react dnd*/}
         <section className='page-container' key={rerenderkey}>
                 <div className='breadcrumb'>
-                    <button className='Btn SurveyOptionBtn card-shadow' onClick={cancel}>
+                    <button className='SurveyOptionBtn card-shadow' onClick={cancel}>
                         取消
                     </button>
-                    <button className='Btn SurveyOptionBtn card-shadow'>
+                    <button className='makeSurveypageBtn card-shadow'>
                         製作問卷
                     </button>
-                    <button className='Btn SurveyOptionBtn card-shadow' onClick={handleSubmit}>
+                    <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
                         填寫資訊
                     </button>
                 </div>
@@ -266,13 +270,13 @@ const MakeSurvey = () =>{
                 <section className='makeSurvey-results card-shadow'>
             
                     <div className='makeSurvey-card'>
-                        <h3>表單標題</h3>
+                        <h3>問卷標題</h3>
                         <p>
-                           <input type="text" placeholder="問卷題目" className='input-columns' style={{width: "100%"}} defaultValue={surveyTitle} onChange={handleChangeTitle}/>
+                           <input type="text" maxLength="100" placeholder="標題*" className='input-columns' style={{width: "100%"}} defaultValue={surveyTitle} onChange={handleChangeTitle}/>
                         </p>
                         <p>
                             {/*<input type="text" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}} defaultValue={SurveyDescription} onChange={handleChangeDescription}/>*/}
-                            <textarea placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px", resize:'vertical'}} defaultValue={SurveyDescription} onChange={handleChangeDescription}></textarea>
+                            <textarea maxLength="500" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px", resize:'vertical'}} defaultValue={SurveyDescription} onChange={handleChangeDescription}></textarea>
                         </p>
     
                     </div>

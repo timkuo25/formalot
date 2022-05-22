@@ -1,4 +1,9 @@
 /* LoginModal Components --------------------------*/
+#portal {
+    position: relative;
+    z-index: 5;
+}
+
 .modalBackground {
     width: 100vw;
     height: 100vh;

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import ReactLoading from "react-loading";
 import { LoginModal } from './Components/LoginModal';
 import { CopyMessage } from './Components/CopyMessage';
+import callrefresh from '../refresh.js';
 
 const Homepage = () => {
     const [page, setPage] = useState(0);
@@ -23,6 +24,9 @@ const Homepage = () => {
             let data = await fetch('http://127.0.0.1:5000/home',{
                 headers: {'Content-Type': 'application/json'}
             });
+            if (data.status===401){
+                callrefresh('reload');
+            }
             let dataJSON = await data.json();
             console.log(dataJSON);
             
@@ -38,6 +42,9 @@ const Homepage = () => {
             data = await fetch('http://127.0.0.1:5000/home?sortBy=newest',{
                 headers: {'Content-Type': 'application/json'}
             });
+            if (data.status===401){
+                callrefresh('reload');
+            }
             dataJSON = await data.json();
             setForms( prevForms => {
                 return {
