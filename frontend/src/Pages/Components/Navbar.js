@@ -1,6 +1,6 @@
 import '../../css/Navbar.css';
 import { LoginModal } from './LoginModal';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate, NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from 'i18next';
@@ -10,12 +10,22 @@ const Navbar = () => {
     const [navActive, setNavActive] = useState(false);
     const [lngmodalOpen, setlngModalOpen] = useState(false);
     const navigate = useNavigate();
+
+    
     //多國語言切換
     const { t, i18n } = useTranslation();
 
     const changeLanguage = (lng) => {
        i18n.changeLanguage(lng);
+       window.sessionStorage.setItem('lng', lng);
     };
+
+    useEffect(() => {
+        let lngInfo = window.sessionStorage.getItem('lng')
+        if(lngInfo){
+            i18n.changeLanguage(lngInfo);
+        }
+    }, []);
 
     const calllogout = async (e) => {
         e.preventDefault();

@@ -3,6 +3,7 @@ import { Navbar } from './Components/Navbar';
 import React from 'react';
 import { useState } from "react";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 
 
@@ -13,7 +14,7 @@ const MakeSurvey = () =>{
     const [surveyTitle, setSurveyTitle] = useState("")
     const [SurveyDescription, setSurveyDescription] = useState("")
     const [rerenderkey, setrerenderkey] = useState(0)
-
+    const { t, i18n } = useTranslation();
 
 
     useEffect(() => {
@@ -256,13 +257,13 @@ const MakeSurvey = () =>{
         <section className='page-container' key={rerenderkey}>
                 <div className='breadcrumb'>
                     <button className='SurveyOptionBtn card-shadow' onClick={cancel}>
-                        取消
+                        {t("取消")}
                     </button>
                     <button className='makeSurveypageBtn card-shadow'>
-                        製作問卷
+                        {t("製作問卷")}
                     </button>
                     <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
-                        填寫資訊
+                        {t("填寫資訊")}
                     </button>
                 </div>
             <section className='makeSurvey-container'>
@@ -270,6 +271,7 @@ const MakeSurvey = () =>{
                 <section className='makeSurvey-results card-shadow'>
             
                     <div className='makeSurvey-card'>
+
                         <h3>問卷標題</h3>
                         <p>
                            <input type="text" maxLength="100" placeholder="標題*" className='input-columns' style={{width: "100%"}} defaultValue={surveyTitle} onChange={handleChangeTitle}/>
@@ -285,7 +287,7 @@ const MakeSurvey = () =>{
                         <>
                             <div className='makeSurvey-card' key={index}>
                                 <button id={item.id} className="titleCloseBtn" style={{background:"#fbfafc"}} onClick={deleteQuestion}>X</button>
-                                <h4>{item.Type}</h4>
+                                <h4>{t(item.Type)}</h4>
                                 <p>
                                     <input id = {item.id} type="text" placeholder={item.Question} className='input-columns' style={{width: "100%", height:"50px"}} onChange={handleChangeQuestion}/>
                                 </p>
@@ -294,7 +296,7 @@ const MakeSurvey = () =>{
                                             <>
                                                 <p>
                                                     <input key={[item.id,i]} id={[item.id, i]} type="text" className='input-columns' placeholder={opt} style={{width: "80%", height:"80px"}} onChange={handleChangeChoice}/>
-                                                    <button id={[item.id, i]} className={'Btn NextBtn'} onClick={deleteOption} disabled={i>1? 0:1}>刪除</button>
+                                                    <button id={[item.id, i]} className={'Btn NextBtn'} onClick={deleteOption} disabled={i>1? 0:1}>{t("刪除")}</button>
                                                 </p>
 
                                             </>
@@ -302,7 +304,7 @@ const MakeSurvey = () =>{
                                     })}
                                     <p>
                                     </p>
-                                    {item.Options.length > 0 ? <button id = {item.id} className={'Btn SurveyOptionBtn card-shadow'} onClick={addChoice}>新增選項</button>: null }
+                                    {item.Options.length > 0 ? <button id = {item.id} className={'Btn SurveyOptionBtn card-shadow'} onClick={addChoice}>{t("新增選項")}</button>: null }
                             </div>
                         </>
                         );
@@ -320,30 +322,26 @@ const MakeSurvey = () =>{
                     <div className='makeSurvey-card sticky-div card-shadow'>
                         <p>
                             <button className='Btn SurveyDescriptionBtn card-shadow' onClick = {renderShortAns}>
-                            簡答
+                            {t("簡答題")}
                             </button>
                         </p>
 
                         <p>
                             <button className='Btn SurveyDescriptionBtn card-shadow' onClick={renderSingleChoice}>
-                            單選題
+                            {t("單選題")}
                             </button>
                         </p>
                         <p>
                             <button className='Btn SurveyDescriptionBtn card-shadow' onClick={renderMultipleChoice}>
-                            複選題
-                            </button>
-                        </p>
-                        <p>
-                            <button className='Btn SurveyDescriptionBtn card-shadow' onClick={renderDropDown}>
-                            下拉式選單
+                            {t("複選題")}
                             </button>
                         </p>
                         <p>
                             <button className='Btn SurveyDescriptionBtn card-shadow' disabled={1}>
-                            線性量表問題
+                            {t("下拉式選單")}
                             </button>
                         </p>
+
                     </div>
                 </section>
                 
