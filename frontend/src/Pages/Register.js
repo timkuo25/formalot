@@ -5,6 +5,7 @@ import { Footer } from './Components/Footer';
 import React from "react";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { AiFillEye } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
 
 // import { Button } from 'react-native';
 
@@ -19,6 +20,7 @@ const Register = () => {
     //const [loading, setLoading] = useState(false)
     const [image, setImage] = useState({img:null,display:null });
     const inputFile = useRef(null) 
+    const { t, i18n } = useTranslation();
 
     
     const callemailApi = async (e) => {
@@ -166,12 +168,12 @@ const Register = () => {
         <div className="reg_card_container" align='center'>
             <div className="register_card_left">
                 <div className='reg_description'>
-                    <h1>加入 FORMALOT<br/>輕鬆填寫問卷、參加抽獎<br/>隨時查看抽獎進度<br/>把一堆獎品免費帶回家</h1>
+                    <h1>{t("加入")} FORMALOT<br/>{t("輕鬆填寫問卷、參加抽獎")}<br/>{t("隨時查看抽獎進度")}<br/>{t("把一堆獎品免費帶回家")}</h1>
                 </div>
             </div>
             <div className="register_card_right">
                 <div className="input_content">
-                    <h3>電子郵件</h3>
+                    <h3>{t("電子郵件")}</h3>
                     <div className = 'reg-valid'>
                         <input type="text" maxLength="60" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} className="reg_inputbar"/>
                         {(email.length>0 && errors.email) && <font>{errors.email}</font>}
@@ -179,15 +181,15 @@ const Register = () => {
                     </div>
                 </div>
                 <div className="input_content">
-                    <h3>姓氏</h3>
+                    <h3>{t("姓氏")}</h3>
                     <input type="text" maxLength="45" value={last_name} placeholder="Lastname" onChange={(e) => setLastname(e.target.value)} className="reg_inputbar"/>
                 </div>
                 <div className="input_content">
-                    <h3>名字</h3>
+                    <h3>{t("名字")}</h3>
                     <input type="text" maxLength="45" value={first_name} placeholder="Firstname" onChange={(e) => setFirstname(e.target.value)} className="reg_inputbar"/>
                 </div>
                 <div className="input_content">
-                    <h3>密碼</h3>
+                    <h3>{t("密碼")}</h3>
                     <div className='reg-password-content'>
                         <input type={values.showPassword ? "text" : "password"} value={password} placeholder="Password" 
                         onChange={(e) => setPassword(e.target.value)} className="reg_inputbar"/>
@@ -199,7 +201,7 @@ const Register = () => {
                     </div>
                 </div>
                 <div className="input_content">
-                    <h3>確認密碼</h3>
+                    <h3>{t("確認密碼")}</h3>
                     <div className='reg-password-content'>
                         <input type={values2.showPassword ? "text" : "password"} value={password2} placeholder="Confirm Password" 
                         onChange={(e) => setPassword2(e.target.value)} className="reg_inputbar"/>
@@ -222,12 +224,12 @@ const Register = () => {
                 </div> */}
 
                 <div className="input_content">
-                    <h3>信箱驗證碼</h3>
+                    <h3>{t("信箱驗證碼")}</h3>
                     
                     <form className="register_verification">                        
                         <input type="text" value={code} placeholder="Verification code" onChange={(e) => setCode(e.target.value)} className="reg_inputbar"/>
-                        {errors.email && <button className="Btn ver_submit" onClick={callErrorEmailAlert}>取得驗證碼</button>}
-                        {errors.pass && <button className="Btn ver_submit" onClick={callemailApi}>取得驗證碼</button>}
+                        {errors.email && <button className="Btn ver_submit" onClick={callErrorEmailAlert}>{t("取得驗證碼")}</button>}
+                        {errors.pass && <button className="Btn ver_submit" onClick={callemailApi}>{t("取得驗證碼")}</button>}
                         {/* <button className="ver_submit">取得驗證碼</button> */}
                     </form>
                 </div>
@@ -235,13 +237,13 @@ const Register = () => {
                 <br/>
                 <div className="member_rule">
                     <input type="checkbox" className='box' id='agree' value={agree} onChange={callCheckedbox}/>
-                    <font>我已詳閱
-                        <button className='member_info' onClick={() => {window.location.href='instruction'}}>會員須知</button>並同意所有會員規範</font>
+                    <font>{t("我已詳閱")}
+                        <button className='member_info' onClick={() => {window.location.href='instruction'}}>{t("會員須知")}</button>{t("並同意所有會員規範")}</font>
                 </div>
             
             <form>
-                {(errors.email || errors.errorpwd || agree!==true) && <button className="reg_submit_gray" onClick={callAlert} >註冊</button>}
-                {(errors.pass && errors.correctpwd && agree===true) && <button className="Btn reg_submit" onClick={callregisterApi}>註冊</button>}
+                {(errors.email || errors.errorpwd || agree!==true) && <button className="reg_submit_gray" onClick={callAlert} >{t("註冊")}</button>}
+                {(errors.pass && errors.correctpwd && agree===true) && <button className="Btn reg_submit" onClick={callregisterApi}>{t("註冊")}</button>}
                 {/* <button className="reg_submit">註冊</button> */}
             </form>
             

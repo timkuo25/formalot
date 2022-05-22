@@ -7,6 +7,7 @@ import React from "react";
 import { AiFillEyeInvisible } from "react-icons/ai";
 import { AiFillEye } from "react-icons/ai";
 import ReactLoading from "react-loading";
+import { useTranslation } from "react-i18next";
 
 
 const EditProfile = () => {
@@ -16,6 +17,7 @@ const EditProfile = () => {
     const [password2, setPassword2] = useState("");
     const [loading, setload] = useState(false)
     const [readload, setreadload] = useState(false)
+    const { t, i18n } = useTranslation();
     // 修改個人資料
     const calluserupdate = async (e) => {
         e.preventDefault();
@@ -115,24 +117,24 @@ const EditProfile = () => {
             
             <div className="edit_card_right">
                 <div className="edit_input_content">
-                    <h1>編輯個人資訊</h1>
+                    <h1>{t("編輯個人資訊")}</h1>
                     
                 </div>
                 <div className="edit_input_content">
-                    <h2>你的信箱</h2>
+                    <h2>{t("你的信箱")}</h2>
                     <h3>{readload ?   <ReactLoading type="spinningBubbles" color="#432a58"/>:Profile.user_email}</h3>
                 </div>
                 <div className="edit_input_content">
-                    <h3>姓氏</h3>
+                    <h3>{t("姓氏")}</h3>
                     <input maxLength="45" defaultValue = {Profile.user_lastname} onChange={(e) => setLastname(e.target.value)} type="text" placeholder="LastName" className="edit_inputbar"/>
                     </div>
                 <div className="edit_input_content">
-                    <h3>名字</h3>
+                    <h3>{t("名字")}</h3>
                     <input maxLength="45" defaultValue = {Profile.user_firstname} onChange={(e) => setFirstname(e.target.value)} type="text" placeholder="FirstName" className="edit_inputbar"/>
                 </div>
 
                 <div className="edit_input_content">
-                    <h3>輸入新密碼</h3>
+                    <h3>{t("輸入新密碼")}</h3>
                     <div className='edit-password-content'>
                         <input type={values.showPassword ? "text" : "password"} value={password} placeholder="Password" 
                         onChange={(e) => setPassword(e.target.value)} className="edit_inputbar"/>
@@ -144,7 +146,7 @@ const EditProfile = () => {
                     </div>
                 </div>
                 <div className="edit_input_content">
-                    <h3>確認新密碼</h3>
+                    <h3>{t("確認新密碼")}</h3>
                     <div className='edit-password-content'>
                         <input type={values2.showPassword ? "text" : "password"} value={password2} placeholder="Password" 
                         onChange={(e) => setPassword2(e.target.value)} className="edit_inputbar"/>
@@ -155,8 +157,8 @@ const EditProfile = () => {
                 </div>
                 
             <form>
-                {errors.errorpwd && <button className="Btn edit_submit" onClick={callAlert}>修改</button>}
-                {errors.correctpwd && <button className="Btn edit_submit" onClick={calluserupdate}>修改</button>}
+                {errors.errorpwd && <button className="Btn edit_submit" onClick={callAlert}>{t("修改")}</button>}
+                {errors.correctpwd && <button className="Btn edit_submit" onClick={calluserupdate}>{t("修改")}</button>}
                 {loading ?   <div className='card-container'><ReactLoading type="balls" color="#432a58"/></div>:null}
                 {/* <button className="Btn edit_submit" onClick={calluserupdate}>修改</button> */}
             </form>

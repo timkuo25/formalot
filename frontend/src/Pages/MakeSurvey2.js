@@ -314,6 +314,7 @@ const MakeSurvey2 = () => {
       }
 
 
+
   
       console.log(surveyData)
       console.log("---------")
@@ -572,7 +573,7 @@ const deleteGift =evt=>{
                               
                                 <h4>{t("輸入獎品資訊")}</h4>
                                   <p>
-                                      <input id={item.id} maxLength="45" type="text" placeholder="獎品名稱"  className='input-columns' defaultValue={item.gift_name}  onChange={changeGiftName}/>
+                                      <input id={item.id} maxLength="45" type="text" placeholder={t("獎品名稱")}  className='input-columns' defaultValue={item.gift_name}  onChange={changeGiftName}/>
                                   </p>
                                   <p>
                                       <input id={item.id} type="text" pattern="[0-9]*" placeholder={t("獎品數量")}  className='input-columns' defaultValue={item.quantity}  onChange={changeGiftquantity}/>
