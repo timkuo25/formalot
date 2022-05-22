@@ -9,6 +9,7 @@ import {useParams} from 'react-router-dom';
 import ReactLoading from "react-loading";
 import Loading from 'react-loading';
 import { Avator } from './Components/Avator';
+import { SurveyStatistics } from './SurveyStatistics';
 
 
 const Form = () => {
@@ -68,7 +69,7 @@ const Form = () => {
         // 設定可看到的左上角頁面標籤
         if(resJson.form_owner_status == true)
         {
-            setTags(['填寫問卷', '抽獎結果','填答結果'])
+            setTags(['填寫問卷', '抽獎結果',"統計結果"])
         }
         else {
             setTags(['填寫問卷', '抽獎結果'])
@@ -140,8 +141,17 @@ const Form = () => {
     };
 
     function changePage(showTag){
-        return showTag === "填寫問卷" ? <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
-        : <Lottery form_id = {FORM_ID} form_title={formDetail.form_title}/> 
+        console.log(showTag)
+
+        if (showTag == "填寫問卷"){
+            return <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} /> 
+        }else if(showTag == "抽獎結果"){
+            return <Lottery form_id = {FORM_ID} form_title={formDetail.form_title}/> 
+        }else if (showTag == "統計結果"){
+            return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title}/> 
+        }
+        // return showTag === "填寫問卷" ? <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
+        // : <Lottery form_id = {FORM_ID} form_title={formDetail.form_title}/> 
     }
 
 

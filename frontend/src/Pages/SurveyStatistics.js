@@ -5,22 +5,19 @@ import {LotteryCard} from './Components/LotteryCard'
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import { TagCloud } from 'react-tagcloud'
-import { WordCloud } from "wordcloud"
-import swal from 'sweetalert'
-import { saveAs } from 'file-saver';
+import ReactLoading from "react-loading";
 
 
 // 傳入想要看的 formID
-const FORM_SEARCH = {id:1};
 
-const SurveyStatistics = () => {
-
+const SurveyStatistics = (props) => {
+    const FORM_ID = props.form_id;
     console.log('----- invoke function component -----');
 
     const [gifts, setGifts] = useState([]);
     const [candidateList, setCandidateList] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
-    const [lotteryResults, setLotteryResults] = useState([]);
+    let [lotteryResults, setLotteryResults] = useState([]);
     let [csvResults, setcsvResults] = useState([]);
     let chart_title = ['Item', 'Numbers']
     let chart_item = ['Item', 'Numbers']
@@ -40,7 +37,7 @@ const SurveyStatistics = () => {
     const fetchCurrentGifts = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetGift?form_id=1`,
+            `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -60,7 +57,7 @@ const SurveyStatistics = () => {
     const fetchCandidateList = () =>
     {
         fetch(
-            ` http://127.0.0.1:5000/GetCandidate?form_id=1`,
+            ` http://127.0.0.1:5000/GetCandidate?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -80,7 +77,7 @@ const SurveyStatistics = () => {
     const fetchFormDetail = () =>
     {
         fetch(
-            ` http://127.0.0.1:5000/GetFormDetail?form_id=1`,
+            ` http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -102,7 +99,7 @@ const SurveyStatistics = () => {
     const fetchLotteryResults = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/SurveyManagement/detail?form_id=1`,
+            `http://127.0.0.1:5000/SurveyManagement/detail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -122,7 +119,7 @@ const SurveyStatistics = () => {
     const fetchcsvResults = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/SurveyManagement/downloadResponse?form_id=1`,
+            `http://127.0.0.1:5000/SurveyManagement/downloadResponse?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -138,144 +135,150 @@ const SurveyStatistics = () => {
         .catch(error => console.log(error))
     };
 
-    // var el = document.getElementById("1");
-    // if(el){
-    //   el.addEventListener("click",function(){
-    //     swal("Good job!", "You clicked the button!", "success");
-    // }); 
-    // }
-    // google.charts.load('current', {'packages':['corechart']});
-    // google.charts.setOnLoadCallback(drawChart);
-
-    // function drawChart() {
-
-    //   var data = google.visualization.arrayToDataTable([
-    //     ['Task', 'Hours per Day'],
-    //     ['Work',     11],
-    //     ['Eat',      2],
-    //     ['Commute',  2],
-    //     ['Watch TV', 2],
-    //     ['Sleep',    7]
-    //   ]);
-
-    //   var options = {
-    //     title: 'My Daily Activities'
-    //   };
-
-    //   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-    //   chart.draw(data, options);
-    // }
-
-
-
-
-
-    const data = [
-        { value: '喜歡', count: 38 },
-        { value: '喜翻', count: 30 }
-      ]
       
-    const SimpleCloud = () => (
-        <TagCloud
-          minSize={12}
-          maxSize={35}
-          tags={data}
-          onClick={tag => alert(`'${tag.value}' was selected!`)}
-        />
-      )
+
+    //   const [gifts, setGifts] = useState([]);
+    //   const [candidateList, setCandidateList] = useState([]);
+    //   const [formDetail, setFormDetail] = useState([]);
+    //   const [lotteryResults, setLotteryResults] = useState([]);
+    //   let [csvResults, setcsvResults] = useState([]);
+    console.log("CurrentGifts",gifts)
+    console.log("CandidateList",candidateList)
+    console.log("FormDetail",formDetail)
+    console.log("csvResults",csvResults)
+    console.log("lotteryResults",lotteryResults)
+
+    for (let i = 0; i < lotteryResults.length; i++) {
+        var uni_ans_list = []
+        var ans_count = []
+        if (lotteryResults[i].question_type == "單選題"){
+            for (let j = 0; j < lotteryResults[i].replies.length; j++) {
+                if (uni_ans_list.includes(lotteryResults[i].replies[j].answer[0])){
+                    ans_count[uni_ans_list.indexOf(lotteryResults[i].replies[j].answer[0])] += 1
+                }else{
+                    uni_ans_list.push(lotteryResults[i].replies[j].answer[0])
+                    ans_count[uni_ans_list.indexOf(lotteryResults[i].replies[j].answer[0])] = 1
+                }
+
+            } 
+            var keyword_list = {}
+            for (let k = 0; k < ans_count.length; k++) {
+                keyword_list[uni_ans_list[k]] = ans_count[k]
+            } 
+            lotteryResults[i].keywordCount = [keyword_list]
+
+        }
+    }
+    // [{是: 4, 無意見: 2}]
+    // const data = [
+    //     { value: '喜歡', count: 38 },
+    //     { value: '喜翻', count: 30 }
+    //   ]
+    for (let i = 0; i < lotteryResults.length; i++) {
+        var keyword_cloud = []
+        for (let j = 0; j < Object.keys(lotteryResults[i].keywordCount[0]).length; j++){
+            keyword_cloud.push({"value":Object.keys(lotteryResults[i].keywordCount[0])[j],
+                                "count":lotteryResults[i].keywordCount[0][Object.keys(lotteryResults[i].keywordCount[0])[j]]})
+        }
+        lotteryResults[i].keyword_cloud = keyword_cloud
+    }
+
+    var csv_index = 0;
+    csv_index = csvResults.indexOf(".csv") +6
+    csvResults = csvResults.slice(csv_index)
+
 
     return (
         <>
-            <Navbar/>
-            {console.log('render')}
-            <section className='lottery-page-container'>
-                {/* 問卷左半部抽獎結果 */}
-                <section className='lottery-container'>
-                    <section className='lottery-results'>
-                        <h2> {formDetail.form_title} </h2>
-                        {console.log("csvResults",csvResults)}
-                        <a  
+        <section className='lottery-results card-shadow'>
+            <h1> {props.form_title} </h1>
+                            <a className='stat_a'
+
                             href={
                                 `data:text/csv;charset=utf-8,%EF%BB%BF`+  `${encodeURI(csvResults)}`
                             }
                             // href={`data:text/csv;charset=utf-8;,${encodeURIComponent(
                             // csvResults
                             // )}`}
-
-
-
-
                             download={formDetail.form_title + `.csv`}
-                        >
-                            {`Download Json`}
-                        </a>
-                        {console.log("csvResults_3",`data:text/csv;charset=utf-8;,${encodeURIComponent(
-                            csvResults
-                            )}`)}
+                        >{`下載檔案`}</a>
 
-                       
-                        {lotteryResults.map(result => {
-                            return (
-                                <div className='lottery-card' key={result.question}>
-                                    
-                                    <h2> {result.question}   </h2>
-                                    <div className="prize-tag-stat" >{`${result.question_type}`}</div>
-
-
-
-                                    <div>
-                                        {console.log('replies', lotteryResults)}                              
-                                        {console.log('result.keywordCount', chart_item =  Object.entries(result.keywordCount[0])) }
-                                        {console.log('result.keywordCount', chart_item.unshift(chart_title)) }
-
-                                        {/* dont delete */}
-                                        <Chart
-                                        chartType="PieChart"
-                                        data={chart_item}
-                                        width="100%"
-                                        height="400px"
-                                        legendToggle
-                                        />
-                                        <TagCloud
-                                        minSize={12}
-                                        maxSize={35}
-                                        tags={data}
-                                        onClick={tag => alert(`'${tag.value}' was selected!`)}
-                                        />
-                                    </div>
+  
+            {lotteryResults.map(result => {
+                if (result.question_type=="簡答題"){
+                    return (
+                        <div className='lottery-card card-shadow' key={result.question}>
+                            
+                            <h2> {result.question}   </h2>
+                            <div className="prize-tag-stat" >{`${result.question_type}`}</div>
+    
+                        <table class="stat_table">    
+                            <tr>
+                                
+                                <div class ="stat_scroll">
+                                    <td>       
+                                    {result['replies'].map( (replies) => {
+                                        return(
+                                        <div>
+                                            <div id="no-border" class="stat-items">{replies.answer}</div>
+                                            <div class="stat-items">{replies.user}</div>
+                                        </div> 
+                                            )
+                                        })}
+                                    </td>
                                 </div>
-                            )
-                        })}
+                                <td>  
+                                <TagCloud
+                                    style={{
+                                        fontFamily: 'sans-serif',
+                                        fontSize: 10,
+                                        fontWeight: 'bold',
+                                        fontStyle: 'italic',
+                                        padding: 5,
+                                        width: '100%',
+                                        height: '100%'
+                                        }}
+                                minSize={30}
+                                maxSize={50}
+                                tags={result.keyword_cloud}
+                                onClick={tag => alert(`'${tag.value}' was selected!`)}
+                                />
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+                    )
+                }else{
+                return (
+                    <div className='lottery-card card-shadow' key={result.question}>
+                        
+                        <h2> {result.question}   </h2>
+                        <div className="prize-tag-stat" >{`${result.question_type}`}</div>
 
-                    </section>
 
 
+                        <div>
+                            {console.log('replies', lotteryResults)}                              
+                            {console.log('result.keywordCount', chart_item =  Object.entries(result.keywordCount[0])) }
+                            {console.log('result.keywordCount', chart_item.unshift(chart_title)) }
 
-                    {/* 問卷右半部基本問卷資訊 */}
-                    <section className='form-info'>
-                        <h2> 問卷資訊 </h2>
-                        發布時間：{formDetail.form_create_date} <br />
-                        截止時間：{formDetail.form_end_date} <br />
-                        抽獎時間：{formDetail.form_draw_date}<br/>
-                        <h2> 獎品 </h2>
-                        {gifts.map(gift => {
-                            return (
-                                <div className='prize-container' key={gift.question}>
-                                    <h3> {gift.question} × {gift.amount} </h3>
-                                    <img className='prize-image' src={gift.gift_pic_url} alt=''/>
-                                </div>
-                            )
-                        })}
+                            {/* dont delete */}
+                        
+                            <Chart
+                            chartType="PieChart"
+                            data={chart_item}
+                            width="100%"
+                            height="400px"
+                            legendToggle
+                            />
+                        </div>
+                    </div>
+                )
+            }
+            })}
+        </section>
 
-                    </section>
-                </section>
-                <div className='form-buttons'>
-                    <button class='form-button'> 填答結果</button>
-                    <button class='form-button'> 瀏覽問卷</button>.
-                    {/* <button class='form-button' onClick={fetchCurrentGifts}> 重新整理</button> */}
-                </div>
-            </section>
+
 
         </>
     )
