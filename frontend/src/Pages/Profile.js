@@ -10,11 +10,13 @@ import ReactLoading from "react-loading";
 import { AiFillCamera } from "react-icons/ai";
 import {CropperModal} from './Components/CropperModal';
 import React from 'react';
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
     const [Profile, setProfile] = useState([]);
     const [loading, setload] = useState(false)
     const [uploadimgloading, setuploadimgloading] = React.useState(false)
+    const { t, i18n } = useTranslation();
     useEffect(() => {
         const callGetUserProfile = async () => {
             setload(true)
@@ -149,27 +151,27 @@ const Profile = () => {
                     <hr className="solid"></hr>
                         
                     <div className="profile-content">
-                        <h3 className="profile-name">信箱</h3>
+                        <h3 className="profile-name">{t("信箱")}</h3>
                         <p className="profile-bar">{Profile.user_email}</p>
                     </div>
 
                     <div className="profile-content">
-                        <h3 className="profile-name">學號</h3>
+                        <h3 className="profile-name">{t("學號")}</h3>
                         <p className="profile-bar">{Profile.student_id}</p>
                     </div>
 
                     <div className="profile-content">
-                        <h3 className="profile-name">姓氏</h3>
+                        <h3 className="profile-name">{t("姓氏")}</h3>
                         <p className="profile-bar">{Profile.user_lastname}</p>
                         {/* <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/> */}
                     </div>
 
                     <div className="profile-content">
-                        <h3 className="profile-name">名字</h3>
+                        <h3 className="profile-name">{t("名字")}</h3>
                         <p className="profile-bar">{Profile.user_firstname}</p>
                         {/* <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/> */}
                     </div>
-                        <button className="Btn edit-profile" onClick={() => {window.location.href='editProfile'}}>編輯個人資訊</button>
+                        <button className="Btn edit-profile" onClick={() => {window.location.href='editProfile'}}>{t("編輯個人資訊")}</button>
                 </div>
             </div>
         <Footer />
