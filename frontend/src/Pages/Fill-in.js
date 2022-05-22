@@ -1,5 +1,6 @@
 import '../css/Lottery.css'
 import '../css/Fill-in.css'
+import callrefresh from '../refresh.js';
 import { Navbar } from './Components/Navbar';
 import React, { useState, useEffect } from 'react';
 import {useParams} from 'react-router-dom';
@@ -20,8 +21,7 @@ const Fillin = (props) => {
     useEffect(() => {
         let abortController = new AbortController();  
         const fetchData = async () => {
-            await Promise.resolve(formRespondCheck());
-            fetchQuestions();
+            await Promise.resolve([formRespondCheck(),fetchQuestions()]);
         }
         fetchData();
         return () => {  
@@ -47,30 +47,27 @@ const Fillin = (props) => {
         }
     }
 
-    const fetchQuestions = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            // console.log('response of getUserForm',response)
+    const fetchQuestions = async () => {
+        try{
+            const response = await fetch(
+                `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                }});
+            const resJson = await response.json();
+            console.log("questions", resJson[0]['questioncontent']);
             setFormContent({
-                description: response[0]['form_description'],
-                picture: response[0]['form_pic_url'],
-                questions: response[0]['questioncontent']
+                description: resJson[0]['form_description'],
+                picture: resJson[0]['form_pic_url'],
+                questions: resJson[0]['questioncontent']
             })
-        })
-        .then(console.log("questions", formContent.questions))
-        .catch(error => console.log(error))  
-    };
+        } catch(e) {
+             console.log("form response check error", e)
+        }
+    }
 
     //決定要顯示哪些問題
     
