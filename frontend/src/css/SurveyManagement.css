@@ -42,7 +42,7 @@ h3.manage-header {
   justify-content: left; 
   overflow: auto;
   overflow-y:auto;
-  /* white-space: nowrap; */
+  white-space: nowrap;
   width: 100%;
 }
 

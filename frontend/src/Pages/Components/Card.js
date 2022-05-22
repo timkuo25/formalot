@@ -3,6 +3,7 @@ import { FaRegCopy } from 'react-icons/fa';
 import { useTranslation } from "react-i18next";
 
 
+
 const Card = ({ info, type, openModal }) => {
     const { t, i18n } = useTranslation();
     if (!info) return <div className="empty-card"></div>;
@@ -49,9 +50,50 @@ const Card = ({ info, type, openModal }) => {
         window.location.href='form/'+info.form_id;
     }
 
+    function showStatus(){
+        if(type==='replied'){
+            if(info.form_run_state === 'Closed'){
+                if(info.draw_result === null){
+                    return(<div className="prize-tag black">{'未中獎'}</div>)
+                }
+                else if(info.form_run_state !== null){
+                    return(<div className="prize-tag pink">{'已中獎'}</div>)
+                }            
+            }
+            else if(info.form_run_state === 'Open'){
+                return(<div className="prize-tag">{'未開獎'}</div>)
+            }
+            else if(info.form_run_state === 'Delete'){
+                return(<div className="prize-tag black">{'已刪除'}</div>)
+            }
+            else {
+                return(<div className="prize-tag">{'未知狀態'}</div>)
+            }
+        }
+        else if (type==='created'){
+            if(info.form_run_state === 'Open'){
+                return(<div className="prize-tag">{'未開獎'}</div>)
+            }
+            else if(info.form_run_state === 'Closed'){
+                return(<div className="prize-tag pink">{'已開獎'}</div>)
+            }
+            else if(info.form_run_state === 'WaitForDraw'){
+                return(<div className="prize-tag pink">{'待開獎'}</div>)
+            }
+            else if(info.form_run_state === 'Delete'){
+                return(<div className="prize-tag">{''}</div>)
+            }
+            else {
+                return(<div className="prize-tag">{'未知狀態'}</div>)
+            }
+        }
+    }
+
     return (
         <div className="card card-shadow" onClick={clickForm}>
-            <div className="prize-tag">{t("抽獎名額 ")}{`${num_prize}`}{t(" 名")}</div>
+            {type==='home'? <><div className="prize-tag">{`${prize} ${num_prize} 名`}</div></> : <></>}
+            {showStatus()}
+
             <img alt="" className="q-image" src={image_path}/>
             <div className='card-form-title'> <h3>{title}</h3> </div>
             <p>

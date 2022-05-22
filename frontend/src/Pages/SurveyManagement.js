@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Card } from './Components/Card';
 import { Navbar } from "./Components/Navbar";
 import { Footer } from "./Components/Footer";
+import callrefresh from '../refresh.js';
 import React from "react";
 import ReactLoading from "react-loading";
 
@@ -33,9 +34,9 @@ const SurveyManagement = () => {
         abortController.abort();  
     }  
   }, []);  
-  const fetchFormData = () =>
+  const fetchFormData = async () =>
   {
-      fetch(
+      const res = await fetch(
           `http://127.0.0.1:5000/SurveyManagement`,
           {
               method: "GET",
@@ -44,12 +45,13 @@ const SurveyManagement = () => {
                   Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
               }
           }
-      )
-      .then(response => response.json())
-      .then(response => {
-        console.log('allData', response)
-        console.log('createdData',response[0].created)
-        console.log('repliedData',response[0].replied)
+      );
+      const response = await res.json();
+      if(response.msg==='Token has expired'){
+        callrefresh("reload");
+      }
+      else{
+        console.log('allData', response);
         setCreatedData({
           "data":response[0].created,
           "isLoading":0
@@ -58,8 +60,7 @@ const SurveyManagement = () => {
           "data":response[0].replied,
           "isLoading":0
         })
-      })
-      .catch(error => console.log(error))  
+      }
   };
   return (
     <>
@@ -73,7 +74,7 @@ const SurveyManagement = () => {
               {repliedData.isLoading ==1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                   repliedData.data.map( (form) => {
                       return (
-                          <Card info={form} />
+                          <Card type={'replied'} info={form} />
                       )
                   })
               }
@@ -85,7 +86,7 @@ const SurveyManagement = () => {
               {createdData.isLoading==1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                 createdData.data.map( (form) => {
                     return (
-                        <Card info={form} />
+                        <Card type={'created'} info={form} />
                     )
                 })
               }

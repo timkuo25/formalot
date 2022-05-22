@@ -27,74 +27,12 @@ const SurveyStatistics = (props) => {
     // 使用 useEffect Hook
     useEffect(() => {
         console.log('execute function in useEffect');
-        fetchCurrentGifts();
-        fetchCandidateList();
-        fetchFormDetail();
+        // fetchCurrentGifts();
+        // fetchCandidateList();
+        // fetchFormDetail();
         fetchLotteryResults();
         fetchcsvResults();
     }, []);  // dependency 
-
-    const fetchCurrentGifts = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            setGifts(response.data);
-            console.log('giftsdata',response.data)
-        })
-        .catch(error => console.log(error))  
-    };
-
-    const fetchCandidateList = () =>
-    {
-        fetch(
-            ` http://127.0.0.1:5000/GetCandidate?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('candidate_data',response.data['candidates'])
-            setCandidateList(response.data['candidates']);
-        })
-        .catch(error => console.log(error))  
-    };
-
-    const fetchFormDetail = () =>
-    {
-        fetch(
-            ` http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('Form Detail',response)
-            setFormDetail(response);
-        })
-        .catch(error => console.log(error))  
-    };
-
-
 
     const fetchLotteryResults = () =>
     {
@@ -135,16 +73,7 @@ const SurveyStatistics = (props) => {
         .catch(error => console.log(error))
     };
 
-      
 
-    //   const [gifts, setGifts] = useState([]);
-    //   const [candidateList, setCandidateList] = useState([]);
-    //   const [formDetail, setFormDetail] = useState([]);
-    //   const [lotteryResults, setLotteryResults] = useState([]);
-    //   let [csvResults, setcsvResults] = useState([]);
-    console.log("CurrentGifts",gifts)
-    console.log("CandidateList",candidateList)
-    console.log("FormDetail",formDetail)
     console.log("csvResults",csvResults)
     console.log("lotteryResults",lotteryResults)
 
@@ -208,26 +137,19 @@ const SurveyStatistics = (props) => {
                 if (result.question_type=="簡答題"){
                     return (
                         <div className='lottery-card card-shadow' key={result.question}>
-                            
                             <h2> {result.question}   </h2>
                             <div className="prize-tag" >{`${result.question_type}`}</div>
-    
-                        <table class="stat_table">    
-                            <tr>
-                                
+                            <div class="stat_table">    
                                 <div class ="stat_scroll">
-                                    <td>       
                                     {result['replies'].map( (replies) => {
                                         return(
                                         <div>
-                                            <div id="no-border" class="stat-items">{replies.answer}</div>
                                             <div class="stat-items">{replies.user}</div>
+                                            <div class="stat-items no-border">{replies.answer}</div>
                                         </div> 
                                             )
                                         })}
-                                    </td>
                                 </div>
-                                <td>  
                                 <TagCloud
                                     style={{
                                         fontFamily: 'sans-serif',
@@ -235,17 +157,15 @@ const SurveyStatistics = (props) => {
                                         fontWeight: 'bold',
                                         fontStyle: 'italic',
                                         padding: 5,
-                                        width: '100%',
-                                        height: '100%'
+                                        width: '50%',
+                                        height: '50%'
                                         }}
                                 minSize={30}
                                 maxSize={50}
                                 tags={result.keyword_cloud}
                                 onClick={tag => alert(`'${tag.value}' was selected!`)}
                                 />
-                                </td>
-                            </tr>
-                        </table>
+                            </div>
                         </div>
                     )
                 }else{
