@@ -173,7 +173,7 @@ const Register = () => {
                 <div className="input_content">
                     <h3>電子郵件</h3>
                     <div className = 'reg-valid'>
-                        <input type="text" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} className="reg_inputbar"/>
+                        <input type="text" maxLength="60" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} className="reg_inputbar"/>
                         {(email.length>0 && errors.email) && <font>{errors.email}</font>}
                         {errors.pass && <text>{errors.pass}</text>}
                     </div>
