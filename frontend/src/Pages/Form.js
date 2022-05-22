@@ -4,11 +4,13 @@ import '../css/Form.css'
 import { Navbar } from './Components/Navbar';
 import { Fillin } from './Fill-in';
 import { Lottery } from './Lottery';
-import React, { useState, useEffect } from 'react';
+import { TagList } from './SetTagList';
+import React, { useState, useEffect, useCallback } from 'react';
 import {useParams} from 'react-router-dom';
 import ReactLoading from "react-loading";
 import Loading from 'react-loading';
 import { Avator } from './Components/Avator';
+import { Modal } from 'react-bootstrap';
 
 
 const Form = () => {
@@ -18,10 +20,15 @@ const Form = () => {
     console.log('----- invoke function component -----');
     const [gifts, setGifts] = useState([]);
     const [formDetail, setFormDetail] = useState([]);
-    const [owner, setOwner] = useState(false);
-    const [tags, setTags] = useState([])
+    const [isOwner, setIsOwner] = useState(false);
+    // const [tags, setTags] = useState([])
     const [showTag, setShowTag] = useState('填寫問卷')
     const [isLoading, setIsLoading] = useState(true);
+    const [lotteryResults, setLotteryResults] = useState({
+        "status":"Open",
+        "results":[],
+        "isLoading":true,  // 控制是否還在 loading
+    });
 
     // 使用 useEffect Hook
     useEffect(() => {
@@ -30,17 +37,19 @@ const Form = () => {
 
         // 等問卷資料載入完畢再進入頁面
         const fetchData = async () => {
-            try { 
+            try{
                 await Promise.all([fetchIsOwner(),
-                fetchCurrentGifts(),
-                fetchFormDetail()])
-            } catch (error) {
-                console.log("fetch data error", error)
+                    fetchCurrentGifts(),
+                    fetchFormDetail(),
+                    fetchLotteryResults(),
+                ]);
+            }
+            catch(error){
+                console.log('fetchdata', error)
             }
             setIsLoading(false);
         }
         fetchData();
-        console.log("is the page Loading", isLoading);
         return () => {  
             abortController.abort();  
         }  
@@ -60,22 +69,9 @@ const Form = () => {
         );
         const resJson = await response.json();
         console.log("is owner?", resJson);
-        setOwner({
-            "isOwner": resJson.form_owner_status,
-            "owner_id": resJson.form_owner_id,
-            "owner_pic_url": resJson.form_owner_pic_url
-        })
-        // 設定可看到的左上角頁面標籤
-        if(resJson.form_owner_status == true)
-        {
-            setTags(['填寫問卷', '抽獎結果','填答結果'])
-        }
-        else {
-            setTags(['填寫問卷', '抽獎結果'])
-        }
+        setIsOwner(resJson.form_owner_status)
     }
-
-
+    
     const fetchCurrentGifts = async () => {
         try {
             const response = await fetch(
@@ -113,6 +109,8 @@ const Form = () => {
             console.log('Form Detail',response)
             setFormDetail({
                 form_title : response.form_title,
+                form_owner_id : response.user_student_id,
+                form_owner_pic_url : response.user_pic_url,
                 form_create_date : new Intl.DateTimeFormat('zh-TW', {
                     year: 'numeric', 
                     month: 'long',
@@ -139,10 +137,46 @@ const Form = () => {
         .catch(error => console.log(error))  
     };
 
+    const fetchLotteryResults = () =>
+    {
+        fetch(
+            `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                }
+            }
+        )
+        .then(response => response.json())
+        .then(response => {
+            console.log('lottery results22', response)
+            setLotteryResults({
+                "status": response['status'],
+                "results": response.data['results'],
+                "isLoading": false,
+            })
+        })
+        .catch(error => console.log(error))  
+    };
+
+
+
     function changePage(showTag){
-        return showTag === "填寫問卷" ? <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
-        : <Lottery form_id = {FORM_ID} form_title={formDetail.form_title}/> 
-    }
+        if (showTag === "填寫問卷"){
+            return <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
+        }
+        else if (showTag === "抽獎結果"){
+            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
+        }
+        else if (showTag === "填答結果"){
+            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
+        }
+        else{
+            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
+        }
+    };
 
 
 
@@ -154,20 +188,7 @@ const Form = () => {
             {console.log('render')}
             {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
             <section className='lottery-page-container'>
-                <div className='page-navbar'>
-                    {tags.map(item => {
-                        return (
-                            <div
-                                className='page-navbar-item card-shadow'
-                                key={item}
-                                style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
-                                onClick={e => {
-                                    setShowTag(item);
-                                }}
-                            >{item}</div>
-                        )
-                    })}
-                </div>
+                <TagList lotteryResults={lotteryResults} isOwner={isOwner} setShowTag={setShowTag} showTag={showTag}/>
                 <section className='lottery-container'>
                     {/* 問卷左半部 */}
                     {changePage(showTag)}
@@ -179,7 +200,7 @@ const Form = () => {
                         截止時間：{formDetail.form_end_date} <br />
                         抽獎時間：{formDetail.form_draw_date} <br />
                         <h2> 製作者 </h2>
-                        <Avator user_name={owner.owner_id}  user_pic_url={owner.owner_pic_url}/> 
+                        <Avator user_name={formDetail.form_owner_id}  user_pic_url={formDetail.form_owner_pic_url}/> 
                         {/* 缺製作者的圖片 url */}
                         <h2> 獎品 </h2>
                         {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
