@@ -4,6 +4,9 @@ import React from 'react';
 import { useState } from "react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Breadcrumb } from 'react-bootstrap';
+import { Footer } from './Components/Footer';
+
 
 
 
@@ -268,7 +271,7 @@ const MakeSurvey = () =>{
                 </div>
             <section className='makeSurvey-container'>
         
-                <section className='makeSurvey-results card-shadow'>
+                <section className='makeSurvey-questions card-shadow'>
             
                     <div className='makeSurvey-card'>
 
@@ -317,9 +320,9 @@ const MakeSurvey = () =>{
     
                 </section>  
                 
-                <section className='makeSurvey-info'>
+                <section className='makeSurvey-qustion-types'>
 
-                    <div className='makeSurvey-card sticky-div card-shadow'>
+                    <div className='makeSurvey-card card-shadow sticky-div'>
                         <p>
                             <button className='Btn SurveyDescriptionBtn card-shadow' onClick = {renderShortAns}>
                             {t("簡答題")}
@@ -347,6 +350,7 @@ const MakeSurvey = () =>{
             </section>
 
         </section>
+        <Footer />
         </>
     )
 

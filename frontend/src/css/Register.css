@@ -184,18 +184,4 @@
     color: var(--theme-purple);
     font-size: medium;
 }
-
-.SurveyOptionBtn {
-    width: 120px;
-    height: 40px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-weight: 500;
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    text-align: center;
-    background-color: #ffffff;
-    border-color: #e5e3e3;
-}
 /* end Register page --------------------------*/

@@ -1,6 +1,8 @@
 import '../css/MakeSurvey.css';
 import { Navbar } from './Components/Navbar';
 import {ButtonGroup} from "./Components/ButtonGroup";
+import { Footer } from './Components/Footer';
+
 import React, {useState, useRef, useEffect} from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import DateTimePicker from 'react-datetime-picker';
@@ -144,8 +146,8 @@ const MakeSurvey2 = () => {
     const DisplayGiftTypeBtn = ()=>{
       return(
         
-        <div className='makeSurvey-card'>
-        <h4>{t("抽獎獎品類別？")}</h4>
+        <div className='lottery-card card-shadow'>
+        <h3>{t("抽獎獎品類別？")}</h3>
           <div className='BtnGroupContainer'>
             <ButtonGroup buttons={["飲料類", "食物類", "兌換卷類", "服裝飾品類", "3C", "美妝保養類", "圖書類", "日用品類", "運動戶外類", "現金類"]} btnFunc={giftTypeBtn} defaultvalue={giftType}/>
           </div>
@@ -517,18 +519,20 @@ const deleteGift =evt=>{
 
           </div>
           <section className='makeSurvey-container'>
-              <section className='makeSurvey-info'>
-                  <div className='makeSurvey-card card-shadow'>
+              <section className='makeSurvey-info card-shadow'>
                     <h3 style={{textAlign: "center"}}>{t("截止與抽獎時間")}</h3>
                     <h4>{t("問卷截止時間")}</h4>
                     <p>
                     <DateTimePicker value={DateForFormEnd} minDate={moment().toDate()} onChange={(date) => setDateForFormEnd(date)}   format={"y-MM-dd h:mm:ss a"} className='input-columns' />
                     </p>
 
-                    {displayBtnOrNot==="是" ?  <><h4>{t("抽獎時間")}</h4><p><DateTimePicker value={DateForLottery} minDate={moment().toDate()} onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns'/></p></>  : null}
+                    {displayBtnOrNot==="是" ?  <><h4>{t("抽獎時間")}</h4><p><DateTimePicker value={DateForLottery} minDate={moment().toDate()}
+                           onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns' style={{  height: '100%', width: '100%', border: '0px'}}/></p></>  : null}
                     <h4>{t("問卷縮圖圖片")}</h4>
                     <div>
-                    {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:imgurURL==="" ? <img src={"https://i.imgur.com/sKBuD6v.png"} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="form"/>:<img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="form"/>}
+                    {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:imgurURL==="" ? 
+                                            <img src={"https://i.imgur.com/sKBuD6v.png"} style={{  height: '100%', width: '100%', border: '0px'}} className='input-columns' alt="form"/> : 
+                                                      <img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="form"/>}
                       </div>
                       <br></br>
                       <div>
@@ -537,7 +541,6 @@ const deleteGift =evt=>{
                         {t("選擇圖片")}
                       </button>
 
-                    </div>
 
                   
                       
@@ -546,18 +549,17 @@ const deleteGift =evt=>{
                   
               </section>  
               
-              <section className='makeSurvey-results ' key={rerenderkey}>
+              <section className='makeSurvey-results card-shadow' key={rerenderkey}>
 
-                  <div className='makeSurvey-card card-shadow'>
-                  <div className='makeSurvey-card'>
-                    <h4>{t("問卷類別")}</h4>
+                  <div className='lottery-card card-shadow'>
+                    <h3>{t("問卷類別")}</h3>
                       <div className='BtnGroupContainer'>
                         <ButtonGroup buttons={["商業及管理學門", "教育學門", "工程學門", "社會及行為科學學門", "民生學門", "人文學門", "電算機學門", "法律學門", "藝術學門", "社會服務學門", "傳播學門", "醫藥衛生學門", "設計學門", "建築及都市規劃學門", "農業科學學門", "運輸服務學門", "自然科學學門", "數學及統計學門", "生命科學學門", "環境保護學門", "軍警國防安全學門", "其他學門", "獸醫學門"]} btnFunc={formTypeBtn} defaultvalue={formType}/>
                       </div>
                     </div>
                   
-                    <div className='makeSurvey-card'>
-                      <h4>{t("是否有抽獎？")}</h4>
+                    <div className='lottery-card card-shadow'>
+                      <h3>{t("是否有抽獎？")}</h3>
                       <div className='BtnGroupContainer'>
                         <ButtonGroup buttons={["是", "否"]} btnFunc={displayBtn} defaultvalue={displayBtnOrNot}/>
                       </div>
@@ -571,7 +573,7 @@ const deleteGift =evt=>{
                               <div className='lottery-card card-shadow'>
                               {item.id !== 0 ? <button id={item.id} className="titleCloseBtn" style={{background:"#fbfafc"}} onClick={deleteGift}>X</button> : null}
                               
-                                <h4>{t("輸入獎品資訊")}</h4>
+                                <h3>{t("輸入獎品資訊")}</h3>
                                   <p>
                                       <input id={item.id} maxLength="45" type="text" placeholder={t("獎品名稱")}  className='input-columns' defaultValue={item.gift_name}  onChange={changeGiftName}/>
                                   </p>
@@ -586,9 +588,6 @@ const deleteGift =evt=>{
                                       <br/>
 
                                       <input id={item.id}  type="file" name="myImage" accept="image/png, image/jpeg" onChange={changeGiftURL} />
-
-
-
                                   </p>
 
                                 </div>
@@ -597,9 +596,6 @@ const deleteGift =evt=>{
                         );
                         })}
                     {displayBtnOrNot==="是" ? <DisplayGiftBtn/>  : null}
-
-                  </div>
-
               </section>
             </section>
 
