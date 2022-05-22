@@ -270,13 +270,13 @@ const MakeSurvey = () =>{
                 <section className='makeSurvey-results card-shadow'>
             
                     <div className='makeSurvey-card'>
-                        <h3>表單標題</h3>
+                        <h3>問卷標題</h3>
                         <p>
-                           <input type="text" placeholder="問卷題目" className='input-columns' style={{width: "100%"}} defaultValue={surveyTitle} onChange={handleChangeTitle}/>
+                           <input type="text" maxLength="100" placeholder="標題*" className='input-columns' style={{width: "100%"}} defaultValue={surveyTitle} onChange={handleChangeTitle}/>
                         </p>
                         <p>
                             {/*<input type="text" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px"}} defaultValue={SurveyDescription} onChange={handleChangeDescription}/>*/}
-                            <textarea placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px", resize:'vertical'}} defaultValue={SurveyDescription} onChange={handleChangeDescription}></textarea>
+                            <textarea maxLength="500" placeholder="問卷描述" className='input-columns' style={{width: "100%", height:"90px", resize:'vertical'}} defaultValue={SurveyDescription} onChange={handleChangeDescription}></textarea>
                         </p>
     
                     </div>

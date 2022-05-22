@@ -88,7 +88,7 @@ function LoginModal( {closeModal}){
                         
                         <div className='login-form-input'>
                             {/* <label className='form-label'>帳號</label> */}
-                            <input placeholder="電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)} ></input>
+                            <input maxLength="45" placeholder="電子郵件" className="inputbar" value={email} onChange={(e) => setEmail(e.target.value)} ></input>
                             {(email.length>0 && errors.email) && <font>{errors.email}</font>}
                         </div>
                         <p></p>
