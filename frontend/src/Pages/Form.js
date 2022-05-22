@@ -24,6 +24,7 @@ const Form = () => {
     // const [tags, setTags] = useState([])
     const [showTag, setShowTag] = useState('填寫問卷')
     const [isLoading, setIsLoading] = useState(true);
+    const [formStatus, setFormStatus] = useState([]);
     const [lotteryResults, setLotteryResults] = useState({
         "status":"Open",
         "results":[],
@@ -41,19 +42,39 @@ const Form = () => {
                 await Promise.all([fetchIsOwner(),
                     fetchCurrentGifts(),
                     fetchFormDetail(),
-                    fetchLotteryResults(),
+                    fetchFormStatus(),
                 ]);
+                fetchLotteryResults();
             }
             catch(error){
                 console.log('fetchdata', error)
             }
-            setIsLoading(false);
+            setIsLoading(false)
         }
         fetchData();
         return () => {  
             abortController.abort();  
         }  
     }, []);  // dependency 
+
+
+    const fetchFormStatus = async () =>
+    {
+        const response = await fetch(
+            `http://127.0.0.1:5000/GetFormStatus?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`  
+                }
+            }
+        );
+        const resJson = await response.json();
+        console.log("Form Status?", resJson);
+        setFormStatus(resJson.status)
+    }
+
 
     const fetchIsOwner = async () =>
     {
@@ -94,7 +115,7 @@ const Form = () => {
 
     const fetchFormDetail = () =>
     {
-        fetch(
+        return fetch(
             `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
@@ -161,8 +182,6 @@ const Form = () => {
         .catch(error => console.log(error))  
     };
 
-
-
     function changePage(showTag){
         if (showTag === "填寫問卷"){
             return <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
@@ -179,7 +198,6 @@ const Form = () => {
     };
 
 
-
     return (
         <>
         <Navbar/>
@@ -188,7 +206,7 @@ const Form = () => {
             {console.log('render')}
             {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
             <section className='lottery-page-container'>
-                <TagList lotteryResults={lotteryResults} isOwner={isOwner} setShowTag={setShowTag} showTag={showTag}/>
+                <TagList formStatus={formStatus} isOwner={isOwner} setShowTag={setShowTag} showTag={showTag}/>
                 <section className='lottery-container'>
                     {/* 問卷左半部 */}
                     {changePage(showTag)}

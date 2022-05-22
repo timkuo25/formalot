@@ -5,23 +5,26 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 
 const TagList = (props) => {
-    const lotteryResults = props.lotteryResults
+    const formStatus = props.formStatus
     const isOwner = props.isOwner
     const setShowTag = props.setShowTag
     const showTag = props.showTag
     const [tags, setTags] = useState([])
 
     useEffect(()=> {
-        setTagList(lotteryResults, isOwner)
-    }, [lotteryResults, isOwner])
+        console.log('tag called!!!')
+        async function haha(){
+            await Promise.resolve(setTagList(formStatus, isOwner));
+        }
+        haha();
+    }, [])
 
-    function setTagList(lotteryResults, isOwner)
+    function setTagList(formStatus, isOwner)
     {
-        return new Promise((resolve, reject) => {
-            console.log(lotteryResults.status, isOwner)
+            console.log(formStatus, isOwner)
             if(isOwner === true)
             {
-                if (lotteryResults === 'Closed' || lotteryResults === 'WaitForDraw'){
+                if (formStatus === 'Closed' || formStatus === 'WaitForDraw'){
                     console.log('condition1')
                     setTags(['抽獎結果','填答結果'])
                     setShowTag('抽獎結果')
@@ -34,7 +37,7 @@ const TagList = (props) => {
             }
             else if(isOwner === false)
             {
-                if (lotteryResults === 'Closed' || lotteryResults === 'WaitForDraw'){
+                if (formStatus === 'Closed' || formStatus === 'WaitForDraw'){
                     console.log('condition3')
                     setTags(['抽獎結果'])
                     setShowTag('抽獎結果')
@@ -50,8 +53,6 @@ const TagList = (props) => {
                 setTags(['有問題'])
                 setShowTag('有問題')
             }
-            resolve();
-        });
     };
 
 
