@@ -1,6 +1,8 @@
 import '../css/MakeSurvey.css';
 import { Navbar } from './Components/Navbar';
 import {ButtonGroup} from "./Components/ButtonGroup";
+import { Footer } from './Components/Footer';
+
 import React, {useState, useRef, useEffect} from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import DateTimePicker from 'react-datetime-picker';

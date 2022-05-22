@@ -17,29 +17,52 @@
 }
 
 .makeSurvey-container{
-    display:flex;
+    display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    margin-bottom: 10%;
 }
-
-.makeSurvey-results{
+.makeSurvey-questions{
     height: 100%;
-    width: 60%;
-    margin: 0 5% 1em 0;
+    width: 80%;
+    margin: 0 0.5% 1em 5%;
+    padding: 0.5em 2em;
+    display: flex;
+    flex-direction: column;
+}
+.makeSurvey-qustion-types{
+    height: 100%;
+    width: 40%;
+    margin: 0 1% 1em 5%;
     padding: 0.5em 2em;
     display: flex;
     flex-direction: column;
 }
 
-.makeSurvey-results > h2{
-    font-size: 2em;
-    font-weight: bold;
+.makeSurvey-card {
+    border-radius: 0.5em;
+    box-shadow: 0px 1px 2.5px 2px #dadada;
+    padding: 1em;
+    margin: 0.8em 0.2em;
+    display: flex;
+    flex-direction: column;
 }
 
+.makeSurvey-card > h2{
+    font-size: 1.2em;
+    font-weight: bold;
+}
 
 .makeSurvey-info{
     height: 100%;
     width: 40%;
+    margin-left: 50px;
+    padding: 0.5em 2em;
+    display: flex;
+    flex-direction: column;
+}
+.makeSurvey-results{
+    height: 100%;
+    width: 60%;
     margin: 0 1% 1em 5%;
     padding: 0.5em 2em;
     display: flex;
@@ -65,7 +88,7 @@
 
 .SurveyDescriptionBtn {
     width: 200px;
-    height: 120px;
+    height: 60px;
     text-transform: uppercase;
     letter-spacing: 2.5px;
     font-weight: 500;
@@ -75,6 +98,7 @@
     cursor: pointer;
     outline: none;
     text-align: center;
+    margin-bottom: 40%;
 }
 
 .SurveyOptionBtn {
@@ -139,22 +163,23 @@
 }
 
 .add-giftBtn {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     /* font-family: 'Roboto', sans-serif; */
     /* font-size: 11px; */
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    font-weight: 600;
+    font-weight: 400;
     color: #000;
     border: 1px;
-    border-radius: 100%;
+    border-color: #e7e7e7;
+    border-radius: 40px;
     box-shadow: var(--shadow);
-    transition: all 0.2s ease 0s;
+    transition: all 0.3s ease 0s;
     cursor: pointer;
     outline: none;
     position: relative;
-    left: 40%;
+    left: 50%;
 }
 
 .add-gift-image {
