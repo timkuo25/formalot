@@ -198,15 +198,30 @@ const Form = () => {
         }
     };
 
-
-    return (
-        <>
-        <Navbar/>
-        { isLoading ? <> <section className='loading-container'> <ReactLoading type="spinningBubbles" color="#432a58" /> <h3> Loading </h3></section> </> :
-            <>
-            {console.log('render')}
-            {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
-            <section className='lottery-page-container'>
+    function show(){
+        if(formStatus ==="NotExist"){
+            return(
+                <> <div className='modalBackground'>
+                    <div className="alert-modal">
+                        <h2>此問卷不存在</h2>
+                        <button className="Btn create-account-button" onClick={() => {window.location.href='/'}}>回首頁</button>
+                    </div>
+                </div></>
+            )
+        }
+        else if(formStatus ==="Delete"){
+            return(
+                <> <div className='modalBackground'>
+                    <div className="alert-modal">
+                        <h2>此問卷已被作者刪除</h2>
+                        <button className="Btn create-account-button" onClick={() => {window.location.href='/'}}>回首頁</button>
+                    </div>
+                </div></>
+            )
+        }
+        else {
+            return(
+                <>
                 <TagList formStatus={formStatus} isOwner={isOwner} setShowTag={setShowTag} showTag={showTag}/>
                 <section className='lottery-container'>
                     {/* 問卷左半部 */}
@@ -217,7 +232,7 @@ const Form = () => {
                         <h2> 問卷資訊 </h2>
                         發布時間：{formDetail.form_create_date} <br />
                         截止時間：{formDetail.form_end_date} <br />
-                        抽獎時間：{formDetail.form_draw_date} <br />
+                        {formDetail.form_draw_date==="1970年1月1日 上午8:00"? <></> : <>抽獎時間：{formDetail.form_draw_date}</>}
                         <h2> 製作者 </h2>
                         <Avator user_name={formDetail.form_owner_id}  user_pic_url={formDetail.form_owner_pic_url}/> 
                         {/* 缺製作者的圖片 url */}
@@ -234,6 +249,21 @@ const Form = () => {
                         }
                     </section>
                 </section>
+                </>
+            )
+        }
+    }
+
+
+    return (
+        <>
+        <Navbar/>
+        { isLoading ? <> <section className='loading-container'> <ReactLoading type="spinningBubbles" color="#432a58" /> <h3> Loading </h3></section> </> :
+            <>
+            {console.log('render')}
+            {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
+            <section className='lottery-page-container'>
+                {show()}
             </section>
             </>
         }
