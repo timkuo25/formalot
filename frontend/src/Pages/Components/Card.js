@@ -1,8 +1,10 @@
 import '../../css/Card.css';
 import { FaRegCopy } from 'react-icons/fa';
+import { useTranslation } from "react-i18next";
 
 
 const Card = ({ info, type, openModal }) => {
+    const { t, i18n } = useTranslation();
     if (!info) return <div className="empty-card"></div>;
     let prize, num_prize, image_path, title, due_time, lottery_time;
 
@@ -49,12 +51,12 @@ const Card = ({ info, type, openModal }) => {
 
     return (
         <div className="card card-shadow" onClick={clickForm}>
-            <div className="prize-tag">{`${prize} ${num_prize} 名`}</div>
+            <div className="prize-tag">{t("抽獎名額 ")}{`${num_prize}`}{t(" 名")}</div>
             <img alt="" className="q-image" src={image_path}/>
             <div className='card-form-title'> <h3>{title}</h3> </div>
             <p>
-                {`截止時間：`}<br/>{due_time} <br/>
-                {`抽獎時間：`}<br/>{lottery_time}
+                {t("截止時間")}:<br/>{due_time} <br/>
+                {t("抽獎時間")}:<br/>{lottery_time}
             </p>
             <FaRegCopy
                 className='share-q' 
