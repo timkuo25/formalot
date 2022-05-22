@@ -12,23 +12,24 @@ import {useParams} from 'react-router-dom';
 
 const Lottery = (props) => {
     const FORM_ID = props.form_id;
+    const lotteryResults = props.lr;
 
     //For candidate slider
     const [activeItemIndex, setActiveItemIndex] = useState(0);
     console.log('----- invoke function component -----');
     const [candidateList, setCandidateList] = useState([]);
-    const [lotteryResults, setLotteryResults] = useState({
-        "status":"Open",
-        "results":[],
-        "isLoading":true,  // 控制是否還在 loading
-    });
+    // const [lotteryResults, setLotteryResults] = useState({
+    //     "status":"Open",
+    //     "results":[],
+    //     "isLoading":true,  // 控制是否還在 loading
+    // });
 
     // 使用 useEffect Hook
     useEffect(() => {
         console.log('execute function in useEffect');
         let abortController = new AbortController();  
         fetchCandidateList();
-        fetchLotteryResults();
+        // fetchLotteryResults();
         return () => {  
             abortController.abort();  
         }  
@@ -85,54 +86,43 @@ const Lottery = (props) => {
     //                     }
     //                 ]
     //             },
-    //             {
-    //                 "amount": 1,
-    //                 "gift_name": "星巴克",
-    //                 "gift_pic_url": "https://i.imgur.com/KhpRc5G.jpg",
-    //                 "winner": [
-    //                     {
-    //                         "user_pic_url": "https://i.imgur.com/POYn9h1.jpg",
-    //                         "user_student_id": "r09302322"
-    //                     }
-    //                 ]
-    //             }
     //         ],
-    //         "禮物數量": 2
+    //         "禮物數量": 1
     //     },
     //     "message": "Get lottery results successfully!!!",
     //     "status": "Closed","WaitforDraw", "Open","Delete"
     // }
-    const fetchLotteryResults = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('lottery results22', response)
-            setLotteryResults({
-                "status": response.status,
-                "results": response.data['results'],
-                "isLoading": false,
-            })
-        })
-        .catch(error => console.log(error))  
-    };
+    // const fetchLotteryResults = () =>
+    // {
+    //     fetch(
+    //         `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
+    //         {
+    //             method: "GET",
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+    //             }
+    //         }
+    //     )
+    //     .then(response => response.json())
+    //     .then(response => {
+    //         console.log('lottery results22', response)
+    //         setLotteryResults({
+    //             "status": response.status,
+    //             "results": response.data['results'],
+    //             "isLoading": false,
+    //         })
+    //     })
+    //     .catch(error => console.log(error))  
+    // };
 
 
 
   
-    function SeeStatus(lotteryResults){
+    function SeeStatus(){
         return lotteryResults.status === "Open" ? <h3>問卷還沒到抽獎日期！</h3>
         : lotteryResults.status === "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
-        : lotteryResults.status === "WaitforDraw" ? <h3>問卷已到抽獎日，等待製作者手動抽獎。</h3> 
+        : lotteryResults.status === "WaitForDraw" ? <h3>問卷已到抽獎日，等待抽獎中，請稍候。</h3> 
         : lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>);
     }
 
@@ -150,7 +140,7 @@ const Lottery = (props) => {
                 <div >
                     {console.log("isLoading", lotteryResults.isLoading)}
                     {lotteryResults.isLoading ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
-                        SeeStatus(lotteryResults)
+                        SeeStatus()
                     }
 
                 </div>
