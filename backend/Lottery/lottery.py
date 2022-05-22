@@ -247,9 +247,10 @@ def getGiftWinner(form_id):
     cursor = db.cursor()
     try:
         query = '''
-        SELECT gift.gift_name as gift_name, gift.user_student_id as winner_student_id, form.form_title as form_title, userform.form_answer_time as form_answer_time
+        SELECT gift.gift_name as gift_name, gift.user_student_id as winner_student_id, form.form_title as form_title, userform.form_answer_time as form_answer_time, users.user_email
         FROM gift JOIN form on gift.form_form_id = form.form_id
         JOIN  userform on userform.form_form_id = form.form_id and gift.user_student_id = userform.user_student_id
+        JOIN users ON users.student_id = userform.user_student_id
         where gift.form_form_id = (%s);
         '''
         cursor.execute(query, [form_id])
@@ -473,7 +474,7 @@ def getUserForm():
         cursor.execute(query, [form_id])
         result = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
         db.commit()
-        
+        return result
     except:
         db.rollback()
     finally:
@@ -587,7 +588,7 @@ def SendEmailPage():
                 # 已抽獎，尚未寄信給中獎者
                 get_gift_winners = getGiftWinner(form_id)
                 for winner in get_gift_winners:
-                    sendEmail(winner['winner_student_id'],winner['form_title'], winner['form_answer_time'], winner['gift_name'], time, place, info)
+                    sendEmail(winner['user_email'],winner['form_title'], winner['form_answer_time'], winner['gift_name'], time, place, info)
                 
                 modifyEmailStatus(form_id)
                 response["status"] = 'success'
@@ -622,8 +623,8 @@ def sendEmail(recipient, form_title, form_ans_time, gift_name, time, place, info
         "status": "",
         "message": "",
     }
-    recipient_email = recipient + '@ntu.edu.tw'
-    msg = Message('Formalot 中獎通知', sender='sdmg42022@gmail.com', recipients=[recipient_email])
+    # recipient_email = recipient + '@ntu.edu.tw'
+    msg = Message('Formalot 中獎通知', sender='sdmg42022@gmail.com', recipients=[recipient])
     msg.body = f"""
     親愛的 Formalot 用戶您好：\n\n
     感謝您於 {form_ans_time} 填寫表單 {form_title} \n
@@ -644,7 +645,7 @@ def sendEmail(recipient, form_title, form_ans_time, gift_name, time, place, info
         mail = Mail(current_app)
         try:
             mail.send(msg)
-            print('已寄出')
+            print('已寄出',recipient)
 
         except SMTPException as e:
             current_app.logger.error(e.message)
