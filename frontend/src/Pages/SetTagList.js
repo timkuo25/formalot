@@ -29,6 +29,11 @@ const TagList = (props) => {
                     setTags(['抽獎結果','填答結果'])
                     setShowTag('抽獎結果')
                 }
+                else if (formStatus === 'Delete' || formStatus === 'NotExist'){
+                    console.log('condition6')
+                    setTags(['抽獎結果'])
+                    setShowTag('抽獎結果')
+                }
                 else{
                     console.log('condition2')
                     setTags(['填寫問卷', '抽獎結果', '填答結果'])
@@ -39,6 +44,11 @@ const TagList = (props) => {
             {
                 if (formStatus === 'Closed' || formStatus === 'WaitForDraw'){
                     console.log('condition3')
+                    setTags(['抽獎結果'])
+                    setShowTag('抽獎結果')
+                }
+                else if (formStatus === 'Delete' || formStatus === 'NotExist'){
+                    console.log('condition6')
                     setTags(['抽獎結果'])
                     setShowTag('抽獎結果')
                 }
