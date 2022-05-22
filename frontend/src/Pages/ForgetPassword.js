@@ -113,7 +113,7 @@ const ForgetPassword = () => {
                 </div>
                 <div className="forget_input_content">
                     <h3>驗證碼</h3>
-                    <input value={code} onChange={(e) => setCode(e.target.value)} type="password" placeholder="Verification code" className="forget_inputbar"/>
+                    <input value={code} onChange={(e) => setCode(e.target.value)} type="text" placeholder="Verification code" className="forget_inputbar"/>
                 </div>
 
                 <div className="forget_input_content">
