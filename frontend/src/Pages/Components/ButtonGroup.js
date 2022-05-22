@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ButtonGroup = ({ buttons, btnFunc, defaultvalue}) => {
+  const { t, i18n } = useTranslation();
   let stateval = -1
   for(let i=0; i<buttons.length; i++){
     if(defaultvalue===buttons[i]){
@@ -21,7 +23,7 @@ const ButtonGroup = ({ buttons, btnFunc, defaultvalue}) => {
           onClick={(event) => handleClick(event, i)}
           className={i === clickedId ? "BtnGroup BtnGroupActive" : "BtnGroup"}
         >
-          {buttonLabel}
+          {t(buttonLabel)}
         </button>
       ))}
     </>

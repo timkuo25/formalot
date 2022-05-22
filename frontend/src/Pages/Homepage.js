@@ -7,6 +7,7 @@ import ReactLoading from "react-loading";
 import { LoginModal } from './Components/LoginModal';
 import { CopyMessage } from './Components/CopyMessage';
 import callrefresh from '../refresh.js';
+import { useTranslation } from "react-i18next";
 
 const Homepage = () => {
     const [page, setPage] = useState(0);
@@ -17,9 +18,11 @@ const Homepage = () => {
     });
     const [modalOpen, setModalOpen] = useState(false);
     const [show, setShow] = useState('熱門');
+    const { t, i18n } = useTranslation();
     
     
     useEffect(() => {
+
         const fetchData = async () => {
             let data = await fetch('http://127.0.0.1:5000/home',{
                 headers: {'Content-Type': 'application/json'}
@@ -83,19 +86,19 @@ const Homepage = () => {
                 {/* <img className='main-image' src={process.env.PUBLIC_URL + 'LandingPage.svg'} alt=''/> */}
                 <div className='description'>
                     <div className='caption'>
-                        <h2>填寫問卷，參與抽獎，<br/>發布專屬於你的抽獎問卷</h2>
-                        <h3>Formalot 是問卷抽獎管理的首選平台！</h3>
+                        <h2>{t("填寫問卷，參與抽獎，")}<br/>{t("發布專屬於你的抽獎問卷")}</h2>
+                        <h3>{t("Formalot 是問卷抽獎管理的首選平台！")}</h3>
                     </div>
                     <div className='cta-button'>
-                        <button className='explore-button' onClick={()=>{window.location.href = "/explore"}}>探索抽獎</button>
-                        <button className='make-survey-button' onClick={makeForm}>製作問卷</button>
+                        <button className='explore-button' onClick={()=>{window.location.href = "/explore"}}>{t("探索抽獎")}</button>
+                        <button className='make-survey-button' onClick={makeForm}>{t("製作問卷")}</button>
                     </div>
                 </div>
             </section>
             <section className='latest-q'>
                 <div className='latest-q-container'>
-                    <h2>{show}問卷</h2>
-                    <h3>點擊問卷，快速填寫問卷，即可參加抽獎，幸運星即將降臨</h3>
+                    <h2>{t(show)}{t("問卷")}</h2>
+                    <h3>{t("點擊問卷，快速填寫問卷，即可參加抽獎，幸運星即將降臨")}</h3>
                     <select value={show} onChange={e => {setShow(e.currentTarget.value)}}>
                         {['熱門', '最新'].map(item => {
                             return (<option value={item}>{item}</option>);

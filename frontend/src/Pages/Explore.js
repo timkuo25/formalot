@@ -5,8 +5,10 @@ import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
 import { CopyMessage } from './Components/CopyMessage';
 
+import { useTranslation } from "react-i18next";
 
 const Explore = ( ) => {
+    const { t, i18n } = useTranslation();
     const [type, setType] = useState('分類方式');
     const [show, setShow] = useState('類別');
     const [query, setQuery] = useState(''); //for search bar
@@ -71,7 +73,7 @@ const Explore = ( ) => {
         <>
             <Navbar />
             <div className='explore-title'>
-                <h2>探索抽獎</h2>
+                <h2>{t("探索")}</h2>
             </div>
             <div className='tag-select'>
                 <select value={type} onChange={e => {setType(e.currentTarget.value)}}>
