@@ -210,7 +210,7 @@ const SurveyStatistics = (props) => {
                         <div className='lottery-card card-shadow' key={result.question}>
                             
                             <h2> {result.question}   </h2>
-                            <div className="prize-tag-stat" >{`${result.question_type}`}</div>
+                            <div className="prize-tag" >{`${result.question_type}`}</div>
     
                         <table class="stat_table">    
                             <tr>
@@ -253,7 +253,7 @@ const SurveyStatistics = (props) => {
                     <div className='lottery-card card-shadow' key={result.question}>
                         
                         <h2> {result.question}   </h2>
-                        <div className="prize-tag-stat" >{`${result.question_type}`}</div>
+                        <div className="prize-tag" >{`${result.question_type}`}</div>
 
 
 
