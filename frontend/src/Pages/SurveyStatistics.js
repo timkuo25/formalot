@@ -137,26 +137,19 @@ const SurveyStatistics = (props) => {
                 if (result.question_type=="簡答題"){
                     return (
                         <div className='lottery-card card-shadow' key={result.question}>
-                            
                             <h2> {result.question}   </h2>
                             <div className="prize-tag" >{`${result.question_type}`}</div>
-    
-                        <table class="stat_table">    
-                            <tr>
-                                
+                            <div class="stat_table">    
                                 <div class ="stat_scroll">
-                                    <td>       
                                     {result['replies'].map( (replies) => {
                                         return(
                                         <div>
-                                            <div id="no-border" class="stat-items">{replies.answer}</div>
                                             <div class="stat-items">{replies.user}</div>
+                                            <div class="stat-items no-border">{replies.answer}</div>
                                         </div> 
                                             )
                                         })}
-                                    </td>
                                 </div>
-                                <td>  
                                 <TagCloud
                                     style={{
                                         fontFamily: 'sans-serif',
@@ -164,17 +157,15 @@ const SurveyStatistics = (props) => {
                                         fontWeight: 'bold',
                                         fontStyle: 'italic',
                                         padding: 5,
-                                        width: '100%',
-                                        height: '100%'
+                                        width: '50%',
+                                        height: '50%'
                                         }}
                                 minSize={30}
                                 maxSize={50}
                                 tags={result.keyword_cloud}
                                 onClick={tag => alert(`'${tag.value}' was selected!`)}
                                 />
-                                </td>
-                            </tr>
-                        </table>
+                            </div>
                         </div>
                     )
                 }else{
