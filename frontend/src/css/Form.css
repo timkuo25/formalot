@@ -29,6 +29,22 @@
     align-items: center;
 }
 
+
+.alert-modal{
+    width: 300px;
+    height: 300px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Statistics page --------------------------*/
+
 .stat_table
 {
     padding-left:2px;
