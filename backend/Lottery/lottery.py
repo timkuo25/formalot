@@ -369,6 +369,32 @@ def autoLottery(form_id):
 
     return 0
 
+@lottery_bp.route('/GetFormStatus', methods=["GET"])
+# @jwt_required()
+def getFormStatus():
+    form_id = request.args.get('form_id')
+    response = {
+        "status": "",
+    }
+    try:
+        form_run_state = getFormRunStatueByFormId(form_id)[0]['form_run_state']
+        form_del_state = getFormDeleteStatueByFormId(form_id)[0]['form_delete_state']
+        if(form_run_state == 'Closed' and form_del_state == 0):
+            response["status"] = "Closed"
+        elif(form_run_state == 'WaitForDraw'):
+            response["status"] = 'WaitForDraw'
+        elif(form_run_state == 'Open'):
+            response["status"] = 'Open'
+        elif(form_run_state == 'Closed' and form_del_state == 1):
+            response["status"] = 'Delete'
+
+    except:
+        response["status"] = 'NotExist'
+
+    return jsonify(response)
+
+
+
 
 @lottery_bp.route('/GetLotteryResults', methods=["GET"])
 # @jwt_required()

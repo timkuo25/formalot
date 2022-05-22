@@ -1,8 +1,7 @@
 import '../css/Lottery.css'
 import '../css/Fill-in.css'
-import { Navbar } from './Components/Navbar';
 import React, { useState, useEffect } from 'react';
-import {useParams} from 'react-router-dom';
+import ReactLoading from "react-loading";
 
 
 const Fillin = (props) => {
@@ -12,6 +11,7 @@ const Fillin = (props) => {
     console.log('----- invoke function component -----');
     const [formContent, setFormContent] = useState([]);
     const [hasAnsweredBefore, sethasAnsweredBefore] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -20,8 +20,15 @@ const Fillin = (props) => {
     useEffect(() => {
         let abortController = new AbortController();  
         const fetchData = async () => {
-            await Promise.resolve(formRespondCheck());
-            fetchQuestions();
+            try{
+                await Promise.all([
+                    formRespondCheck(),
+                    fetchQuestions()]);
+                setIsLoading(false);
+            }
+            catch(err){
+                console.log('Fill in page error', err)
+            }
         }
         fetchData();
         return () => {  
@@ -47,30 +54,27 @@ const Fillin = (props) => {
         }
     }
 
-    const fetchQuestions = () =>
-    {
-        fetch(
-            `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
-                }
-            }
-        )
-        .then(response => response.json())
-        .then(response => {
-            // console.log('response of getUserForm',response)
+    const fetchQuestions = async () => {
+        try{
+            const response = await fetch(
+                `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                }});
+            const resJson = await response.json();
+            console.log("questions", resJson[0]['questioncontent']);
             setFormContent({
-                description: response[0]['form_description'],
-                picture: response[0]['form_pic_url'],
-                questions: response[0]['questioncontent']
+                description: resJson[0]['form_description'],
+                picture: resJson[0]['form_pic_url'],
+                questions: resJson[0]['questioncontent']
             })
-        })
-        .then(console.log("questions", formContent.questions))
-        .catch(error => console.log(error))  
-    };
+        } catch(e) {
+             console.log("form response check error", e)
+        }
+    }
 
     //決定要顯示哪些問題
     
@@ -188,23 +192,27 @@ const Fillin = (props) => {
         {/* 問卷左半部問卷題目，如果用戶已經填答過 */}
         <section className='lottery-results card-shadow'>
             <h1> {props.form_title} </h1>
-            <section className='form-description'> {formContent.description} </section>
-            {hasAnsweredBefore?  <><br /><section className='form-description alert'> 你已經填答過此問卷摟！ </section></>: ''}
-            {/* 所有問題會顯示在這邊 */}
-            <div className='questions'>
-                {/* {console.log('questions',formContent.questions)} */}
-                <form onSubmit={handleSubmit} >
-                {formContent.questions && formContent.questions.map(question => {
-                    return (
-                        <div key={question.Question}>
-                            <h3> {question.Question} </h3>
-                            {hasAnsweredBefore? showQuestion_disabled(question) :  showQuestion(question)}
-                        </div>
-                )})}
-                <br/>
-                <input type="submit" className='general-button Btn ' value="送出表單" />
-                </form>
-            </div>
+            {isLoading ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
+            <>
+                <section className='form-description'> {formContent.description} </section>
+                    {hasAnsweredBefore?  <><br /><section className='form-description alert'> 你已經填答過此問卷摟！ </section></>: ''}
+                    {/* 所有問題會顯示在這邊 */}
+                    <div className='questions'>
+                        {/* {console.log('questions',formContent.questions)} */}
+                        <form onSubmit={handleSubmit} >
+                        {formContent.questions && formContent.questions.map(question => {
+                            return (
+                                <div key={question.Question}>
+                                    <h3> {question.Question} </h3>
+                                    {hasAnsweredBefore? showQuestion_disabled(question) :  showQuestion(question)}
+                                </div>
+                        )})}
+                        <br/>
+                        <input type="submit" className='general-button Btn ' value="送出表單" />
+                        </form>
+                    </div>
+            </>
+            }
         </section>
         </>
     )

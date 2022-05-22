@@ -519,10 +519,11 @@ def FormRespondentCheck():
     rows = searchResponseByID(student_id, form_id)
     # print(rows)
     if rows != []:
-        return "True"
+        response["has_responded"] = 1
 
     else:
-        return "False"
+        response["has_responded"] = 0
+    return response
 
 
 # Get questions and question types of form
