@@ -1,8 +1,8 @@
 import '../../css/Card.css';
+import callrefresh from '../../refresh.js';
 import { FaRegCopy } from 'react-icons/fa';
 import { useTranslation } from "react-i18next";
-
-
+import React, { useState, useEffect } from 'react';
 
 const Card = ({ info, type, openModal }) => {
     const { t, i18n } = useTranslation();
@@ -50,6 +50,29 @@ const Card = ({ info, type, openModal }) => {
         window.location.href='form/'+info.form_id;
     }
 
+    // 刪除或關閉問卷
+    const manageform = async (action) => {
+        const getprotected = await fetch('http://127.0.0.1:5000/SurveyManagement',{
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            },
+            body: JSON.stringify({
+                form_id: info.form_id,
+                action : action,
+            }),
+        });
+        console.log(getprotected.status);
+        if(getprotected.status === 401){
+            callrefresh();
+        }else{
+            const resdata = await getprotected.json();
+            console.log(resdata);
+            console.log(resdata.message);
+            alert(resdata.message);
+        }
+    };
+
     function showStatus(){
         if(type==='replied'){
             if(info.form_run_state === 'Closed'){
@@ -91,9 +114,17 @@ const Card = ({ info, type, openModal }) => {
 
     return (
         <div className="card card-shadow" onClick={clickForm}>
-            {type==='home'? <><div className="prize-tag">{`${prize} ${num_prize} 名`}</div></> : <></>}
-            {showStatus()}
-
+            <div className="prize-tag-container">
+                {type==='home'? <><div className="prize-tag">{`${prize} ${num_prize} 名`}</div></> : <></>}
+                {showStatus()}
+                <div className="nav-option user-dropdown" >
+                    {t("...")}
+                    <div className="user-dropdown-options" >
+                        <button onClick={()=>{manageform('close')}}>{t("關閉問卷")}</button>
+                        <button onClick={()=>{manageform('delete')}}>{t("刪除問卷")}</button>
+                    </div>
+                </div>
+            </div>
             <img alt="" className="q-image" src={image_path}/>
             <div className='card-form-title'> <h3>{title}</h3> </div>
             <p>
