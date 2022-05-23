@@ -78,7 +78,7 @@ const Form = () => {
     const fetchFormStatus = async () =>
     {
         const response = await fetch(
-            `http://127.0.0.1:5000/GetFormStatus?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/GetFormStatus?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -96,7 +96,7 @@ const Form = () => {
     const fetchIsOwner = async () =>
     {
         const response = await fetch(
-            `http://127.0.0.1:5000/FormOwnerCheck?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/FormOwnerCheck?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -119,7 +119,7 @@ const Form = () => {
     const fetchCurrentGifts = async () => {
         try {
             const response = await fetch(
-                `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
+                `https://be-sdmg4.herokuapp.com/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
                 {
                     method: "GET",
                     headers: {
@@ -139,7 +139,7 @@ const Form = () => {
     const fetchFormDetail = () =>
     {
         return fetch(
-            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -184,7 +184,7 @@ const Form = () => {
     const fetchLotteryResults = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {

@@ -25,7 +25,7 @@ const Register = () => {
     
     const callemailApi = async (e) => {
         e.preventDefault();
-        const result = await fetch("http://127.0.0.1:5000/Email?condition=register", {
+        const result = await fetch("https://be-sdmg4.herokuapp.com/Email?condition=register", {
             method: "POST",
             body: JSON.stringify({
                 email: email
@@ -73,7 +73,7 @@ const Register = () => {
         // }
 
         e.preventDefault();
-        const result = await fetch("http://127.0.0.1:5000/Register", {
+        const result = await fetch("https://be-sdmg4.herokuapp.com/Register", {
             method: "POST",
             body: JSON.stringify({
                 email: email,

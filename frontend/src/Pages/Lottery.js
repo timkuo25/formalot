@@ -68,7 +68,7 @@ const Lottery = (props) => {
     const fetchCandidateList = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetCandidate?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/GetCandidate?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -84,8 +84,6 @@ const Lottery = (props) => {
         })
         .catch(error => console.log(error))  
     };
-
-
 
   
     function SeeStatus(){

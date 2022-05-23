@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 import { CopyMessage } from './Components/CopyMessage';
 
 import { useTranslation } from "react-i18next";
+import ReactLoading from "react-loading";
 
 const Explore = ( ) => {
     const { t, i18n } = useTranslation();
+    const [loading, setload] = useState(false)
     const [type, setType] = useState('分類方式');
     const [show, setShow] = useState('類別');
     const [query, setQuery] = useState(''); //for search bar
@@ -35,8 +37,13 @@ const Explore = ( ) => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setload(true)
+            let data = await fetch('https://be-sdmg4.herokuapp.com/home',{
+                headers: {'Content-Type': 'application/json'}
+            });
+
             field_list.forEach(async item => {
-                const data = await fetch(`http://127.0.0.1:5000/GetFormByKeyWord?KeywordType=field&Keyword=${item}`);
+                const data = await fetch(`https://be-sdmg4.herokuapp.com/GetFormByKeyWord?KeywordType=field&Keyword=${item}`);
                 const dataJSON = await data.json();
                 setShowList(prevShowList => {
                     let curShowList = prevShowList;
@@ -45,7 +52,7 @@ const Explore = ( ) => {
                 });
             });
             gift_list.forEach(async item => {
-                const data = await fetch(`http://127.0.0.1:5000/GetFormByKeyWord?KeywordType=tag&Keyword=${item}`);
+                const data = await fetch(`https://be-sdmg4.herokuapp.com/GetFormByKeyWord?KeywordType=tag&Keyword=${item}`);
                 const dataJSON = await data.json();
                 setShowList(prevShowList => {
                     let curShowList = prevShowList;
@@ -54,9 +61,7 @@ const Explore = ( ) => {
                 });
             });
 
-            let data = await fetch('http://127.0.0.1:5000/home',{
-                headers: {'Content-Type': 'application/json'}
-            });
+            setload(false)
             let dataJSON = await data.json();
             setShowList( prevShowList => {
                 return {
@@ -102,7 +107,7 @@ const Explore = ( ) => {
                     }}
                     onKeyDown={async e => {
                         if (e.key !== 'Enter') return;
-                        const data = await fetch(`http://localhost:5000/explore?keyword=${e.currentTarget.value}`);
+                        const data = await fetch(`https://be-sdmg4.herokuapp.com/explore?keyword=${e.currentTarget.value}`);
                         const dataJSON = await data.json();
                         setShowList(prevShowList => {
                             let curShowList = prevShowList;
@@ -118,8 +123,10 @@ const Explore = ( ) => {
             </div>
             <section className='explore'>
                 <div className='card-container'>
+                    {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
+                    {showList[show].length===0 ? <div className='card-container'><h2>此類別沒有問卷喔，趕快去製作一個吧！</h2></div> :null}
                     {showList[show].map(item => {
-                        return <Card type='home' info={item}/>
+                        return <Card type='explore' info={item}/>
                     })}
                 </div>
             </section>

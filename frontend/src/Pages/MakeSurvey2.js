@@ -126,7 +126,7 @@ const MakeSurvey2 = () => {
     const DisplayGiftBtn = ()=>{
       return(
         <div>
-          <button className='add-giftBtn Btn' onClick={addGift}>{t("新增禮物")}</button>
+          <button className='add-giftBtn Btn' onClick={addGift}>{t("＋新增獎品")}</button>
         </div>
     
       );
@@ -325,7 +325,7 @@ const MakeSurvey2 = () => {
       if(legalsubmit===1)
       {
         
-        const result =  await fetch("http://127.0.0.1:5000/SurveyManagement/new", {
+        const result =  await fetch("https://be-sdmg4.herokuapp.com/SurveyManagement/new", {
           method: "POST",
           headers:{
             Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -532,7 +532,7 @@ const deleteGift =evt=>{
                     <div>
                     {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:imgurURL==="" ? 
                                             <img src={"https://i.imgur.com/sKBuD6v.png"} style={{  height: '100%', width: '100%', border: '0px'}} className='input-columns' alt="form"/> : 
-                                                      <img src={imgurURL} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="form"/>}
+                                                      <img src={imgurURL} className='input-columns form-thumbnail' alt="form"/>}
                       </div>
                       <br></br>
                       <div>
@@ -582,9 +582,8 @@ const deleteGift =evt=>{
                                   </p>
                                   <p>
                                       {/*<input id={item.id} type="text" placeholder="獎品圖片url網址"  className='input-columns' defaultValue={item.gift_pic_url}  onChange={changeGiftURL}/>*/}
-                                      
-                                      <img id={item.id} src={item.gift_pic_url} style={{  height: '300px', width: '400px', border: '0px'}} className='input-columns' alt="gift"/>
-                                      {item.gift_pic_url==='https://i.imgur.com/sKBuD6v.png'? null:<button id={item.id} className={'Btn NextBtn'} onClick={deleteGiftImage}>Ｘ</button>}
+                                      {item.gift_pic_url==='https://i.imgur.com/sKBuD6v.png'? null:<button id={item.id} className={'Btn NextBtn'} onClick={deleteGiftImage}> ✕ </button>}
+                                      <img id={item.id} src={item.gift_pic_url} className='input-columns gift-thumbnail' alt="gift"/>
                                       <br/>
 
                                       <input id={item.id}  type="file" name="myImage" accept="image/png, image/jpeg" onChange={changeGiftURL} />

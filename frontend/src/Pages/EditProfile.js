@@ -22,7 +22,7 @@ const EditProfile = () => {
     const calluserupdate = async (e) => {
         e.preventDefault();
         setload(true)
-        const getprotected = await fetch('http://127.0.0.1:5000/UserUpdate',{
+        const getprotected = await fetch('https://be-sdmg4.herokuapp.com/UserUpdate',{
             method: 'PUT',
             headers: {
               Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -51,7 +51,7 @@ const EditProfile = () => {
     useEffect(() => {
         setreadload(true)
         const callGetUserProfile = async () => {
-            const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
+            const data = await fetch('https://be-sdmg4.herokuapp.com/GetUserProfile',{
                 method: 'GET',
                 headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,

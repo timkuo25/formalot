@@ -34,7 +34,7 @@ const BrowseForm = () => {
     const fetchCurrentGifts = async () => {
         try {
             const response = await fetch(
-                `http://127.0.0.1:5000/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
+                `https://be-sdmg4.herokuapp.com/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
                 {
                     method: "GET",
                     headers: {
@@ -54,7 +54,7 @@ const BrowseForm = () => {
     const fetchFormDetail = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -74,7 +74,7 @@ const BrowseForm = () => {
     const fetchQuestions = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -142,7 +142,7 @@ const BrowseForm = () => {
         }
         console.log("tempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
         
-        const result = await fetch("http://127.0.0.1:5000/FillForm", {
+        const result = await fetch("https://be-sdmg4.herokuapp.com/FillForm", {
             method: "POST",
             body: JSON.stringify({
                 form_id: props.form_id,

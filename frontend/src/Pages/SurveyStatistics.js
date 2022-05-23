@@ -1,11 +1,6 @@
-import { Card } from './Components/Card';
-import { Navbar } from './Components/Navbar';
-import { Avator } from './Components/Avator';
-import {LotteryCard} from './Components/LotteryCard'
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import { TagCloud } from 'react-tagcloud'
-import ReactLoading from "react-loading";
 
 
 // 傳入想要看的 formID
@@ -37,7 +32,7 @@ const SurveyStatistics = (props) => {
     const fetchLotteryResults = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/SurveyManagement/detail?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/SurveyManagement/detail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -57,7 +52,7 @@ const SurveyStatistics = (props) => {
     const fetchcsvResults = () =>
     {
         fetch(
-            `http://127.0.0.1:5000/SurveyManagement/downloadResponse?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/SurveyManagement/downloadResponse?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -80,7 +75,7 @@ const SurveyStatistics = (props) => {
     for (let i = 0; i < lotteryResults.length; i++) {
         var uni_ans_list = []
         var ans_count = []
-        if (lotteryResults[i].question_type == "單選題"){
+        if (lotteryResults[i].question_type === "單選題"){
             for (let j = 0; j < lotteryResults[i].replies.length; j++) {
                 if (uni_ans_list.includes(lotteryResults[i].replies[j].answer[0])){
                     ans_count[uni_ans_list.indexOf(lotteryResults[i].replies[j].answer[0])] += 1
@@ -124,7 +119,7 @@ const SurveyStatistics = (props) => {
                             <a className='stat_a'
 
                             href={
-                                `data:text/csv;charset=utf-8,%EF%BB%BF`+  `${encodeURI(csvResults)}`
+                                `data:text/csv;charset=utf-8,%EF%BB%BF${encodeURI(csvResults)}`
                             }
                             // href={`data:text/csv;charset=utf-8;,${encodeURIComponent(
                             // csvResults
@@ -134,7 +129,7 @@ const SurveyStatistics = (props) => {
 
   
             {lotteryResults.map(result => {
-                if (result.question_type=="簡答題"){
+                if (result.question_type==="簡答題"){
                     return (
                         <div className='lottery-card card-shadow' key={result.question}>
                             <h2> {result.question}   </h2>
