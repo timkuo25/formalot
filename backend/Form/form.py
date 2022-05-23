@@ -343,9 +343,9 @@ def returnForm():
 
 
 # Creator close or delete forms
-@form_bp.route('/SurveyManagement', methods=["PUT"])
+@form_bp.route('/SurveyManagement', methods=['PUT'])
 def modifyForm():
-    req_json = request.get_json()
+    req_json = request.get_json(force=True)
     form_id = req_json["form_id"]
     action = req_json["action"]
     response_return = {
