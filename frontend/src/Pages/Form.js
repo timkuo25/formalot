@@ -1,6 +1,8 @@
 import '../css/Lottery.css'
 import '../css/Fill-in.css'
 import '../css/Form.css'
+import callrefresh from '../refresh.js';
+import { Footer } from './Components/Footer';
 import { Navbar } from './Components/Navbar';
 import { Fillin } from './Fill-in';
 import { Lottery } from './Lottery';
@@ -89,9 +91,15 @@ const Form = () => {
                 }
             }
         );
-        const resJson = await response.json();
-        console.log("is owner?", resJson);
-        setIsOwner(resJson.form_owner_status)
+        console.log("token?", response.status);
+        if(response.status === 401){
+            callrefresh();
+        }
+        else{
+            const resJson = await response.json();
+            console.log("is owner?", resJson);
+            setIsOwner(resJson.form_owner_status)
+        }
     }
     
     const fetchCurrentGifts = async () => {
@@ -188,7 +196,7 @@ const Form = () => {
             return <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
         }
         else if (showTag === "抽獎結果"){
-            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
+            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title} isOwner={isOwner}/> 
         }
         else if (showTag === "填答結果"){
             return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title}/> 
@@ -267,6 +275,7 @@ const Form = () => {
             </section>
             </>
         }
+        <Footer />
         </>
     )
 }

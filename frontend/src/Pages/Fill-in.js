@@ -1,5 +1,6 @@
 import '../css/Lottery.css'
 import '../css/Fill-in.css'
+import callrefresh from '../refresh.js';
 import React, { useState, useEffect } from 'react';
 import ReactLoading from "react-loading";
 
@@ -45,10 +46,17 @@ const Fillin = (props) => {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
-                }});
-            const resJson = await response.json();
-            console.log("form response check ", resJson);
-            sethasAnsweredBefore(resJson["has_responded"]);
+                }
+            });
+            console.log("token?", response.status);
+            if(response.status === 401){
+                callrefresh();
+            }
+            else{
+                const resJson = await response.json();
+                console.log("form response check ", resJson);
+                sethasAnsweredBefore(resJson["has_responded"]);
+            }
         } catch(e) {
              console.log("form response check error", e)
         }
