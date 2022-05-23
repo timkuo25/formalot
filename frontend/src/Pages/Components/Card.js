@@ -70,11 +70,11 @@ const Card = ({ info, type, openModal }) => {
             },
             body: a,
         });
-        console.log(manageform.status);
-        if(manageform.status === 401){
+        console.log(getprotected.status);
+        if(getprotected.status === 401){
             callrefresh();
         }else{
-            const resdata = await manageform.json();
+            const resdata = await getprotected.json();
             console.log(resdata);
             alert(resdata.message);
             window.location.reload();
