@@ -89,16 +89,21 @@ const Form = () => {
                 }
             }
         );
-        const resJson = await response.json();
-        console.log("Form Status?", resJson);
-        setFormStatus(resJson.status)
-        if(resJson.status === 'Open' && tags.length <= 3){
-            setTags((prevState) => ([...prevState, '填寫問卷','抽獎結果']))
-            setShowTag('填寫問卷')
+        if(response.status === 401){
+            callrefresh();
         }
-        else if (resJson.status !== 'Open' && tags.length <= 3){
-            setTags((prevState) => ([...prevState, '抽獎結果']))
-            setShowTag('抽獎結果')
+        else{
+            const resJson = await response.json();
+            console.log("Form Status?", resJson);
+            setFormStatus(resJson.status)
+            if(resJson.status === 'Open' && tags.length <= 3){
+                setTags((prevState) => ([...prevState, '填寫問卷','抽獎結果']))
+                setShowTag('填寫問卷')
+            }
+            else if (resJson.status !== 'Open' && tags.length <= 3){
+                setTags((prevState) => ([...prevState, '抽獎結果']))
+                setShowTag('抽獎結果')
+            }
         }
     }
 
@@ -127,7 +132,7 @@ const Form = () => {
                 setTags((prevState) => ([...prevState, '填答結果']))
             }
         }
-    }
+    };
     
     const fetchCurrentGifts = async () => {
         try {
@@ -140,86 +145,100 @@ const Form = () => {
                         // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
                     }
                 });
-            const responseJson = await response.json();
-            setGifts(responseJson.data);
-            console.log('giftsdata',responseJson.data);
-            if(responseJson.data.length===0){
-                setHaveGifts(false);
+            if(response.status === 401){
+                callrefresh();
             }
-            console.log('have gifts?', responseJson.data.length);
+            else{
+                const responseJson = await response.json();
+                setGifts(responseJson.data);
+                console.log('giftsdata',responseJson.data);
+                if(responseJson.data.length===0){
+                    setHaveGifts(false);
+                }
+            }
         }
         catch (error) {
             console.log(error);
         }
     };
 
-    const fetchFormDetail = () =>
-    {
-        return fetch(
-            `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+    const fetchFormDetail = async () => {
+        try{
+            const response = await fetch(
+                `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+                    }
                 }
+            )
+            if(response.status === 401){
+                callrefresh();
             }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('Form Detail',response)
-            setFormDetail({
-                form_title : response.form_title,
-                form_owner_id : response.user_student_id,
-                form_owner_pic_url : response.user_pic_url,
-                form_create_date : new Intl.DateTimeFormat('zh-TW', {
-                    year: 'numeric', 
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                }).format(new Date(response.form_create_date)),
-                form_end_date : new Intl.DateTimeFormat('zh-TW', {
-                    year: 'numeric', 
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                }).format(new Date(response.form_end_date)),
-                form_draw_date : new Intl.DateTimeFormat('zh-TW', {
-                    year: 'numeric', 
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                }).format(new Date(response.form_draw_date))
-            })
-        })
-        .catch(error => console.log(error))  
+            else{
+                const resJson = await response.json();
+                console.log('Form Detail',resJson);
+                setFormDetail({
+                    form_title : resJson.form_title,
+                    form_owner_id : resJson.user_student_id,
+                    form_owner_pic_url : resJson.user_pic_url,
+                    form_create_date : new Intl.DateTimeFormat('zh-TW', {
+                        year: 'numeric', 
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                    }).format(new Date(resJson.form_create_date)),
+                    form_end_date : new Intl.DateTimeFormat('zh-TW', {
+                        year: 'numeric', 
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                    }).format(new Date(resJson.form_end_date)),
+                    form_draw_date : new Intl.DateTimeFormat('zh-TW', {
+                        year: 'numeric', 
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                    }).format(new Date(resJson.form_draw_date))
+                })
+            }
+        }
+        catch(error){console.log('fetchFormDetail',error)}  
     };
 
-    const fetchLotteryResults = () =>
+    const fetchLotteryResults = async () =>
     {
-        fetch(
-            `https://be-sdmg4.herokuapp.com/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+        try{
+            const response = await fetch(
+                `https://be-sdmg4.herokuapp.com/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+                    }
                 }
+            )
+            if (response.status===401){
+                callrefresh();
+            } else{
+                const resJson = await response.json();
+                console.log('lottery results22',resJson);     
+                setLotteryResults({
+                    "status": resJson['status'],
+                    "results": resJson.data['results'],
+                    "isLoading": false,
+                })   
             }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('lottery results22', response)
-            setLotteryResults({
-                "status": response['status'],
-                "results": response.data['results'],
-                "isLoading": false,
-            })
-        })
-        .catch(error => console.log(error))  
+        }
+        catch(err){
+            console.log('fetchLotteryResults', err)
+        }
     };
 
     function changePage(showTag){
@@ -227,7 +246,7 @@ const Form = () => {
             return <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
         }
         else if (showTag === "抽獎結果"){
-            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title} isOwner={isOwner}/> 
+            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title} isOwner={isOwner}  haveGifts={haveGifts}/> 
         }
         else if (showTag === "填答結果"){
             return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title}/> 
