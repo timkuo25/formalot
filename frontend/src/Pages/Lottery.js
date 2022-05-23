@@ -40,7 +40,7 @@ const Lottery = (props) => {
     const fetchHasSentEmail = async () =>
     {
         const response = await fetch(
-            `http://127.0.0.1:5000/CheckSendEmail?form_id=${encodeURIComponent(FORM_ID)}`,
+            `https://be-sdmg4.herokuapp.com/CheckSendEmail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
@@ -94,11 +94,27 @@ const Lottery = (props) => {
 
   
     function SeeStatus(){
-        return lotteryResults.status === "Open" && haveGifts ? <h3>問卷還沒到抽獎日期！</h3>
-        : lotteryResults.status === "Open" && haveGifts === 0 ? <></>
-        : lotteryResults.status === "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
-        : lotteryResults.status === "WaitForDraw" ? <h3>問卷已到抽獎日，等待抽獎中，請稍候。</h3> 
-        : lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>);
+        if (haveGifts===1){
+            if(lotteryResults.status === "Open"){
+                return(<h3>問卷還沒到抽獎日期！</h3>)
+            }
+            else if(lotteryResults.status === "Delete")
+            {
+                return(<h3> 問卷已被製作者刪除。 </h3>)
+            }
+            else if(lotteryResults.status === "WaitForDraw")
+            {
+                return(<h3>問卷已到抽獎日，等待抽獎中，請稍候。</h3> )
+            }
+            else {
+                return(lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>))
+            }
+        }
+        // return lotteryResults.status === "Open" && haveGifts ? <h3>問卷還沒到抽獎日期！</h3>
+        // : lotteryResults.status === "Open" && haveGifts === 0 ? <></>
+        // : lotteryResults.status === "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
+        // : lotteryResults.status === "WaitForDraw" ? <h3>問卷已到抽獎日，等待抽獎中，請稍候。</h3> 
+        // : lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>);
     }
           
     return (
