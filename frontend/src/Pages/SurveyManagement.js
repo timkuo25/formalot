@@ -7,8 +7,6 @@ import callrefresh from '../refresh.js';
 import React from "react";
 import ReactLoading from "react-loading";
 
-
-
 const SurveyManagement = () => {
   const [createdData, setCreatedData] = useState(
     {
@@ -84,7 +82,7 @@ const SurveyManagement = () => {
           <div className="survey-card card-shadow">
             <h3 className="manage-header">&#10004; 已填寫問卷</h3>
             <div className="card-container-management ">
-              {repliedData.isLoading ==1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
+              {repliedData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                   repliedData.data.map( (form) => {
                       return (
                           <Card type={'replied'} info={form} />
@@ -96,7 +94,7 @@ const SurveyManagement = () => {
           <div className="survey-card card-shadow">
             <h3 className="manage-header">&#10004; 已發佈問卷</h3>
             <div className="card-container-management ">
-              {createdData.isLoading==1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
+              {createdData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                 createdData.data.map( (form) => {
                     return (
                         <Card type={'created'} info={form} />
