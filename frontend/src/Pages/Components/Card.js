@@ -4,7 +4,7 @@ import { FaRegCopy } from 'react-icons/fa';
 import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from 'react';
 
-const Card = ({ info, type, openModal }) => {
+const Card = ({ info, type }) => {
     const { t, i18n } = useTranslation();
     if (!info) return <div className="empty-card"></div>;
     let prize, num_prize, image_path, title, due_time, lottery_time;
@@ -45,10 +45,6 @@ const Card = ({ info, type, openModal }) => {
     // }
 
     const clickForm = (e) => {
-        if(!(localStorage.getItem('jwt'))){
-            openModal();
-            return;
-        }
         console.log("form_id of this card is", info.form_id);
         window.location.href='form/'+info.form_id;
         return
