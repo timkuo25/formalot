@@ -269,12 +269,11 @@ def updateWaitForDraw():
     cursor_set = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     try:
-        # e.g. Current time is 20:00, Select form_end_date between 20:00 to 20:59
         query_check = '''
         SET timezone to 'Asia/Taipei';
         SELECT form_id
         FROM form
-        WHERE form_end_date BETWEEN date_trunc('hour', current_timestamp) AND date_trunc('minute', current_timestamp + interval '59 mins');
+        WHERE form_end_date < CURRENT_TIMESTAMP;
         '''
         cursor_check.execute(query_check)
         results = cursor_check.fetchall()
