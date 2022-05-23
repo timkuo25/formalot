@@ -38,6 +38,10 @@ const Explore = ( ) => {
     useEffect(() => {
         const fetchData = async () => {
             setload(true)
+            let data = await fetch('http://127.0.0.1:5000/home',{
+                headers: {'Content-Type': 'application/json'}
+            });
+
             field_list.forEach(async item => {
                 const data = await fetch(`http://127.0.0.1:5000/GetFormByKeyWord?KeywordType=field&Keyword=${item}`);
                 const dataJSON = await data.json();
@@ -56,10 +60,7 @@ const Explore = ( ) => {
                     return curShowList;
                 });
             });
-            
-            let data = await fetch('http://127.0.0.1:5000/home',{
-                headers: {'Content-Type': 'application/json'}
-            });
+
             setload(false)
             let dataJSON = await data.json();
             setShowList( prevShowList => {
@@ -125,7 +126,7 @@ const Explore = ( ) => {
                     {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
                     {showList[show].length===0 ? <div className='card-container'><h2>此類別沒有問卷喔，趕快去製作一個吧！</h2></div> :null}
                     {showList[show].map(item => {
-                        return <Card type='home' info={item}/>
+                        return <Card type='explore' info={item}/>
                     })}
                 </div>
             </section>

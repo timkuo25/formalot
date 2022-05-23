@@ -118,7 +118,7 @@
 }
 
 .NextBtn {
-    width: 70px;
+    width: 60px;
     height: 40px;
     /* font-family: 'Roboto', sans-serif; */
     /* font-size: 11px; */
@@ -136,7 +136,8 @@
     outline: none;
     text-align: center;
     position: initial;
-    margin: 1em;
+    display: block;
+    margin: 10px 0
 }
 
 .BtnGroupContainer{
@@ -144,7 +145,7 @@
 }
 .BtnGroup{
     width: 200px;
-    height: 120px;
+    height: 80px;
     letter-spacing: 0.5px;
     background-color: #ebe9f0;
     color:#432a58;
@@ -163,23 +164,23 @@
 }
 
 .add-giftBtn {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 80px;
     /* font-family: 'Roboto', sans-serif; */
     /* font-size: 11px; */
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    font-weight: 400;
+    font-weight: 500;
     color: #000;
     border: 1px;
     border-color: #e7e7e7;
-    border-radius: 40px;
+    border-radius: 20px;
     box-shadow: var(--shadow);
     transition: all 0.3s ease 0s;
     cursor: pointer;
     outline: none;
     position: relative;
-    left: 50%;
+    left: 30%;
 }
 
 .add-gift-image {
@@ -187,5 +188,18 @@
     height: 80px;
 }
 
+.form-thumbnail {
+    height: 100%;
+    width: 100%;
+    border: 0px;
+    object-fit: contain;
+}
 
+.gift-thumbnail {
+    width: 60%;
+    height: 200px;
+    margin-bottom: 12px;
+    border: 0px;
+    object-fit: contain;
+}
 /* make survey page done */
