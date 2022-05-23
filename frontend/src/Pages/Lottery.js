@@ -94,7 +94,8 @@ const Lottery = (props) => {
 
   
     function SeeStatus(){
-        return lotteryResults.status === "Open" ? <h3>問卷還沒到抽獎日期！</h3>
+        return lotteryResults.status === "Open" && haveGifts ? <h3>問卷還沒到抽獎日期！</h3>
+        : lotteryResults.status === "Open" && haveGifts === 0 ? <></>
         : lotteryResults.status === "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
         : lotteryResults.status === "WaitForDraw" ? <h3>問卷已到抽獎日，等待抽獎中，請稍候。</h3> 
         : lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>);
