@@ -324,9 +324,9 @@ def autoLottery(form_id):
     num_of_lottery = 0
     candidate_list = []
     # print('HI')
-    form_id = request.args.get('form_id')
+    # form_id = request.args.get('form_id')
 
-    get_form_det = getFormDetailByFormId(form_id)
+    # get_form_det = getFormDetailByFormId(form_id)
     get_gift = getGiftAmountByFormId(form_id)
     get_candidate = getCandidateByFormId(form_id)
     get_gift_detail = getGiftDetailByFormId(form_id)
@@ -516,7 +516,7 @@ def autolotteryfunc():
     cursor = db.cursor()
 
     query = '''
-    SET timezone to 'Asia/Tapei';
+    SET timezone to 'Asia/Taipei';
     SELECT form_id
     FROM form
     WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP;
