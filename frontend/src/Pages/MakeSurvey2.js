@@ -325,7 +325,7 @@ const MakeSurvey2 = () => {
       if(legalsubmit===1)
       {
         
-        const result =  await fetch("http://127.0.0.1:5000/SurveyManagement/new", {
+        const result =  await fetch("https://be-sdmg4.herokuapp.com/SurveyManagement/new", {
           method: "POST",
           headers:{
             Authorization: `Bearer ${localStorage.getItem('jwt')}`
