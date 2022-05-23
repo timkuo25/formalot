@@ -146,6 +146,7 @@ const Form = () => {
             if(responseJson.data.length===0){
                 setHaveGifts(false);
             }
+            console.log('have gifts?', responseJson.data.length);
         }
         catch (error) {
             console.log(error);

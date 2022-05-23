@@ -94,7 +94,7 @@ const Lottery = (props) => {
 
   
     function SeeStatus(){
-        if (haveGifts===1){
+        if (haveGifts!==0){
             if(lotteryResults.status === "Open"){
                 return(<h3>問卷還沒到抽獎日期！</h3>)
             }
