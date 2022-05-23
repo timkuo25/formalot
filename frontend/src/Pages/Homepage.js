@@ -101,7 +101,7 @@ const Homepage = () => {
                     <h3>{t("點擊問卷，快速填寫問卷，即可參加抽獎，幸運星即將降臨")}</h3>
                     <select value={show} onChange={e => {setShow(e.currentTarget.value)}}>
                         {['熱門', '最新'].map(item => {
-                            return (<option value={item}>{item}</option>);
+                            return (<option value={item} key={item}>{item}</option>);
                         })}
                     </select>  
                     {!forms[show]

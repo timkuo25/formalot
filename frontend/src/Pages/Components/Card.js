@@ -44,13 +44,15 @@ const Card = ({ info, type, openModal }) => {
     //     lottery_time = 'lottery date';
     // }
 
-    const clickForm = () => {
+    const clickForm = (e) => {
+        if(e.currentTarget != e.target ) return;
         if(!(localStorage.getItem('jwt'))){
             openModal();
             return;
         }
         console.log("form_id of this card is", info.form_id);
         window.location.href='form/'+info.form_id;
+        return
     }
 
     // 刪除或關閉問卷
@@ -59,8 +61,9 @@ const Card = ({ info, type, openModal }) => {
             form_id: info.form_id,
             action : action,
         })
-        console.log('a',a)
-        const manageform = await fetch('http://127.0.0.1:5000/SurveyManagement',{
+
+        const getprotected = await fetch('https://be-sdmg4.herokuapp.com/SurveyManagement',{
+
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -78,7 +81,7 @@ const Card = ({ info, type, openModal }) => {
         }
     };
 
-    function showStatus(){
+    const showStatus = () => {
         if(type==='replied'){
             if(info.form_run_state === 'Closed'){
                 if(info.draw_result === null){
@@ -143,17 +146,19 @@ const Card = ({ info, type, openModal }) => {
                 {t("截止時間")}:<br/>{due_time} <br/>
                 {t("抽獎時間")}:<br/>{lottery_time}
             </p>
-            <FaRegCopy
-                className='share-q' 
+            <div 
+                className='share-q'
                 onClick={async e => {
                     e.stopPropagation();
-                    await navigator.clipboard.writeText(window.location.href=`/form/${info.form_id}`);
+                    await navigator.clipboard.writeText(`https:sdmg4.herokuapp.com/form/${info.form_id}`);
                     const copyMsg = document.querySelector('.copy-message');
                     copyMsg.classList.add('show');
 
                     setTimeout(() =>{copyMsg.classList.remove('show')}, 2500);
                 }}
-            />
+            >
+                <FaRegCopy/>
+            </div>
         </div>
 
     )

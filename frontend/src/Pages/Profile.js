@@ -25,7 +25,7 @@ const Profile = () => {
                 window.location.href="/"
               }
             else{
-                const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
+                const data = await fetch('https://be-sdmg4.herokuapp.com/GetUserProfile',{
                     method: 'GET',
                     headers: {
                       Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -147,7 +147,7 @@ const Profile = () => {
                         {/* <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
                         
                         
-                        <div>
+                        <div className='name-section'>
                             {loading ?   <div className='name'><ReactLoading type="balls" color="#432a58"/></div>:<p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>}                            
                             <p className="email">{Profile.user_email}</p>
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}

@@ -8,6 +8,8 @@ import i18n from 'i18next';
 const Navbar = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [navActive, setNavActive] = useState(false);
+    const [toggleUserM, settoggleUserM] = useState(false);
+    const [toggleLngM, settoggleLngM] = useState(false);
     const [lngmodalOpen, setlngModalOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -112,23 +114,30 @@ const Navbar = () => {
                 <header className="header">
                     <h1 className="app-title"><a href='/' onClick={clearform}>Formalot</a></h1>
                     <nav className="navbar">
-                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore' onClick={clearform}> {t("探索")} </NavLink>
-                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey' onClick={clearform}> {t("製作問卷")}  </NavLink>
-                        <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction' onClick={clearform}> {t("說明")} </NavLink>
-                        <button className="nav-option user-dropdown">
-                            {t("會員")}
-                            <div className="user-dropdown-options" >
-                                <button onClick={()=>{window.location.href = "/SurveyManagement";  window.sessionStorage.removeItem('form_info'); window.sessionStorage.removeItem('form'); }}>{t("管理問卷")}</button>
-                                <button onClick={()=>{window.location.href = "/Profile"; window.sessionStorage.removeItem('form_info'); window.sessionStorage.removeItem('form'); }}>{t("個人資料")}</button>
-                                <button onClick={calllogout}>{t("登出")}</button>
+                        <div className='toggle-button' onClick={() => setNavActive(prev => !prev)}>
+                            <span className='bar'></span>
+                            <span className='bar'></span>
+                            <span className='bar'></span>
+                        </div>
+                        <div className='navbar-links'>
+                            <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore' onClick={clearform}> {t("探索")} </NavLink>
+                            <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey' onClick={clearform}> {t("製作問卷")}  </NavLink>
+                            <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction' onClick={clearform}> {t("說明")} </NavLink>
+                            <div className="nav-option user-dropdown">
+                                {t("會員")}
+                                <div className="user-dropdown-options" >
+                                    <button onClick={()=>{window.location.href = "/SurveyManagement";  window.sessionStorage.removeItem('form_info'); window.sessionStorage.removeItem('form'); }}>{t("管理問卷")}</button>
+                                    <button onClick={()=>{window.location.href = "/Profile"; window.sessionStorage.removeItem('form_info'); window.sessionStorage.removeItem('form'); }}>{t("個人資料")}</button>
+                                    <button onClick={calllogout}>{t("登出")}</button>
+                                </div>
                             </div>
-                        </button>
-                        <div className="nav-option user-dropdown" onClick={() => setlngModalOpen(true)}>
-                            {t("語言")}
-                            <div className="user-dropdown-options" >
-                                <button onClick={() => changeLanguage("tw")}>{t("中文")}</button>
-                                <button onClick={() => changeLanguage("en")}>{t("英文")}</button>
-                            </div>
+                            <div className="nav-option user-dropdown" onClick={() => setlngModalOpen(true)}>
+                                {t("語言")}
+                                <div className="user-dropdown-options" >
+                                    <button onClick={() => changeLanguage("tw")}>{t("中文")}</button>
+                                    <button onClick={() => changeLanguage("en")}>{t("英文")}</button>
+                                </div>
+                            </div> 
                         </div>
                     </nav>
                 </header>
@@ -137,21 +146,44 @@ const Navbar = () => {
                     <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/explore'> {t("探索")}  </NavLink>
                     <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/MakeSurvey'> {t("製作問卷")} </NavLink>
                     <NavLink className={(navData) => navData.isActive ? 'active-nav-option' : 'nav-option'} to='/Instruction'> {t("說明")} </NavLink>
-                    <button className="nav-option user-dropdown">
+                    <button 
+                        className="nav-option user-dropdown"
+                        onClick={() => {
+                            const obj = document.querySelectorAll('.user-dropdown-options-m');
+                            if (!toggleUserM){
+                                obj.forEach(item => item.classList.add('show'));
+                                settoggleUserM(prev => !prev);
+                            }
+                            else {
+                                obj.forEach(item => item.classList.remove('show'));
+                                settoggleUserM(prev => !prev);
+                            }
+                        }}>
                         User
-                        <div className="user-dropdown-options" >
-                            <button onClick={()=>{window.location.href = "/SurveyManagement"}}>{t("管理問卷")}</button>
-                            <button onClick={()=>{window.location.href = "/Profile"}}>{t("個人資料")}</button>
-                            <button onClick={calllogout}>{t("登出")}</button>
-                        </div>
                     </button>
-                    <div className="nav-option user-dropdown" onClick={() => setlngModalOpen(true)}>
+
+                    <button className="nav-option user-dropdown-options-m" onClick={()=>{window.location.href = "/SurveyManagement"}}>{t("管理問卷")}</button>
+                    <button className="nav-option user-dropdown-options-m" onClick={()=>{window.location.href = "/Profile"}}>{t("個人資料")}</button>
+                    <button className="nav-option user-dropdown-options-m" onClick={calllogout}>{t("登出")}</button>
+
+                    <div
+                        className="nav-option user-dropdown"
+                        onClick={() => {
+                            setlngModalOpen(true);
+                            const obj = document.querySelectorAll('.lng-dropdown-options-m');
+                            if (!toggleLngM){
+                                obj.forEach(item => item.classList.add('show'));
+                                settoggleLngM(prev => !prev);
+                            }
+                            else {
+                                obj.forEach(item => item.classList.remove('show'));
+                                settoggleLngM(prev => !prev);
+                            }
+                        }}>
                         {t("語言")}
-                        <div className="user-dropdown-options" >
-                            <button onClick={() => changeLanguage("tw")}>{t("中文")}</button>
-                            <button onClick={() => changeLanguage("en")}>{t("英文")}</button>
-                        </div>
                     </div>
+                    <button className="nav-option lng-dropdown-options-m" onClick={() => changeLanguage("tw")}>{t("中文")}</button>
+                    <button className="nav-option lng-dropdown-options-m" onClick={() => changeLanguage("en")}>{t("英文")}</button>
                 </div>
             </>
         )
