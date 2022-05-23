@@ -133,17 +133,17 @@ const Profile = () => {
             <div className="profile_card_container" align='center'>
                 <div className="profile_card_right">
                     <div className="top-section">
-                    <input ref={inputFile} type="file" accept="image/png, image/jpeg" name="myImage" onChange={onImageChange} style={{display:'none'}} />
-
-                            {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
-                            
-                            {uploadimgloading ?   <div className='photo'><ReactLoading type="spinningBubbles" color="#432a58"/></div>:<img className="photo" src={resizedImage || Profile.user_pic_url} />}
+                        <input ref={inputFile} type="file" accept="image/png, image/jpeg" name="myImage" onChange={onImageChange} style={{display:'none'}} />
+                        {/* <img className="photo" src={resizedImage} alt="Cropped preview"/> */}
+                        {uploadimgloading ?   <div className='photo'><ReactLoading type="spinningBubbles" color="#432a58"/></div>:<img className="photo" src={resizedImage || Profile.user_pic_url} />}
+                        <div className='button-container'>
                             <button className='Btn camera' onClick={()=>inputFile.current.click()}>
                                 <AiFillCamera size='20px'/>
                             </button>
                             <CropperModal file={file} 
-                            onConfirm={( croppedFile ) => { uploadImage(croppedFile); }} onCompleted={() => setFile(null)} />
-                            
+                                onConfirm={( croppedFile ) => { uploadImage(croppedFile); }} onCompleted={() => setFile(null)}
+                            />
+                        </div>
                         {/* <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
                         
                         
@@ -153,8 +153,6 @@ const Profile = () => {
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>
                     </div>
-                    
-                    <hr className="solid"></hr>
                         
                     <div className="profile-content">
                         <h3 className="profile-name">{t("信箱")}</h3>
@@ -177,8 +175,12 @@ const Profile = () => {
                         <p className="profile-bar">{Profile.user_firstname}</p>
                         {/* <img className="pencil" onClick={() => {window.location.href='editProfile'}} src={process.env.PUBLIC_URL + 'purplepencil.png'} alt=''/> */}
                     </div>
+
+                    <div className='edit-profile-container'>
                         <button className="Btn edit-profile" onClick={() => {window.location.href='editProfile'}}>{t("編輯個人資訊")}</button>
+                    </div>
                 </div>
+
             </div>
         <Footer />
         </>
