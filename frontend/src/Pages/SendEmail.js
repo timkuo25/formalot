@@ -45,7 +45,7 @@ const SendEmail = (props2) => {
         })
         console.log(info)
         e.preventDefault();
-        const result = await fetch(`http://127.0.0.1:5000/SendEmailPage?form_id=${encodeURIComponent(FORM_ID)}`, {
+        const result = await fetch(`https://be-sdmg4.herokuapp.com/SendEmailPage?form_id=${encodeURIComponent(FORM_ID)}`, {
             method: "POST",
             body: info,
         });
@@ -53,6 +53,7 @@ const SendEmail = (props2) => {
         console.log("submit message", resJson.message);
         console.log("submit status", resJson.status);
         alert(resJson.message);
+        window.location.reload();
     };
 
 

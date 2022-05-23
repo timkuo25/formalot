@@ -54,8 +54,8 @@ const Lottery = (props) => {
         }
         else{
             const resJson = await response.json();
-            console.log("HasSentEmail?", resJson);
-            setHasSentEmail(resJson.data['send_email'])
+            setHasSentEmail(resJson.data['send_email']);
+            console.log("HasSentEmail?", resJson.data['send_email']);
         }
     }
 
@@ -120,9 +120,9 @@ const Lottery = (props) => {
     return (
         <>
             <section className='lottery-results card-shadow'>
-                {/* {console.log("HasSentEmail?", hasSentEmail)} */}
+                {console.log("haveGifts and isOwner?", haveGifts, isOwner)}
                 <h1> {props.form_title} </h1>
-                {isOwner && haveGifts && <button className="send-email-btn Btn " onClick={() => setShowSendEmail(true)}>寄出中獎通知</button>}
+                {haveGifts===true && isOwner===true && lotteryResults.status==='Closed' && <button className="send-email-btn Btn " onClick={() => setShowSendEmail(true)}>寄出中獎通知</button>}
                 <div className='lottery-card card-shadow'>
                     <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
                     <ItemSlider candidateList={candidateList} 
