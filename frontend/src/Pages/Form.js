@@ -52,12 +52,12 @@ const Form = () => {
                     fetchFormStatus(),
                 ]);
                 await fetchIsOwner()
+                setIsLoading(false);
+                fetchLotteryResults();
             }
             catch(error){
                 console.log('fetchdata', error)
             }
-            setIsLoading(false);
-            fetchLotteryResults();
             if (!(localStorage.getItem('jwt'))){
                 await delay(5000);
                 alert("要登入才能填寫問卷喔！");
