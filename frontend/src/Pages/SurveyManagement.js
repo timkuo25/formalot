@@ -105,8 +105,8 @@ const SurveyManagement = () => {
             </div>
           </div>
           <div className="survey-manage-buttons">
-            <button className="form-button"> 填答問卷</button>
-            <button className="form-button"> 製作問卷</button>
+            <button className="form-button" onClick={() => {window.location.href='/explore'}}> 填答問卷</button>
+            <button className="form-button" onClick={() => {window.location.href='/MakeSurvey'}}> 製作問卷</button>
           </div>
         </div>
       </section>

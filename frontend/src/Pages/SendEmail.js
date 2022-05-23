@@ -53,6 +53,7 @@ const SendEmail = (props2) => {
         console.log("submit message", resJson.message);
         console.log("submit status", resJson.status);
         alert(resJson.message);
+        window.location.reload();
     };
 
 
