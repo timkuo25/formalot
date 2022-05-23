@@ -8,6 +8,7 @@ import ReactLoading from "react-loading";
 import React, { useState, useEffect } from 'react';
 import {useParams} from 'react-router-dom';
 import { SendEmail } from './SendEmail';
+import callrefresh from '../refresh.js';
 
 
 // 傳入想要看的 formID
@@ -16,6 +17,7 @@ const Lottery = (props) => {
     const FORM_ID = props.form_id;
     const lotteryResults = props.lr;
     const isOwner = props.isOwner;
+    const haveGifts = props.haveGifts;
 
     //For candidate slider
     const [activeItemIndex, setActiveItemIndex] = useState(0);
@@ -47,9 +49,14 @@ const Lottery = (props) => {
                 }
             }
         );
-        const resJson = await response.json();
-        console.log("HasSentEmail?", resJson);
-        setHasSentEmail(resJson.data['send_email'])
+        if(response.status === 401){
+            callrefresh();
+        }
+        else{
+            const resJson = await response.json();
+            console.log("HasSentEmail?", resJson);
+            setHasSentEmail(resJson.data['send_email'])
+        }
     }
 
     // candidateList
@@ -100,7 +107,7 @@ const Lottery = (props) => {
             <section className='lottery-results card-shadow'>
                 {/* {console.log("HasSentEmail?", hasSentEmail)} */}
                 <h1> {props.form_title} </h1>
-                {isOwner && <button className="send-email-btn Btn " onClick={() => setShowSendEmail(true)}>寄出中獎通知</button>}
+                {isOwner && haveGifts && <button className="send-email-btn Btn " onClick={() => setShowSendEmail(true)}>寄出中獎通知</button>}
                 <div className='lottery-card card-shadow'>
                     <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
                     <ItemSlider candidateList={candidateList} 
