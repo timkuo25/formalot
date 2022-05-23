@@ -370,17 +370,23 @@ def sendemail(recipient, condition):
                       sender='sdmg42022@gmail.com', recipients=[recipient])
         msg.body = "請使用驗證碼更改您的 Formalot 密碼。 這是您的驗證碼: " + code
 
-    with current_app.app_context():
-        mail = Mail(current_app)
-        try:
-            mail.send(msg)
-            response_return["status"] = "success"
-            response_return["message"] = "請至信箱查看驗證碼"
-            response_return["code"] = str(
-                md5(code.encode("utf-8")).hexdigest())
-        except SMTPException as e:
-            current_app.logger.error(e.message)
-            print()
+    mail = Mail(current_app)
+
+    mail.send(msg)
+    response_return["status"] = "success"
+    response_return["message"] = "請至信箱查看驗證碼"
+    response_return["code"] = str(md5(code.encode("utf-8")).hexdigest())
+    # with current_app.app_context():
+    #     mail = Mail(current_app)
+    #     try:
+    #         mail.send(msg)
+    #         response_return["status"] = "success"
+    #         response_return["message"] = "請至信箱查看驗證碼"
+    #         response_return["code"] = str(
+    #             md5(code.encode("utf-8")).hexdigest())
+    #     except SMTPException as e:
+    #         current_app.logger.error(e.message)
+    #         print()
 
     return jsonify(response_return)
 

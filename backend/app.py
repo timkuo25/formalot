@@ -32,7 +32,7 @@ jwt = JWTManager(app)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'sdmg42022@gmail.com'
-app.config['MAIL_PASSWORD'] = 'sdm2022g4'
+app.config['MAIL_PASSWORD'] = 'akiukmpmtqehjxnv'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
