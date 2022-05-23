@@ -273,7 +273,7 @@ def updateWaitForDraw():
         SET timezone to 'Asia/Taipei';
         SELECT form_id
         FROM form
-        WHERE form_end_date < CURRENT_TIMESTAMP;
+        WHERE form_run_state = 'Open' AND form_draw_date IS NOT NULL AND form_end_date < CURRENT_TIMESTAMP;
         '''
         cursor_check.execute(query_check)
         results = cursor_check.fetchall()
