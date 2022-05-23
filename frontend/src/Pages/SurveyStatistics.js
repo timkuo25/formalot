@@ -116,8 +116,6 @@ const SurveyStatistics = (props) => {
     csv_index = csvResults.indexOf(".csv") +6
     csvResults = csvResults.slice(csv_index);
     csvResults = csvResults.toString().replaceAll('-', '.');
-    console.log("csvResults",csvResults)
-
     
 
     return (
