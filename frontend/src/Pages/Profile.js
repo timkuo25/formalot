@@ -20,7 +20,7 @@ const Profile = () => {
     useEffect(() => {
         const callGetUserProfile = async () => {
             setload(true)
-            const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
+            const data = await fetch('https://be-sdmg4.herokuapp.com/GetUserProfile',{
                 method: 'GET',
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem('jwt')}`,
@@ -98,7 +98,7 @@ const Profile = () => {
         }
 
 		
-        const result = await fetch("http://127.0.0.1:5000/UpdateMemberPhoto", {
+        const result = await fetch("https://be-sdmg4.herokuapp.com/UpdateMemberPhoto", {
             method: "PUT",
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem('jwt')}`,

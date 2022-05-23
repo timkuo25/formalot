@@ -24,7 +24,7 @@ const Homepage = () => {
     useEffect(() => {
 
         const fetchData = async () => {
-            let data = await fetch('http://127.0.0.1:5000/home',{
+            let data = await fetch('https://be-sdmg4.herokuapp.com/home',{
                 headers: {'Content-Type': 'application/json'}
             });
             if (data.status===401){
@@ -42,7 +42,7 @@ const Homepage = () => {
                 };
             });
 
-            data = await fetch('http://127.0.0.1:5000/home?sortBy=newest',{
+            data = await fetch('https://be-sdmg4.herokuapp.com/home?sortBy=newest',{
                 headers: {'Content-Type': 'application/json'}
             });
             if (data.status===401){

@@ -38,12 +38,12 @@ const Explore = ( ) => {
     useEffect(() => {
         const fetchData = async () => {
             setload(true)
-            let data = await fetch('http://127.0.0.1:5000/home',{
+            let data = await fetch('https://be-sdmg4.herokuapp.com/home',{
                 headers: {'Content-Type': 'application/json'}
             });
 
             field_list.forEach(async item => {
-                const data = await fetch(`http://127.0.0.1:5000/GetFormByKeyWord?KeywordType=field&Keyword=${item}`);
+                const data = await fetch(`https://be-sdmg4.herokuapp.com/GetFormByKeyWord?KeywordType=field&Keyword=${item}`);
                 const dataJSON = await data.json();
                 setShowList(prevShowList => {
                     let curShowList = prevShowList;
@@ -52,7 +52,7 @@ const Explore = ( ) => {
                 });
             });
             gift_list.forEach(async item => {
-                const data = await fetch(`http://127.0.0.1:5000/GetFormByKeyWord?KeywordType=tag&Keyword=${item}`);
+                const data = await fetch(`https://be-sdmg4.herokuapp.com/GetFormByKeyWord?KeywordType=tag&Keyword=${item}`);
                 const dataJSON = await data.json();
                 setShowList(prevShowList => {
                     let curShowList = prevShowList;
@@ -107,7 +107,7 @@ const Explore = ( ) => {
                     }}
                     onKeyDown={async e => {
                         if (e.key !== 'Enter') return;
-                        const data = await fetch(`http://localhost:5000/explore?keyword=${e.currentTarget.value}`);
+                        const data = await fetch(`https://be-sdmg4.herokuapp.com/explore?keyword=${e.currentTarget.value}`);
                         const dataJSON = await data.json();
                         setShowList(prevShowList => {
                             let curShowList = prevShowList;

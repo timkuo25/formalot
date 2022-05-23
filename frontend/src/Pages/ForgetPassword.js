@@ -13,7 +13,7 @@ const ForgetPassword = () => {
         const [code, setCode] = useState("");
         const callforgetpasswordApi = async (e) => {
             e.preventDefault();
-            const getprotected = await fetch('http://127.0.0.1:5000/ForgetPsw',{
+            const getprotected = await fetch('https://be-sdmg4.herokuapp.com/ForgetPsw',{
                 method: 'PUT',
                 body: JSON.stringify({
                     email: email,
@@ -34,7 +34,7 @@ const ForgetPassword = () => {
 
         const callemailApi = async (e) => {
             e.preventDefault();
-            const result = await fetch("http://127.0.0.1:5000/Email?condition=forget_psw", {
+            const result = await fetch("https://be-sdmg4.herokuapp.com/Email?condition=forget_psw", {
                 method: "POST",
                 body: JSON.stringify({
                     email: email
