@@ -104,7 +104,30 @@
     align-items: left;
 }
 
-/* .prize-container > h3{
+.send-email-btn{
+    border: var(--theme-dark-purple) solid 0.15em;
+    border-radius: 0.2em;
+    background-color: #fbfafc;
+    color: var(--theme-dark-purple);
+    margin: 2em 0em 0em 0em;
+    width: 10em;
+    height: 2.25em;
     font-size: 1.2em;
-    font-weight: bold;
-} */
+    font-weight: 700;
+    text-align: center;
+}
+
+.sendEmail-modal{
+    width: 500px;
+    height: 600px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    margin-top:40%;
+    margin-bottom:30%;
+    justify-content: center;
+    align-items: center;
+}
