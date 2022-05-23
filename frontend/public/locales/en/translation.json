@@ -119,5 +119,6 @@
     "截止時間":"End Time",
     "抽獎名額 ":"Lottery Quota ",
     " 名":"",
-    "問卷題目不得為空":"Form question cannot be empty"
+    "問卷題目不得為空":"Form question cannot be empty",
+    "選項":"Option"
 }
