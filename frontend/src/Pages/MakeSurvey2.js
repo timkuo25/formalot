@@ -45,6 +45,7 @@ const MakeSurvey2 = () => {
     const inputFormFile = useRef(null) 
     const [openAlert, setOpenAlert] = useState(false);
     const [errorMessage, setErrorMsg] = useState("");
+    const [gid, setgid]=useState(0)
     const { t, i18n } = useTranslation();
 
 
@@ -67,6 +68,7 @@ const MakeSurvey2 = () => {
         setFormType(form_info.form_field_type)
         setDisplayBtnOrNot(form_info.displayBtnOrNot)
         setGiftType(form_info.form_gift_type)
+        setgid(form_info.gid)
 
       }
       setrerenderkey(r=>r+1)
@@ -81,11 +83,12 @@ const MakeSurvey2 = () => {
         form_field_type:formType,
         displayBtnOrNot:displayBtnOrNot,
         gift_info:gift_info,
-        imgurURL:imgurURL
+        imgurURL:imgurURL,
+        gid:gid
 
       }
       window.sessionStorage.setItem('form_info', JSON.stringify(form_info));
-  }, [DateForFormEnd, DateForLottery, displayBtnOrNot, giftNum, giftType, formType, gift_info, imgurURL]);
+  }, [DateForFormEnd, DateForLottery, displayBtnOrNot, giftNum, giftType, formType, gift_info, imgurURL, gid]);
 
 
     const displayBtn = (event) => {
@@ -100,6 +103,7 @@ const MakeSurvey2 = () => {
             quantity:1
           }
           setGiftInfo((gift_info.concat(gift)));
+          setgid(g=>g+1)
         }
       }
       else{
@@ -107,26 +111,28 @@ const MakeSurvey2 = () => {
         setGiftType("無抽獎活動");
         setGiftNum(0);
         setGiftInfo([]);
+        setgid(0)
       }
 
     };
 
     const addGift =()=>{
+      console.log(gid)
       let gift={
-        id:gift_info.length,
+        id:gid,
         gift_name:"",
         gift_pic_url:"https://i.imgur.com/sKBuD6v.png",
         quantity:1
       }
       setGiftInfo((gift_info.concat(gift)));
-
+      setgid(g=>g+1)
     }
 
 
     const DisplayGiftBtn = ()=>{
       return(
         <div>
-          <button className='add-giftBtn Btn' onClick={addGift}>{t("＋新增獎品")}</button>
+          <button className='add-giftBtn Btn' onClick={addGift}>+{t("新增獎品")}</button>
         </div>
     
       );
@@ -205,7 +211,8 @@ const MakeSurvey2 = () => {
         form_field_type:formType,
         displayBtnOrNot:displayBtnOrNot,
         gift_info:gift_info,
-        imgurURL:imgurURL
+        imgurURL:imgurURL,
+        gid:gid
 
       }
       window.sessionStorage.setItem('form_info', JSON.stringify(form_info));
@@ -225,6 +232,7 @@ const MakeSurvey2 = () => {
     
 
     const handleSubmit = async()=>{
+
       setOpenAlert(false)
       setload(true)
       var errorMsg = ""
@@ -374,9 +382,14 @@ const MakeSurvey2 = () => {
       change question content(get by id)
       */
       console.log(evt.target.id)
-      let id = Number(evt.target.id)
+      let index = Number(evt.target.id)
       let tempArr = gift_info
-      tempArr[id].gift_name=evt.target.value
+      for(let i=0; i<=tempArr.length;i++){
+        if (tempArr[i].id===index){
+          tempArr[i].gift_name=evt.target.value
+        }
+      }
+      
       setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
           
         setGiftInfo(tempArr)
@@ -388,9 +401,15 @@ const MakeSurvey2 = () => {
   const deleteGiftImage = evt =>{
     console.log(evt.target.id)
 
-    let id = Number(evt.target.id)
+    let index = Number(evt.target.id)
     let tempArr = gift_info
-    tempArr[id].gift_pic_url="https://i.imgur.com/sKBuD6v.png"
+
+    for(let i=0; i<=tempArr.length;i++){
+      if (tempArr[i].id===index){
+        tempArr[i].gift_pic_url="https://i.imgur.com/sKBuD6v.png"
+      }
+    }
+
     setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
       setGiftInfo(tempArr)
       setrerenderkey(rerenderkey+1)
@@ -404,9 +423,15 @@ const MakeSurvey2 = () => {
     change question content(get by id)
     */
     console.log(evt.target.id)
-    let id = Number(evt.target.id)
+    let index = Number(evt.target.id)
     let tempArr = gift_info
-    tempArr[id].quantity=Number(evt.target.value)
+
+    for(let i=0; i<=tempArr.length;i++){
+      if (tempArr[i].id===index){
+          tempArr[i].quantity=Number(evt.target.value)
+      }
+    }
+
     setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
         
       setGiftInfo(tempArr)
@@ -452,9 +477,14 @@ const MakeSurvey2 = () => {
         else{
 
           console.log(imgururl)
-          let id = Number(event.target.id)
+          let index = Number(event.target.id)
           let tempArr = gift_info
-          tempArr[id].gift_pic_url=imgururl
+          for(let i=0; i<=tempArr.length;i++){
+            if (tempArr[i].id===index){
+              tempArr[i].gift_pic_url=imgururl
+            }
+          }
+
           setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
             setGiftInfo(tempArr)
             setrerenderkey(rerenderkey+1)
@@ -472,11 +502,13 @@ const MakeSurvey2 = () => {
 const deleteGift =evt=>{
 
   let index = Number(evt.target.id)
-  setGiftInfo((gift_info)=>{//試了很多方法都行不通...有夠難寫
-    setGiftInfo(gift_info.filter(items=>items.id !== index));
 
-      return gift_info
-  })
+  setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
+    setGiftInfo(gift_info.filter(items=>items.id !== index));
+    setrerenderkey(r=>r+1)
+    return gift_info
+})
+
 
   
 }
@@ -580,7 +612,7 @@ const deleteGift =evt=>{
                         return (
                           <>
                               <div className='lottery-card card-shadow'>
-                              {item.id !== 0 ? <button id={item.id} className="titleCloseBtn" style={{background:"#fbfafc"}} onClick={deleteGift}>X</button> : null}
+                              {index !== 0 ? <button id={item.id} className="titleCloseBtn" style={{background:"#fbfafc"}} onClick={deleteGift}>X</button> : null}
                               
                                 <h3>{t("輸入獎品資訊")}</h3>
                                   <p>
