@@ -126,7 +126,7 @@ const Explore = ( ) => {
                     {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
                     {showList[show].length===0 ? <div className='card-container'><h2>此類別沒有問卷喔，趕快去製作一個吧！</h2></div> :null}
                     {showList[show].map(item => {
-                        return <Card type='explore' info={item}/>
+                        return <Card type='home' info={item}/>
                     })}
                 </div>
             </section>
