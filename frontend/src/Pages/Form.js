@@ -1,6 +1,8 @@
 import '../css/Lottery.css'
 import '../css/Fill-in.css'
 import '../css/Form.css'
+import callrefresh from '../refresh.js';
+import { Footer } from './Components/Footer';
 import { Navbar } from './Components/Navbar';
 import { Fillin } from './Fill-in';
 import { Lottery } from './Lottery';
@@ -11,7 +13,8 @@ import {useParams} from 'react-router-dom';
 import ReactLoading from "react-loading";
 import Loading from 'react-loading';
 import { Avator } from './Components/Avator';
-import { Modal } from 'react-bootstrap';
+import { LoginModal } from './Components/LoginModal';
+
 
 
 const Form = () => {
@@ -31,6 +34,8 @@ const Form = () => {
         "results":[],
         "isLoading":true,  // 控制是否還在 loading
     });
+    const [showLoginModal, setShowLoginModal] = useState(false);
+
 
     // 使用 useEffect Hook
     useEffect(() => {
@@ -50,7 +55,13 @@ const Form = () => {
             catch(error){
                 console.log('fetchdata', error)
             }
-            setIsLoading(false)
+            setIsLoading(false);
+            if (!(localStorage.getItem('jwt'))){
+                await delay(5000);
+                alert("要登入才能填寫問卷喔！");
+                setShowLoginModal(true);
+                // window.location.href="/"
+            }
         }
         fetchData();
         return () => {  
@@ -58,6 +69,11 @@ const Form = () => {
         }  
     }, []);  // dependency 
 
+    const delay = (s) => {
+        return new Promise(resolve => {
+          setTimeout(resolve,s); 
+        });
+      };
 
     const fetchFormStatus = async () =>
     {
@@ -89,9 +105,15 @@ const Form = () => {
                 }
             }
         );
-        const resJson = await response.json();
-        console.log("is owner?", resJson);
-        setIsOwner(resJson.form_owner_status)
+        console.log("token?", response.status);
+        if(response.status === 401){
+            callrefresh();
+        }
+        else{
+            const resJson = await response.json();
+            console.log("is owner?", resJson);
+            setIsOwner(resJson.form_owner_status)
+        }
     }
     
     const fetchCurrentGifts = async () => {
@@ -188,7 +210,7 @@ const Form = () => {
             return <Fillin form_id = {FORM_ID} form_title={formDetail.form_title} />
         }
         else if (showTag === "抽獎結果"){
-            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
+            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title} isOwner={isOwner}/> 
         }
         else if (showTag === "填答結果"){
             return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title}/> 
@@ -263,10 +285,12 @@ const Form = () => {
             {console.log('render')}
             {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
             <section className='lottery-page-container'>
+                {showLoginModal && <LoginModal closeModal={setShowLoginModal}/>}
                 {show()}
             </section>
             </>
         }
+        <Footer />
         </>
     )
 }

@@ -91,3 +91,40 @@
         width: 100%;
     }
 }
+
+.prize-tag-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.card-dropdown-options{
+    display: none;
+    position: absolute;
+    top: -3em;
+    width: 3em;
+    height: 5em;
+    background-color: var(--theme-extra-light);
+    box-shadow: var(--shadow);
+    transform: translateY(4.5em);
+    z-index:1;
+}
+
+.card-dropdown:hover .user-dropdown-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.card-dropdown-options > * {
+    all: unset;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:rgb(75, 71, 71);
+    font-weight: 500;
+}
+
+.card-dropdown-options > *:hover {
+    color: var(--theme-purple);
+}

@@ -34,7 +34,7 @@ function LoginModal( {closeModal}){
             console.log(resJson.access_token);
             alert("登入成功");
             window.location.reload();
-            navigate(<Homepage/>);
+            // navigate(<Homepage/>);
             
         }else{
             console.log(resJson);

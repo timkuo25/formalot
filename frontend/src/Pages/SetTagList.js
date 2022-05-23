@@ -60,8 +60,8 @@ const TagList = (props) => {
             }
             else {
                 console.log('condition5')
-                setTags(['有問題'])
-                setShowTag('有問題')
+                setTags(['填寫問卷', '抽獎結果'])
+                setShowTag('填寫問卷')
             }
     };
 
