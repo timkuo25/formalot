@@ -189,6 +189,7 @@ const Fillin = (props) => {
             console.log("submit message", resJson.message);
             console.log("submit status", resJson.status);
             alert(resJson.message);
+            window.location.reload();
         }
 
     }
