@@ -114,8 +114,11 @@ const SurveyStatistics = (props) => {
 
     var csv_index = 0;
     csv_index = csvResults.indexOf(".csv") +6
-    csvResults = csvResults.slice(csv_index)
+    csvResults = csvResults.slice(csv_index);
+    csvResults = csvResults.toString().replaceAll('-', '.');
+    console.log("csvResults",csvResults)
 
+    
 
     return (
         <>
@@ -129,7 +132,7 @@ const SurveyStatistics = (props) => {
                             // href={`data:text/csv;charset=utf-8;,${encodeURIComponent(
                             // csvResults
                             // )}`}
-                            download={formDetail.form_title + `.csv`}
+                            download={props.form_title + `.csv`}
                         >{`下載檔案`}</a>
 
   
