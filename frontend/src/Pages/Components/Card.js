@@ -45,7 +45,6 @@ const Card = ({ info, type, openModal }) => {
     // }
 
     const clickForm = (e) => {
-        if(e.currentTarget != e.target ) return;
         if(!(localStorage.getItem('jwt'))){
             openModal();
             return;
