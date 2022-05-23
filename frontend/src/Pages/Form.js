@@ -13,7 +13,8 @@ import {useParams} from 'react-router-dom';
 import ReactLoading from "react-loading";
 import Loading from 'react-loading';
 import { Avator } from './Components/Avator';
-import { Modal } from 'react-bootstrap';
+import { LoginModal } from './Components/LoginModal';
+
 
 
 const Form = () => {
@@ -33,6 +34,8 @@ const Form = () => {
         "results":[],
         "isLoading":true,  // 控制是否還在 loading
     });
+    const [showLoginModal, setShowLoginModal] = useState(false);
+
 
     // 使用 useEffect Hook
     useEffect(() => {
@@ -52,7 +55,13 @@ const Form = () => {
             catch(error){
                 console.log('fetchdata', error)
             }
-            setIsLoading(false)
+            setIsLoading(false);
+            if (!(localStorage.getItem('jwt'))){
+                await delay(5000);
+                alert("要登入才能填寫問卷喔！");
+                setShowLoginModal(true);
+                // window.location.href="/"
+            }
         }
         fetchData();
         return () => {  
@@ -60,6 +69,11 @@ const Form = () => {
         }  
     }, []);  // dependency 
 
+    const delay = (s) => {
+        return new Promise(resolve => {
+          setTimeout(resolve,s); 
+        });
+      };
 
     const fetchFormStatus = async () =>
     {
@@ -271,6 +285,7 @@ const Form = () => {
             {console.log('render')}
             {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
             <section className='lottery-page-container'>
+                {showLoginModal && <LoginModal closeModal={setShowLoginModal}/>}
                 {show()}
             </section>
             </>
