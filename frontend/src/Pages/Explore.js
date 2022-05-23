@@ -35,6 +35,9 @@ const Explore = ( ) => {
 
     useEffect(() => {
         const fetchData = async () => {
+            let data = await fetch('http://127.0.0.1:5000/home',{
+                headers: {'Content-Type': 'application/json'}
+            });
             field_list.forEach(async item => {
                 const data = await fetch(`http://127.0.0.1:5000/GetFormByKeyWord?KeywordType=field&Keyword=${item}`);
                 const dataJSON = await data.json();
@@ -52,10 +55,6 @@ const Explore = ( ) => {
                     curShowList[item] = dataJSON;
                     return curShowList;
                 });
-            });
-
-            let data = await fetch('http://127.0.0.1:5000/home',{
-                headers: {'Content-Type': 'application/json'}
             });
             let dataJSON = await data.json();
             setShowList( prevShowList => {
@@ -119,7 +118,7 @@ const Explore = ( ) => {
             <section className='explore'>
                 <div className='card-container'>
                     {showList[show].map(item => {
-                        return <Card type='home' info={item}/>
+                        return <Card type='explore' info={item}/>
                     })}
                 </div>
             </section>
