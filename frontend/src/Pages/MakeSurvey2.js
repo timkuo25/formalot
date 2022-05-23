@@ -250,7 +250,14 @@ const MakeSurvey2 = () => {
         dateEnd.getMinutes(),
         dateEnd.getSeconds(),
         ];
-      let dateForEnd  = dataValuesEnd[0]+'-'+dataValuesEnd[1]+'-'+dataValuesEnd[2]+' '+String(Number(dataValuesEnd[3]) - 8 )+":"+ dataValuesEnd[4]+":"+dataValuesEnd[5]
+
+      let detected_end = Number(dataValuesEnd[3]) - 8 
+      let detected_day_end = Number(dataValuesEnd[2])
+      if(detected_end < 0) {
+        detected_end = detected_end + 24
+        detected_day_end = detected_day_end - 1
+      }  
+      let dateForEnd  = dataValuesEnd[0]+'-'+dataValuesEnd[1]+'-'+String(detected_day_end)+' '+ String(detected_end) +":"+ dataValuesEnd[4]+":"+dataValuesEnd[5]
       console.log(dateForEnd)
 
 
@@ -265,7 +272,13 @@ const MakeSurvey2 = () => {
           dateForlot.getMinutes(),
           dateForlot.getSeconds(),
         ];
-      var dateForlottory  = dataValueslot[0]+'-'+dataValueslot[1]+'-'+dataValueslot[2]+' ' + String(Number(dataValueslot[3]) - 8 ) + ":"+ dataValueslot[4]+":"+dataValueslot[5]
+      let detected = Number(dataValueslot[3]) - 8 
+      let detected_day = Number(dataValueslot[2])
+      if(detected < 0) {
+        detected = detected + 24
+        detected_day = detected_day - 1
+      }
+      var dateForlottory  = dataValueslot[0]+'-'+dataValueslot[1]+'-'+String(detected_day)+' ' + String(detected) + ":"+ dataValueslot[4]+":"+dataValueslot[5]
 
       let qArr = surveycontent.questioncontent
       let qoptArr = []
