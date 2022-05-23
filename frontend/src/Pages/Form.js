@@ -7,7 +7,7 @@ import { Navbar } from './Components/Navbar';
 import { Fillin } from './Fill-in';
 import { Lottery } from './Lottery';
 import { SurveyStatistics } from './SurveyStatistics';
-import { TagList } from './SetTagList';
+// import { TagList } from './SetTagList';
 import React, { useState, useEffect, useCallback } from 'react';
 import {useParams} from 'react-router-dom';
 import ReactLoading from "react-loading";
@@ -26,7 +26,7 @@ const Form = () => {
     const [haveGifts, setHaveGifts] = useState(true);
     const [formDetail, setFormDetail] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
-    // const [tags, setTags] = useState([])
+    const [tags, setTags] = useState([])
     const [showTag, setShowTag] = useState('填寫問卷')
     const [isLoading, setIsLoading] = useState(true);
     const [formStatus, setFormStatus] = useState([]);
@@ -46,17 +46,18 @@ const Form = () => {
         // 等問卷資料載入完畢再進入頁面
         const fetchData = async () => {
             try{
-                await Promise.all([fetchIsOwner(),
+                await Promise.all([
                     fetchCurrentGifts(),
                     fetchFormDetail(),
                     fetchFormStatus(),
                 ]);
-                fetchLotteryResults();
+                await fetchIsOwner()
             }
             catch(error){
                 console.log('fetchdata', error)
             }
             setIsLoading(false);
+            fetchLotteryResults();
             if (!(localStorage.getItem('jwt'))){
                 await delay(5000);
                 alert("要登入才能填寫問卷喔！");
@@ -91,6 +92,14 @@ const Form = () => {
         const resJson = await response.json();
         console.log("Form Status?", resJson);
         setFormStatus(resJson.status)
+        if(resJson.status === 'Open' && tags.length <= 3){
+            setTags((prevState) => ([...prevState, '填寫問卷','抽獎結果']))
+            setShowTag('填寫問卷')
+        }
+        else if (resJson.status !== 'Open' && tags.length <= 3){
+            setTags((prevState) => ([...prevState, '抽獎結果']))
+            setShowTag('抽獎結果')
+        }
     }
 
 
@@ -114,6 +123,9 @@ const Form = () => {
             const resJson = await response.json();
             console.log("is owner?", resJson);
             setIsOwner(resJson.form_owner_status)
+            if(resJson.form_owner_status === true && tags.length <= 3){
+                setTags((prevState) => ([...prevState, '填答結果']))
+            }
         }
     }
     
@@ -224,6 +236,68 @@ const Form = () => {
         }
     };
 
+    // function tagList(tags)
+    // {
+    //         console.log('set taglist', formStatus, isOwner)
+    //         if(isOwner === true)
+    //         {
+    //             if (formStatus === 'Closed' || formStatus === 'WaitForDraw'){
+    //                 console.log('condition1')
+    //                 tags = (['抽獎結果','填答結果'])
+    //                 // setShowTag('抽獎結果')
+    //             }
+    //             else if (formStatus === 'Delete' || formStatus === 'NotExist'){
+    //                 console.log('condition6')
+    //                 tags = (['抽獎結果'])
+    //                 // setShowTag('抽獎結果')
+    //             }
+    //             else{
+    //                 console.log('condition2')
+    //                 tags = (['填寫問卷', '抽獎結果', '填答結果'])
+    //                 // setShowTag('填寫問卷')
+    //             }
+    //         }
+    //         else if(isOwner === false)
+    //         {
+    //             if (formStatus === 'Closed' || formStatus === 'WaitForDraw'){
+    //                 console.log('condition3')
+    //                 tags = (['抽獎結果'])
+    //                 // setShowTag('抽獎結果')
+    //             }
+    //             else if (formStatus === 'Delete' || formStatus === 'NotExist'){
+    //                 console.log('condition6')
+    //                 tags = (['抽獎結果'])
+    //                 // setShowTag('抽獎結果')
+    //             }
+    //             else{
+    //                 console.log('condition4')
+    //                 tags = (['填寫問卷', '抽獎結果'])
+    //                 // setShowTag('填寫問卷')
+    //             }
+    //         }
+    //         else {
+    //             console.log('condition5')
+    //             tags= (['填寫問卷', '抽獎結果'])
+    //             // setShowTag('填寫問卷')
+    //         }
+    //         return(
+    //             <div className='page-navbar'>
+    //             {tags.map(item => {
+    //                 return (
+    //                     <div
+    //                         className='page-navbar-item card-shadow'
+    //                         key={item}
+    //                         style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
+    //                         onClick={e => {
+    //                             setShowTag(item);
+    //                         }}
+    //                     >{item}</div>
+    //                 )
+    //             })}
+    //             </div>
+    //         )
+    // };
+
     function show(){
         if(formStatus ==="NotExist"){
             return(
@@ -248,7 +322,22 @@ const Form = () => {
         else {
             return(
                 <>
-                <TagList formStatus={formStatus} isOwner={isOwner} setShowTag={setShowTag} showTag={showTag}/>
+                {/* <TagList formStatus={formStatus} isOwner={isOwner} setShowTag={setShowTag} showTag={showTag}/> */}
+                {/* {tagList()} */}
+                <div className='page-navbar'>
+                {tags.map(item => {
+                    return (
+                        <div
+                            className='page-navbar-item card-shadow'
+                            key={item}
+                            style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
+                            onClick={e => {
+                                setShowTag(item);
+                            }}
+                        >{item}</div>
+                    )
+                })}
+                </div>
                 <section className='lottery-container'>
                     {/* 問卷左半部 */}
                     {changePage(showTag)}
