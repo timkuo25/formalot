@@ -3,6 +3,7 @@ import { Card } from './Components/Card';
 import { Navbar } from './Components/Navbar';
 import { Footer } from './Components/Footer';
 import { useEffect, useState } from 'react';
+import { LoginModal } from './Components/LoginModal';
 import { CopyMessage } from './Components/CopyMessage';
 
 import { useTranslation } from "react-i18next";
@@ -10,7 +11,8 @@ import ReactLoading from "react-loading";
 
 const Explore = ( ) => {
     const { t, i18n } = useTranslation();
-    const [loading, setload] = useState(false)
+    const [loading, setload] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const [type, setType] = useState('分類方式');
     const [show, setShow] = useState('類別');
     const [query, setQuery] = useState(''); //for search bar
@@ -126,7 +128,7 @@ const Explore = ( ) => {
                     {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
                     {showList[show].length===0 ? <div className='card-container'><h2>此類別沒有問卷喔，趕快去製作一個吧！</h2></div> :null}
                     {showList[show].map(item => {
-                        return <Card type='explore' info={item}/>
+                        return <Card type='explore' info={item} openModal={() => setModalOpen(true)}/>
                     })}
                 </div>
             </section>
