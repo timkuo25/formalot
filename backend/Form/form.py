@@ -85,7 +85,7 @@ def getFormById(form_id):
     cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
         query = """
-        SELECT form_draw_date
+        SELECT form_draw_date, form_run_state
         FROM Form
         WHERE form_id = %s;
         """
@@ -106,23 +106,28 @@ def closeForm(form_id, form_close_date, form_draw_date):
     # print(result['form_draw_date'])
     # if result
     try:
-        if result['form_draw_date'] == None:
-            query = '''UPDATE Form
-            SET form_run_state='Closed', form_end_date = (%s)
-            WHERE form_id = (%s)
-            '''
-            cursor.execute(query, [form_close_date, form_id])
-            db.commit()
-            return True
-
+        if result['form_run_state'] == "Closed" or result['form_run_state'] == "WaitForDraw":
+            return (f"表單已被刪除或已結束")
         else:
-            query = '''UPDATE Form
-            SET form_run_state='WaitForDraw', form_end_date = (%s), form_draw_date = (%s)
-            WHERE form_id = (%s)
-            '''
-            cursor.execute(query, [form_close_date, form_draw_date, form_id])
-            db.commit()
-            return True
+            if result['form_draw_date'] == None:
+                query = '''UPDATE Form
+                SET form_run_state='Closed', form_end_date = (%s)
+                WHERE form_id = (%s)
+                '''
+                cursor.execute(query, [form_close_date, form_id])
+                db.commit()
+                return ("表單已關閉，沒有抽獎")
+            elif result['form_draw_date'] != None and result['form_run_state'] == "Open":
+                query = '''UPDATE Form
+                SET form_run_state='WaitForDraw', form_end_date = (%s), form_draw_date = (%s)
+                WHERE form_id = (%s)
+                '''
+                cursor.execute(query, [form_close_date, form_draw_date, form_id])
+                db.commit()
+                return (f"表單已關閉，抽獎日提前至{form_draw_date}")
+            else:
+                return (f"不明的錯誤")
+
 
     except psycopg2.DatabaseError as error:
         print(error)
@@ -367,12 +372,13 @@ def modifyForm():
         form_close_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         form_draw_date = (datetime.datetime.now(
         ) + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
-        if closeForm(form_id, form_close_date, form_draw_date):
+        response = closeForm(form_id, form_close_date, form_draw_date)
+        if response != "不明的錯誤":
             response_return["status"] = "success"
-            response_return["message"] = "Closed form."
+            response_return["message"] = response
         else:
             response_return["status"] = "fail"
-            response_return["message"] = "DB error or cannot found result."
+            response_return["message"] = response
     return jsonify(response_return)
 
 
