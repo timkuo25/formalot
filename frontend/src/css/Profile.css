@@ -19,20 +19,20 @@
 }
 
 .top-section{
-    justify-content:left;
-    display:flex;
-    flex-direction: row;
     display: flex; 
+    justify-content:left;
+    flex-direction: row;
+    width: 80%;
 }
 
-.top-section .photo{
+.photo{
     width: 210px;
     height: 210px;
     border-radius: 50%;
     margin: 70px 5px 5px 60px;
 }
 
-.top-section .camera{
+.camera{
     width: 40px;
     height:40px;
     border-radius: 50%;
@@ -41,19 +41,23 @@
     border-width: 0;
 }
 
-.top-section .name{
+.name{
     font-size: 35px;
     margin: 120px 5px 5px 150px;
     color: black;
 }
 
-.top-section .email{
+.name-section {
+    width: 80%;
+}
+
+.email{
     font-size: 25px;
     margin: 30px 5px 5px 150px;
     color: var(--theme-purple)
 }
 
-.top-section .self-intro{
+.self-intro{
     margin: 10px 5px 5px 150px;
     width: 120%;
     height: 100px;
@@ -76,7 +80,7 @@ hr.solid {
 }
 
 .profile_card_right {
-    width: 70em;
+    width: 80%;
     height:65em;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;

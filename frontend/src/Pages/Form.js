@@ -1,6 +1,6 @@
-import '../css/Lottery.css'
-import '../css/Fill-in.css'
-import '../css/Form.css'
+import '../css/Lottery.css';
+import '../css/Fill-in.css';
+import '../css/Form.css';
 import callrefresh from '../refresh.js';
 import { Footer } from './Components/Footer';
 import { Navbar } from './Components/Navbar';

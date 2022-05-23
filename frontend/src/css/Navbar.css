@@ -142,17 +142,25 @@ button:hover{
         display: flex;
     }
 
+    .navbar-links-mobile{
+        position: relative;
+        z-index: 1;
+    }
+
     .navbar-links {
         display: none;
     }
 
-    .user-dropdown:hover .user-dropdown-options{
+    .user-dropdown-options-m {
         display: none;
+    }
+
+    .lng-dropdown-options-m {
+        display: none;
+    }
+
+    .show {
+        display: flex;
     }
 }
 
-@media only screen and (max-width: 1200px) {
-    .navbar-links-mobile {
-        display: none;
-    }
-}
