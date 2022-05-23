@@ -49,8 +49,8 @@ def after_request(response):
     header['Access-Control-Allow-Headers'] = '*'
     header['Access-Control-Allow-Methods'] = '*'
     header['Content-type'] = 'application/json'
-    header['Cache-control'] = 'max-age=300'  # general content cache
-    header['Access-Control-Max-Age'] = 30  # preflight response cache
+    header['Cache-control'] = 'no-cache'  # general content cache
+    # header['Access-Control-Max-Age'] = 30  # preflight response cache
     return response
 
 
