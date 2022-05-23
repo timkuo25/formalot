@@ -20,20 +20,26 @@ const Profile = () => {
     useEffect(() => {
         const callGetUserProfile = async () => {
             setload(true)
-            const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
-                method: 'GET',
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-                },
-            });
-            console.log(data.status);
-            setload(false)
-            if(data.status === 401){
-                callrefresh("reload");
-            }else{
-                const dataJSON = await data.json();
-                console.log(dataJSON);
-                setProfile(dataJSON[0]);
+            if (!(localStorage.getItem('jwt'))){
+                alert("請先登入才能管理問卷喔。")
+                window.location.href="/"
+              }
+            else{
+                const data = await fetch('http://127.0.0.1:5000/GetUserProfile',{
+                    method: 'GET',
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+                    },
+                });
+                console.log(data.status);
+                setload(false)
+                if(data.status === 401){
+                    callrefresh("reload");
+                }else{
+                    const dataJSON = await data.json();
+                    console.log(dataJSON);
+                    setProfile(dataJSON[0]);
+                }
             }
         };
         callGetUserProfile();
