@@ -17,6 +17,7 @@ const MakeSurvey = () =>{
     const [surveyTitle, setSurveyTitle] = useState("")
     const [SurveyDescription, setSurveyDescription] = useState("")
     const [rerenderkey, setrerenderkey] = useState(0)
+    const [qid, setqid] = useState(0)
     const { t, i18n } = useTranslation();
 
 
@@ -32,17 +33,19 @@ const MakeSurvey = () =>{
             setSurveyTitle(form.form_title)
             setSurveyDescription(form.form_description)
             setSurveyQDict(form.questioncontent);
+            setqid(form.qid)
         }
     }, []);
     useEffect(() => {
         let form={
             form_title:surveyTitle,
             form_description:SurveyDescription,
-            questioncontent:surveyQDict
+            questioncontent:surveyQDict,
+            qid:qid
         }
 
         window.sessionStorage.setItem('form', JSON.stringify(form));
-    }, [surveyQDict, surveyTitle, SurveyDescription]);
+    }, [surveyQDict, surveyTitle, SurveyDescription,qid]);
     
     //const [storedChoice, setStoredChoice] = useState([]);
  
@@ -60,7 +63,7 @@ const MakeSurvey = () =>{
         
         setSurveyQDict((surveyQDict)=>{
             setSurveyQDict(tempArr)
-            setrerenderkey(rerenderkey+1)
+            setrerenderkey(r=>r+1)
             return surveyQDict
         })
         
@@ -72,11 +75,18 @@ const MakeSurvey = () =>{
         */
         //console.log(storedElements)
         let index = Number(event.target.id)
-        setSurveyQDict((surveyQDict)=>{//試了很多方法都行不通...有夠難寫
-            setSurveyQDict(surveyQDict.filter(items=>items.id !== index));
+        console.log(index)
+        console.log(surveyQDict)
 
+        
+        setSurveyQDict((surveyQDict)=>{ //為了解決每次都沒辦法get到最新set的value
+            setSurveyQDict(surveyQDict.filter(items=>items.id !== index));
+            console.log(surveyQDict)
+            setrerenderkey(r=>r+1)
             return surveyQDict
         })
+        
+
 
     }
     
@@ -112,7 +122,15 @@ const MakeSurvey = () =>{
         let index = Number(idArr[0])
         let optionArrIndex = Number(idArr[1])
         let tempArr = surveyQDict
-        tempArr[index].Options[optionArrIndex] = evt.target.value
+
+        for(let i=0; i<=tempArr.length;i++){
+            if(tempArr[i].id===index){
+                tempArr[i].Options[optionArrIndex] = evt.target.value
+            }
+        }
+
+
+        //tempArr[index].Options[optionArrIndex] = evt.target.value
         //console.log(tempArr)
         
         setSurveyQDict((surveyQDict)=>{
@@ -131,15 +149,16 @@ const MakeSurvey = () =>{
         */
 
         console.log('----')
-        console.log(surveyQDict.length)
+        console.log(qid)
 
         const msg = {
-            id:surveyQDict.length,
+            id:qid,
             Question:"",
             Type: '簡答題',
             Options:[]
         };
         setSurveyQDict(surveyQDict=>surveyQDict.concat(msg))
+        setqid(q=>q+1)
         //setStoredElements(storedElements=>storedElements.concat(<ShortAns key={storedElements.length} />)); //將區塊加入list中
 
         //console.log(surveyQDict)
@@ -151,12 +170,13 @@ const MakeSurvey = () =>{
         add question(singleChoice)
         */
         const msg = {
-            id:surveyQDict.length,
+            id:qid,
             Question:"",
             Type: '單選題',
             Options:['選項 1', '選項 2']
         };
         setSurveyQDict(surveyQDict.concat(msg))
+        setqid(q=>q+1)
         //setStoredElements(storedElements=>storedElements.concat(<SingleChoice key={storedElements.length} />)); //將區塊加入list中
     }
 
@@ -165,12 +185,13 @@ const MakeSurvey = () =>{
         add question(multipleChoice)
         */
         const msg = {
-            id:surveyQDict.length,
+            id:qid,
             Question:"",
             Type: '複選題',
             Options:['選項 1', '選項 2']
         };
         setSurveyQDict(surveyQDict.concat(msg))
+        setqid(q=>q+1)
         //setStoredElements(storedElements=>storedElements.concat(<SingleChoice key={storedElements.length} />)); //將區塊加入list中
     }
 
@@ -179,12 +200,13 @@ const MakeSurvey = () =>{
         add question(singleChoice)
         */
         const msg = {
-            id:surveyQDict.length,
+            id:qid,
             Question:"",
             Type: '下拉式選單',
             Options:['選項 1', '選項 2']
         };
         setSurveyQDict(surveyQDict.concat(msg))
+        setqid(q=>q+1)
         //setStoredElements(storedElements=>storedElements.concat(<SingleChoice key={storedElements.length} />)); //將區塊加入list中
     }
 
@@ -197,9 +219,15 @@ const MakeSurvey = () =>{
         change question content(get by id)
         */
         console.log(evt.target.id)
-        let id = Number(evt.target.id)
+        let index = Number(evt.target.id)
+
         let tempArr = surveyQDict
-        tempArr[id].Question=evt.target.value
+        for(let i=0; i<=tempArr.length;i++){
+            if(tempArr[i].id===index){
+                tempArr[i].Question = evt.target.value
+            }
+        }
+        
         setSurveyQDict((surveyQDict)=>{ //為了解決每次都沒辦法get到最新set的value
             
             setSurveyQDict(tempArr)
@@ -228,7 +256,8 @@ const MakeSurvey = () =>{
         let form={
             form_title:surveyTitle,
             form_description:SurveyDescription,
-            questioncontent:surveyQDict
+            questioncontent:surveyQDict,
+            qid:qid
         }
         console.log(form)
         
@@ -292,13 +321,13 @@ const MakeSurvey = () =>{
                                 <button id={item.id} className="titleCloseBtn" style={{background:"#fbfafc"}} onClick={deleteQuestion}>X</button>
                                 <h4>{t(item.Type)}</h4>
                                 <p>
-                                    <input id = {item.id} type="text" placeholder={item.Question} className='input-columns' style={{width: "100%", height:"50px"}} onChange={handleChangeQuestion}/>
+                                    <input id = {item.id} type="text" placeholder={item.Question} className='input-columns' style={{width: "100%", height:"50px"}} defaultValue={item.Question} onChange={handleChangeQuestion}/>
                                 </p>
                                     {item.Options.map((opt, i) =>{
                                         return (
                                             <>
                                                 <p>
-                                                    <input key={[item.id,i]} id={[item.id, i]} type="text" className='input-columns' placeholder={opt} style={{width: "80%", height:"80px"}} onChange={handleChangeChoice}/>
+                                                    <input key={[item.id,i]} id={[item.id, i]} type="text" className='input-columns' placeholder={opt} style={{width: "80%", height:"80px"}} defaultValue={opt} onChange={handleChangeChoice}/>
                                                     <button id={[item.id, i]} className={'Btn NextBtn'} onClick={deleteOption} disabled={i>1? 0:1}>{t("刪除")}</button>
                                                 </p>
 
