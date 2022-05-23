@@ -20,10 +20,12 @@
 
 .top-section{
     display: flex; 
-    justify-content:left;
     flex-direction: row;
+    align-items: center;
+    justify-content:space-around;
     width: 80%;
 }
+
 
 .photo{
     width: 210px;
@@ -43,22 +45,23 @@
 
 .name{
     font-size: 35px;
-    margin: 120px 5px 5px 150px;
     color: black;
 }
 
 .name-section {
-    width: 80%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .email{
-    font-size: 25px;
-    margin: 30px 5px 5px 150px;
+    font-size: 1.4em;
     color: var(--theme-purple)
 }
 
 .self-intro{
-    margin: 10px 5px 5px 150px;
     width: 120%;
     height: 100px;
     border-color:#f9f9f9;
@@ -80,32 +83,31 @@ hr.solid {
 }
 
 .profile_card_right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 80%;
-    height:65em;
+    height: auto;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;
     padding: 0.8em;
-    margin: 1em 1em 1em 1em;
-    flex-direction: column;
     transform: translate(20px, 20px);
-    float:left;
     text-align:left;
     background-color: #ffffff;
 }
 
 .profile-content{
-    justify-content:left;
     display:flex;
+    justify-content:space-around;
     flex-direction: row;
-    display: flex; 
+    width: 100%;
 }
 
 .profile-name{
-    margin: 58px 200px 0px 100px;
 }
 
 .profile-bar-gray{
-    margin: 50px 10px;
     width: 45%;
     height: 40px;
     border-color:#cccccc;
@@ -116,7 +118,6 @@ hr.solid {
 }
 
 .profile-bar{
-    margin: 58px 10px;
     width: 45%;
     height: 40px;
     color:var(--theme-purple);
@@ -127,14 +128,15 @@ hr.solid {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    margin: 60px 0px 5px 0px;
+}
+
+.edit-profile-container{
+    display: flex;
+    justify-content: center;
 }
 
 .edit-profile{
-    margin-top: -10px;
     font-size: 1.2em;
-    justify-content:right;
-    margin-left: 85%;
     background-color: var(--theme-dark-purple);
     border-color: var(--theme-dark-purple);
     border-radius: 0.4em;
@@ -143,6 +145,14 @@ hr.solid {
     font-weight: 500;
     text-align: center;
     color: #FFFFFF;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .top-section {
+        flex-direction: column;
+        height: 80%;
+    }
 }
 
 /* profile page done */
