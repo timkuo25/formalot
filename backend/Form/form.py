@@ -559,7 +559,7 @@ def autoWaitForDraw():
         "status": "",
         "message": ""
     }
-    if scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="cron", minute=0):
+    if scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="interval", minutes=1):
         scheduler.start()
         response["status"] = "success"
         response["message"] = "Auto update WaitForDraw is running."
