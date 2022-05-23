@@ -2,7 +2,6 @@ import '../css/MakeSurvey.css';
 import { Navbar } from './Components/Navbar';
 import {ButtonGroup} from "./Components/ButtonGroup";
 import { Footer } from './Components/Footer';
-
 import React, {useState, useRef, useEffect} from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import DateTimePicker from 'react-datetime-picker';
@@ -369,7 +368,7 @@ const MakeSurvey2 = () => {
           window.sessionStorage.removeItem('form_info'); 
           window.sessionStorage.removeItem('form'); 
           alert("問卷製作成功")
-          window.location.href = "/";
+          window.location.href = "/SurveyManagement";
         }
         else if(result.status===401){
 
@@ -557,7 +556,8 @@ const deleteGift =evt=>{
 
         </Box>
         <section className='page-container'>
-          <div className='breadcrumb'>
+          <div className='breadcrumb-container'>
+            <div className='breadcrumb'>
                     <button className='SurveyOptionBtn card-shadow' onClick={cancel}>
                         {t("取消")}
                     </button>
@@ -570,9 +570,8 @@ const deleteGift =evt=>{
                     <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
                       {t("發布問卷")}
                     </button>
-                    {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
-
-
+              </div>
+              {loading ?   <ReactLoading type="spinningBubbles" color="#432a58" /> :null}
           </div>
           <section className='makeSurvey-container'>
               <section className='makeSurvey-info card-shadow'>
@@ -655,6 +654,7 @@ const deleteGift =evt=>{
             </section>
 
         </section>
+        <Footer />
         </>
     );
   }
