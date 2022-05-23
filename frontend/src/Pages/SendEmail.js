@@ -58,7 +58,6 @@ const SendEmail = (props2) => {
 
     return (
         <>
-        <Navbar/>
             {console.log('render')}
             {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
             <section className='lottery-page-container'>
