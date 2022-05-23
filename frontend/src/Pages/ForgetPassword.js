@@ -131,11 +131,17 @@ const ForgetPassword = () => {
                 <div className="forget_input_content">
                     <h3>確認新密碼</h3>
                     <div className='new-password-content'>
-                        <input type={values2.showPassword ? "text" : "password"} value={newpsw2} placeholder="Password" 
-                        onChange={(e) => setNewPsw2(e.target.value)} className="forget_inputbar"/>
-                        <button className='eye' onClick={handleClickShowPassword2} onMouseDown={handleMouseDownPassword2}>
-                            {values2.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
-                        </button>
+                        <div>
+                            <input
+                                type={values2.showPassword ? "text" : "password"} value={newpsw2} placeholder="Password" 
+                                onChange={(e) => setNewPsw2(e.target.value)} className="forget_inputbar"
+                            />
+                        </div>
+                        <div>
+                            <button className='eye' onClick={handleClickShowPassword2} onMouseDown={handleMouseDownPassword2}>
+                                {values2.showPassword ? <AiFillEye size='20px'/> : <AiFillEyeInvisible size='20px'/>}
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
