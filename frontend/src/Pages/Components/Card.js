@@ -104,7 +104,7 @@ const Card = ({ info, type, openModal }) => {
                 className='share-q' 
                 onClick={async e => {
                     e.stopPropagation();
-                    await navigator.clipboard.writeText(`localhost:3000/form/${info.form_id}`);
+                    await navigator.clipboard.writeText(window.location.href=`/form/${info.form_id}`);
                     const copyMsg = document.querySelector('.copy-message');
                     copyMsg.classList.add('show');
 
