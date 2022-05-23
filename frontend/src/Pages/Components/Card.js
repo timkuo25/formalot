@@ -99,17 +99,23 @@ const Card = ({ info, type, openModal }) => {
             }
         }
         else if (type==='created'){
-            if(info.form_run_state === 'Open'){
+            if(info.form_run_state === 'Open'&& info.form_draw_date !== null){
                 return(<div className="prize-tag">{'未開獎'}</div>)
             }
-            else if(info.form_run_state === 'Closed'){
+            else if(info.form_run_state === 'Open'&& info.form_draw_date === null){
+                return(<div className="prize-tag">{'無獎品'}</div>)
+            }
+            else if(info.form_run_state === 'Closed' && info.form_draw_date !== null){
                 return(<div className="prize-tag pink">{'已開獎'}</div>)
+            }
+            else if(info.form_run_state === 'Closed' && info.form_draw_date === null){
+                return(<div className="prize-tag black">{'已結束'}</div>)
             }
             else if(info.form_run_state === 'WaitForDraw'){
                 return(<div className="prize-tag pink">{'待開獎'}</div>)
             }
             else if(info.form_run_state === 'Delete'){
-                return(<div className="prize-tag">{''}</div>)
+                return(<div className="prize-tag black">{'已刪除'}</div>)
             }
             else {
                 return(<div className="prize-tag">{'未知狀態'}</div>)
