@@ -314,6 +314,15 @@ const MakeSurvey2 = () => {
         legalsubmit=0
         errorMsg = "問卷題目未製作"
       }
+      else{
+        for(let i=0; i<surveyData.questioncontent.length;i++){
+          if(surveyData.questioncontent[i].Question===""){
+            console.log("flag 7")
+            legalsubmit=0
+            errorMsg = "問卷題目不得為空"
+          }
+        }
+      }
 
 
 

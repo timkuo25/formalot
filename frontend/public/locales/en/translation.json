@@ -118,5 +118,6 @@
     "修改":"Edit",
     "截止時間":"End Time",
     "抽獎名額 ":"Lottery Quota ",
-    " 名":""
+    " 名":"",
+    "問卷題目不得為空":"Form question cannot be empty"
 }

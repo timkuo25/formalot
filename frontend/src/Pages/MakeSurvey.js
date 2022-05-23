@@ -135,7 +135,7 @@ const MakeSurvey = () =>{
 
         const msg = {
             id:surveyQDict.length,
-            Question:"Question",
+            Question:"",
             Type: '簡答題',
             Options:[]
         };
@@ -152,7 +152,7 @@ const MakeSurvey = () =>{
         */
         const msg = {
             id:surveyQDict.length,
-            Question:"Question",
+            Question:"",
             Type: '單選題',
             Options:['選項 1', '選項 2']
         };
@@ -166,7 +166,7 @@ const MakeSurvey = () =>{
         */
         const msg = {
             id:surveyQDict.length,
-            Question:"Question",
+            Question:"",
             Type: '複選題',
             Options:['選項 1', '選項 2']
         };
@@ -180,7 +180,7 @@ const MakeSurvey = () =>{
         */
         const msg = {
             id:surveyQDict.length,
-            Question:"Question",
+            Question:"",
             Type: '下拉式選單',
             Options:['選項 1', '選項 2']
         };
