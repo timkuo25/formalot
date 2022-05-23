@@ -26,7 +26,6 @@ const SurveyManagement = () => {
 
   // 使用 useEffect Hook
   useEffect(() => {
-
     console.log('execute function in useEffect');
     let abortController = new AbortController();  
     const fetchData = async () => {

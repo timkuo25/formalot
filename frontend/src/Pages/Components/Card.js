@@ -22,15 +22,18 @@ const Card = ({ info, type, openModal }) => {
         minute: 'numeric',
         }).format(new Date(info.form_end_date))
 
-    lottery_time = new Intl.DateTimeFormat('zh-TW', {
-    year: 'numeric', 
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    }).format(new Date(info.form_draw_date));
-
-
+    if (info.form_draw_date===null){
+        lottery_time = "此問卷沒有抽獎"
+    }
+    else{
+        lottery_time = new Intl.DateTimeFormat('zh-TW', {
+            year: 'numeric', 
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+        }).format(new Date(info.form_draw_date));
+    }
 
     // if (type === 'explore'){
     //     prize = '抽獎名額';
@@ -52,24 +55,26 @@ const Card = ({ info, type, openModal }) => {
 
     // 刪除或關閉問卷
     const manageform = async (action) => {
-        const getprotected = await fetch('http://127.0.0.1:5000/SurveyManagement',{
+        const a = JSON.stringify({
+            form_id: info.form_id,
+            action : action,
+        })
+        console.log('a',a)
+        const manageform = await fetch('http://127.0.0.1:5000/SurveyManagement',{
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
             },
-            body: JSON.stringify({
-                form_id: info.form_id,
-                action : action,
-            }),
+            body: a,
         });
-        console.log(getprotected.status);
-        if(getprotected.status === 401){
+        console.log(manageform.status);
+        if(manageform.status === 401){
             callrefresh();
         }else{
-            const resdata = await getprotected.json();
+            const resdata = await manageform.json();
             console.log(resdata);
-            console.log(resdata.message);
             alert(resdata.message);
+            window.location.reload();
         }
     };
 
@@ -94,17 +99,23 @@ const Card = ({ info, type, openModal }) => {
             }
         }
         else if (type==='created'){
-            if(info.form_run_state === 'Open'){
+            if(info.form_run_state === 'Open'&& info.form_draw_date !== null){
                 return(<div className="prize-tag">{'未開獎'}</div>)
             }
-            else if(info.form_run_state === 'Closed'){
+            else if(info.form_run_state === 'Open'&& info.form_draw_date === null){
+                return(<div className="prize-tag">{'無獎品'}</div>)
+            }
+            else if(info.form_run_state === 'Closed' && info.form_draw_date !== null){
                 return(<div className="prize-tag pink">{'已開獎'}</div>)
+            }
+            else if(info.form_run_state === 'Closed' && info.form_draw_date === null){
+                return(<div className="prize-tag black">{'已結束'}</div>)
             }
             else if(info.form_run_state === 'WaitForDraw'){
                 return(<div className="prize-tag pink">{'待開獎'}</div>)
             }
             else if(info.form_run_state === 'Delete'){
-                return(<div className="prize-tag">{''}</div>)
+                return(<div className="prize-tag black">{'已刪除'}</div>)
             }
             else {
                 return(<div className="prize-tag">{'未知狀態'}</div>)
@@ -117,13 +128,14 @@ const Card = ({ info, type, openModal }) => {
             <div className="prize-tag-container">
                 {type==='home'? <><div className="prize-tag">{`${prize} ${num_prize} 名`}</div></> : <></>}
                 {showStatus()}
-                <div className="nav-option user-dropdown" >
-                    {t("...")}
-                    <div className="user-dropdown-options" >
-                        <button onClick={()=>{manageform('close')}}>{t("關閉問卷")}</button>
-                        <button onClick={()=>{manageform('delete')}}>{t("刪除問卷")}</button>
-                    </div>
-                </div>
+                {type==='created' && 
+                    <div className="nav-option card-dropdown" >
+                        {t("...")}
+                        <div className="user-dropdown-options" >
+                            <button onClick={async e =>{e.stopPropagation(); manageform('close')}}>{t("關閉問卷")}</button>
+                            <button onClick={async e =>{e.stopPropagation(); manageform('delete')}}>{t("刪除問卷")}</button>
+                        </div>
+                    </div>}
             </div>
             <img alt="" className="q-image" src={image_path}/>
             <div className='card-form-title'> <h3>{title}</h3> </div>

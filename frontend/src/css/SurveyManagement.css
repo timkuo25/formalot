@@ -29,7 +29,7 @@ h3.manage-header {
 .survey-card {
     /* border-radius: 0.5em; */
     height:30%;
-    box-shadow: 0px 1px 2.5px 1px #dadada;
+    /* box-shadow: 0px 1px 2.5px 1px #dadada; */
     background-color: #ffffff;
     padding: 2em;
     margin: 0.8em 0.8em;
@@ -39,10 +39,10 @@ h3.manage-header {
 
 .card-container-management {
   display: flex;
-  justify-content: left; 
+  justify-content:left; 
   overflow: auto;
-  overflow-y:auto;
-  white-space: nowrap;
+  overflow-y: hidden;
+  white-space: pre;
   width: 100%;
 }
 

@@ -23,6 +23,7 @@ const Form = () => {
     
     console.log('----- invoke function component -----');
     const [gifts, setGifts] = useState([]);
+    const [haveGifts, setHaveGifts] = useState(true);
     const [formDetail, setFormDetail] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
     // const [tags, setTags] = useState([])
@@ -130,6 +131,9 @@ const Form = () => {
             const responseJson = await response.json();
             setGifts(responseJson.data);
             console.log('giftsdata',responseJson.data);
+            if(responseJson.data.length===0){
+                setHaveGifts(false);
+            }
         }
         catch (error) {
             console.log(error);
@@ -216,7 +220,7 @@ const Form = () => {
             return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title}/> 
         }
         else{
-            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title}/> 
+            return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title} haveGifts={haveGifts}/> 
         }
     };
 
@@ -254,12 +258,12 @@ const Form = () => {
                         <h2> 問卷資訊 </h2>
                         發布時間：{formDetail.form_create_date} <br />
                         截止時間：{formDetail.form_end_date} <br />
-                        {formDetail.form_draw_date==="1970年1月1日 上午8:00"? <></> : <>抽獎時間：{formDetail.form_draw_date}</>}
+                        {haveGifts && <>抽獎時間：{formDetail.form_draw_date}</>}
                         <h2> 製作者 </h2>
                         <Avator user_name={formDetail.form_owner_id}  user_pic_url={formDetail.form_owner_pic_url}/> 
                         {/* 缺製作者的圖片 url */}
                         <h2> 獎品 </h2>
-                        {gifts.length === 0 ? <h3>此問卷沒有抽獎</h3> :  
+                        {haveGifts===false ? <h3>此問卷沒有抽獎</h3> :  
                             gifts.map(gift => {
                                 return (
                                     <div className='prize-container' key={gift.gift_name}>
