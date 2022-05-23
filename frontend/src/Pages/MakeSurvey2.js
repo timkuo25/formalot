@@ -97,7 +97,7 @@ const MakeSurvey2 = () => {
         if (giftNum===0){
           setGiftNum(1);
           let gift={
-            id:gift_info.length,
+            id:gid,
             gift_name:"",
             gift_pic_url:"https://i.imgur.com/sKBuD6v.png",
             quantity:1
@@ -250,7 +250,7 @@ const MakeSurvey2 = () => {
         dateEnd.getMinutes(),
         dateEnd.getSeconds(),
         ];
-      let dateForEnd  = dataValuesEnd[0]+'-'+dataValuesEnd[1]+'-'+dataValuesEnd[2]+' '+dataValuesEnd[3]+":"+ dataValuesEnd[4]+":"+dataValuesEnd[5]
+      let dateForEnd  = dataValuesEnd[0]+'-'+dataValuesEnd[1]+'-'+dataValuesEnd[2]+' '+String(Number(dataValuesEnd[3]) - 8 )+":"+ dataValuesEnd[4]+":"+dataValuesEnd[5]
       console.log(dateForEnd)
 
 
@@ -265,12 +265,24 @@ const MakeSurvey2 = () => {
           dateForlot.getMinutes(),
           dateForlot.getSeconds(),
         ];
-      var dateForlottory  = dataValueslot[0]+'-'+dataValueslot[1]+'-'+dataValueslot[2]+' '+dataValueslot[3]+":"+ dataValueslot[4]+":"+dataValueslot[5]
+      var dateForlottory  = dataValueslot[0]+'-'+dataValueslot[1]+'-'+dataValueslot[2]+' ' + String(Number(dataValueslot[3]) - 8 ) + ":"+ dataValueslot[4]+":"+dataValueslot[5]
+
+      let qArr = surveycontent.questioncontent
+      let qoptArr = []
+      for(let i=0; i<qArr.length;i++){
+        qoptArr = []
+        if(qArr[i].Type!=='簡答題'){
+          for(let j=0;j<qArr[i].Options.length;j++){
+              qoptArr = qoptArr.concat(qArr[i].Options[j].opt)
+          }
+        }
+        qArr[i].Options = qoptArr
+      }
 
       let surveyData = {
         form_title: surveycontent.form_title,
         form_description: surveycontent.form_description,
-        questioncontent: surveycontent.questioncontent,
+        questioncontent: qArr,
         form_end_date: dateForEnd,
         form_draw_date: dateForlottory,
         form_pic_url: imgurURL,
@@ -384,7 +396,7 @@ const MakeSurvey2 = () => {
       console.log(evt.target.id)
       let index = Number(evt.target.id)
       let tempArr = gift_info
-      for(let i=0; i<=tempArr.length;i++){
+      for(let i=0; i<tempArr.length;i++){
         if (tempArr[i].id===index){
           tempArr[i].gift_name=evt.target.value
         }
@@ -404,7 +416,7 @@ const MakeSurvey2 = () => {
     let index = Number(evt.target.id)
     let tempArr = gift_info
 
-    for(let i=0; i<=tempArr.length;i++){
+    for(let i=0; i<tempArr.length;i++){
       if (tempArr[i].id===index){
         tempArr[i].gift_pic_url="https://i.imgur.com/sKBuD6v.png"
       }
@@ -426,7 +438,7 @@ const MakeSurvey2 = () => {
     let index = Number(evt.target.id)
     let tempArr = gift_info
 
-    for(let i=0; i<=tempArr.length;i++){
+    for(let i=0; i<tempArr.length;i++){
       if (tempArr[i].id===index){
           tempArr[i].quantity=Number(evt.target.value)
       }
@@ -475,19 +487,22 @@ const MakeSurvey2 = () => {
           alert("上傳圖片失敗")
         }
         else{
-
+          
           console.log(imgururl)
           let index = Number(event.target.id)
           let tempArr = gift_info
-          for(let i=0; i<=tempArr.length;i++){
-            if (tempArr[i].id===index){
+          console.log(tempArr)
+          console.log(tempArr[index].id)
+
+          for(let i=0; i<tempArr.length;i++){
+            if(tempArr[i].id===index){
               tempArr[i].gift_pic_url=imgururl
             }
           }
 
           setGiftInfo((gift_info)=>{ //為了解決每次都沒辦法get到最新set的value
             setGiftInfo(tempArr)
-            setrerenderkey(rerenderkey+1)
+            setrerenderkey(r=>r+1)
             return gift_info
           })
 

@@ -18,6 +18,7 @@ const MakeSurvey = () =>{
     const [SurveyDescription, setSurveyDescription] = useState("")
     const [rerenderkey, setrerenderkey] = useState(0)
     const [qid, setqid] = useState(0)
+    const [optid, setoptid] = useState(1000)
     const { t, i18n } = useTranslation();
 
 
@@ -34,6 +35,7 @@ const MakeSurvey = () =>{
             setSurveyDescription(form.form_description)
             setSurveyQDict(form.questioncontent);
             setqid(form.qid)
+            setoptid(form.optid)
         }
     }, []);
     useEffect(() => {
@@ -41,33 +43,16 @@ const MakeSurvey = () =>{
             form_title:surveyTitle,
             form_description:SurveyDescription,
             questioncontent:surveyQDict,
-            qid:qid
+            qid:qid,
+            optid:optid
         }
 
         window.sessionStorage.setItem('form', JSON.stringify(form));
-    }, [surveyQDict, surveyTitle, SurveyDescription,qid]);
+    }, [surveyQDict, surveyTitle, SurveyDescription,qid,optid]);
     
     //const [storedChoice, setStoredChoice] = useState([]);
  
-    const deleteOption = evt =>{
-        /*
-        delete question id's option (get by id)
-        */
-        let id = evt.target.id
-        let idArr = id.split(",")
-        let index = Number(idArr[0])
-        let optionArrIndex = Number(idArr[1])
-        let tempArr = surveyQDict
-        tempArr[index].Options.splice(optionArrIndex, 1)
-        //console.log(tempArr)
-        
-        setSurveyQDict((surveyQDict)=>{
-            setSurveyQDict(tempArr)
-            setrerenderkey(r=>r+1)
-            return surveyQDict
-        })
-        
-    }
+
 
     const deleteQuestion = event =>{
         /*
@@ -90,32 +75,73 @@ const MakeSurvey = () =>{
 
     }
     
+    const deleteOption = evt =>{
+        /*
+        delete question id's option (get by id)
+        */
+        let id = evt.target.id
+        let idArr = id.split(",")
+        let index = Number(idArr[0])
+        let optionArrIndex = Number(idArr[1])
+        let tempArr = surveyQDict
 
+        for(let i=0; i<tempArr.length;i++){
+            if(tempArr[i].id===index){
+                //tempArr[i].Options[optionArrIndex] = evt.target.value
+                let tempopt = tempArr[i].Options.filter(item=>item.optid !== optionArrIndex)
+                tempArr[i].Options=tempopt
+            }
+        }
+        //tempArr[index].Options.splice(optionArrIndex, 1)
+        //console.log(tempArr)
+        
+        setSurveyQDict((surveyQDict)=>{
+            setSurveyQDict(tempArr)
+            setrerenderkey(r=>r+1)
+            return surveyQDict
+        })
+        
+    }
 
-    const addChoice = evt =>{
+    const addChoice = evt =>{//OK
         /*
         add question id's option
         */
         let index = Number(evt.target.id)
         let tempArr = surveyQDict
-        let optionArr = tempArr[index].Options     
-        tempArr[index].Options=optionArr.concat('選項'+(Number(optionArr.length)+1))
+
+        for(let i=0; i<tempArr.length;i++){
+            if(tempArr[i].id===index){
+                let optionArr = tempArr[i].Options  
+                let tempdic={
+                    optid:optid,
+                    opt:'選項'
+                }
+                tempArr[i].Options=optionArr.concat(tempdic)
+            }
+        }
+
+
+
+        //let optionArr = tempArr[index].Options     
+        //tempArr[index].Options=optionArr.concat('選項'+(Number(optionArr.length)+1))
         console.log(tempArr)
-
-        
-
+        setoptid(o=>o+1)
+    
         setSurveyQDict((surveyQDict)=>{ //為了解決每次都沒辦法get到最新set的value
             setSurveyQDict(tempArr)
-            setrerenderkey(rerenderkey+1)
+            setrerenderkey(r=>r+1)
             return surveyQDict
         })
     }
 
 
-    const handleChangeChoice = evt=>{
+    const handleChangeChoice = evt=>{//OK
         /*
         change option content (get by id)
         */
+       console.log(evt.target.id)
+       console.log(evt.target.value)
 
         let id = evt.target.id
         let idArr = id.split(",")
@@ -123,9 +149,17 @@ const MakeSurvey = () =>{
         let optionArrIndex = Number(idArr[1])
         let tempArr = surveyQDict
 
-        for(let i=0; i<=tempArr.length;i++){
+        for(let i=0; i<tempArr.length;i++){
             if(tempArr[i].id===index){
-                tempArr[i].Options[optionArrIndex] = evt.target.value
+
+                //tempArr[i].Options[optionArrIndex] = evt.target.value
+                for(let j=0;j<tempArr[i].Options.length;j++){
+                    if(tempArr[i].Options[j].optid===optionArrIndex){
+                        tempArr[i].Options[j].opt=evt.target.value
+
+                    }
+                }
+                break;
             }
         }
 
@@ -135,6 +169,7 @@ const MakeSurvey = () =>{
         
         setSurveyQDict((surveyQDict)=>{
             setSurveyQDict(tempArr)
+            console.log(tempArr)
             return surveyQDict
         })
         
@@ -173,10 +208,18 @@ const MakeSurvey = () =>{
             id:qid,
             Question:"",
             Type: '單選題',
-            Options:['選項 1', '選項 2']
+            Options:[{
+                optid:optid,
+                opt:'選項'
+            },
+            {
+                optid:optid+1,
+                opt:'選項'
+            }]
         };
         setSurveyQDict(surveyQDict.concat(msg))
         setqid(q=>q+1)
+        setoptid(o=>o+2)
         //setStoredElements(storedElements=>storedElements.concat(<SingleChoice key={storedElements.length} />)); //將區塊加入list中
     }
 
@@ -188,10 +231,18 @@ const MakeSurvey = () =>{
             id:qid,
             Question:"",
             Type: '複選題',
-            Options:['選項 1', '選項 2']
+            Options:[{
+                optid:optid,
+                opt:'選項'
+            },
+            {
+                optid:optid+1,
+                opt:'選項'
+            }]
         };
         setSurveyQDict(surveyQDict.concat(msg))
         setqid(q=>q+1)
+        setoptid(o=>o+2)
         //setStoredElements(storedElements=>storedElements.concat(<SingleChoice key={storedElements.length} />)); //將區塊加入list中
     }
 
@@ -222,7 +273,7 @@ const MakeSurvey = () =>{
         let index = Number(evt.target.id)
 
         let tempArr = surveyQDict
-        for(let i=0; i<=tempArr.length;i++){
+        for(let i=0; i<tempArr.length;i++){
             if(tempArr[i].id===index){
                 tempArr[i].Question = evt.target.value
             }
@@ -234,8 +285,8 @@ const MakeSurvey = () =>{
             return surveyQDict
         })
 
-
     }
+
     const cancel =()=>{
         
         
@@ -257,7 +308,8 @@ const MakeSurvey = () =>{
             form_title:surveyTitle,
             form_description:SurveyDescription,
             questioncontent:surveyQDict,
-            qid:qid
+            qid:qid,
+            optid:optid
         }
         console.log(form)
         
@@ -327,8 +379,8 @@ const MakeSurvey = () =>{
                                         return (
                                             <>
                                                 <p>
-                                                    <input key={[item.id,i]} id={[item.id, i]} type="text" className='input-columns' placeholder={opt} style={{width: "80%", height:"80px"}} defaultValue={opt} onChange={handleChangeChoice}/>
-                                                    <button id={[item.id, i]} className={'Btn NextBtn'} onClick={deleteOption} disabled={i>1? 0:1}>{t("刪除")}</button>
+                                                    <input key={[item.id, opt.optid]} id={[item.id, opt.optid]} type="text" className='input-columns' placeholder={t(opt.opt)} style={{width: "80%", height:"80px"}} onChange={handleChangeChoice}/>
+                                                    { i>1 ? <button id={[item.id, opt.optid]} className={'Btn NextBtn'} onClick={deleteOption}>{t("刪除")}</button>:null}
                                                 </p>
 
                                             </>
