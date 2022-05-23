@@ -29,7 +29,21 @@ const SurveyManagement = () => {
 
     console.log('execute function in useEffect');
     let abortController = new AbortController();  
-    fetchFormData();
+    const fetchData = async () => {
+      try{
+        if (!(localStorage.getItem('jwt'))){
+          alert("請先登入才能管理問卷喔。")
+          window.location.href="/"
+        }
+        else{
+          await Promise.all([fetchFormData()]);
+        }
+      }
+      catch(e){
+        console.log('error', e)
+      }
+    }
+    fetchData();
     return () => {  
         abortController.abort();  
     }  
