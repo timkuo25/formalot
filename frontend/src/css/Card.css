@@ -97,6 +97,18 @@
     flex-direction: row;
 }
 
+.card-dropdown-option {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-grow: 1;
+    font-weight: 700;
+    cursor: pointer;
+    color:var(--theme-dark-purple);
+}
+
+
 .card-dropdown-options{
     display: none;
     position: absolute;
@@ -106,7 +118,6 @@
     background-color: var(--theme-extra-light);
     box-shadow: var(--shadow);
     transform: translateY(4.5em);
-    z-index:1;
 }
 
 .card-dropdown:hover .user-dropdown-options {
