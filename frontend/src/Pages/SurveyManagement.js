@@ -51,7 +51,7 @@ const SurveyManagement = () => {
   const fetchFormData = async () =>
   {
       const res = await fetch(
-          `http://127.0.0.1:5000/SurveyManagement`,
+          `https://be-sdmg4.herokuapp.com/SurveyManagement`,
           {
               method: "GET",
               headers: {
