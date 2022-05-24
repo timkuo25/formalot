@@ -38,8 +38,9 @@ h2.manage-header {
 .card-container-management {
   display: flex;
   justify-content:left; 
-  overflow: auto;
-  overflow-y: hidden;
+  /* overflow: auto; */
+  /* overflow-y: hidden; */
+  flex-wrap: wrap;
   white-space: pre;
   width: 100%;
 }
