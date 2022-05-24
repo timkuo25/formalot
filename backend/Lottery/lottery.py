@@ -540,10 +540,23 @@ def autolotteryfunc():
 @lottery_bp.route('/AutolotteryOnTime', methods=["GET"])
 @jwt_required()
 def AutolotteryOnTime():
+    action = request.args.get('action')
+    response = {
+        "message": ""
+    }
+    if scheduler.add_job(id='AutoLottery', func=autolotteryfunc, trigger="interval", minutes=1):
+        scheduler.start()
+        response["message"] = "lottery running"
+    if action == "stop":
+        scheduler.shutdown()
+        response["message"] = "Shut down scheduler."
+    elif action == "check":
+        response["message"] = "Job list: "+ str(scheduler.get_jobs())
+
     scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="interval", minutes=1)
     scheduler.start()
 
-    return 'lottery running'
+    return jsonify(response)
     
 
 # # 取得該問卷的題目與題型
