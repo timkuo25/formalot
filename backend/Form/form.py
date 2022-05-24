@@ -479,7 +479,7 @@ def exportCSV():
         data = []  # csv content
         for result in results["userReply"]:
             data.append(result)
-
+            print(data)
         def generate():
             io = StringIO()  # write with stream
             w = csv.writer(io)  # write csv in io
@@ -505,7 +505,7 @@ def exportCSV():
                 temp_ans.append(i["form_answer_time"])
                 temp_ans.append(i["user_student_id"])
                 for j in i["answercontent"]:
-                    temp_ans.append(j["Answer"][0])
+                    temp_ans.append(j["Answer"])
                 w.writerow(temp_ans)
                 yield io.getvalue()  # return streaming content
                 io.seek(0)  # set stream position to beginning
