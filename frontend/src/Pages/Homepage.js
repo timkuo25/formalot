@@ -81,7 +81,7 @@ const Homepage = () => {
     return (
         <>
             <Navbar />
-            {/* {modalOpen && <LoginModal closeModal={setModalOpen} />} */}
+            {modalOpen && <LoginModal closeModal={setModalOpen} />}
             <section className='call-to-action'>
                 {/* <img className='main-image' src={process.env.PUBLIC_URL + 'LandingPage.svg'} alt=''/> */}
                 <div className='description'>
