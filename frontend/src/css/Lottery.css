@@ -12,6 +12,7 @@
     display:flex;
     flex-direction: row;
     margin-bottom: 10%;
+    width:100%;
 }
 
 .lottery-results{
@@ -59,8 +60,7 @@
 
 /* 獎品照片 */
 .prize-image {
-    width: 15em;
-    margin: 1em;
+    width: 100%;
     border-radius: 0.5em;
     border: var(--theme-light-grey) solid 0.1em;
     box-shadow: var(--shadow);
@@ -102,17 +102,16 @@
     flex-direction: column;
     margin-bottom: 1em; 
     align-items: left;
+    width:100%;
 }
 
 .send-email-btn{
-    border: var(--theme-dark-purple) solid 0.15em;
+    border: var(--theme-purple) solid 2px;
     border-radius: 0.2em;
-    background-color: #fbfafc;
+    background-color: var(--theme-pink);
     color: var(--theme-dark-purple);
-    margin: 2em 0em 0em 0em;
-    width: 10em;
+    width: 40%;
     height: 2.25em;
-    font-size: 1.2em;
     font-weight: 700;
     text-align: center;
 }
@@ -132,3 +131,8 @@
     align-items: center;
 }
 
+@media only screen and (max-width: 600px) {
+
+
+
+}
