@@ -6,8 +6,10 @@ import { Footer } from "./Components/Footer";
 import callrefresh from '../refresh.js';
 import React from "react";
 import ReactLoading from "react-loading";
+import { useTranslation } from "react-i18next";
 
 const SurveyManagement = () => {
+  const { t, i18n } = useTranslation();
   const [createdData, setCreatedData] = useState(
     {
       "data":[],
@@ -78,9 +80,9 @@ const SurveyManagement = () => {
       <Navbar />
       <section className="survey-bar">
         <div className="survey-container">
-          <h2 className="manage-header">問卷管理</h2>
+          <h2 className="manage-header">{t("問卷管理")}</h2>
           <div className="survey-card card-shadow">
-            <h3 className="manage-header">&#10004; 已填寫問卷</h3>
+            <h3 className="manage-header">&#10004; {t("已填寫問卷")}</h3>
             <div className="card-container-management ">
               {repliedData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                   repliedData.data.map( (form) => {
@@ -92,7 +94,7 @@ const SurveyManagement = () => {
             </div>
           </div>
           <div className="survey-card card-shadow">
-            <h3 className="manage-header">&#10004; 已發佈問卷</h3>
+            <h3 className="manage-header">&#10004; {t("已發佈問卷")}</h3>
             <div className="card-container-management ">
               {createdData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                 createdData.data.map( (form) => {
@@ -105,8 +107,8 @@ const SurveyManagement = () => {
             </div>
           </div>
           <div className="survey-manage-buttons">
-            <button className="form-button" onClick={() => {window.location.href='/explore'}}> 填答問卷</button>
-            <button className="form-button" onClick={() => {window.location.href='/MakeSurvey'}}> 製作問卷</button>
+            <button className="form-button" onClick={() => {window.location.href='/explore'}}> {t("探索問卷")}</button>
+            <button className="form-button" onClick={() => {window.location.href='/MakeSurvey'}}> {t("製作問卷")}</button>
           </div>
         </div>
       </section>
