@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin: 3% 1%;
+    margin: 3% 5%;
 }
 
 .makeSurvey-container{
@@ -242,7 +242,7 @@
     }
     .makeSurvey-questions{
         width: 98%;
-        margin: 0% 1%;    
+        margin: 0% 0.5%;    
     }
 
     .makeSurvey-info {
