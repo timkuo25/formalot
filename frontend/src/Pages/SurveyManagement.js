@@ -76,11 +76,11 @@ const SurveyManagement = () => {
   return (
     <>
       <Navbar />
-      <section className="survey-bar">
+      <section className="survey-management-page">
         <div className="survey-container">
-          <h2 className="manage-header">問卷管理</h2>
+          <h1 className="manage-header">問卷管理</h1>
           <div className="survey-card card-shadow">
-            <h3 className="manage-header">&#10004; 已填寫問卷</h3>
+            <h2 className="manage-header">&#10004; 已填寫問卷</h2>
             <div className="card-container-management ">
               {repliedData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                   repliedData.data.map( (form) => {
@@ -92,7 +92,7 @@ const SurveyManagement = () => {
             </div>
           </div>
           <div className="survey-card card-shadow">
-            <h3 className="manage-header">&#10004; 已發佈問卷</h3>
+            <h2 className="manage-header">&#10004; 已發佈問卷</h2>
             <div className="card-container-management ">
               {createdData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                 createdData.data.map( (form) => {
