@@ -21,17 +21,25 @@ const Lottery = (props) => {
 
     //For candidate slider
     const [activeItemIndex, setActiveItemIndex] = useState(0);
-    console.log('----- invoke function component -----');
     const [candidateList, setCandidateList] = useState([]);
     const [showSendEmail, setShowSendEmail] = useState(false);
     const [hasSentEmail, setHasSentEmail] = useState(false);
 
     // 使用 useEffect Hook
     useEffect(() => {
-        console.log('execute function in useEffect');
+        console.log('Lottery.js: execute function in useEffect');
         let abortController = new AbortController();  
-        fetchCandidateList();
-        fetchHasSentEmail();
+        const fetchData = async () => {
+            try {
+                await Promise.all([
+                    fetchCandidateList(),
+                    fetchHasSentEmail(),
+                ])
+            } catch(err){
+                console.log('Lottery Page Fetch Error', err)
+            }
+        }
+        fetchData();
         return () => {  
             abortController.abort();  
         }  
@@ -50,51 +58,38 @@ const Lottery = (props) => {
             }
         );
         if(response.status === 401){
-            callrefresh();
+            callrefresh("refresh");
         }
         else{
             const resJson = await response.json();
             setHasSentEmail(resJson.data['send_email']);
-            console.log("HasSentEmail?", resJson.data['send_email']);
+            console.log("Has Sent Email?", resJson);
         }
     }
-
-    // candidateList
-    // {
-    //     "data": {
-    //         "candidates": [
-    //             {
-    //                 "user_pic_url": "https://i.imgur.com/JSAGBAs.jpg",
-    //                 "user_student_id": "b07905244"
-    //             },
-    //         ]
-    //     },
-    //     "message": "Get candidates successfully!!!",
-    //     "status": "success"
-    // }
-    const fetchCandidateList = () =>
+    const fetchCandidateList = async () =>
     {
-        fetch(
+        const response = await fetch(
             `https://be-sdmg4.herokuapp.com/GetCandidate?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  
                 }
             }
-        )
-        .then(response => response.json())
-        .then(response => {
-            console.log('candidate_data',response.data['candidates'])
-            setCandidateList(response.data['candidates']);
-        })
-        .catch(error => console.log(error))  
-    };
-
+        );
+        if(response.status === 401){
+            callrefresh("refresh");
+        }
+        else{
+            const resJson = await response.json();
+            setCandidateList(resJson.data['candidates']);
+            console.log('Candidate Data', resJson)
+        }
+    }
   
     function SeeStatus(){
-        if (haveGifts!==0){
+        if (haveGifts!==false){
             if(lotteryResults.status === "Open"){
                 return(<h3>問卷還沒到抽獎日期！</h3>)
             }
@@ -110,17 +105,12 @@ const Lottery = (props) => {
                 return(lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>))
             }
         }
-        // return lotteryResults.status === "Open" && haveGifts ? <h3>問卷還沒到抽獎日期！</h3>
-        // : lotteryResults.status === "Open" && haveGifts === 0 ? <></>
-        // : lotteryResults.status === "Delete" ? <h3> 問卷已被製作者刪除。 </h3>
-        // : lotteryResults.status === "WaitForDraw" ? <h3>問卷已到抽獎日，等待抽獎中，請稍候。</h3> 
-        // : lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>);
     }
           
     return (
         <>
             <section className='lottery-results card-shadow'>
-                {console.log("haveGifts and isOwner?", haveGifts, isOwner)}
+                {console.log("HaveGifts and isOwner?", haveGifts, isOwner)}
                 <h1> {props.form_title} </h1>
                 {haveGifts===true && isOwner===true && lotteryResults.status==='Closed' && <button className="send-email-btn Btn " onClick={() => setShowSendEmail(true)}>寄出中獎通知</button>}
                 <div className='lottery-card card-shadow'>
@@ -130,7 +120,6 @@ const Lottery = (props) => {
                 </div>
                 {/* 禮物與中獎人 */}
                 <div >
-                    {console.log("isLoading", lotteryResults.isLoading)}
                     {lotteryResults.isLoading ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
                         SeeStatus()
                     }
