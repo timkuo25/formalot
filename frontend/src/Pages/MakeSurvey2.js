@@ -577,7 +577,7 @@ const deleteGift =evt=>{
                     <button className='SurveyOptionBtn card-shadow' onClick={back}>
                       {t("製作問卷")}
                     </button>
-                    <button className='makeSurveypageBtn card-shadow' >
+                    <button className='SurveyOptionBtn card-shadow' >
                       {t("填寫資訊")}
                     </button>
                     <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
