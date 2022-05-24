@@ -14,34 +14,35 @@ import ReactLoading from "react-loading";
 import Loading from 'react-loading';
 import { Avator } from './Components/Avator';
 import { LoginModal } from './Components/LoginModal';
+import { useTranslation } from "react-i18next";
+
 
 
 
 const Form = () => {
     const props = useParams();
     const FORM_ID = props.form_id; // 傳入想要看的 formID
-    
-    console.log('----- invoke function component -----');
     const [gifts, setGifts] = useState([]);
     const [haveGifts, setHaveGifts] = useState(true);
     const [formDetail, setFormDetail] = useState([]);
+    const [formStatus, setFormStatus] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
     const [tags, setTags] = useState([])
     const [showTag, setShowTag] = useState('填寫問卷')
     const [isLoading, setIsLoading] = useState(true);
-    const [formStatus, setFormStatus] = useState([]);
     const [lotteryResults, setLotteryResults] = useState({
         "status":"Open",
         "results":[],
         "isLoading":true,  // 控制是否還在 loading
     });
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const { t, i18n } = useTranslation();
 
 
     // 使用 useEffect Hook
     useEffect(() => {
         let abortController = new AbortController();  
-        console.log('execute function in useEffect');
+        console.log('Form.js: execute function in useEffect');
 
         // 等問卷資料載入完畢再進入頁面
         const fetchData = async () => {
@@ -56,11 +57,11 @@ const Form = () => {
                 fetchLotteryResults();
             }
             catch(error){
-                console.log('fetchdata', error)
+                console.log('Form Page Fetch Error', error)
             }
             if (!(localStorage.getItem('jwt'))){
                 await delay(5000);
-                alert("要登入才能填寫問卷喔！");
+                alert("請先進行登入");
                 setShowLoginModal(true);
                 // window.location.href="/"
             }
@@ -96,11 +97,11 @@ const Form = () => {
             const resJson = await response.json();
             console.log("Form Status?", resJson);
             setFormStatus(resJson.status)
-            if(resJson.status === 'Open' && tags.length <= 3){
+            if(resJson.status === 'Open' && tags.length+2 <= 3){
                 setTags((prevState) => ([...prevState, '填寫問卷','抽獎結果']))
                 setShowTag('填寫問卷')
             }
-            else if (resJson.status !== 'Open' && tags.length <= 3){
+            else if (resJson.status !== 'Open' && tags.length+1 <= 3){
                 setTags((prevState) => ([...prevState, '抽獎結果']))
                 setShowTag('抽獎結果')
             }
@@ -120,124 +121,111 @@ const Form = () => {
                 }
             }
         );
-        console.log("token?", response.status);
         if(response.status === 401){
             callrefresh();
         }
         else{
             const resJson = await response.json();
-            console.log("is owner?", resJson);
+            console.log("Is owner?", resJson);
             setIsOwner(resJson.form_owner_status)
-            if(resJson.form_owner_status === true && tags.length <= 3){
+
+            if(resJson.form_owner_status === true && tags.length+1 <= 3){
                 setTags((prevState) => ([...prevState, '填答結果']))
             }
         }
     };
     
     const fetchCurrentGifts = async () => {
-        try {
-            const response = await fetch(
-                `https://be-sdmg4.herokuapp.com/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
-                    }
-                });
-            if(response.status === 401){
-                callrefresh();
-            }
-            else{
-                const responseJson = await response.json();
-                setGifts(responseJson.data);
-                console.log('giftsdata',responseJson.data);
-                if(responseJson.data.length===0){
-                    setHaveGifts(false);
+        const response = await fetch(
+            `https://be-sdmg4.herokuapp.com/GetGift?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 應該要拿掉
                 }
-            }
+        });
+        if(response.status === 401){
+            callrefresh();
         }
-        catch (error) {
-            console.log(error);
+        else{
+            const responseJson = await response.json();
+            setGifts(responseJson.data);
+            console.log('Giftsdata',responseJson.data);
+            if(responseJson.data.length===0){
+                setHaveGifts(false);
+            }
         }
     };
 
     const fetchFormDetail = async () => {
-        try{
-            const response = await fetch(
-                `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
-                    }
+        const response = await fetch(
+            `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
                 }
-            )
-            if(response.status === 401){
-                callrefresh();
             }
-            else{
-                const resJson = await response.json();
-                console.log('Form Detail',resJson);
-                setFormDetail({
-                    form_title : resJson.form_title,
-                    form_owner_id : resJson.user_student_id,
-                    form_owner_pic_url : resJson.user_pic_url,
-                    form_create_date : new Intl.DateTimeFormat('zh-TW', {
-                        year: 'numeric', 
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                    }).format(new Date(resJson.form_create_date)),
-                    form_end_date : new Intl.DateTimeFormat('zh-TW', {
-                        year: 'numeric', 
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                    }).format(new Date(resJson.form_end_date)),
-                    form_draw_date : new Intl.DateTimeFormat('zh-TW', {
-                        year: 'numeric', 
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                    }).format(new Date(resJson.form_draw_date))
-                })
-            }
+        )
+        if(response.status === 401){
+            callrefresh();
         }
-        catch(error){console.log('fetchFormDetail',error)}  
+        else{
+            const resJson = await response.json();
+            console.log('Form Detail',resJson);
+            setFormDetail({
+                form_title : resJson.form_title,
+                form_owner_id : resJson.user_student_id,
+                form_owner_pic_url : resJson.user_pic_url,
+                form_create_date : new Intl.DateTimeFormat('zh-TW', {
+                    year: 'numeric', 
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(resJson.form_create_date)),
+                form_end_date : new Intl.DateTimeFormat('zh-TW', {
+                    year: 'numeric', 
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(resJson.form_end_date)),
+                form_draw_date : new Intl.DateTimeFormat('zh-TW', {
+                    year: 'numeric', 
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(new Date(resJson.form_draw_date))
+            })
+        }
     };
 
     const fetchLotteryResults = async () =>
     {
-        try{
-            const response = await fetch(
-                `https://be-sdmg4.herokuapp.com/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
-                    }
+        const response = await fetch(
+            `https://be-sdmg4.herokuapp.com/GetLotteryResults?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
                 }
-            )
-            if (response.status===401){
-                callrefresh();
-            } else{
-                const resJson = await response.json();
-                console.log('lottery results22',resJson);     
-                setLotteryResults({
-                    "status": resJson['status'],
-                    "results": resJson.data['results'],
-                    "isLoading": false,
-                })   
             }
-        }
-        catch(err){
-            console.log('fetchLotteryResults', err)
+        )
+        if (response.status===401){
+            callrefresh();
+        } else{
+            const resJson = await response.json();
+            console.log('Lottery Results',resJson);     
+            setLotteryResults({
+                "status": resJson['status'],
+                "results": resJson.data['results'],
+                "isLoading": false,
+            })   
         }
     };
 
@@ -249,74 +237,12 @@ const Form = () => {
             return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title} isOwner={isOwner}  haveGifts={haveGifts}/> 
         }
         else if (showTag === "填答結果"){
-            return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title}/> 
+            return <SurveyStatistics form_id = {FORM_ID} form_title={formDetail.form_title} lotteryResults={lotteryResults}/> 
         }
         else{
             return <Lottery form_id = {FORM_ID} lr = {lotteryResults} form_title={formDetail.form_title} haveGifts={haveGifts}/> 
         }
     };
-
-    // function tagList(tags)
-    // {
-    //         console.log('set taglist', formStatus, isOwner)
-    //         if(isOwner === true)
-    //         {
-    //             if (formStatus === 'Closed' || formStatus === 'WaitForDraw'){
-    //                 console.log('condition1')
-    //                 tags = (['抽獎結果','填答結果'])
-    //                 // setShowTag('抽獎結果')
-    //             }
-    //             else if (formStatus === 'Delete' || formStatus === 'NotExist'){
-    //                 console.log('condition6')
-    //                 tags = (['抽獎結果'])
-    //                 // setShowTag('抽獎結果')
-    //             }
-    //             else{
-    //                 console.log('condition2')
-    //                 tags = (['填寫問卷', '抽獎結果', '填答結果'])
-    //                 // setShowTag('填寫問卷')
-    //             }
-    //         }
-    //         else if(isOwner === false)
-    //         {
-    //             if (formStatus === 'Closed' || formStatus === 'WaitForDraw'){
-    //                 console.log('condition3')
-    //                 tags = (['抽獎結果'])
-    //                 // setShowTag('抽獎結果')
-    //             }
-    //             else if (formStatus === 'Delete' || formStatus === 'NotExist'){
-    //                 console.log('condition6')
-    //                 tags = (['抽獎結果'])
-    //                 // setShowTag('抽獎結果')
-    //             }
-    //             else{
-    //                 console.log('condition4')
-    //                 tags = (['填寫問卷', '抽獎結果'])
-    //                 // setShowTag('填寫問卷')
-    //             }
-    //         }
-    //         else {
-    //             console.log('condition5')
-    //             tags= (['填寫問卷', '抽獎結果'])
-    //             // setShowTag('填寫問卷')
-    //         }
-    //         return(
-    //             <div className='page-navbar'>
-    //             {tags.map(item => {
-    //                 return (
-    //                     <div
-    //                         className='page-navbar-item card-shadow'
-    //                         key={item}
-    //                         style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
-    //                         onClick={e => {
-    //                             setShowTag(item);
-    //                         }}
-    //                     >{item}</div>
-    //                 )
-    //             })}
-    //             </div>
-    //         )
-    // };
 
     function show(){
         if(formStatus ==="NotExist"){
@@ -342,8 +268,6 @@ const Form = () => {
         else {
             return(
                 <>
-                {/* <TagList formStatus={formStatus} isOwner={isOwner} setShowTag={setShowTag} showTag={showTag}/> */}
-                {/* {tagList()} */}
                 <div className='page-navbar'>
                 {tags.map(item => {
                     return (
@@ -395,7 +319,7 @@ const Form = () => {
         <Navbar/>
         { isLoading ? <> <section className='loading-container'> <ReactLoading type="spinningBubbles" color="#432a58" /> <h3> Loading </h3></section> </> :
             <>
-            {console.log('render')}
+            {console.log('render form page')}
             {/* 選擇要填寫問卷、查看抽獎、查看填寫結果 */}
             <section className='lottery-page-container'>
                 {showLoginModal && <LoginModal closeModal={setShowLoginModal}/>}
