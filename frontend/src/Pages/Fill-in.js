@@ -9,7 +9,6 @@ const Fillin = (props) => {
 
 
     const FORM_ID = props.form_id; // 傳入想要看的 formID
-    console.log('----- invoke function component -----');
     const [formContent, setFormContent] = useState([]);
     const [hasAnsweredBefore, sethasAnsweredBefore] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -19,12 +18,14 @@ const Fillin = (props) => {
 
     // 使用 useEffect Hook
     useEffect(() => {
+        console.log('Fill-in.js: execute function in useEffect');
         let abortController = new AbortController();  
         const fetchData = async () => {
             try{
                 await Promise.all([
                     formRespondCheck(),
-                    fetchQuestions()]);
+                    fetchQuestions()
+                ]);
                 setIsLoading(false);
             }
             catch(err){
@@ -38,51 +39,47 @@ const Fillin = (props) => {
     }, []);  // dependency 
 
     const formRespondCheck = async () => {
-        try{
-            const response = await fetch(
-                `https://be-sdmg4.herokuapp.com/FormRespondentCheck?form_id=${encodeURIComponent(FORM_ID)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
-                }
-            });
-            console.log("token?", response.status);
-            if(response.status === 401){
-                callrefresh();
+        const response = await fetch(
+            `https://be-sdmg4.herokuapp.com/FormRespondentCheck?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
             }
-            else{
-                const resJson = await response.json();
-                console.log("form response check ", resJson);
-                sethasAnsweredBefore(resJson["has_responded"]);
-            }
-        } catch(e) {
-             console.log("form response check error", e)
+        });
+        if(response.status === 401){
+            callrefresh("refresh");
         }
-    }
+        else{
+            const resJson = await response.json();
+            console.log("Has Answered Before", resJson);
+            sethasAnsweredBefore(resJson["has_responded"]);
+        }
+    };
 
     const fetchQuestions = async () => {
-        try{
-            const response = await fetch(
-                `https://be-sdmg4.herokuapp.com/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
-                {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
-                }});
+        const response = await fetch(
+            `https://be-sdmg4.herokuapp.com/GetUserForm?form_id=${encodeURIComponent(FORM_ID)}`,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
+            }});
+        if(response.status === 401){
+            callrefresh("refresh");
+        } 
+        else{
             const resJson = await response.json();
-            console.log("questions", resJson[0]['questioncontent']);
+            console.log("Form Questions", resJson[0]['questioncontent']);
             setFormContent({
                 description: resJson[0]['form_description'],
                 picture: resJson[0]['form_pic_url'],
                 questions: resJson[0]['questioncontent']
             })
-        } catch(e) {
-             console.log("form response check error", e)
-        }
-    }
+        }           
+    };
 
     //決定要顯示哪些問題
     
@@ -173,8 +170,7 @@ const Fillin = (props) => {
             }
         }
         if(continued === 1){
-            console.log("tempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
-
+            console.log("TempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
             const result = await fetch("https://be-sdmg4.herokuapp.com/FillForm", {
                 method: "POST",
                 body: JSON.stringify({
@@ -185,13 +181,16 @@ const Fillin = (props) => {
                     Authorization: `Bearer ${localStorage.getItem('jwt')}`
                 }
             });
-            let resJson = await result.json();
-            console.log("submit message", resJson.message);
-            console.log("submit status", resJson.status);
-            alert(resJson.message);
-            window.location.reload();
+            if(result.status === 401){
+                callrefresh();
+            }
+            else{
+                let resJson = await result.json();
+                console.log("submit status", resJson.status);
+                alert(resJson.message);
+                window.location.reload();
+            }
         }
-
     }
 
 
@@ -204,20 +203,23 @@ const Fillin = (props) => {
             {isLoading ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
             <>
                 <section className='form-description'> {formContent.description} </section>
-                    {hasAnsweredBefore?  <><br /><section className='form-description alert'> 你已經填答過此問卷摟！ </section></>: ''}
+                    {hasAnsweredBefore  &&  <><br /><section className='form-description alert'> 你已經填答過此問卷摟！ </section></>}
+                    {!(localStorage.getItem('jwt'))  &&  <><br /><section className='form-description alert'> 先登入才能填寫問卷喔。 </section></>}
                     {/* 所有問題會顯示在這邊 */}
                     <div className='questions'>
-                        {/* {console.log('questions',formContent.questions)} */}
                         <form onSubmit={handleSubmit} >
                         {formContent.questions && formContent.questions.map(question => {
                             return (
                                 <div key={question.Question}>
                                     <h3> {question.Question} </h3>
-                                    {hasAnsweredBefore? showQuestion_disabled(question) :  showQuestion(question)}
+                                    {hasAnsweredBefore || !(localStorage.getItem('jwt')) ? showQuestion_disabled(question) :  showQuestion(question)}
                                 </div>
                         )})}
                         <br/>
-                        <input type="submit" className='general-button Btn ' value="送出表單" />
+                        {hasAnsweredBefore || !(localStorage.getItem('jwt')) ? 
+                         <input type="submit" className='general-button Btn' value="送出表單" disabled/>
+                            :  <input type="submit" className='general-button Btn' value="送出表單" />}
+
                         </form>
                     </div>
             </>
