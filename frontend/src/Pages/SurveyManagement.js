@@ -79,7 +79,7 @@ const SurveyManagement = () => {
   function showPage(){
     if(showTag === '已填寫問卷'){
       return(
-        <div className="survey-card card-shadow">
+        <div className="survey-card">
         {/* <h2 className="manage-header">&#10004; 已填寫問卷</h2> */}
         <div className="card-container-management ">
           {repliedData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
@@ -95,7 +95,7 @@ const SurveyManagement = () => {
     }
     else if(showTag === '已發布問卷'){
       return(
-        <div className="survey-card card-shadow">
+        <div className="survey-card">
         {/* <h2 className="manage-header">&#10004; 已發佈問卷</h2> */}
         <div className="card-container-management ">
           {createdData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
