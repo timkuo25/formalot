@@ -13,7 +13,7 @@ import csv
 
 
 form_bp = Blueprint('form', __name__)
-scheduler = APScheduler()
+form_scheduler = APScheduler()
 
 
 # DAO
@@ -273,7 +273,7 @@ def updateWaitForDraw():
         SET timezone to 'Asia/Taipei';
         SELECT form_id
         FROM form
-        WHERE form_run_state = 'Open' AND form_draw_date IS NOT NULL AND form_end_date < CURRENT_TIMESTAMP;
+        WHERE (form_run_state='Open' AND form_draw_date IS NOT NULL) AND form_end_date < CURRENT_TIMESTAMP;
         '''
         cursor_check.execute(query_check)
         results = cursor_check.fetchall()
@@ -554,16 +554,19 @@ def getUserForm():
 # Check if form end date has expired and set form run state to WaitForDraw
 @form_bp.route('/AutoWaitForDraw', methods=["GET"])
 def autoWaitForDraw():
+    action = request.args.get('action')
     response = {
-        "status": "",
         "message": ""
     }
-    if scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="interval", minutes=1):
-        scheduler.start()
-        response["status"] = "success"
-        response["message"] = "Auto update WaitForDraw is running."
+    if action== "start":
+        if form_scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="interval", minutes=1):
+            form_scheduler.start()
+            response["message"] = "Auto update WaitForDraw is running."
+    elif action == "stop":
+        form_scheduler.shutdown()
+        response["message"] = "Shut down scheduler."
+    elif action == "check":
+        response["message"] = "Job list: "+ str(form_scheduler.get_jobs())
     else:
-        response["status"] = "fail"
-        response["message"] = "Scheduler error."
-
+        response["message"] = "Please enter action (start/stop/check)."
     return jsonify(response)
