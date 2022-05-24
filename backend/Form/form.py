@@ -267,28 +267,31 @@ def updateWaitForDraw():
     db = get_db()
     cursor_check = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cursor_set = db.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
+    print("Checking end forms...")
     try:
         query_check = '''
         SET timezone to 'Asia/Taipei';
         SELECT form_id
         FROM form
-        WHERE form_run_state = 'Open' AND form_draw_date IS NOT NULL AND form_end_date < CURRENT_TIMESTAMP;
+        WHERE form_run_state = 'Open' AND form_draw_date IS NOT NULL AND form_end_date + interval '8 hours' < CURRENT_TIMESTAMP;
         '''
         cursor_check.execute(query_check)
         results = cursor_check.fetchall()
+        
+        if results == []:
+            print("There is no end form.")
+        else:
+            query_set = '''
+            UPDATE Form
+            SET form_run_state = 'WaitForDraw'
+            WHERE form_id = (%s)
+            '''
 
-        query_set = '''
-        UPDATE Form
-        SET form_run_state = 'WaitForDraw'
-        WHERE form_id = (%s)
-        '''
-
-        for i in results:
-            form_id = i['form_id']
-            cursor_set.execute(query_set, [form_id])
-            print('Form ' + str(form_id) +
-                  ' is set to WaitForDraw.')
+            for i in results:
+                form_id = i['form_id']
+                cursor_set.execute(query_set, [form_id])
+                print('Form ' + str(form_id) +
+                    ' is set to WaitForDraw.')
 
         db.commit()
         return True
@@ -558,7 +561,7 @@ def autoWaitForDraw():
         "status": "",
         "message": ""
     }
-    if scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="interval", minutes=1):
+    if scheduler.add_job(id='AutoWaitForDraw', func=updateWaitForDraw, trigger="cron", second=0):
         scheduler.start()
         response["status"] = "success"
         response["message"] = "Auto update WaitForDraw is running."

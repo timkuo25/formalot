@@ -519,7 +519,7 @@ def autolotteryfunc():
     SET timezone to 'Asia/Taipei';
     SELECT form_id
     FROM form
-    WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP;
+    WHERE form_run_state = 'WaitForDraw' AND form_draw_date + interval '8 hours' < CURRENT_TIMESTAMP;
     '''
     cursor.execute(query)
     result = [dict((cursor.description[i][0], value)
@@ -540,7 +540,7 @@ def autolotteryfunc():
 @lottery_bp.route('/AutolotteryOnTime', methods=["GET"])
 @jwt_required()
 def AutolotteryOnTime():
-    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="interval", minutes=1)
+    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", second=0)
     scheduler.start()
 
     return 'lottery running'
