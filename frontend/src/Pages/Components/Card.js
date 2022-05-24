@@ -9,7 +9,7 @@ const Card = ({ info, type }) => {
     if (!info) return <div className="empty-card"></div>;
     let prize, num_prize, image_path, title, due_time, lottery_time;
 
-    prize = '抽獎名額';
+    prize = '抽獎名額 ';
     num_prize = info.num_gift;
     image_path = info.form_pic_url || (process.env.PUBLIC_URL + 'form_preview_default.png');
     title = info.form_title.length > 30 ? info.form_title.substring(0, 30) + '...' : info.form_title;
@@ -80,43 +80,43 @@ const Card = ({ info, type }) => {
         if(type==='replied'){
             if(info.form_run_state === 'Closed'){
                 if(info.draw_result === null){
-                    return(<div className="prize-tag black">{'未中獎'}</div>)
+                    return(<div className="prize-tag black">{t('未中獎')}</div>)
                 }
                 else if(info.form_run_state !== null){
-                    return(<div className="prize-tag pink">{'已中獎'}</div>)
+                    return(<div className="prize-tag pink">{t('已中獎')}</div>)
                 }            
             }
             else if(info.form_run_state === 'Open'){
-                return(<div className="prize-tag">{'未開獎'}</div>)
+                return(<div className="prize-tag">{t('未開獎')}</div>)
             }
             else if(info.form_run_state === 'Delete'){
-                return(<div className="prize-tag black">{'已刪除'}</div>)
+                return(<div className="prize-tag black">{t('已刪除')}</div>)
             }
             else {
-                return(<div className="prize-tag">{'未知狀態'}</div>)
+                return(<div className="prize-tag">{t('未知狀態')}</div>)
             }
         }
         else if (type==='created'){
             if(info.form_run_state === 'Open'&& info.form_draw_date !== null){
-                return(<div className="prize-tag">{'未開獎'}</div>)
+                return(<div className="prize-tag">{t('未開獎')}</div>)
             }
             else if(info.form_run_state === 'Open'&& info.form_draw_date === null){
-                return(<div className="prize-tag">{'無獎品'}</div>)
+                return(<div className="prize-tag">{t('無獎品')}</div>)
             }
             else if(info.form_run_state === 'Closed' && info.form_draw_date !== null){
-                return(<div className="prize-tag pink">{'已開獎'}</div>)
+                return(<div className="prize-tag pink">{t('已開獎')}</div>)
             }
             else if(info.form_run_state === 'Closed' && info.form_draw_date === null){
-                return(<div className="prize-tag black">{'已結束'}</div>)
+                return(<div className="prize-tag black">{t('已結束')}</div>)
             }
             else if(info.form_run_state === 'WaitForDraw'){
-                return(<div className="prize-tag pink">{'待開獎'}</div>)
+                return(<div className="prize-tag pink">{t('待開獎')}</div>)
             }
             else if(info.form_run_state === 'Delete'){
-                return(<div className="prize-tag black">{'已刪除'}</div>)
+                return(<div className="prize-tag black">{t('已刪除')}</div>)
             }
             else {
-                return(<div className="prize-tag">{'未知狀態'}</div>)
+                return(<div className="prize-tag">{t('未知狀態')}</div>)
             }
         }
     }
@@ -124,7 +124,7 @@ const Card = ({ info, type }) => {
     return (
         <div className="card card-shadow" onClick={clickForm}>
             <div className="prize-tag-container">
-                {type==='home'? <><div className="prize-tag">{`${prize} ${num_prize} 名`}</div></> : <></>}
+                {type==='home'? <><div className="prize-tag">{t(prize)}{` ${num_prize}`} {t(" 名")}</div></> : <></>}
                 {showStatus()}
                 {type==='created' && 
                     <div className="nav-option card-dropdown" >
@@ -139,7 +139,7 @@ const Card = ({ info, type }) => {
             <div className='card-form-title'> <h3>{title}</h3> </div>
             <p>
                 {t("截止時間")}:<br/>{due_time} <br/>
-                {t("抽獎時間")}:<br/>{lottery_time}
+                {t("抽獎時間")}:<br/>{t(lottery_time)}
             </p>
             <div 
                 className='share-q'

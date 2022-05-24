@@ -519,7 +519,7 @@ def autolotteryfunc():
     SET timezone to 'Asia/Taipei';
     SELECT form_id
     FROM form
-    WHERE form_run_state = 'WaitForDraw' AND form_draw_date < CURRENT_TIMESTAMP;
+    WHERE form_run_state = 'WaitForDraw' AND form_draw_date + interval '8 hours' < CURRENT_TIMESTAMP;
     '''
     cursor.execute(query)
     result = [dict((cursor.description[i][0], value)
@@ -540,23 +540,10 @@ def autolotteryfunc():
 @lottery_bp.route('/AutolotteryOnTime', methods=["GET"])
 @jwt_required()
 def AutolotteryOnTime():
-    action = request.args.get('action')
-    response = {
-        "message": ""
-    }
-    if scheduler.add_job(id='AutoLottery', func=autolotteryfunc, trigger="interval", minutes=1):
-        scheduler.start()
-        response["message"] = "lottery running"
-    if action == "stop":
-        scheduler.shutdown()
-        response["message"] = "Shut down scheduler."
-    elif action == "check":
-        response["message"] = "Job list: "+ str(scheduler.get_jobs())
-
-    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="interval", minutes=1)
+    scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", second=0)
     scheduler.start()
 
-    return jsonify(response)
+    return "lottery running"
     
 
 # # 取得該問卷的題目與題型

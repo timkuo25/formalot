@@ -6,8 +6,10 @@ import { Footer } from "./Components/Footer";
 import callrefresh from '../refresh.js';
 import React from "react";
 import ReactLoading from "react-loading";
+import { useTranslation } from "react-i18next";
 
 const SurveyManagement = () => {
+  const { t, i18n } = useTranslation();
   const [createdData, setCreatedData] = useState(
     {
       "data":[],
@@ -135,8 +137,8 @@ const SurveyManagement = () => {
 
           {showPage()}
           <div className="survey-manage-buttons">
-            <button className="form-button" onClick={() => {window.location.href='/explore'}}> 填答問卷</button>
-            <button className="form-button" onClick={() => {window.location.href='/MakeSurvey'}}> 製作問卷</button>
+            <button className="form-button" onClick={() => {window.location.href='/explore'}}> {t("探索問卷")}</button>
+            <button className="form-button" onClick={() => {window.location.href='/MakeSurvey'}}> {t("製作問卷")}</button>
           </div>
         </div>
       </section>

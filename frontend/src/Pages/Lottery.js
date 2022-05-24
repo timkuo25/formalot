@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import {useParams} from 'react-router-dom';
 import { SendEmail } from './SendEmail';
 import callrefresh from '../refresh.js';
+import { useTranslation } from "react-i18next";
 
 
 // 傳入想要看的 formID
@@ -24,6 +25,7 @@ const Lottery = (props) => {
     const [candidateList, setCandidateList] = useState([]);
     const [showSendEmail, setShowSendEmail] = useState(false);
     const [hasSentEmail, setHasSentEmail] = useState(false);
+    const { t, i18n } = useTranslation();
 
     // 使用 useEffect Hook
     useEffect(() => {
@@ -91,15 +93,15 @@ const Lottery = (props) => {
     function SeeStatus(){
         if (haveGifts!==false){
             if(lotteryResults.status === "Open"){
-                return(<h3>問卷還沒到抽獎日期！</h3>)
+                return(<h3>{t("問卷還沒到抽獎日期")}!</h3>)
             }
             else if(lotteryResults.status === "Delete")
             {
-                return(<h3> 問卷已被製作者刪除。 </h3>)
+                return(<h3> {t("此問卷已被作者刪除")}。 </h3>)
             }
             else if(lotteryResults.status === "WaitForDraw")
             {
-                return(<h3>問卷已到抽獎日，等待抽獎中，請稍候。</h3> )
+                return(<h3>{t("問卷已到抽獎日，等待抽獎中，請稍候")}。</h3> )
             }
             else {
                 return(lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>))
@@ -112,9 +114,9 @@ const Lottery = (props) => {
             <section className='lottery-results card-shadow'>
                 {console.log("HaveGifts and isOwner?", haveGifts, isOwner)}
                 <h1> {props.form_title} </h1>
-                {haveGifts===true && isOwner===true && lotteryResults.status==='Closed' && <button className="send-email-btn Btn " onClick={() => setShowSendEmail(true)}>寄出中獎通知</button>}
+                {haveGifts===true && isOwner===true && lotteryResults.status==='Closed' && <button className="send-email-btn Btn " onClick={() => setShowSendEmail(true)}>{t("寄出中獎通知")}</button>}
                 <div className='lottery-card card-shadow'>
-                    <h2> 可抽獎人名單：{candidateList.length} 人 </h2>
+                    <h2> {t("可抽獎人名單")}：{candidateList.length} {t("人")} </h2>
                     <ItemSlider candidateList={candidateList} 
                     activeItemIndex={activeItemIndex} setActiveItemIndex={setActiveItemIndex}/>
                 </div>

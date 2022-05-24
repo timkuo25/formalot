@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import { TagCloud } from 'react-tagcloud'
 import callrefresh from '../refresh.js';
+import { useTranslation } from "react-i18next";
 
 
 const SurveyStatistics = (props) => {
@@ -10,6 +11,7 @@ const SurveyStatistics = (props) => {
     let [csvResults, setcsvResults] = useState([]);
     let chart_title = ['Item', 'Numbers']
     let chart_item = ['Item', 'Numbers']
+    const { t, i18n } = useTranslation();
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
 
@@ -132,7 +134,7 @@ const SurveyStatistics = (props) => {
                             // csvResults
                             // )}`}
                             download={props.form_title + `.csv`}
-                        >{`下載檔案`}</a>
+                        >{t("下載檔案")}</a>
 
   
             {answerResults.map(result => {
@@ -140,7 +142,7 @@ const SurveyStatistics = (props) => {
                     return (
                         <div className='lottery-card card-shadow' key={result.question}>
                             <h2> {result.question}   </h2>
-                            <div className="prize-tag" >{`${result.question_type}`}</div>
+                            <div className="prize-tag" >{t(result.question_type)}</div>
                             <div className="stat_table">    
                                 <div className ="stat_scroll">
                                     {result['replies'].map( (replies) => {
@@ -175,7 +177,7 @@ const SurveyStatistics = (props) => {
                     <div className='lottery-card card-shadow' key={result.question}>
                         
                         <h2> {result.question}   </h2>
-                        <div className="prize-tag" >{`${result.question_type}`}</div>
+                        <div className="prize-tag" >{t(result.question_type)}</div>
 
 
 
