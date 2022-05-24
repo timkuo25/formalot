@@ -158,5 +158,12 @@
     "無獎品":"No lot",
     "已開獎":"Has drawn",
     "已結束":"Ended",
-    "待開獎":"Wait draw"
+    "待開獎":"Wait draw",
+    "此類別沒有問卷喔，趕快去製作一個吧！":"There is no form for this category, so go make one now!",
+    "3C類":"3C",
+    "無抽獎活動":"No lottery",
+    "分類方式":"Classification",
+    "以領域搜尋":"Search by field",
+    "以獎品搜尋":"Search by gift",
+    "類別":"Category"
 }
