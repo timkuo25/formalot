@@ -339,17 +339,19 @@ const MakeSurvey = () =>{
         <Navbar/>
         {/*react dnd*/}
         <section className='page-container' key={rerenderkey}>
+            <div className='breadcrumb-container'>
                 <div className='breadcrumb'>
                     <button className='SurveyOptionBtn card-shadow' onClick={cancel}>
                         {t("取消")}
                     </button>
-                    <button className='makeSurveypageBtn card-shadow'>
+                    <button className='SurveyOptionBtn card-shadow btn-clicked'>
                         {t("製作問卷")}
                     </button>
                     <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
                         {t("填寫資訊")}
                     </button>
                 </div>
+            </div>
             <section className='makeSurvey-container'>
         
                 <section className='makeSurvey-questions card-shadow'>
@@ -401,9 +403,9 @@ const MakeSurvey = () =>{
     
                 </section>  
                 
-                <section className='makeSurvey-qustion-types'>
+                {/* <section className='makeSurvey-qustion-types'> */}
 
-                    <div className='makeSurvey-card card-shadow sticky-div'>
+                    <div className='makeSurvey-questiontype-box card-shadow'>
                         <p>
                             <button className='Btn SurveyDescriptionBtn card-shadow' onClick = {renderShortAns}>
                             {t("簡答題")}
@@ -426,7 +428,7 @@ const MakeSurvey = () =>{
                         </p>
 
                     </div>
-                </section>
+                {/* </section> */}
                 
             </section>
 
