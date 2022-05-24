@@ -4,7 +4,6 @@ import {ButtonGroup} from "./Components/ButtonGroup";
 import { Footer } from './Components/Footer';
 import React, {useState, useRef, useEffect} from 'react';
 import "react-datepicker/dist/react-datepicker.css";
-import DateTimePicker from 'react-datetime-picker';
 import ReactLoading from "react-loading";
 import moment from 'moment';
 import callrefresh from '../refresh.js';
@@ -17,6 +16,11 @@ import AlertTitle from '@mui/material/AlertTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import { FaLastfmSquare } from 'react-icons/fa';
 import { useTranslation } from "react-i18next";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import TextField from '@mui/material/TextField';
+
 
 
 //import { DndProvider } from "react-dnd";
@@ -304,6 +308,11 @@ const MakeSurvey2 = () => {
       }
 
       //做合法性判斷
+      if(dateForEndbeforeProcess<=Date.now()){
+        console.log("flag 0")
+        legalsubmit=0
+        errorMsg = "問卷截止時間不得早於現在的時間"
+      }
       if(displayBtnOrNot==="是")
       {
         console.log("flag 1")
@@ -317,6 +326,10 @@ const MakeSurvey2 = () => {
           console.log("flag 7")
           legalsubmit=0
           errorMsg = "問卷截止日不得晚於問卷抽獎日"
+        }
+        if(dateForlotbeforeProcess<=Date.now()){
+          legalsubmit=0
+          errorMsg = "問卷抽獎時間不得早於現在的時間"
         }
         for(let i=0; i<surveyData.gift_info.length;i++){
           if(surveyData.gift_info[i].gift_name===""){
@@ -504,7 +517,6 @@ const MakeSurvey2 = () => {
           let index = Number(event.target.id)
           let tempArr = gift_info
           console.log(tempArr)
-          console.log(tempArr[index].id)
 
           for(let i=0; i<tempArr.length;i++){
             if(tempArr[i].id===index){
@@ -590,12 +602,44 @@ const deleteGift =evt=>{
               <section className='makeSurvey-info card-shadow'>
                     <h3 style={{textAlign: "center"}}>{t("截止與抽獎時間")}</h3>
                     <h4>{t("問卷截止時間")}</h4>
-                    <p>
-                    <DateTimePicker value={DateForFormEnd} minDate={moment().toDate()} onChange={(date) => setDateForFormEnd(date)}   format={"y-MM-dd h:mm:ss a"} className='input-columns' />
-                    </p>
 
-                    {displayBtnOrNot==="是" ?  <><h4>{t("抽獎時間")}</h4><p><DateTimePicker value={DateForLottery} minDate={moment().toDate()}
-                           onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns' style={{  height: '100%', width: '100%', border: '0px'}}/></p></>  : null}
+                    {/*<p>
+                      <DateTimePicker2 value={DateForFormEnd} minDate={moment().toDate()} onChange={(date) => setDateForFormEnd(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns'/>
+                    </p>*/}
+
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateTimePicker
+                          renderInput={(props) => <TextField {...props} />}
+
+                          value={DateForFormEnd}
+                          onChange={(newValue) => {
+                            setDateForFormEnd(newValue);
+                            console.log(newValue);
+                          }}
+                          minDateTime={moment().toDate()}
+                        />
+                    </LocalizationProvider>
+
+                    {displayBtnOrNot==="是" ?  
+                        <>
+                        <h4>{t("抽獎時間")}</h4>
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateTimePicker
+                          renderInput={(props) => <TextField {...props} />}
+                          value={DateForLottery}
+                          onChange={(newValue) => {
+                            setDateForLottery(newValue);
+                            console.log(newValue);
+                          }}
+                          minDateTime={moment().toDate()}
+                        />
+                    </LocalizationProvider>
+                          </>  : null}
+
+
+
+                    {/*displayBtnOrNot==="是" ?  <><h4>{t("抽獎時間")}</h4><p><DateTimePicker value={DateForLottery} minDate={moment().toDate()}
+                           onChange={(date) => setDateForLottery(date)} format={"y-MM-dd h:mm:ss a"} className='input-columns' style={{  height: '100%', width: '100%', border: '0px'}}/></p></>  : null*/}
                     <h4>{t("問卷縮圖圖片")}</h4>
                     <div>
                     {formImageLoading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:imgurURL==="" ? 
