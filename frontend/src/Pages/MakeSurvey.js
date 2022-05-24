@@ -373,13 +373,13 @@ const MakeSurvey = () =>{
                                 <button id={item.id} className="titleCloseBtn" style={{background:"#fbfafc"}} onClick={deleteQuestion}>X</button>
                                 <h4>{t(item.Type)}</h4>
                                 <p>
-                                    <input id = {item.id} type="text" placeholder={item.Question} className='input-columns' style={{width: "100%", height:"50px"}} defaultValue={item.Question} onChange={handleChangeQuestion}/>
+                                    <input id = {item.id} type="text" placeholder={item.Question===""? "Question":item.Question} className='input-columns' style={{width: "100%", height:"50px"}} defaultValue={item.Question} onChange={handleChangeQuestion}/>
                                 </p>
                                     {item.Options.map((opt, i) =>{
                                         return (
                                             <>
                                                 <p>
-                                                    <input key={[item.id, opt.optid]} id={[item.id, opt.optid]} type="text" className='input-columns' placeholder={t(opt.opt)} style={{width: "80%", height:"80px"}} onChange={handleChangeChoice}/>
+                                                    <input key={[item.id, opt.optid]} id={[item.id, opt.optid]} type="text" className='input-columns' placeholder={t(opt.opt)} style={{width: "80%", height:"80px"}} defaultValue={t(opt.opt)} onChange={handleChangeChoice}/>
                                                     { i>1 ? <button id={[item.id, opt.optid]} className={'Btn NextBtn'} onClick={deleteOption}>{t("刪除")}</button>:null}
                                                 </p>
 
