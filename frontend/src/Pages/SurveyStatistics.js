@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import { TagCloud } from 'react-tagcloud'
 import callrefresh from '../refresh.js';
-import { useTranslation } from "react-i18next";
+import { composeInitialProps, useTranslation } from "react-i18next";
 
 
 const SurveyStatistics = (props) => {
@@ -83,13 +83,18 @@ const SurveyStatistics = (props) => {
     for (let i = 0; i < answerResults.length; i++) {
         var uni_ans_list = []
         var ans_count = []
-        if (answerResults[i].question_type === "單選題"){
+        if (answerResults[i].question_type != "簡答題"){
             for (let j = 0; j < answerResults[i].replies.length; j++) {
-                if (uni_ans_list.includes(answerResults[i].replies[j].answer[0])){
-                    ans_count[uni_ans_list.indexOf(answerResults[i].replies[j].answer[0])] += 1
-                }else{
-                    uni_ans_list.push(answerResults[i].replies[j].answer[0])
-                    ans_count[uni_ans_list.indexOf(answerResults[i].replies[j].answer[0])] = 1
+                for (let k = 0; k < answerResults[i].replies[j].answer.length; k++){
+                    if (uni_ans_list.includes(answerResults[i].replies[j].answer[k])){
+                        console.log("answerResults[i].replies[j].answer"+i+j+k,answerResults[i].replies[j].answer[k])
+                        console.log("uni_ans_list",uni_ans_list)
+                        console.log("ans_count",ans_count)
+                        ans_count[uni_ans_list.indexOf(answerResults[i].replies[j].answer[k])] += 1
+                    }else{
+                        uni_ans_list.push(answerResults[i].replies[j].answer[k])
+                        ans_count[uni_ans_list.indexOf(answerResults[i].replies[j].answer[k])] = 1
+                    }
                 }
 
             } 
@@ -101,11 +106,9 @@ const SurveyStatistics = (props) => {
 
         }
     }
-    // [{是: 4, 無意見: 2}]
-    // const data = [
-    //     { value: '喜歡', count: 38 },
-    //     { value: '喜翻', count: 30 }
-    //   ]
+
+    
+    console.log("answerResults",answerResults)
     for (let i = 0; i < answerResults.length; i++) {
         var keyword_cloud = []
         for (let j = 0; j < Object.keys(answerResults[i].keywordCount[0]).length; j++){

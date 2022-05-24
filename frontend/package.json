@@ -36,6 +36,7 @@
     "react-image-button": "^1.0.6",
     "react-items-carousel": "^2.8.0",
     "react-loading": "^2.0.3",
+    "react-localize": "^5.1.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.0",
     "react-tagcloud": "^2.2.0",
