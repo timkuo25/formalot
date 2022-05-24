@@ -344,7 +344,7 @@ const MakeSurvey = () =>{
                     <button className='SurveyOptionBtn card-shadow' onClick={cancel}>
                         {t("取消")}
                     </button>
-                    <button className='SurveyOptionBtn card-shadow'>
+                    <button className='SurveyOptionBtn card-shadow btn-clicked'>
                         {t("製作問卷")}
                     </button>
                     <button className='SurveyOptionBtn card-shadow' onClick={handleSubmit}>
