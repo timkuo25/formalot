@@ -543,7 +543,7 @@ def AutolotteryOnTime():
     scheduler.add_job(id = 'AutoLottery', func=autolotteryfunc, trigger="cron", second=0)
     scheduler.start()
 
-    return jsonify(response)
+    return "lottery running"
     
 
 # # 取得該問卷的題目與題型
