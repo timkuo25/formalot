@@ -249,8 +249,8 @@ const Form = () => {
             return(
                 <> <div className='modalBackground'>
                     <div className="alert-modal">
-                        <h2>此問卷不存在</h2>
-                        <button className="Btn create-account-button" onClick={() => {window.location.href='/'}}>回首頁</button>
+                        <h2>{t("此問卷不存在")}</h2>
+                        <button className="Btn create-account-button" onClick={() => {window.location.href='/'}}>{t("回首頁")}</button>
                     </div>
                 </div></>
             )
@@ -259,8 +259,8 @@ const Form = () => {
             return(
                 <> <div className='modalBackground'>
                     <div className="alert-modal">
-                        <h2>此問卷已被作者刪除</h2>
-                        <button className="Btn create-account-button" onClick={() => {window.location.href='/'}}>回首頁</button>
+                        <h2>{t("此問卷已被作者刪除")}</h2>
+                        <button className="Btn create-account-button" onClick={() => {window.location.href='/'}}>{t("回首頁")}</button>
                     </div>
                 </div></>
             )
@@ -278,7 +278,7 @@ const Form = () => {
                             onClick={e => {
                                 setShowTag(item);
                             }}
-                        >{item}</div>
+                        >{t(item)}</div>
                     )
                 })}
                 </div>
@@ -288,15 +288,15 @@ const Form = () => {
 
                     {/* 問卷右半部基本問卷資訊 */}
                     <section className='form-info card-shadow'>
-                        <h2> 問卷資訊 </h2>
-                        發布時間：{formDetail.form_create_date} <br />
-                        截止時間：{formDetail.form_end_date} <br />
-                        {haveGifts && <>抽獎時間：{formDetail.form_draw_date}</>}
-                        <h2> 製作者 </h2>
+                        <h2> {t("問卷資訊")} </h2>
+                        {t("發布時間")}：{formDetail.form_create_date} <br />
+                        {t("截止時間")}：{formDetail.form_end_date} <br />
+                        {haveGifts && <>{t("抽獎時間")}：{formDetail.form_draw_date}</>}
+                        <h2> {t("製作者")} </h2>
                         <Avator user_name={formDetail.form_owner_id}  user_pic_url={formDetail.form_owner_pic_url}/> 
                         {/* 缺製作者的圖片 url */}
-                        <h2> 獎品 </h2>
-                        {haveGifts===false ? <h3>此問卷沒有抽獎</h3> :  
+                        <h2> {t("獎品")} </h2>
+                        {haveGifts===false ? <h3>{t("此問卷沒有抽獎")}</h3> :  
                             gifts.map(gift => {
                                 return (
                                     <div className='prize-container' key={gift.gift_name}>

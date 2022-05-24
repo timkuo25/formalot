@@ -3,7 +3,7 @@ import '../css/Fill-in.css'
 import callrefresh from '../refresh.js';
 import React, { useState, useEffect } from 'react';
 import ReactLoading from "react-loading";
-
+import { useTranslation } from "react-i18next";
 
 const Fillin = (props) => {
 
@@ -12,6 +12,7 @@ const Fillin = (props) => {
     const [formContent, setFormContent] = useState([]);
     const [hasAnsweredBefore, sethasAnsweredBefore] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const { t, i18n } = useTranslation();
 
     // 取得 access token
     // const access_token =  localStorage.getItem('jwt');
@@ -217,8 +218,8 @@ const Fillin = (props) => {
                         )})}
                         <br/>
                         {hasAnsweredBefore || !(localStorage.getItem('jwt')) ? 
-                         <input type="submit" className='general-button Btn' value="送出表單" disabled/>
-                            :  <input type="submit" className='general-button Btn' value="送出表單" />}
+                         <input type="submit" className='general-button Btn' value={t("送出表單")} disabled/>
+                            :  <input type="submit" className='general-button Btn' value={t("送出表單")} />}
 
                         </form>
                     </div>
