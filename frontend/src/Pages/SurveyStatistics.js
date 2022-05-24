@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Chart } from "react-google-charts";
 import { TagCloud } from 'react-tagcloud'
+import callrefresh from '../refresh.js';
 
-
-// 傳入想要看的 formID
 
 const SurveyStatistics = (props) => {
     const FORM_ID = props.form_id;
-    console.log('----- invoke function component -----');
-
-    const [gifts, setGifts] = useState([]);
-    const [candidateList, setCandidateList] = useState([]);
-    const [formDetail, setFormDetail] = useState([]);
-    let [lotteryResults, setLotteryResults] = useState([]);
+    let [answerResults, setanswerResults] = useState([]);
     let [csvResults, setcsvResults] = useState([]);
     let chart_title = ['Item', 'Numbers']
     let chart_item = ['Item', 'Numbers']
@@ -21,17 +15,28 @@ const SurveyStatistics = (props) => {
 
     // 使用 useEffect Hook
     useEffect(() => {
-        console.log('execute function in useEffect');
-        // fetchCurrentGifts();
-        // fetchCandidateList();
-        // fetchFormDetail();
-        fetchLotteryResults();
-        fetchcsvResults();
+        console.log('Statistics.js: execute function in useEffect');
+        let abortController = new AbortController();  
+        const fetchData = async () => {
+            try{
+                await Promise.all([
+                    fetchAnswerResults(),
+                    fetchcsvResults(),
+                ])
+            }
+            catch(error){
+                console.log('Statistics page fetch error', error)
+            }
+        }
+        fetchData();
+        return () => {  
+            abortController.abort();  
+        }  
     }, []);  // dependency 
 
-    const fetchLotteryResults = () =>
+    const fetchAnswerResults = async () =>
     {
-        fetch(
+        const response = await fetch(
             `https://be-sdmg4.herokuapp.com/SurveyManagement/detail?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
@@ -41,47 +46,48 @@ const SurveyStatistics = (props) => {
                 }
             }
         )
-        .then(response => response.json())
-        .then(response => {
-            console.log('lottery results',response.data)
-            setLotteryResults(response.data);
-        })
-        .catch(error => console.log(error))
+        if(response.status === 401){
+            callrefresh("refresh")
+        }
+        else{
+            const resJson = await response.json()
+            console.log('Answer Results',resJson)
+            setanswerResults(resJson.data);
+        }
     };
 
-    const fetchcsvResults = () =>
+    const fetchcsvResults = async () =>
     {
-        fetch(
+        const response = await fetch(
             `https://be-sdmg4.herokuapp.com/SurveyManagement/downloadResponse?form_id=${encodeURIComponent(FORM_ID)}`,
             {
                 method: "GET",
                 headers: {
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('jwt')}`,  //驗證使用者資訊
                 }
             }
         )
-        .then(response => response.text())
-        .then(response => {
-            console.log('csv results',response)
-            setcsvResults(response);
-        })
-        .catch(error => console.log(error))
+        if(response.status === 401){
+            callrefresh("refresh")
+        }
+        else{
+            const resJson = await response.text()
+            console.log('Csv results',resJson)
+            setcsvResults(resJson);
+        }
     };
 
-
-    console.log("csvResults",csvResults)
-    console.log("lotteryResults",lotteryResults)
-
-    for (let i = 0; i < lotteryResults.length; i++) {
+    for (let i = 0; i < answerResults.length; i++) {
         var uni_ans_list = []
         var ans_count = []
-        if (lotteryResults[i].question_type === "單選題"){
-            for (let j = 0; j < lotteryResults[i].replies.length; j++) {
-                if (uni_ans_list.includes(lotteryResults[i].replies[j].answer[0])){
-                    ans_count[uni_ans_list.indexOf(lotteryResults[i].replies[j].answer[0])] += 1
+        if (answerResults[i].question_type === "單選題"){
+            for (let j = 0; j < answerResults[i].replies.length; j++) {
+                if (uni_ans_list.includes(answerResults[i].replies[j].answer[0])){
+                    ans_count[uni_ans_list.indexOf(answerResults[i].replies[j].answer[0])] += 1
                 }else{
-                    uni_ans_list.push(lotteryResults[i].replies[j].answer[0])
-                    ans_count[uni_ans_list.indexOf(lotteryResults[i].replies[j].answer[0])] = 1
+                    uni_ans_list.push(answerResults[i].replies[j].answer[0])
+                    ans_count[uni_ans_list.indexOf(answerResults[i].replies[j].answer[0])] = 1
                 }
 
             } 
@@ -89,7 +95,7 @@ const SurveyStatistics = (props) => {
             for (let k = 0; k < ans_count.length; k++) {
                 keyword_list[uni_ans_list[k]] = ans_count[k]
             } 
-            lotteryResults[i].keywordCount = [keyword_list]
+            answerResults[i].keywordCount = [keyword_list]
 
         }
     }
@@ -98,13 +104,13 @@ const SurveyStatistics = (props) => {
     //     { value: '喜歡', count: 38 },
     //     { value: '喜翻', count: 30 }
     //   ]
-    for (let i = 0; i < lotteryResults.length; i++) {
+    for (let i = 0; i < answerResults.length; i++) {
         var keyword_cloud = []
-        for (let j = 0; j < Object.keys(lotteryResults[i].keywordCount[0]).length; j++){
-            keyword_cloud.push({"value":Object.keys(lotteryResults[i].keywordCount[0])[j],
-                                "count":lotteryResults[i].keywordCount[0][Object.keys(lotteryResults[i].keywordCount[0])[j]]})
+        for (let j = 0; j < Object.keys(answerResults[i].keywordCount[0]).length; j++){
+            keyword_cloud.push({"value":Object.keys(answerResults[i].keywordCount[0])[j],
+                                "count":answerResults[i].keywordCount[0][Object.keys(answerResults[i].keywordCount[0])[j]]})
         }
-        lotteryResults[i].keyword_cloud = keyword_cloud
+        answerResults[i].keyword_cloud = keyword_cloud
     }
 
     var csv_index = 0;
@@ -129,19 +135,19 @@ const SurveyStatistics = (props) => {
                         >{`下載檔案`}</a>
 
   
-            {lotteryResults.map(result => {
+            {answerResults.map(result => {
                 if (result.question_type==="簡答題"){
                     return (
                         <div className='lottery-card card-shadow' key={result.question}>
                             <h2> {result.question}   </h2>
                             <div className="prize-tag" >{`${result.question_type}`}</div>
-                            <div class="stat_table">    
-                                <div class ="stat_scroll">
+                            <div className="stat_table">    
+                                <div className ="stat_scroll">
                                     {result['replies'].map( (replies) => {
                                         return(
                                         <div>
-                                            <div class="stat-items">{replies.user}</div>
-                                            <div class="stat-items no-border">{replies.answer}</div>
+                                            <div className="stat-items">{replies.user}</div>
+                                            <div className="stat-items no-border">{replies.answer}</div>
                                         </div> 
                                             )
                                         })}
@@ -174,7 +180,7 @@ const SurveyStatistics = (props) => {
 
 
                         <div>
-                            {console.log('replies', lotteryResults)}                              
+                            {console.log('replies', answerResults)}                              
                             {console.log('result.keywordCount', chart_item =  Object.entries(result.keywordCount[0])) }
                             {console.log('result.keywordCount', chart_item.unshift(chart_title)) }
 
