@@ -158,7 +158,7 @@ const MakeSurvey2 = () => {
         <div className='lottery-card card-shadow'>
         <h3>{t("抽獎獎品類別？")}</h3>
           <div className='BtnGroupContainer'>
-            <ButtonGroup buttons={["飲料類", "食物類", "兌換卷類", "服裝飾品類", "3C", "美妝保養類", "圖書類", "日用品類", "運動戶外類", "現金類"]} btnFunc={giftTypeBtn} defaultvalue={giftType}/>
+            <ButtonGroup buttons={["飲料類", "食物類", "兌換卷類", "服裝飾品類", "3C類", "美妝保養類", "圖書類", "日用品類", "運動戶外類", "現金類"]} btnFunc={giftTypeBtn} defaultvalue={giftType}/>
           </div>
         </div>
     

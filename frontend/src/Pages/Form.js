@@ -37,10 +37,12 @@ const Form = () => {
     });
     const [showLoginModal, setShowLoginModal] = useState(false);
     const { t, i18n } = useTranslation();
+    
 
 
     // 使用 useEffect Hook
     useEffect(() => {
+
         let abortController = new AbortController();  
         console.log('Form.js: execute function in useEffect');
 
@@ -173,6 +175,7 @@ const Form = () => {
             callrefresh();
         }
         else{
+
             const resJson = await response.json();
             console.log('Form Detail',resJson);
             setFormDetail({
@@ -201,6 +204,7 @@ const Form = () => {
                     minute: 'numeric',
                 }).format(new Date(resJson.form_draw_date))
             })
+
         }
     };
 

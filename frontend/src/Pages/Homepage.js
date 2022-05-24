@@ -8,6 +8,8 @@ import { LoginModal } from './Components/LoginModal';
 import { CopyMessage } from './Components/CopyMessage';
 import callrefresh from '../refresh.js';
 import { useTranslation } from "react-i18next";
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 const Homepage = () => {
     const [page, setPage] = useState(0);
@@ -78,6 +80,7 @@ const Homepage = () => {
         }
     }
 
+
     return (
         <>
             <Navbar />
@@ -99,11 +102,22 @@ const Homepage = () => {
                 <div className='latest-q-container'>
                     <h2>{t(show)}{t("問卷")}</h2>
                     <h3>{t("點擊問卷，快速填寫問卷，即可參加抽獎，幸運星即將降臨")}</h3>
-                    <select value={show} onChange={e => {setShow(e.currentTarget.value)}}>
+                    {/*<select value={show} onChange={e => {setShow(e.currentTarget.value)}}>
                         {['熱門', '最新'].map(item => {
                             return (<option value={item} key={item}>{item}</option>);
                         })}
-                    </select>  
+                    </select>*/} 
+
+                    <Select
+                        value={show}
+                        onChange={e=>setShow(e.target.value)}
+                        >
+                        {['熱門', '最新'].map(item => {
+                            return (<MenuItem value={item} key={item}>{t(item)}</MenuItem>);
+                        })}
+                    </Select>
+
+
                     {!forms[show]
                         ?
                             <div className='card-container'>

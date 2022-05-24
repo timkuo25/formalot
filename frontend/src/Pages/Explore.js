@@ -85,7 +85,7 @@ const Explore = ( ) => {
             <div className='tag-select'>
                 <select value={type} onChange={e => {setType(e.currentTarget.value)}}>
                     {keywordType.map(item => {
-                        return (<option value={item}>{item}</option>);
+                        return (<option value={item}>{t(item)}</option>);
                     })}
                 </select>             
                 {type === '分類方式'
@@ -95,8 +95,8 @@ const Explore = ( ) => {
                         setShow(e.currentTarget.value)
                     }}>
                         {type === '以獎品搜尋'
-                            ?  gift_list.map(item => {return (<option value={item}>{item}</option>);})
-                            : field_list.map(item => {return (<option value={item}>{item}</option>);})
+                            ?  gift_list.map(item => {return (<option value={item}>{t(item)}</option>);})
+                            : field_list.map(item => {return (<option value={item}>{t(item)}</option>);})
                         }
                         </select>
                 }
@@ -126,7 +126,7 @@ const Explore = ( ) => {
             <section className='explore'>
                 <div className='card-container'>
                     {loading ?   <div className='card-container'><ReactLoading type="spinningBubbles" color="#432a58" /></div>:null}
-                    {showList[show].length===0 ? <div className='card-container'><h2>此類別沒有問卷喔，趕快去製作一個吧！</h2></div> :null}
+                    {showList[show].length===0 ? <div className='card-container'><h2>{t("此類別沒有問卷喔，趕快去製作一個吧！")}</h2></div> :null}
                     {showList[show].map(item => {
                         return <Card type='home' info={item}/>
 

@@ -204,7 +204,7 @@ const Fillin = (props) => {
             {isLoading ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
             <>
                 <section className='form-description'> {formContent.description} </section>
-                    {hasAnsweredBefore  &&  <><br /><section className='form-description alert'> 你已經填答過此問卷摟！ </section></>}
+                    {hasAnsweredBefore  ?  <><br /><section className='form-description alert'> 你已經填答過此問卷摟！ </section></>:null}
                     {!(localStorage.getItem('jwt'))  &&  <><br /><section className='form-description alert'> 先登入才能填寫問卷喔。 </section></>}
                     {/* 所有問題會顯示在這邊 */}
                     <div className='questions'>
