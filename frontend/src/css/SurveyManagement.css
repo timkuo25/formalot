@@ -5,20 +5,18 @@
     height: 100%;
 }
 
-.survey-bar {
+.survey-management-page {
     display: flex;
     align-items: left;
     justify-content: center;
 }
 
-h2.manage-header {
-    font-size: 2em;
-    text-align: left;
+h1.manage-header {
+    text-align:center;
     color: var(--theme-dark-purple);
 }
 
-h3.manage-header {
-    font-size: 1.5em;
+h2.manage-header {
     text-align: left;
     padding: 0;
     margin-bottom: 0;
@@ -30,9 +28,8 @@ h3.manage-header {
     /* border-radius: 0.5em; */
     height:30%;
     /* box-shadow: 0px 1px 2.5px 1px #dadada; */
-    background-color: #ffffff;
-    padding: 2em;
-    margin: 0.8em 0.8em;
+    padding: 0em 2em;
+    /* margin: 0.8em 0.8em; */
     display: flex;
     flex-direction: column;
 }
@@ -40,8 +37,9 @@ h3.manage-header {
 .card-container-management {
   display: flex;
   justify-content:left; 
-  overflow: auto;
-  overflow-y: hidden;
+  /* overflow: auto; */
+  /* overflow-y: hidden; */
+  flex-wrap: wrap;
   white-space: pre;
   width: 100%;
 }

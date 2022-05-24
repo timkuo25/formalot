@@ -5,45 +5,43 @@
     justify-content: center;
     position: relative;
     z-index: 0;
+    margin-top: 5%;
 }
 
 .register_card_left {
-    width: 48em;
-    height:65em;
+    width: 40%;
+    height: 100%;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;
     padding: 0.8em;
-    margin: 1em 1em 1em 1em;
+    margin-right: 2%;
     display: flex;
     flex-direction: row;
-    transform: translate(20px, 20px);
-    float:left;
+    float: left;
     text-align: center;
     background-color: #ffffff;
 }
 
 .reg_description {
-    padding-left: 6em;
+    padding: 2em;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 45em;
-    transform: translateY(-2em);
-    margin: 0.5em 5.5em;
+    height: 100%;
+    /* transform: translateY(-2em); */
+    /* margin: 0.5em 5.5em; */
     color: var(--theme-purple);
 }
 
 .register_card_right {
-    width: 50em;
-    height:65em;
+    width: 50%;
+    height: 100%;
     border-radius: 0.5em;
     box-shadow: 0px 1px 2.5px 1px #dadada;
     padding: 0.8em;
-    margin: 1em 1em 1em 1em;
     flex-direction: column;
-    transform: translate(20px, 20px);
-    float:left;
-    text-align:left;
+    float: left;
+    text-align: left;
     background-color: #ffffff;
     position: relative;
     z-index: 0;
@@ -67,13 +65,13 @@
     border-radius: 0.3em;
     background-color: var(--theme-purple);
     color: #ffffff;
-    margin: 0em 3em;
-    width: 10em;
+    margin-left: 1em;
+    width: 7em;
     height: 1.8em;
     font-size: 1.2em;
     font-weight: 700;
     text-align: center;
-    float:left;
+    float: left;
     flex-direction: row;
 }
 
@@ -185,3 +183,13 @@
     font-size: medium;
 }
 /* end Register page --------------------------*/
+
+@media only screen and (max-width: 600px) {
+    .register_card_left{
+        display: none;
+    }
+    .register_card_right{
+        width:98%;
+    }
+
+}

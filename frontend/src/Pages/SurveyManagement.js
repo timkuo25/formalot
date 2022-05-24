@@ -22,6 +22,8 @@ const SurveyManagement = () => {
       "isLoading":1
     }
   );
+  const [showTag, setShowTag] = useState('已填寫問卷')
+  const tags = ['已填寫問卷','已發布問卷']
 
 
   // 使用 useEffect Hook
@@ -75,37 +77,65 @@ const SurveyManagement = () => {
         })
       }
   };
+
+  function showPage(){
+    if(showTag === '已填寫問卷'){
+      return(
+        <div className="survey-card">
+        {/* <h2 className="manage-header">&#10004; 已填寫問卷</h2> */}
+        <div className="card-container-management ">
+          {repliedData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
+              repliedData.data.map( (form) => {
+                  return (
+                      <Card type={'replied'} info={form} />
+                  )
+              })
+          }
+        </div>
+      </div>
+      )
+    }
+    else if(showTag === '已發布問卷'){
+      return(
+        <div className="survey-card">
+        {/* <h2 className="manage-header">&#10004; 已發佈問卷</h2> */}
+        <div className="card-container-management ">
+          {createdData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
+            createdData.data.map( (form) => {
+                return (
+                    <Card type={'created'} info={form} />
+                )
+            })
+          }
+
+        </div>
+      </div>
+      )
+    }
+  }
   return (
     <>
       <Navbar />
-      <section className="survey-bar">
+      <section className="survey-management-page">
         <div className="survey-container">
-          <h2 className="manage-header">{t("問卷管理")}</h2>
-          <div className="survey-card card-shadow">
-            <h3 className="manage-header">&#10004; {t("已填寫問卷")}</h3>
-            <div className="card-container-management ">
-              {repliedData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
-                  repliedData.data.map( (form) => {
-                      return (
-                          <Card type={'replied'} info={form} />
-                      )
-                  })
-              }
-            </div>
-          </div>
-          <div className="survey-card card-shadow">
-            <h3 className="manage-header">&#10004; {t("已發佈問卷")}</h3>
-            <div className="card-container-management ">
-              {createdData.isLoading === 1 ? <> <div className="loading-container"> <ReactLoading type="spinningBubbles" color="#432a58" /> </div></> : 
-                createdData.data.map( (form) => {
+          <h1 className="manage-header">問卷管理</h1>
+          <div className='page-navbar'>
+                {tags.map(item => {
                     return (
-                        <Card type={'created'} info={form} />
+                        <div
+                            className='page-navbar-item card-shadow'
+                            key={item}
+                            style={item === showTag ? {backgroundColor: 'rgba(77, 14, 179, 0.15)'} : {}}
+                            onClick={e => {
+                                setShowTag(item);
+                            }}
+                        >{item}</div>
                     )
-                })
-              }
-
-            </div>
+                })}
           </div>
+
+
+          {showPage()}
           <div className="survey-manage-buttons">
             <button className="form-button" onClick={() => {window.location.href='/explore'}}> {t("探索問卷")}</button>
             <button className="form-button" onClick={() => {window.location.href='/MakeSurvey'}}> {t("製作問卷")}</button>

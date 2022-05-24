@@ -145,11 +145,9 @@ const Profile = () => {
                             />
                         </div>
                         {/* <img className="photo" src={image.display || process.env.PUBLIC_URL + 'dog.png'} alt=''/> */}
-                        
-                        
                         <div className='name-section'>
                             {loading ?   <div className='name'><ReactLoading type="balls" color="#432a58"/></div>:<p className="name">{Profile.user_lastname}{Profile.user_firstname}</p>}                            
-                            <p className="email">{Profile.user_email}</p>
+                            {/* <p className="email">{Profile.user_email}</p> */}
                             {/* <textarea type="text" placeholder = "自我介紹" className="self-intro"/> */}
                         </div>
                     </div>
