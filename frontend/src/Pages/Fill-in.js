@@ -12,6 +12,7 @@ const Fillin = (props) => {
     const [formContent, setFormContent] = useState([]);
     const [hasAnsweredBefore, sethasAnsweredBefore] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [ans, setAns] = useState([])
     const { t, i18n } = useTranslation();
 
     // 取得 access token
@@ -79,6 +80,15 @@ const Fillin = (props) => {
                 picture: resJson[0]['form_pic_url'],
                 questions: resJson[0]['questioncontent']
             })
+            let ansList=[]
+            for(let i=0;i<resJson[0]['questioncontent'].length;i++){
+                ansList = ansList.concat({
+                    id: resJson[0]['questioncontent'][i].id,
+                    Question:resJson[0]['questioncontent'][i].Question,
+                    Ans:[]
+                })
+            }
+            setAns(ansList)
         }           
     };
 
@@ -87,22 +97,22 @@ const Fillin = (props) => {
     function showQuestion(question){
         const questionBox = [];
         if (question.Type=="單選題"){
-            question.Options && question.Options.map(option => {
+            question.Options && question.Options.map((option,i) => {
                 questionBox.push ( 
                     <div className='question-card'>
                         <label> {option}</label>
-                        <input type="radio" id={question.Question} name={question.Question} value={option} />
+                        <input type="radio" id={question.id} name={question.Question} value={option} onChange={handleChangeShortAnsAndRadio}/>
                     </div>
                 )
             })
             return(questionBox)
         }
         else if (question.Type=="複選題"){
-            question.Options && question.Options.map(option => {
+            question.Options && question.Options.map((option,i) => {
                 questionBox.push ( 
                     <div className='question-card'>
                         <label> {option}</label>
-                        <input type="checkbox" id={question.Question} name={question.Question} value={option} />
+                        <input type="checkbox" id={question.id} name={question.Question} value={option} onChange={handleCheckedBox}/>
                     </div>
                 )
             })
@@ -110,10 +120,42 @@ const Fillin = (props) => {
         }
         else if (question.Type=="簡答題"){
             return (
-                <textarea rows="6" type="text" placeholder="Answer" className='input-columns' name={question.Question}
-                style={{width: "100%", height:"90px"}}/>
+                <textarea rows="6" type="text" placeholder="Answer" id={question.id} className='input-columns' name={question.Question}
+                style={{width: "100%", height:"90px"}} onChange={handleChangeShortAnsAndRadio}/>
             )
         }
+    }
+    const handleChangeShortAnsAndRadio = (e) =>{
+        console.log(e.target.value)
+        let index = Number(e.target.id)
+        let temp = ans
+        for(let i=0;i<ans.length;i++){
+            if(ans[i].id===index){
+                temp[i].Ans = [e.target.value]
+            }
+        }
+        console.log(temp)
+        setAns(temp)
+    }
+    const handleCheckedBox =(e)=>{
+        let index = Number(e.target.id)
+        let temp = ans
+        if(e.target.checked===true){
+            for(let i=0;i<ans.length;i++){
+                if(ans[i].id===index){
+                    temp[i].Ans = temp[i].Ans.concat(e.target.value)
+                }
+            }
+        }
+        else{//之所以寫這麼複雜因為怕有使用者選項設一樣的
+            for(let i=0;i<ans.length;i++){
+                if(ans[i].id===index){
+                    temp[i].Ans = temp[i].Ans.filter(item=>item!==e.target.value)
+                }
+            }
+        }
+        console.log(temp)
+        setAns(temp)
     }
 
     function showQuestion_disabled(question){
@@ -152,14 +194,33 @@ const Fillin = (props) => {
 
     // 提交回答
     const handleSubmit = async(e) => {
+        //console.log('ans',ans)
+        
+        //console.log('etarget',e.target)
+        
         e.preventDefault();
         // 取得表單回覆
-        const formData = new FormData(e.target);
-        const formProps = Object.fromEntries(formData);
-        const tempAnsList = [];
+        //const formData = new FormData(e.target);
+
+        //const formProps = Object.fromEntries(formData);
+        //console.log('formProps',formProps)
+        var tempAnsList = [];
         var continued = 1;
+        for(let i=0; i<ans.length;i++){
+            if(ans[i].Ans.length===0){
+                alert(ans[i].Question+ "\n 需要填答此問題，才能成功提交表單，參加抽獎喔！");
+                continued=0
+                break;
+            }
+            tempAnsList = tempAnsList.concat({
+                Question:ans[i].Question,
+                Answer:ans[i].Ans
+            })
+        }
+        console.log("TempAnsList", tempAnsList)
+        /*
         for(const key in formProps ){
-            if (formProps[key] ==""){
+            if (formProps[key] ===""){
                 alert(key+ "\n 需要填答此問題，才能成功提交表單，參加抽獎喔！");
                 continued = 0;
             } else {
@@ -169,7 +230,8 @@ const Fillin = (props) => {
                 }
                 tempAnsList.push(tempAns)
             }
-        }
+        }*/
+        //console.log('tempAnsList',tempAnsList)
         if(continued === 1){
             console.log("TempAnsList", tempAnsList) // 印出回傳結果看一下，可刪掉
             const result = await fetch("https://be-sdmg4.herokuapp.com/FillForm", {
