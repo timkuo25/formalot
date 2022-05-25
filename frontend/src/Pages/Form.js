@@ -161,50 +161,52 @@ const Form = () => {
     };
 
     const fetchFormDetail = async () => {
-        const response = await fetch(
-            `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
-            {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+        try {
+            const response = await fetch(
+                `https://be-sdmg4.herokuapp.com/GetFormDetail?form_id=${encodeURIComponent(FORM_ID)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Authorization: `Bearer ${localStorage.getItem('jwt')}`  // 驗證使用者資訊 可拿掉
+                    }
                 }
+            )
+            if(response.status === 401){
+                callrefresh();
             }
-        )
-        if(response.status === 401){
-            callrefresh();
-        }
-        else{
-
-            const resJson = await response.json();
-            console.log('Form Detail',resJson);
-            setFormDetail({
-                form_title : resJson.form_title,
-                form_owner_id : resJson.user_student_id,
-                form_owner_pic_url : resJson.user_pic_url,
-                form_create_date : new Intl.DateTimeFormat('zh-TW', {
-                    year: 'numeric', 
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                }).format(new Date(resJson.form_create_date)),
-                form_end_date : new Intl.DateTimeFormat('zh-TW', {
-                    year: 'numeric', 
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                }).format(new Date(resJson.form_end_date)),
-                form_draw_date : new Intl.DateTimeFormat('zh-TW', {
-                    year: 'numeric', 
-                    month: 'long',
-                    day: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                }).format(new Date(resJson.form_draw_date))
-            })
-
+            else{
+                const resJson = await response.json();
+                console.log('Form Detail',resJson);
+                setFormDetail({
+                    form_title : resJson.form_title,
+                    form_owner_id : resJson.user_student_id,
+                    form_owner_pic_url : resJson.user_pic_url,
+                    form_create_date : new Intl.DateTimeFormat('zh-TW', {
+                        year: 'numeric', 
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                    }).format(new Date(resJson.form_create_date)),
+                    form_end_date : new Intl.DateTimeFormat('zh-TW', {
+                        year: 'numeric', 
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                    }).format(new Date(resJson.form_end_date)),
+                    form_draw_date : new Intl.DateTimeFormat('zh-TW', {
+                        year: 'numeric', 
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                    }).format(new Date(resJson.form_draw_date))
+                })
+            }
+        } catch (err){
+            console.log('fetch form result error', err);
         }
     };
 
