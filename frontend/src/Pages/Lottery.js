@@ -101,7 +101,7 @@ const Lottery = (props) => {
             }
             else if(lotteryResults.status === "WaitForDraw")
             {
-                return(<h3>{t("問卷已到抽獎日，等待抽獎中，請稍候")}。</h3> )
+                return(<h3>{t("問卷已截止，等待抽獎中。")}。</h3> )
             }
             else {
                 return(lotteryResults.results && lotteryResults.results.map(result => <LotteryCard result={result}/>))
