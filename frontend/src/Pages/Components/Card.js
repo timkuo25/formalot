@@ -86,7 +86,7 @@ const Card = ({ info, type }) => {
                     return(<div className="prize-tag pink">{t('已中獎')}</div>)
                 }            
             }
-            else if(info.form_run_state === 'Open'){
+            else if(info.form_run_state === 'Open' || info.form_run_state === 'WaitForDraw'){
                 return(<div className="prize-tag">{t('未開獎')}</div>)
             }
             else if(info.form_run_state === 'Delete'){
