@@ -10,6 +10,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_apscheduler import APScheduler
 from io import StringIO
 import csv
+import re
 
 
 form_bp = Blueprint('form', __name__)
@@ -505,7 +506,9 @@ def exportCSV():
                 temp_ans.append(i["form_answer_time"])
                 temp_ans.append(i["user_student_id"])
                 for j in i["answercontent"]:
-                    temp_ans.append(j["Answer"])
+                    string_ans = str(j["Answer"])
+                    ans = re.sub("\[|\'|\]","", string_ans)
+                    temp_ans.append(ans)
                 w.writerow(temp_ans)
                 yield io.getvalue()  # return streaming content
                 io.seek(0)  # set stream position to beginning
