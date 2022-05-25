@@ -145,7 +145,7 @@ const Card = ({ info, type }) => {
                 className='share-q'
                 onClick={async e => {
                     e.stopPropagation();
-                    await navigator.clipboard.writeText(`https:sdmg4.herokuapp.com/form/${info.form_id}`);
+                    await navigator.clipboard.writeText(`https://sdmg4.herokuapp.com/form/${info.form_id}`);
                     const copyMsg = document.querySelector('.copy-message');
                     copyMsg.classList.add('show');
 
