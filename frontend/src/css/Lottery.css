@@ -60,7 +60,7 @@
 
 /* 獎品照片 */
 .prize-image {
-    width: 100%;
+    width: 40%;
     border-radius: 0.5em;
     border: var(--theme-light-grey) solid 0.1em;
     box-shadow: var(--shadow);
@@ -132,7 +132,11 @@
 }
 
 @media only screen and (max-width: 600px) {
-
-
+    .prize-image {
+        width: 100%;
+        border-radius: 0.5em;
+        border: var(--theme-light-grey) solid 0.1em;
+        box-shadow: var(--shadow);
+    }
 
 }
